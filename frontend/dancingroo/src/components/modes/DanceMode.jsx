@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from "react"
-// import styled from "styled-components"
+import styled from "styled-components"
 // import axios from "axios"
 import Webcam from "react-webcam"
 
@@ -9,6 +9,24 @@ const modelURL =
 const metadataURL =
   "https://teachablemachine.withgoogle.com/models/7g9Z9_ogC/metadata.json"
 let frameIDs = []
+
+const Wrapper = styled.div`
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  position:relative;
+  .video {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+  .test {
+    position:absolute;
+    bottom:0;
+    right:0;
+  }
+`
+
 function DanceMode(props) {
   /* eslint-disable */
   const [model, setModel] = useState(null)
@@ -46,7 +64,6 @@ function DanceMode(props) {
   const loop = async function () {
     if (videoref.current && webcam) {
       sizeSet()
-      console.log("!!!")
       predict()
     }
   }
@@ -70,7 +87,9 @@ function DanceMode(props) {
     if (!model) {
       return
     }
-    const { pose, posenetOutput } = await model.estimatePose(videoref.current.video)
+    const { pose, posenetOutput } = await model.estimatePose(
+      videoref.current.video
+    )
     const prediction = await model.predict(posenetOutput)
     for (let i = 0; i < model.getTotalClasses(); i++) {
       const rtPosture = prediction[i]
@@ -109,16 +128,16 @@ function DanceMode(props) {
   )
 
   return (
-    <>
+    <Wrapper>
       <div className="videobox">
-        <Webcam ref={videoref} />
+        <Webcam className="video" ref={videoref} mirrored={true} />
+        <div className="test">  
+          <h1>
+            {nowPosture} {badCnt}
+          </h1>
+        </div>
       </div>
-      <div>
-        <h1>
-          {nowPosture} {badCnt}
-        </h1>
-      </div>
-    </>
+    </Wrapper>
   )
 }
 

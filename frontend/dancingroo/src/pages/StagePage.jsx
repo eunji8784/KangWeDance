@@ -16,7 +16,6 @@ function StagePage(props) {
     console.log(params)
     return (
         <Wrapper>
-            StagePage
           {params.modeId === "0" && <DanceMode/>}
         </Wrapper>
     );
