@@ -64,7 +64,7 @@ function HeaderBar(props) {
             <BarContainer height={70} justify={"center"} width={80}>
                     <LogoContainer
                         onClick={() => {
-                            navigate("/dances");
+                            navigate("/");
                         }}
                     >
                         <Menu src={Dance}/>
