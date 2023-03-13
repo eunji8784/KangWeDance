@@ -119,14 +119,14 @@ const LogOut = styled.div`
 
 function HeaderBar(props) {
     const navigate = useNavigate();
-    const [activeMenu, setActiveMenu] = useState('dances');
+    const [activeMenu, setActiveMenu] = useState('play');
 
     return (
         <Wrapper>
             <BarContainer height={30} justify={"space-between"} width={100} display={true}>
                 <Logo onClick={() => {
-                    navigate("/");
-                    setActiveMenu("dances");
+                    navigate("/play");
+                    setActiveMenu("play");
                 }}
                     />
                 <div className="user-menu">
@@ -142,14 +142,14 @@ function HeaderBar(props) {
             <BarContainer height={70} justify={"center"} width={80} display={props.display}>
                 <LogoContainer
                     onClick={() => {
-                        navigate("/");
-                        setActiveMenu('dances')
+                        navigate("/play");
+                        setActiveMenu('play')
                     }}
-                    active={activeMenu === "dances"}
+                    active={activeMenu === "play"}
                 >
                     <Menu src={Dance}/>
                     <span>둠칫둠칫</span>
-                    <Highlight active={activeMenu === "dances"}/>
+                    <Highlight active={activeMenu === "play"}/>
                 </LogoContainer>
                 <LogoContainer
                     onClick={() => {
