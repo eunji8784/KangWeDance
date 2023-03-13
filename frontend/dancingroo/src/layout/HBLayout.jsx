@@ -10,8 +10,13 @@ const Bodysuit = styled.div`
     display: flex;
     flex-direction: column;
     height: 100vh;
-    width: 100vw;
+    /* width: 80vw; */
+    margin:0 8% !important;
+    /* border: 1px solid blue; */
 `;
+const OutletWrapper = styled(Outlet)`
+     
+`
 
 const HBLayout = () => {
     // const navigate = useNavigate();
@@ -26,7 +31,7 @@ const HBLayout = () => {
     return(
         <Bodysuit>
             <HeaderBar/>
-            <Outlet/>
+            <OutletWrapper/>
         </Bodysuit>
     )
 
