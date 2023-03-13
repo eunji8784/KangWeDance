@@ -30,7 +30,8 @@ const HBLayout = () => {
 
     return(
         <Bodysuit>
-            <HeaderBar/>
+            {/* display = false로 넘기면 하단 메뉴 안나옴 */}
+            <HeaderBar display={true}/>
             <OutletWrapper/>
         </Bodysuit>
     )
