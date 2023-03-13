@@ -22,7 +22,7 @@ function App() {
             <Routes>
                 {/* 헤더 있음 */}
                 <Route element={<HBLayout/>}>
-                  <Route path="" element={<MainPage />} />
+                  <Route path="" element={<MainPage/>} />
                   <Route path="/photos" element={<PhotosPage />} />
                   <Route path="/status" element={<StatusPage />} />
                   <Route path="/users" element={<UserPage />} />

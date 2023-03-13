@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useRef} from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -15,8 +15,17 @@ const Wrapper = styled.div`
     align-items: center;
     justify-content: space-between;
     height:8rem;
+    /* box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); */
+    .bottom-line {
+    width: 100vw;
+    height: 2px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  }
 `;
+
+const Line = styled.div`
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+`
 
 const Menu = styled.img`
     /* border: 1px solid black; */
@@ -40,53 +49,78 @@ const BarContainer = styled.div`
 `
 const LogoContainer = styled.div`
     /* border: 1px solid red; */
+    position:relative;
     display:flex;
     flex-direction:column;
-    justify-content:center;
+    justify-content:flex-start;
     align-items:center;
     width:10rem;
-    font-size:0.8rem;
+    height:4.5rem;
+    font-size:0.7rem;
 `
+const Highlight = styled.div`
+  position: absolute;
+  bottom: 0;
+  width: 20%;
+  height: 10%;
+  background-color: orange;
+  border-radius:10px;
+  opacity: ${({ active }) => active ? 1 : 0};
+  transition: opacity 0.3s ease-in-out;
+`;
 
 function HeaderBar(props) {
     const navigate = useNavigate();
+    const [activeMenu, setActiveMenu] = useState(null);
+
     return (
         <Wrapper>
             <BarContainer height={30} justify={"space-between"} width={100}>
-            <Logo onClick={() => {navigate("/");}}/>
-            <div
-                onClick={() => {
-                    navigate(`/users`);
-                }}>   
-                <RiUserFill color="#F05475" size="1.5rem"/>
-            </div>
+                <Logo onClick={() => {
+                    navigate("/");
+                    setActiveMenu(null);
+                }}
+                    />
+                <div
+                    onClick={() => {
+                        navigate(`/users`);
+                    }}>   
+                    <RiUserFill color="#F05475" size="1.5rem"/>
+                </div>
             </BarContainer>
             <BarContainer height={70} justify={"center"} width={80}>
-                    <LogoContainer
-                        onClick={() => {
-                            navigate("/dances");
-                        }}
-                    >
-                        <Menu src={Dance}/>
-                        <span>둠칫둠칫</span>
-                    </LogoContainer>
-                    <LogoContainer
-                        onClick={() => {
-                            navigate("/status");
-                        }}
-                    >
-                        <Menu src={Status}/>  
-                        <span>건강일지</span>
-                    </LogoContainer>
-                    <LogoContainer
-                        onClick={() => {
-                            navigate("/photos");
-                        }}
-                    >
-                        <Menu src={Gallery}/>
-                        <span>사진첩</span>
-                    </LogoContainer>
+                <LogoContainer
+                    onClick={() => {
+                        navigate("/dances");
+                        setActiveMenu('dances')
+                    }}
+                >
+                    <Menu src={Dance}/>
+                    <span>둠칫둠칫</span>
+                    <Highlight active={activeMenu === "dances"}/>
+                </LogoContainer>
+                <LogoContainer
+                    onClick={() => {
+                        navigate("/status");
+                        setActiveMenu('status')
+                    }}
+                >
+                    <Menu src={Status}/>  
+                    <span>건강일지</span>
+                    <Highlight active={activeMenu === "status"}/>
+                </LogoContainer>
+                <LogoContainer
+                    onClick={() => {
+                        navigate("/photos");
+                        setActiveMenu('photos')
+                    }}
+                >
+                    <Menu src={Gallery}/>
+                    <span>사진첩</span>
+                    <Highlight active={activeMenu === "photos"}/>
+                </LogoContainer>
             </BarContainer>
+            <div className="bottom-line" />
         </Wrapper>
     );
 }
