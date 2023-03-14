@@ -6,6 +6,7 @@ import { Outlet } from "react-router-dom";
 import TopBar from "../components/common/nav/TopBar";
 import HeaderBar from "../components/common/nav/HeaderBar";
 import styled from "styled-components";
+import ChildProfile from "../components/common/ui/ChildProfile";
 
 const Bodysuit = styled.div`
     display: flex;
@@ -34,6 +35,7 @@ const HBLayout = () => {
             {/* display = false로 넘기면 하단 메뉴 안나옴 */}
             {/* <TopBar/> */}
             <HeaderBar/>
+            <ChildProfile/>
             <OutletWrapper/>
         </Bodysuit>
     )
