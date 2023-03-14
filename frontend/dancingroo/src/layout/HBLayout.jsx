@@ -3,6 +3,7 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 // import { useNavigate,  } from "react-router-dom";
 // import { useSelector } from "react-redux";
+import TopBar from "../components/common/nav/TopBar";
 import HeaderBar from "../components/common/nav/HeaderBar";
 import styled from "styled-components";
 
@@ -30,6 +31,8 @@ const HBLayout = () => {
 
     return(
         <Bodysuit>
+            {/* display = false로 넘기면 하단 메뉴 안나옴 */}
+            {/* <TopBar/> */}
             <HeaderBar/>
             <OutletWrapper/>
         </Bodysuit>
