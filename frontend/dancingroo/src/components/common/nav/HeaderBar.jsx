@@ -45,7 +45,7 @@ const BarContainer = styled.div`
     height: ${props=>props.height}%;
     display:flex;
     align-items:center;
-    justify-content:${props=>props.justify};;
+    justify-content:${props=>props.justify};
 `
 const LogoContainer = styled.div`
     /* border: 1px solid red; */
