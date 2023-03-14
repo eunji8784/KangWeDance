@@ -17,34 +17,33 @@ const Wrapper = styled.div`
     & > img:first-child {
     position: absolute;
     width:50%;
-    top: 5rem;
+    top: 2rem;
     z-index: 2;
-  }
-  &> img:nth-child(2){
-    position: absolute;
-    top:40rem;
-    width:60rem;
-    height:60rem;;
-    z-index: 3;
-  }
-  & > img:last-child {
-    position: absolute;
-    bottom:0;
-    z-index: 0;
-    width:70%;
-    height:70%;
-  }
-  .socialLogin{
-    display:block;
-    position: absolute;
-    /* background-color:blue; */
-    z-index:1;
-    width:60rem;
-    height:22rem;
-    bottom: 45rem;
-    font-size:100px;
-    text-align:center;
-  }
+    }
+    &> img:nth-child(2){
+      position: absolute;
+      top:11rem;
+      width:15rem;
+      height:15rem;;
+      z-index: 3;
+    }
+    & > img:last-child {
+      position: absolute;
+      bottom:0;
+      z-index: 0;
+      width:70%;
+      height:70%;
+    }
+    .socialLogin{
+      /* display:block; */
+      position: absolute;
+      /* background-color:blue; */
+      z-index:1;
+      width:15rem;
+      top: 30rem;
+      font-size:30px;
+      text-align:center;
+    }
 `;
 
 function PlayPage(props) {
@@ -52,9 +51,9 @@ function PlayPage(props) {
     return (
         <Wrapper>
           <img src={bigLogo} alt="" />
-          <img src={kangkang} alt="" />
+          <img src={kangkang} alt="" onClick={()=>navigate('/play')}/>
           <div className="socialLogin">
-            <div>카카오로그인</div>
+            <div>이미지클릭</div>
             <div>네이버로그인</div>
           </div>
           <img src={musicNote} alt="" />
