@@ -13,12 +13,12 @@ const Wrapper = styled.div`
 `;
 
 const Wrapper2 = styled.div`
-    width: 50rem;
+    width: 45rem;
     display: flex;
     justify-content: space-between;
     margin-bottom: 1rem;
     &>div{
-        width:30%;
+        width:40%;
     }
 `;
 
