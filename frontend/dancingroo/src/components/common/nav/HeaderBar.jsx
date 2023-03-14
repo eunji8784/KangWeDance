@@ -14,24 +14,23 @@ const Wrapper = styled.div`
     flex-direction:column;
     align-items: center;
     justify-content: space-between;
-    height:8rem;
+    height:10rem;
     .bottom-line {
     width: 100vw;
     height: 2px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   }
-  &>*{
-    transition: opacity 0.3s ease-in-out;
-  }
 `;
 const Menu = styled.img`
     /* border: 1px solid black; */
-    width:30%;
+    width:4rem;
     cursor: pointer;
+    transition: transform 0.3s ease-in-out;
 `;
 const Logo = styled.div`
-    width: 9rem;
-    height: 2rem;
+    /* background-color:gold; */
+    width: 12rem;
+    height: 3rem;
     background-image:url(${logo});
     background-size:cover;
     cursor: pointer;
@@ -40,7 +39,7 @@ const BarContainer = styled.div`
     /* border: 1px solid black; */
     width:${props=>props.width}%;
     height: ${props=>props.height}%;
-    display:${props=>props.display? 'flex':'none'};
+    display:flex;
     align-items:center;
     justify-content:${props=>props.justify};
     /* border:1px solid red; */
@@ -48,9 +47,9 @@ const BarContainer = styled.div`
         /* border:1px solid blue; */
         display:flex;
         justify-content:space-between;
-        width:5rem;
+        width:6rem;
         align-items:center;
-        margin-top:0.5rem;
+        /* margin-top:0.5rem; */
         &>div{
             cursor: pointer;
         }
@@ -63,9 +62,9 @@ const LogoContainer = styled.div`
     flex-direction:column;
     justify-content:flex-start;
     align-items:center;
-    width:10rem;
-    height:4.5rem;
-    font-size:0.7rem;
+    width:13rem;
+    height:5.8rem;
+    font-size:0.8rem;
     padding:0;
     &>span{
         font-weight:${props=>props.active? "bold":"normal"};
@@ -85,8 +84,8 @@ const LogoContainer = styled.div`
 const Highlight = styled.div`
   position: absolute;
   bottom: 0;
-  width: 20%;
-  height: 10%;
+  width: 2.5rem;
+  height: 7%;
   background-color: orange;
   border-radius:10px;
   opacity: ${({ active }) => active ? 1 : 0};
@@ -96,9 +95,9 @@ const LogOut = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 3rem;
-  height: 1rem;
-  font-size: 0.1rem;
+  width: 3.5rem;
+  height: 1.3rem;
+  font-size: 0.7rem;
   background-color: #ffd8e0;
   border-radius: 21px;
   text-align: center;
@@ -111,9 +110,9 @@ const LogOut = styled.div`
     border-color: #ff9aa2;
     cursor: pointer;
     font-weight: bolder;
-    font-size: 0.2rem;
-    width: 3.3rem;
-    height: 1.1rem;
+    font-size: 0.8rem;
+    width: 3.7rem;
+    height: 1.5rem;
   }
 `
 
@@ -123,23 +122,25 @@ function HeaderBar(props) {
 
     return (
         <Wrapper>
-            <BarContainer height={30} justify={"space-between"} width={100} display={true}>
+            <BarContainer height={30} justify={"space-between"} width={100}>
                 <Logo onClick={() => {
                     navigate("/play");
                     setActiveMenu("play");
                 }}
                     />
                 <div className="user-menu">
-                    <LogOut>로그아웃</LogOut>
+                    <LogOut onClick={() => {
+                            navigate(`/`);
+                        }}>로그아웃</LogOut>
                     <div
                         onClick={() => {
                             navigate(`/users`);
                         }}>   
-                        <RiUserFill color="#F05475" size="1.5rem"/>
+                        <RiUserFill color="#F05475" size="2rem"/>
                     </div>
                 </div>
             </BarContainer>
-            <BarContainer height={70} justify={"center"} width={80} display={props.display}>
+            <BarContainer height={70} justify={"center"} width={80}>
                 <LogoContainer
                     onClick={() => {
                         navigate("/play");
