@@ -13,6 +13,7 @@ const Bodysuit = styled.div`
     flex-direction: column;
     height: 100vh;
     /* width: 80vw; */
+    /* overflow-x: hidden; */
     margin:0 8% !important;
     /* border: 1px solid blue; */
 `;

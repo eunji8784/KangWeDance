@@ -14,7 +14,7 @@ const Wrapper = styled.div`
     flex-direction:column;
     align-items: center;
     justify-content: space-between;
-    height:10rem;
+    min-height:10rem;
     .bottom-line {
     width: 100vw;
     height: 2px;
@@ -68,16 +68,13 @@ const LogoContainer = styled.div`
     padding:0;
     &>span{
         font-weight:${props=>props.active? "bold":"normal"};
-        :hover{
-            font-weight:bold; 
-        }
     }
     // img에 hover했을때,
     &>img:hover{
         transform: scale(1.1);
         // img와 형제요소인 span선택자.
         &~span{
-            font-weight:bold; 
+            /* font-weight:bold;  */
         }
     }
 `
