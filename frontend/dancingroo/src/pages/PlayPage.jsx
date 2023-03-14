@@ -9,13 +9,13 @@ const Wrapper = styled.div`
     justify-content: center;
 `;
 
-function DancesPage(props) {
+function PlayPage(props) {
     const navigate = useNavigate();
     return (
         <Wrapper>
-            DancesPage
+            PlayPage
         </Wrapper>
     );
 }
 
-export default DancesPage;
+export default PlayPage;
