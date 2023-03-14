@@ -13,7 +13,6 @@ const Wrapper = styled.div`
 function StagePage(props) {
     const navigate = useNavigate();
     const params = useParams();
-    console.log(params)
     return (
         <Wrapper>
           {params.modeId === "0" && <DanceMode/>}
