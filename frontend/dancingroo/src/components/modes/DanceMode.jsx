@@ -4,85 +4,51 @@ import styled from "styled-components"
 import Webcam from "react-webcam"
 
 const tmPose = window.tmPose
-const modelURL =
+const MODELURL =
   "https://teachablemachine.withgoogle.com/models/7g9Z9_ogC/model.json"
-const metadataURL =
+const METADATAURL =
   "https://teachablemachine.withgoogle.com/models/7g9Z9_ogC/metadata.json"
-let frameIDs = []
 
 const Wrapper = styled.div`
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  position:relative;
+  position: relative;
   .video {
     width: 100vw;
     height: 100vh;
     overflow: hidden;
   }
   .test {
-    position:absolute;
-    bottom:0;
-    right:0;
+    position: absolute;
+    bottom: 0;
+    right: 0;
   }
 `
 
 function DanceMode(props) {
   /* eslint-disable */
   const [model, setModel] = useState(null)
-  const [webcam, setWebcam] = useState(null)
-  const [nowPosture, setNowPosture] = useState(null)
-  const [badCnt, setBadCnt] = useState(0)
+  const [aimedPosture, setAimedPosture] = useState("발차기자세")
+  const [count, setCount] = useState(0)
+  const [frameCount, setFrameCount] = useState(0)
   const videoref = useRef(null)
-  useEffect(
-    function () {
-      if (videoref?.current) {
-        settingModel()
-        sizeSet()
-      }
-    },
-    [videoref.current]
-  )
 
+  // 모델 불러오기
   const settingModel = async function () {
-    const model = await tmPose.load(modelURL, metadataURL)
+    const model = await tmPose.load(MODELURL, METADATAURL)
     setModel(() => model)
   }
 
-  const sizeSet = async function () {
-    let w = null
-    let h = null
-
-    if (videoref.current) {
-      w = videoref.current.offsetWidth
-      h = videoref.current.offsetHeight
-    }
-    const webcam = await new tmPose.Webcam(w || 300, h || 200, true)
-    setWebcam(() => webcam)
-  }
-
-  const loop = async function () {
-    if (videoref.current && webcam) {
-      sizeSet()
-      predict()
-    }
-  }
-
+  // 처음에 모델 없으면 모델 불러오기
   useEffect(() => {
+    if (model) {
+      return
+    }
     settingModel()
-    sizeSet()
   }, [])
 
-  useEffect(() => {
-    function handleResize() {
-      sizeSet()
-    }
-    window.addEventListener("resize", handleResize)
-    return () => {
-      window.removeEventListener("resize", handleResize)
-    }
-  }, [])
-
+  // 예측 함수
   const predict = async function () {
     if (!model) {
       return
@@ -91,49 +57,43 @@ function DanceMode(props) {
       videoref.current.video
     )
     const prediction = await model.predict(posenetOutput)
-    for (let i = 0; i < model.getTotalClasses(); i++) {
-      const rtPosture = prediction[i]
-      if (rtPosture.probability.toFixed(2) > 0.99) {
-        setBadCnt((val) => {
-          if (nowPosture === rtPosture.className) {
-            return val + 1
-          } else {
-            return 0
-          }
-        })
-        setNowPosture((oldPosture) => rtPosture.className)
-        console.log(`자세 : ${nowPosture}, 몇프레임째(600당 10초) : ${badCnt}`)
-      }
+    // for (let i = 0; i < model.getTotalClasses(); i++) {
+    const rtPosture = prediction[1]
+    if (
+      rtPosture.probability.toFixed(2) > 0.95
+    ) {
+      setFrameCount((count) => count + 1)
     }
   }
 
-  useEffect(
-    function () {
-      setTimeout(function () {
-        if (videoref?.current) {
-          const aniId = window.requestAnimationFrame(loop)
-          frameIDs.push(aniId)
-        }
-      }, 1000)
+  useEffect(() => {
+  // const timeId = setInterval(() => {
+    if (frameCount > 45) {
+      console.log("!!!")
+      setFrameCount(0)
+      setCount((count) => count + 1)
+    }
+  // }, 500);
+  // return () => clearInterval(timeId);
+}, [frameCount]);
 
-      return function () {
-        let frameID
-        if (frameIDs.length > 0) {
-          frameID = frameIDs.shift()
-          window.cancelAnimationFrame(frameID)
-        }
+  // 프레임마다 반복
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (videoref.current) {
+        predict()
       }
-    },
-    [videoref.current, webcam, predict]
-  )
+    }, 1000 / 60)
+    return () => clearInterval(intervalId)
+  }, [model, videoref.current])
 
   return (
     <Wrapper>
       <div className="videobox">
         <Webcam className="video" ref={videoref} mirrored={true} />
-        <div className="test">  
+        <div className="test">
           <h1>
-            {nowPosture} {badCnt}
+            {aimedPosture} {count} {frameCount}
           </h1>
         </div>
       </div>
