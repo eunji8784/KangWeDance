@@ -7,7 +7,7 @@ const Wrapper = styled.div`
     display: flex;
     justify-content: space-around;
     margin-bottom: 1.5rem;
-    width: 50rem;
+    width: 55rem;
     &>div{
         width:40%;
     }
@@ -22,6 +22,7 @@ const InputWrapper = styled.div`
 const ButtonWrapper = styled.div`
     display: flex;
     justify-content: center;
+    margin-bottom: 1.5rem;
 `;
 
 const FormLabel = styled.label`
@@ -32,7 +33,7 @@ const FormLabel = styled.label`
 
 const FormInput = styled.input`
     height: 2.1rem;
-    width: 16rem;
+    width: 80%;
     font-size: 0.8rem;
     background-color: #f8f8f8;
     border: solid 1px #e5e5e5;
@@ -76,6 +77,9 @@ function RegisterChild({childIdx}) {
   const navigate = useNavigate();
   const [nickname, setNickname] = useState("");
   const [birth, setBirth] = useState("");
+  const [weight, setWeight] = useState("");
+  const [height, setHeight] = useState("");
+  const [newChild, setNewChild] = useState(true);
   const [boy, setBoy] = useState(true);
   const [girl, setGirl] = useState(false);
   const [colorboy, setColorBoy] = useState("#FFD731");
@@ -135,6 +139,19 @@ function RegisterChild({childIdx}) {
                     {/* <input type="file" ref={fileInput} onChange={handleChange} style={{ display: "none" }} /> */}
                     <FormInputButton className="white-black-line-btn" color="white" type="button" value="삭제" />
                 </ButtonWrapper>
+                {newChild ?
+                <ButtonWrapper>
+                    <InputWrapper>
+                        <FormLabel htmlFor="height"> 키</FormLabel>
+                        <FormInput value={height} type="text" name="height" id="height" placeholder=" cm"/>
+                    </InputWrapper>
+                    <InputWrapper>
+                        <FormLabel htmlFor="weight"> 체중</FormLabel>
+                        <FormInput value={weight} type="text" name="weight" id="weight" placeholder=" kg"/>
+                    </InputWrapper>
+                </ButtonWrapper>
+                : null
+                }
             </InputWrapper>
         </Wrapper>
         <ButtonWrapper>
