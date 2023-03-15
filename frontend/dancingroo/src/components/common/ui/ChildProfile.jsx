@@ -11,10 +11,10 @@ const Wrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    height:5rem;
+    min-height:6rem;
 `
 const ProfileImg = styled.img`
-    margin:0 0.3rem;
+    margin:1rem 0.3rem;
     background-color:#FFD732;
     width:3.5rem;
     height:3.5rem;
@@ -27,8 +27,8 @@ const ProfileImg = styled.img`
       active=="false" &&
       ` 
       transform: scale(1.2);
-      transition: transform 0.3s ease-in-out;
-      border-color: #F05475;
+      transition: all 0.3s ease-in-out;
+      border: 3px solid #F05475;
       cursor: pointer;
       `
       }
