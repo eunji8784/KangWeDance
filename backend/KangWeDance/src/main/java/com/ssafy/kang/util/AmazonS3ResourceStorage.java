@@ -24,7 +24,6 @@ public class AmazonS3ResourceStorage {
         File file = new File(MultipartUtil.getLocalHomeDirectory(), fullPath);
         try {
             multipartFile.transferTo(file);
-            System.out.println(file);
             amazonS3Client.putObject(new PutObjectRequest(bucket, fullPath, file)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
             System.out.println(2);
