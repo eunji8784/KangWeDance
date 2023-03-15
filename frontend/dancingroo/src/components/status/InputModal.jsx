@@ -71,10 +71,24 @@ const Wrapper = styled.div`
             border-radius:6px;
             }
             .diet-table{
+                width:100%;
                 background-color:red;
             }
         }
 
+    }
+`;
+
+const Table = styled.table`
+    flex-direction:column;
+    text-align:center;
+    border-collapse: collapse;
+    width: 100%;
+    th, td {
+        padding: 0.5rem;
+    }
+    thead{
+        border-bottom:3px solid black;
     }
 `;
 
@@ -114,11 +128,30 @@ function InputModal(props) {
                         </div>
                     </article>
                     <article>
-                        <div className="diet-table">
-                            <div>아침</div>
-                            <div>점심</div>
-                            <div>저녁</div>
-                        </div>
+                        <Table className="diet-table">
+                            <thead>
+                                <tr>
+                                    <th>아침</th>
+                                    <th>점심</th>
+                                    <th>저녁</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                        {/* 여기서 tr을 map돌리면 될듯 */}
+                                <tr>
+                                    <td>17:5</td>
+                                    <td>상어송</td>
+                                    <td>90</td>
+                                    <td>1030kcal</td>
+                                </tr>
+                                <tr>
+                                    <td>17:25</td>
+                                    <td>균형잡기</td>
+                                    <td>98</td>
+                                    <td>800kcal</td>
+                                </tr>
+                            </tbody>
+                        </Table>
                     </article>
                 </section>
             </main>
