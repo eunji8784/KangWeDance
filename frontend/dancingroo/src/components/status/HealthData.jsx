@@ -4,13 +4,18 @@ import styled from "styled-components";
 
 const Wrapper = styled.div`
     display: flex;
-    /* border:1px solid black; */
+    border:1px solid black;
+    box-sizing: border-box;
     width:100%;  
     height: auto; 
     overflow-y: auto;
+    overflow-x:hidden;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    *{
+      box-sizing: border-box;
+    }
     &>div{
       display:flex;
       align-items:center;
