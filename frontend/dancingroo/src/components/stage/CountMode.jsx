@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from "react"
 import styled from "styled-components"
 // import axios from "axios"
 import Webcam from "react-webcam"
+import { useInterval } from "../../hooks/useInterval"
 
 const tmPose = window.tmPose
 const MODELURL =
@@ -26,12 +27,12 @@ const Wrapper = styled.div`
   }
 `
 
-function DanceMode(props) {
+function CountMode(props) {
   /* eslint-disable */
   const [model, setModel] = useState(null)
-  const [aimedPosture, setAimedPosture] = useState("발차기자세")
+  const [aimedPosture, setAimedPosture] = useState("나무자세")
+  const [prevPosture, setPrevPosture] = useState("기본자세")
   const [count, setCount] = useState(0)
-  const [frameCount, setFrameCount] = useState(0)
   const videoref = useRef(null)
 
   // 모델 불러오기
@@ -58,24 +59,29 @@ function DanceMode(props) {
     )
     const prediction = await model.predict(posenetOutput)
     // for (let i = 0; i < model.getTotalClasses(); i++) {
-    const rtPosture = prediction[1]
-    if (
-      rtPosture.probability.toFixed(2) > 0.95
-    ) {
-      setFrameCount((count) => count + 1)
-    }
+    const rtPosture = prediction[4]
+    // console.log(prediction)
+    console.log(rtPosture.className, rtPosture.probability.toFixed(2))
+    setPrevPosture((prevPosture) => {
+      if (
+        rtPosture.probability.toFixed(2) > 0.95 &&
+        prevPosture === aimedPosture
+      ) {
+        return prevPosture
+      } else if (rtPosture.probability.toFixed(2) > 0.95) {
+        return aimedPosture
+      } else {
+        return "기본자세"
+      }
+    })
   }
 
-  useEffect(() => {
-  // const timeId = setInterval(() => {
-    if (frameCount > 45) {
-      console.log("!!!")
-      setFrameCount(0)
-      setCount((count) => count + 1)
-    }
-  // }, 500);
-  // return () => clearInterval(timeId);
-}, [frameCount]);
+  useInterval(
+    () => {
+        setCount((count) => count + 1)
+    },
+    prevPosture !== "기본자세" ? 350 : null
+  )
 
   // 프레임마다 반복
   useEffect(() => {
@@ -93,7 +99,7 @@ function DanceMode(props) {
         <Webcam className="video" ref={videoref} mirrored={true} />
         <div className="test">
           <h1>
-            {aimedPosture} {count} {frameCount}
+            {aimedPosture} {count} {prevPosture}
           </h1>
         </div>
       </div>
@@ -101,4 +107,4 @@ function DanceMode(props) {
   )
 }
 
-export default DanceMode
+export default CountMode
