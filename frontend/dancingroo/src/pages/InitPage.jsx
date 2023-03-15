@@ -53,8 +53,8 @@ function PlayPage(props) {
           <img src={bigLogo} alt="" />
           <img src={kangkang} alt="" onClick={()=>navigate('/play')}/>
           <div className="socialLogin">
-            <div>이미지클릭</div>
-            <div>네이버로그인</div>
+            <div onClick={()=>navigate('users/oauth2-kakao')}>카카오로그인</div>
+            <div onClick={()=>navigate('users/oauth2-naver')}>네이버로그인</div>
           </div>
           <img src={musicNote} alt="" />
         </Wrapper>
