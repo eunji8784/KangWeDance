@@ -32,9 +32,9 @@ const HBLayout = () => {
 
     return(
         <Bodysuit>
-            {/* <TopBar/> */}
-            <HeaderBar/>
-            <ChildProfile/>
+            <TopBar/>
+            {/* <HeaderBar/> */}
+            {/* <ChildProfile/> */}
             <OutletWrapper/>
         </Bodysuit>
     )
