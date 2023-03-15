@@ -12,7 +12,7 @@ const Wrapper = styled.div`
     flex-direction:column;
     align-items: center;
     justify-content: space-between;
-    height:3rem;
+    min-height:3rem;
     .bottom-line {
     width: 100vw;
     height: 2px;
