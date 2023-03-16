@@ -8,4 +8,5 @@ public interface ParentsService {
 	public Map<String, String> getUserInfo(String access_token) throws IOException;
 	public Map<String, String> getNaverUserInfo(String token) throws Exception;
 	public Map<String, String> getNaverToken(String code) throws Exception;
+	public int findExperience(int idx) throws Exception;
 }

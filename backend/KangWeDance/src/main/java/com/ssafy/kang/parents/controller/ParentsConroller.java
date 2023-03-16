@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.ssafy.kang.common.ErrorCode;
+import com.ssafy.kang.common.SuccessCode;
 import com.ssafy.kang.common.dto.ApiResponse;
 import com.ssafy.kang.parents.model.ParentsDto;
 import com.ssafy.kang.parents.model.service.ParentsService;
@@ -35,7 +37,7 @@ public class ParentsConroller {
 		ParentsDto dto = new ParentsDto();
 		try {
 			token = parentsService.getToken(code);
-			userIO = parentsService.getUserInfo(token.get("access_token"));
+			userIO = parentsService.getUserInfo(token.get("accesstoken"));
 			dto.setSocailUid(userIO.get("id"));
 			dto.setSocailUid("Kakao");
 			dto.setNickname(userIO.get("nickname"));
@@ -46,5 +48,15 @@ public class ParentsConroller {
 			// TODO: handle exception
 		}
 		return null;
+	}
+	
+	@GetMapping("/experience-score")
+	public ApiResponse<?> experienceDetails(@RequestParam int accesstoken){//추후 엑세스 토큰으로 대체
+		System.out.println(11);
+		try {
+			return ApiResponse.success(SuccessCode.READ_EXPERIENCE,parentsService.findExperience(accesstoken));
+		} catch (Exception e) {
+			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
+		}
 	}
 }
