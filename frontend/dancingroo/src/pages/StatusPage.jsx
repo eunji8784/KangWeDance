@@ -15,14 +15,24 @@ const Wrapper = styled.div`
 
 function StatusPage(props) {
     const navigate = useNavigate();
-    const [section, setSection] = useState('Health')
-
+    const [section, setSection] = useState('health')
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const handleSection = (mode)=>{
+        setSection(mode)
+    }
+    const handleIsModalOpen = ()=>{
+        setIsModalOpen((prev)=>!prev)
+    }
+    console.log(isModalOpen)
     return (
         <Wrapper>
-            <StatusBar/>
-            <HealthData/>
-            {/* <PlayData/> */}
-            <InputModal display={'none'}/>
+            <StatusBar handleSection={handleSection}/>
+            {section==='health'?
+            <HealthData handleIsModalOpen={handleIsModalOpen}/>
+            :
+            <PlayData handleIsModalOpen={handleIsModalOpen}/>
+            }
+            <InputModal isOpen={isModalOpen} handleIsModalOpen={handleIsModalOpen}/>
         </Wrapper>
     );
 }
