@@ -92,7 +92,6 @@ public class PhotosController {
 			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
 		}
 	}
-
 }
 
 //try {
