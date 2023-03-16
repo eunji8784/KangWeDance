@@ -23,7 +23,7 @@ import lombok.ToString;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 public class ParentsDto {
-	int parent_idx;
+	int parentIdx;
 	String socialPlatform;
 	String socailUid;
 	String nickname;
