@@ -42,12 +42,14 @@ const Highlight = styled.div`
 `;
 
 function StatusBar(props) {
-    const navigate = useNavigate();
+    const {handleSection} = props;
     const [activeState, setActiveState] = useState('health')
 
     const handleClick = (mode)=>{
       setActiveState(mode)
+      handleSection(mode)
     }
+    
     return (
         <Wrapper >
           <StyledDiv active={activeState === 'health'} onClick={()=>handleClick('health')}>건강 기록
