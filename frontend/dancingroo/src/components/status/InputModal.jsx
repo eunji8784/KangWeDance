@@ -9,7 +9,6 @@ const ModWrapper = styled(Wrapper)`
     border:1px solid transparent;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
     border-radius:10px;
-    /* transition: all 0.5s ease-in-out; */
     position: fixed;
     top: 0; bottom: 0; left: 0; right: 0;
     margin:auto;
