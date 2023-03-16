@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
+import com.ssafy.kang.parents.model.ParentsDto;
 import com.ssafy.kang.parents.model.mapper.ParentsMapper;
 import com.ssafy.kang.util.KakaoUtil;
 import com.ssafy.kang.util.NaverUtil;
@@ -58,7 +59,6 @@ public class ParentsServiceImpl implements ParentsService {
 			// 결과 코드가 200이라면 성공
 			int responseCode = conn.getResponseCode();
 			String result = naverUtil.readBody(conn.getInputStream());
-			System.out.println(result);
 			Gson gson = new Gson();
 			Map<String, Object> map = gson.fromJson(result, Map.class);
 			rt.put("access_token", (String) map.get("accesstoken"));
@@ -100,9 +100,7 @@ public class ParentsServiceImpl implements ParentsService {
         String responseBody = naverUtil.getInfo(apiURL,requestHeaders);
 		Gson gson = new Gson();
         Map<String, Object> obj = gson.fromJson(responseBody, Map.class);
-		System.out.println(obj);
         Map<String, Object> naver_account = gson.fromJson(obj.get("response").toString(), Map.class);
-		System.out.println(naver_account);
 		result.put("id", naver_account.get("id").toString());
 		result.put("nickname", naver_account.get("nickname").toString());
 
@@ -111,6 +109,14 @@ public class ParentsServiceImpl implements ParentsService {
 	@Override
 	public int findExperience(int idx) throws Exception {
 		return parentsMapper.selectExperience(idx);
+	}
+	@Override
+	public void modifyNickname(ParentsDto parentsDto) throws Exception {
+		parentsMapper.updateNickname(parentsDto);
+	}
+	@Override
+	public void removeUser(int idx) throws Exception {
+		parentsMapper.deleteUser(idx);
 	}
 
 	
