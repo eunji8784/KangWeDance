@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafy.kang.parents.model.mapper.ParentsMapper">
-	<!-- 공감 검색 -->
 	<select id="selectExperience" parameterType="int" resultType="int">
-		SELECT experience_score
-		FROM parent
-		WHERE parent_idx = #{idx}
+		select experience_score
+		from parent
+		where parent_idx = #{idx}
 	</select>
+	
+	<update id="updateNickname" parameterType="ParentsDto">
+		update parent
+		set nickname = #{nickname}
+		where parent_idx =#{parentIdx}
+	</update>
+	<delete id="deleteUser" parameterType="int">
+		delete from parent
+		where parent_idx = #{idx}
+	</delete>
 </mapper>
