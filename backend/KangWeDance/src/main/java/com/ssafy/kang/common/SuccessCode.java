@@ -14,7 +14,9 @@ public enum SuccessCode {
 	 * 등록/생성: CREATE, 조회: READ, 수정: UPDATE, 삭제/취소: DELETE
 	 */
 
-	READ_CHECK_NICKNAME(SUCCESS, "유저 닉네임 중복 여부 확인 성공"), READ_CHECK_USER(SUCCESS, "회원 정보 조회 성공"),;
+	CREATE_PHOTO(SUCCESS, "사진 등록 성공"), READ_PHOTO_LIST(SUCCESS, "사진 리스트 조회 성공"),
+	READ_PRAME_LIST(SUCCESS, "스티커 및 프레임 조회 성공"), CREATE_KAKAO(SUCCESS, "카카오톡 공유하기 성공"),
+	DELETE_PHOTO(SUCCESS, "사진 삭제하기 성공");
 
 	private final StatusCode statusCode;
 	private final String message;
