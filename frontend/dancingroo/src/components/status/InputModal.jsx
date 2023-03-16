@@ -1,12 +1,11 @@
-import React,{useState} from "react";
+import React,{useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import {Wrapper, Header, Main, Article, Section, H1, H2, P, Footer} from "../common/ui/Semantics";
+import musicNote from '../../assets/images/musicNote.png'
 
-const Wrapper = styled.div`
+const ModWrapper = styled(Wrapper)`
     display:${({isModalOpen})=>isModalOpen? "flex":"none"};
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     border:1px solid transparent;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
     border-radius:10px;
@@ -14,151 +13,217 @@ const Wrapper = styled.div`
     position: fixed;
     top: 0; bottom: 0; left: 0; right: 0;
     margin:auto;
-    width: 80%;
-    height: 75%;
+    width: 70%;
+    height: 85%;
     background-color: white;
     z-index: 2;
     letter-spacing:0.2rem;
-    *{
-        display:flex;
-        align-items:center;
-        &.title{
+`;
+const ModMain = styled(Main)`
+    flex-direction:column;
+    height:25rem;
+    width:90%;  
+    /* border:1px solid black;  */
+    justify-content:flex-start; 
+`
+const ModSection = styled(Section)`
+    width:90%; 
+    /* justify-content:flex-start;  */
+
+`
+const ModArticle = styled(Article)`
+    flex-direction:column;
+    /* border:1px solid red; */
+    height:100%;
+    width:90%;
+    .row{
+        height:50%;
+        &>div{
+            /* width:13rem; */
+            /* border:1px solid black;  */
+            justify-content:flex-start;
+        }
+    }
+    &.title{ 
+        max-width:20%;
+        h3{
             color:#F05475;
         }
+    }
+    &.inputs{
         input{
-            border:2px solid #F05475;
-            border-radius:10px;
             outline:none;
+            border: 3px solid #F05475;
+            border-radius:9px;
+            width:6rem;
             margin-left:0.5rem;
-            width:7rem;
             height:1.5rem;
-        }
-    }
-    main{
-        width:80%;
-        height:70%;
-        flex-direction:column;
-        border:1px solid black;
-    }
-    section{
-        width:100%;
-        .title{
-            min-width:15%;
-            
-        }
-        &.body{
-            &>article:nth-child(2){
-                margin-left: 1rem;
-                &>div{
-                    margin-left:1.5rem;   
-                }
+            cursor: pointer;
+            &.menu-input{
+                width:25rem;
+                height:2rem;
+                margin-left:-5rem;
             }
         }
-        &.diet{
-            flex-direction:column;
-            /* border:1px solid black; */
-            .title{
-                width:100%;
-                input{
-                    margin-left: 2.5rem;
-                    width:25rem;
-                }
-            }
-            &>article:last-child{
-            justify-content:space-around;
-            width:95%;
-            border: 1px solid blue;
-            border-radius:6px;
-            }
-            .diet-table{
-                width:100%;
-                background-color:red;
+        &>div:first-child{
+            justify-content:space-between;
+            align-items:baseline;
+            &>div{
+                margin-right:3rem;
+                /* &>input{
+                    margin-top:0.1srem;
+                } */
             }
         }
-
     }
-`;
-
-const Table = styled.table`
-    flex-direction:column;
-    text-align:center;
-    border-collapse: collapse;
-    width: 100%;
-    th, td {
-        padding: 0.5rem;
+    &.table{
+        display:grid;
+        grid-template-columns: repeat(3, 1fr);
+        border:2px solid #F05475;
+        /* grid-gap:3px; */
+        border-radius:10px;
+        height:15rem;
+        position:relative;
+        box-sizing:border-box;
+        margin-top:0.8rem;
+        .header{
+            position:absolute;
+            border-top-left-radius:10px;
+            border-top-right-radius:10px;
+            width:100%;
+            height:3rem;
+            background-color:#F05475;
+            top:-1px;
+            z-index:-1;
+            box-sizing:border-box;
+        }
+        .main{
+            height:100%;
+            box-sizing:border-box;
+            align-items:flex-start;
+            position:relative;
+            &.점심{
+                border-left: 2px solid #F05475; border-right: 2px solid #F05475;
+            }
+            ${P}{
+                color:white;
+                position:absolute;
+                top:-15px;
+                /* border:1px solid black; */
+                height:15%
+            }
+        }
     }
-    thead{
-        border-bottom:3px solid black;
-    }
-`;
+`
+const ModFooter = styled(Footer)`
+    &>button{
+        background-color:#F05475;
+        outline:none;
+        border:none;
+        border-radius:10px;
+        min-width:5.5rem;
+        min-height:2rem;
+        color:white;
+        letter-spacing:0.1rem;
+        font-weight:500;
+        font-size:1.2rem;
+        cursor: pointer;
+        box-shadow: 0px 3px 10px rgba(240, 84, 117, 0.3);
+        transition: box-shadow 0.3s ease-in-out;
+        &:hover{
+            box-shadow: 0px 3px 15px rgba(240, 84, 117, 0.6);
+        }
+    }   
+`
+const Hightlight = styled.div`
+    ${({selected})=> selected && `
+        border:4px solid yellow;
+    `}
+    border-radius:15px;
+    position:absolute;
+    top: 0; bottom: 0; left: 0; right: 0;
+    width:96%;
+    height:96%;
+    cursor: pointer;
+`
+const NoteImg = styled.img`
+    z-index:-1;
+    position:absolute;
+    width:100%;
+`
 
 function InputModal(props) {
     const {handleIsModalOpen, isOpen} = props
     const [recentH, recentKg] = [181,78]
+    const [selected, setSelected] = useState('아침')
     const navigate = useNavigate();
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' });
-
+    
+    const handleSelected = (meal)=>{
+        setSelected(meal)
+    }
     return (
-        <Wrapper isModalOpen={isOpen}>
-            <header>
-                <h1>{formattedDate} OO이 기록하기</h1>
-            </header>
-            <main>
-                <section className="body">
-                    <article className="title">
-                        <h3>신체 정보</h3>
-                    </article>
-                    <article>
-                        <div>
-                            <h4>키</h4>
-                            <input type="text" placeholder={recentH}/>
+        <ModWrapper isModalOpen={isOpen}>
+            <Header>
+                <H1>{formattedDate} OO이 기록하기</H1>
+            </Header>
+            <ModMain>
+                <ModSection className="title-inputs">
+                    <ModArticle className="title">
+                        <div className="row">
+                            <h3>신체 정보</h3>
                         </div>
-                        <div>
-                            <h4>몸무게</h4>
-                            <input type="text" placeholder={recentKg}/>
-                        </div>
-                    </article>
-                </section>
-                <section className="diet">
-                    <article className="title">
-                        <div>
+                        <div className="row">
                             <h3>식단 정보</h3>
-                            <input type="text" placeholder="음식을 검색해보세요"/>
                         </div>
-                    </article>
-                    <article>
-                        <Table className="diet-table">
-                            <thead>
-                                <tr>
-                                    <th>아침</th>
-                                    <th>점심</th>
-                                    <th>저녁</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                        {/* 여기서 tr을 map돌리면 될듯 */}
-                                <tr>
-                                    <td>17:5</td>
-                                    <td>상어송</td>
-                                    <td>90</td>
-                                    <td>1030kcal</td>
-                                </tr>
-                                <tr>
-                                    <td>17:25</td>
-                                    <td>균형잡기</td>
-                                    <td>98</td>
-                                    <td>800kcal</td>
-                                </tr>
-                            </tbody>
-                        </Table>
-                    </article>
-                </section>
-            </main>
-            <footer>
-                <button onClick={()=>handleIsModalOpen()}>닫기</button>
-            </footer>
-        </Wrapper>
+                    </ModArticle>
+                    <ModArticle className="inputs">
+                        <div className="row">
+                            <div>
+                                <h4>키(cm)</h4>
+                                <input type="text" placeholder={recentH}/>
+                            </div>
+                            <div>
+                                <h4>몸무게(kg)</h4>
+                                <input type="text" placeholder={recentKg}/>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <input className="menu-input" type="text" placeholder="음식을 검색해보세요"/>
+                        </div>
+                    </ModArticle>
+                </ModSection>
+                <ModSection>
+                    <ModArticle className="table">
+                        <div className="header"/>
+                        <div className="main 아침">
+                            <P>아침</P>
+                            
+                            <Hightlight onClick={()=>handleSelected('아침')} selected={selected==='아침'}/>
+                        </div>
+                        <div className="main 점심">
+                            <P>점심</P>
+                            
+                            <Hightlight onClick={()=>handleSelected('점심')} selected={selected==='점심'}/>
+                        </div>
+                        <div className="main 저녁">
+                            <P>저녁</P>
+                            
+                            <Hightlight onClick={()=>handleSelected('저녁')} selected={selected==='저녁'}/>
+                        </div>
+
+                    </ModArticle>
+                </ModSection>
+            </ModMain>
+            <ModFooter>
+                <button onClick={()=>{
+                    handleIsModalOpen()
+                    setSelected('아침')
+                }}>완  료</button>
+            </ModFooter>
+            <NoteImg src={musicNote}/>
+        </ModWrapper>
     );
 }
 
