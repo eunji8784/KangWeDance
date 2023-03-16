@@ -11,8 +11,9 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class PrameDto {
+public class PramesDto {
+	int prameIdx;
 	String prameURL;// 이미지 URL
-	boolean prameFlag; // 스티커-0/ 프레임 -1
+	int prameFlag; // 스티커-0/ 프레임 -1
 
 }
