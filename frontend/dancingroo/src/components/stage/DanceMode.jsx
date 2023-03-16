@@ -4,6 +4,8 @@ import styled from "styled-components"
 import Webcam from "react-webcam"
 import { useInterval } from "../../hooks/useInterval"
 
+import logo from "../../assets/images/logo.png"
+
 const tmPose = window.tmPose
 const MODELURL =
   "https://teachablemachine.withgoogle.com/models/7g9Z9_ogC/model.json"
@@ -15,7 +17,7 @@ const Wrapper = styled.div`
   height: 100vh;
   overflow: hidden;
   position: relative;
-  .video {
+  .webcam {
     width: 100vw;
     height: 100vh;
     overflow: hidden;
@@ -25,6 +27,51 @@ const Wrapper = styled.div`
     bottom: 0;
     right: 0;
   }
+  .video {
+    width: 400px;
+  }
+  .overlay {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1;
+  }
+  .overlay > img {
+    width: 50%;
+    height: auto;
+    display: none;
+  }
+  .popup {
+    animation: pop-up 1s;
+    @keyframes pop-up {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.4);
+      }
+      60% {
+        transform: scale(1.1);
+      }
+      70% {
+        transform: scale(1.2);
+      }
+      80% {
+        transform: scale(1);
+      }
+      90% {
+        transform: scale(1.1);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+  }
 `
 
 function DanceMode(props) {
@@ -33,8 +80,9 @@ function DanceMode(props) {
   const [aimedPosture, setAimedPosture] = useState("나무자세")
   const [prevPosture, setPrevPosture] = useState("기본자세")
   const [count, setCount] = useState(0)
-  // const [frameCount, setFrameCount] = useState(0)
+  const camref = useRef(null)
   const videoref = useRef(null)
+  const imgref = useRef(null)
 
   // 모델 불러오기
   const settingModel = async function () {
@@ -56,13 +104,10 @@ function DanceMode(props) {
       return
     }
     const { pose, posenetOutput } = await model.estimatePose(
-      videoref.current.video
+      camref.current.video
     )
     const prediction = await model.predict(posenetOutput)
-    // for (let i = 0; i < model.getTotalClasses(); i++) {
     const rtPosture = prediction[4]
-    // console.log(prediction)
-    console.log(rtPosture.className, rtPosture.probability.toFixed(2))
     setPrevPosture((prevPosture) => {
       if (
         rtPosture.probability.toFixed(2) > 0.95 &&
@@ -74,69 +119,65 @@ function DanceMode(props) {
       } else {
         return "기본자세"
       }
-
-      // if (aimedPosture !== rtPosture.className) {
-      //   return count
-      // } else if (prevPosture === rtPosture.className) {
-      //   return count
-      // } else {
-      //   setPrevPosture(() => "나무자세")
-      //   return count + 1
-      // }
     })
   }
 
-  // useEffect(() => {
-  //   let intervalId;
-  //   if (prevPosture !== "기본자세") {
-  //     intervalId = setInterval(() => {
-  //       setCount((prevCount) => prevCount + 1);
-  //     }, 200);
-  //   }
-  //   return () => clearInterval(intervalId);
-  // }, [prevPosture]);
-
+  // 자세 변경에 따라 카운트 올리기
   useInterval(
     () => {
-        setCount((count) => count + 1)
+      setCount((count) => count + 1)
     },
-    prevPosture !== "기본자세" ? 350 : null
+    prevPosture !== "기본자세" ? 1000 : null
   )
 
-  // useEffect(() => {
-  //   let timeoutId
-  //   if (prevPosture === "기본자세") {
-  //     return
-  //   }
-  //   let startTime
-  //   function countingInterval() {
-  //     if (!startTime || Date.now() - startTime < 200) {
-  //       setCount((count) => count + 1)
-  //       startTime = Date.now()
-  //     }
-  //   }
-  //   countingInterval()
-  // }, [prevPosture])
-
-  // 프레임마다 반복
+  // 프레임마다 예측 함수 반복
   useEffect(() => {
     const intervalId = setInterval(() => {
-      if (videoref.current) {
+      if (camref.current) {
         predict()
       }
     }, 1000 / 60)
     return () => clearInterval(intervalId)
-  }, [model, videoref.current])
+  }, [model, camref.current])
+
+  // 재생 시간에 따라 피드백 이미지를 띄우는 함수
+  const handleTimeUpdate = () => {
+    const img = imgref.current
+    const video = videoref.current
+    const currentTime = video.currentTime
+
+    if (currentTime >= 3 && currentTime < 6) {
+      img.style.display = "block"
+    } else {
+      img.style.display = "none"
+    }
+  }
+
+  // 동영상 N초 뒤에 자동 시작 (5000 = 5초)
+  useEffect(() => {
+    const video = videoref.current
+    const timeoutId = setTimeout(() => {
+      video.play()
+    }, 5000)
+    return () => clearTimeout(timeoutId)
+  }, [])
 
   return (
     <Wrapper>
-      <div className="videobox">
-        <Webcam className="video" ref={videoref} mirrored={true} />
-        <div className="test">
-          <h1>
-            {aimedPosture} {count} {prevPosture}
-          </h1>
-        </div>
+      <Webcam className="webcam" ref={camref} mirrored={true} />
+      <div className="overlay">
+        <img className="popup" ref={imgref} src={logo} />
+      </div>
+      <div className="test">
+        <video
+          className="video"
+          ref={videoref}
+          src="https://kangwedance.s3.ap-northeast-2.amazonaws.com/%EB%8F%99%EB%AC%BC+%ED%94%BD%EC%8A%A4.mp4"
+          onTimeUpdate={handleTimeUpdate}
+        />
+        <h1>
+          {aimedPosture} {count} {prevPosture}
+        </h1>
       </div>
     </Wrapper>
   )

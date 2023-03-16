@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from "react"
 import styled from "styled-components"
 // import axios from "axios"
 import Webcam from "react-webcam"
+import { useInterval } from "../../hooks/useInterval"
 
 const tmPose = window.tmPose
 const MODELURL =
@@ -32,7 +33,6 @@ function TimeMode(props) {
   const [aimedPosture, setAimedPosture] = useState("나무자세")
   const [prevPosture, setPrevPosture] = useState("기본자세")
   const [count, setCount] = useState(0)
-  // const [frameCount, setFrameCount] = useState(0)
   const videoref = useRef(null)
 
   // 모델 불러오기
@@ -58,7 +58,6 @@ function TimeMode(props) {
       videoref.current.video
     )
     const prediction = await model.predict(posenetOutput)
-    // for (let i = 0; i < model.getTotalClasses(); i++) {
     const rtPosture = prediction[4]
     console.log(rtPosture.className, rtPosture.probability.toFixed(2))
     setPrevPosture((prevPosture) => {
@@ -75,15 +74,13 @@ function TimeMode(props) {
     })
   }
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (prevPosture === aimedPosture) {
-        setCount((count) => count + 1);
-      }
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [prevPosture, aimedPosture]);
+  // 자세 변경에 따라 카운트 올리기
+  useInterval(
+    () => {
+        setCount((count) => count + 1)
+    },
+    prevPosture !== "기본자세" ? 1000 : null
+  )
 
   // 프레임마다 반복
   useEffect(() => {

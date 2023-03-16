@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from "react"
 import styled from "styled-components"
 // import axios from "axios"
 import Webcam from "react-webcam"
+import { useInterval } from "../../hooks/useInterval"
 
 const tmPose = window.tmPose
 const MODELURL =
@@ -27,75 +28,81 @@ const Wrapper = styled.div`
 `
 
 function TestMode(props) {
-/* eslint-disable */
-const [model, setModel] = useState(null)
-const [aimedPosture, setAimedPosture] = useState("나무자세")
-const [frameCount, setFrameCount] = useState(0)
-const videoref = useRef(null)
+  /* eslint-disable */
+  const [model, setModel] = useState(null)
+  const [aimedPosture, setAimedPosture] = useState("나무자세")
+  const [prevPosture, setPrevPosture] = useState("기본자세")
+  const [count, setCount] = useState(0)
+  const videoref = useRef(null)
 
-// 모델 불러오기
-const settingModel = async function () {
-  const model = await tmPose.load(MODELURL, METADATAURL)
-  setModel(() => model)
-}
-
-// 처음에 모델 없으면 모델 불러오기
-useEffect(() => {
-  if (model) {
-    return
+  // 모델 불러오기
+  const settingModel = async function () {
+    const model = await tmPose.load(MODELURL, METADATAURL)
+    setModel(() => model)
   }
-  settingModel()
-}, [])
 
-// 예측 함수
-const predict = async function () {
-  if (!model) {
-    return
+  // 처음에 모델 없으면 모델 불러오기
+  useEffect(() => {
+    if (model) {
+      return
+    }
+    settingModel()
+  }, [])
+
+  // 예측 함수
+  const predict = async function () {
+    if (!model) {
+      return
+    }
+    const { pose, posenetOutput } = await model.estimatePose(
+      videoref.current.video
+    )
+    const prediction = await model.predict(posenetOutput)
+    const rtPosture = prediction[4]
+    setPrevPosture((prevPosture) => {
+      if (
+        rtPosture.probability.toFixed(2) > 0.95 &&
+        prevPosture === aimedPosture
+      ) {
+        return prevPosture
+      } else if (rtPosture.probability.toFixed(2) > 0.95) {
+        return aimedPosture
+      } else {
+        return "기본자세"
+      }
+    })
   }
-  const { pose, posenetOutput } = await model.estimatePose(
-    videoref.current.video
+
+  // 자세 변경에 따라 카운트 올리기
+  useInterval(
+    () => {
+        setCount((count) => count + 1)
+    },
+    prevPosture !== "기본자세" ? 350 : null
   )
-  const prediction = await model.predict(posenetOutput)
 
-  for (let i = 0; i < model.getTotalClasses(); i++) {
-    const rtPosture = prediction[i]
-    // console.log(rtPosture)
-    if (rtPosture.probability.toFixed(2) > 0.9) {
-      // console.log(rtPosture.probability.toFixed(2))
-      setFrameCount((val) => {
-        if (aimedPosture === rtPosture.className) {
-          console.log(rtPosture.className)
-          return val + 1
-        } else {
-          return val
-        }
-      })
-    }
-  }
-}
+  // 프레임마다 반복
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (videoref.current) {
+        predict()
+      }
+    }, 1000 / 60)
+    return () => clearInterval(intervalId)
+  }, [model, videoref.current])
 
-// 프레임마다 반복
-useEffect(() => {
-  const intervalId = setInterval(() => {
-    if (videoref.current) {
-      predict()
-    }
-  }, 1000 / 60)
-  return () => clearInterval(intervalId)
-}, [model, videoref.current])
-
-return (
-  <Wrapper>
-    <div className="videobox">
-      <Webcam className="video" ref={videoref} mirrored={true} />
-      <div className="test">
-        <h1>
-          {aimedPosture} {frameCount}
-        </h1>
+  return (
+    <Wrapper>
+      <div className="videobox">
+        <Webcam className="video" ref={videoref} mirrored={true} />
+        <div className="test">
+          <h1>
+            {aimedPosture} {count} {prevPosture}
+          </h1>
+        </div>
       </div>
-    </div>
-  </Wrapper>
-)
+    </Wrapper>
+  )
 }
 
 export default TestMode

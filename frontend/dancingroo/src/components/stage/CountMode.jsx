@@ -58,10 +58,7 @@ function CountMode(props) {
       videoref.current.video
     )
     const prediction = await model.predict(posenetOutput)
-    // for (let i = 0; i < model.getTotalClasses(); i++) {
     const rtPosture = prediction[4]
-    // console.log(prediction)
-    console.log(rtPosture.className, rtPosture.probability.toFixed(2))
     setPrevPosture((prevPosture) => {
       if (
         rtPosture.probability.toFixed(2) > 0.95 &&
@@ -76,6 +73,7 @@ function CountMode(props) {
     })
   }
 
+  // 자세 변경에 따라 카운트 올리기
   useInterval(
     () => {
         setCount((count) => count + 1)
