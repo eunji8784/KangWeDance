@@ -32,14 +32,14 @@ public class ParentsServiceImpl implements ParentsService {
 	public Map<String, String> getToken(String code) throws Exception {
 		String reqURL = "https://kauth.kakao.com/oauth/token";
 		String clientId = "eb3617506bc76ea56b625f99f56e42dd";
-		String redirectUri = "https://mindder.me/users/social/kakao";
+		String redirectUri = "http://localhost:8888/dev/parents/social/kakao";
 		Map<String, String> rt = new HashMap<>();
 		try {
 			String result = kakaoUtil.getToken(reqURL, clientId, redirectUri, code);
 			Gson gson = new Gson();
 			Map<String, Object> map = gson.fromJson(result, Map.class);
-			rt.put("access_token", (String) map.get("accesstoken"));
-			rt.put("refresh_token", (String) map.get("refreshtoken"));
+			rt.put("access_token", (String) map.get("access_token"));
+			rt.put("refresh_token", (String) map.get("refresh_token"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -61,8 +61,8 @@ public class ParentsServiceImpl implements ParentsService {
 			String result = naverUtil.readBody(conn.getInputStream());
 			Gson gson = new Gson();
 			Map<String, Object> map = gson.fromJson(result, Map.class);
-			rt.put("access_token", (String) map.get("accesstoken"));
-			rt.put("refresh_token", (String) map.get("refreshtoken"));
+			rt.put("access_token", (String) map.get("access_token"));
+			rt.put("refresh_token", (String) map.get("refresh_token"));
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -80,7 +80,7 @@ public class ParentsServiceImpl implements ParentsService {
 			Map<String, Object> kakao_account = gson.fromJson(obj.get("kakao_account").toString(), Map.class);
 			Map<String, Object> properties = gson.fromJson(obj.get("properties").toString(), Map.class);
 
-			result.put("id", obj.get("id").toString());
+			result.put("id", obj.get("id")+"");
 			result.put("nickname", properties.get("nickname").toString());
 
 		} catch (Exception e) {
@@ -117,6 +117,20 @@ public class ParentsServiceImpl implements ParentsService {
 	@Override
 	public void removeUser(int idx) throws Exception {
 		parentsMapper.deleteUser(idx);
+	}
+	@Override
+	public ParentsDto findSocial(String socailUid) throws Exception {
+		return parentsMapper.selectSocial(socailUid);
+	}
+	@Override
+	public int addUser(ParentsDto dto) throws Exception {
+		parentsMapper.insertUser(dto);
+		return dto.getParentIdx();
+	}
+	@Override
+	public void modifyUser(ParentsDto dto) throws Exception {
+		// TODO Auto-generated method stub
+		parentsMapper.updateUser(dto);
 	}
 
 	
