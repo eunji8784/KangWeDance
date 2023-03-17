@@ -50,7 +50,8 @@ public class StatusController {
 	}
 
 	@GetMapping("/search-food/{word}")
-	public ApiResponse<?> searchHash(@PathVariable("word") String word) {
+	public ApiResponse<?> searchHash(@PathVariable("word") String word,
+			@RequestHeader("access_token") String accessToken) {
 
 		try {
 
