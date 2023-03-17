@@ -8,7 +8,15 @@
 		<result column="title" property="title" />
 		<result column="record_date" property="recordDate" />
 	</resultMap>
-	
+	<select id="temps" parameterType="int" resultType="String">
+		select name from foodList
+		where food_idx = #{i}
+	</select>
+	<update id="tumpu" >
+		update foodList
+		set search_name = #{k}
+		where food_idx = #{i}
+	</update>
 	<select id="selectPlayRecord" parameterType="int" resultMap="playRecordList" >
 		<!--
 			동작별 점수 총합 ->score
@@ -31,6 +39,12 @@
 		) as tmp2
 		
 	    ON tmp1.play_record_idx= tmp2.play_record_idx;
+
+	</select>
+	
+	
+	<select id="selectFoodList" parameterType="String" resultType="FoodsDto" >
+
 	
 	</select>
 	
