@@ -1,0 +1,66 @@
+server:
+  servlet:
+    encoding:
+      force: 'true'
+      charset: UTF-8
+      enabled: 'true'
+    context-path: /dev
+logging:
+  level:
+    root: info
+
+spring:
+  profiles:
+    active: local
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: kangwedance
+    url: jdbc:mysql://j8a606.p.ssafy.io:3306/kangwedance?allowMultiQueries=true&useUniCode=yes&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    password: aLo8aFitTJ7YoIe
+  mvc:
+    pathmatch:
+     matching-strategy: ant_path_matcher
+    
+mybatis:
+  mapper-locations: classpath:mappers/*.xml
+  type-aliases-package: com.ssafy.kang.*.model
+
+cloud:
+  aws:
+    credentials:
+      secret-key: IUbrwTIFA3bLB/f1KA1s2sNE2brE14MGnASf1LtW
+      access-key: AKIARYAZWIARPVAYS4F7
+    stack:
+      auto: 'false'
+    s3:
+      bucket: kangwedance
+    region:
+      static: ap-northeast-2
+      auto: 'false'
+      
+---
+
+spring:
+  config:
+    activate:
+      on-profile: local
+server:
+  port: 8888
+  
+---
+
+spring:
+  config:
+    activate:
+      on-profile: set1
+server:
+  port: 9001
+  
+---
+
+spring:
+  config:
+    activate:
+      on-profile: set2
+server:
+  port: 9002
