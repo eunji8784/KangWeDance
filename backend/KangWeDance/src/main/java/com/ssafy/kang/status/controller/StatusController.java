@@ -72,8 +72,7 @@ public class StatusController {
 					continue;
 				statusService.tumpu(unicodeKorean.KtoE(t), i + "");
 
-			}
-			System.out.println("끝!~~");
+			} // 500여개는 글자길이가 너무 길어서 패스함
 			return ApiResponse.success(SuccessCode.CREATE_KAKAO);
 		} catch (Exception e) {
 			// TODO: handle exception
