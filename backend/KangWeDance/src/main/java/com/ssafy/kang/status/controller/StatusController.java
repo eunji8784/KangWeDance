@@ -14,6 +14,7 @@ import com.ssafy.kang.common.ErrorCode;
 import com.ssafy.kang.common.SuccessCode;
 import com.ssafy.kang.common.dto.ApiResponse;
 import com.ssafy.kang.play.model.PlayRecordDto;
+import com.ssafy.kang.status.model.FoodsDto;
 import com.ssafy.kang.status.model.service.StatusService;
 import com.ssafy.kang.util.UnicodeKorean;
 
@@ -49,12 +50,13 @@ public class StatusController {
 	}
 
 	@GetMapping("/search-food/{word}")
-	public ApiResponse<?> searchHash(@RequestHeader("access_token") String accessToken,
-			@PathVariable("word") String word) {
+	public ApiResponse<?> searchHash(@PathVariable("word") String word) {
 
 		try {
-			return ApiResponse.success(SuccessCode.READ_FOOD_LIST,
-					statusService.findFoodList(unicodeKorean.KtoE(word)));
+
+			// 한국어로 검색 시 -> 영어로 변경하기 위한 호출
+			List<FoodsDto> foodListDto = statusService.findFoodList(unicodeKorean.KtoE(word));
+			return ApiResponse.success(SuccessCode.READ_FOOD_LIST, foodListDto);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
