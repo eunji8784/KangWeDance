@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -55,7 +56,7 @@ public class PhotosController {
 	}
 
 	@GetMapping
-	public ApiResponse<?> photosDetails() throws Exception {
+	public ApiResponse<?> photosDetails(@RequestHeader("access_token") String accessToken) throws Exception {
 		try {
 			// 임시값 -> 토큰 구현전까지만 이렇게 사용
 			int parentIdx = 0;
@@ -68,7 +69,7 @@ public class PhotosController {
 	}
 
 	@GetMapping("/prames")
-	public ApiResponse<?> pramesDetails() throws Exception {
+	public ApiResponse<?> pramesDetails(@RequestHeader("access_token") String accessToken) throws Exception {
 		try {
 			// 임시값 -> 토큰 구현전까지만 이렇게 사용
 			int parentIdx = 0;
@@ -81,7 +82,8 @@ public class PhotosController {
 	}
 
 	@DeleteMapping("/{photoIdx}")
-	public ApiResponse<?> photoRemove(@PathVariable("photoIdx") int photoIdx) throws Exception {
+	public ApiResponse<?> photoRemove(@PathVariable("photoIdx") int photoIdx,
+			@RequestHeader("access_token") String accessToken) throws Exception {
 		try {
 			// 임시값 -> 토큰 구현전까지만 이렇게 사용
 
