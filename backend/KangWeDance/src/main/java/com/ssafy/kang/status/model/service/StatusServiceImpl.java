@@ -25,8 +25,9 @@ public class StatusServiceImpl implements StatusService {
 	}
 
 	@Override
-	public List<FoodsDto> findFoodList(String ktoE) throws Exception {
-		return sqlSession.getMapper(StatusMapper.class).selectFoodList(ktoE);
+	public List<FoodsDto> findFoodList(String word) throws Exception {
+		System.out.println("좀 찍어바 ");
+		return sqlSession.getMapper(StatusMapper.class).selectFoodList(word);
 	}
 
 	// 일회성 코드임

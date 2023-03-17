@@ -8,15 +8,12 @@
 		<result column="title" property="title" />
 		<result column="record_date" property="recordDate" />
 	</resultMap>
-	<select id="temps" parameterType="int" resultType="String">
-		select name from foodList
-		where food_idx = #{i}
-	</select>
-	<update id="tumpu" >
-		update foodList
-		set search_name = #{k}
-		where food_idx = #{i}
-	</update>
+	
+	<resultMap type="FoodsDto" id="foodList">
+		<result column="name" property="name" />
+		<result column="category" property="category" />
+	</resultMap>
+	
 	<select id="selectPlayRecord" parameterType="int" resultMap="playRecordList" >
 		<!--
 			동작별 점수 총합 ->score
@@ -43,10 +40,27 @@
 	</select>
 	
 	
-	<select id="selectFoodList" parameterType="String" resultType="FoodsDto" >
-
+	<select id="selectFoodList" parameterType="String" resultMap="foodList" >
+	SELECT name, category
+	FROM foodList
+	WHERE search_name like CONCAT (#{word}, '%')
+	limit 5
 	
 	</select>
 	
+	
+	<!-- //일회성 코드 : 검색을 위해 영어 <->한국어 
+	
+	<select id="temps" parameterType="int" resultType="String">
+		select name from foodList
+		where food_idx = #{i}
+	</select>
+	
+	<update id="tumpu" >
+		update foodList
+		set search_name = #{k}
+		where food_idx = #{i}
+	</update>
+	-->
 </mapper>
 	
