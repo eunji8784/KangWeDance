@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 //componment
@@ -47,7 +47,7 @@ const Line = styled.div`
 `;
 
 function UserPage(props) {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     return (
         <Wrapper>
             <Title>회원 정보</Title>

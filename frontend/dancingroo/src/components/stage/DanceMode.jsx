@@ -29,7 +29,7 @@ const Wrapper = styled.div`
     position: absolute;
     bottom: 0;
     right: 0;
-    width 400px;
+    width: 400px;
   }
   .test {
     position: absolute;
@@ -111,7 +111,7 @@ function DanceMode(props) {
     settingModel()
   }, [])
 
-  // 예측 함수
+  // 예측 함수 - 자세 상태(prevPosture)를 바꿈
   const predict = async function () {
     if (!model) {
       return
@@ -159,7 +159,7 @@ function DanceMode(props) {
     const video = videoref.current
     const currentTime = video.currentTime
 
-    if (currentTime >= 3 && currentTime < 6) {
+    if (currentTime >= 3 && currentTime < 3+5) {
       img.style.display = "block"
     } else {
       img.style.display = "none"
@@ -185,6 +185,13 @@ function DanceMode(props) {
     videoref.current.play()
   }
 
+  //test
+  const openFeedback = () => {
+    const img = imgref.current
+    img.style.display = "block"
+    setTimeout(() => {img.style.display = "none"}, 3000)
+  }
+
   return (
     <Wrapper>
       <Webcam
@@ -195,6 +202,7 @@ function DanceMode(props) {
       <MyOverlay>
         <img className="popup" ref={imgref} src={logo} />
         <div className="test">
+          <ModalBtn onClick={openFeedback}>피드백 띄우기</ModalBtn>
           <ModalBtn onClick={handleIsModalOpen}>모달 열기</ModalBtn>
           <ModalBtn onClick={replay}>처음부터 재생</ModalBtn>
           <ModalBtn onClick={switchVideo}>화면 전환</ModalBtn>

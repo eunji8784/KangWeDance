@@ -1,8 +1,11 @@
-import React, {useState, useRef} from "react";
-import { useNavigate } from "react-router-dom";
+import React, {useState
+  // , useRef
+} from "react";
+// import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 //logo
+/* eslint-disable */
 import logo from "../../../assets/images/logo.png"
 import {RiUserFill} from "react-icons/ri";
 import kangkang from "../../../assets/images/kangkang.png"
@@ -42,7 +45,8 @@ const ProfileImg = styled.img`
 `
 
 function ChildProfile(props) {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
+    /* eslint-disable */
     const [profileImg, setProfileImg] = useState(kangkang)
     const [active, setActive] = useState([true, false, false]); 
 
