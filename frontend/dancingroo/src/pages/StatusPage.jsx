@@ -1,5 +1,5 @@
 import React,{useState} from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import HealthData from "../components/status/HealthData";
 import InputModal from "../components/status/InputModal";
@@ -14,7 +14,7 @@ const Wrapper = styled.div`
 `;
 
 function StatusPage(props) {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const [section, setSection] = useState('health')
     const [isModalOpen, setIsModalOpen] = useState(false);
     const handleSection = (mode)=>{
@@ -23,7 +23,6 @@ function StatusPage(props) {
     const handleIsModalOpen = ()=>{
         setIsModalOpen((prev)=>!prev)
     }
-    console.log(isModalOpen)
     return (
         <Wrapper>
             <StatusBar handleSection={handleSection}/>

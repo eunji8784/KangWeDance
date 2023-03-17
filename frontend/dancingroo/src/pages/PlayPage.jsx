@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -10,7 +10,7 @@ const Wrapper = styled.div`
 `;
 
 function PlayPage(props) {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     return (
         <Wrapper>
             PlayPage

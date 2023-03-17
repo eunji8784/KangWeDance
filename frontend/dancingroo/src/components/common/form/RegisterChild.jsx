@@ -74,6 +74,7 @@ const ProfileImage = styled.img`
 `;
 
 function RegisterChild({childIdx}) {
+  /* eslint-disable */
   const navigate = useNavigate();
   const [nickname, setNickname] = useState("");
   const [birth, setBirth] = useState("");
