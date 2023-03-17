@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.kang.play.model.PlayRecordDto;
+import com.ssafy.kang.status.model.FoodsDto;
 import com.ssafy.kang.status.model.mapper.StatusMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -22,4 +23,23 @@ public class StatusServiceImpl implements StatusService {
 		return sqlSession.getMapper(StatusMapper.class).selectPlayRecord(childIdx);
 
 	}
+
+	@Override
+	public List<FoodsDto> findFoodList(String word) throws Exception {
+		System.out.println("좀 찍어바 ");
+		return sqlSession.getMapper(StatusMapper.class).selectFoodList(word);
+	}
+
+	// 일회성 코드임
+	// 검색을 위한 한국어 -> 영어로 변환하는 코드
+	// @Override
+	// public String temps(int i) throws Exception {
+	// return sqlSession.getMapper(StatusMapper.class).temps(i);
+	// }
+	//
+	// @Override
+	// public void tumpu(String k, String i) throws Exception {
+	// // TODO Auto-generated method stub
+	// sqlSession.getMapper(StatusMapper.class).tumpu(k, i);
+	// }
 }
