@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.kang.play.model.PlayRecordDto;
+import com.ssafy.kang.status.model.FoodsDto;
 
 @Service
 public interface StatusService {
@@ -17,6 +18,11 @@ public interface StatusService {
 	// 아이별 운동 기록 조회
 	public List<PlayRecordDto> findplayRecord(int childIdx) throws Exception;
 
+	public List<FoodsDto> findFoodList(String ktoE) throws Exception;
+
+	public String temps(int i) throws Exception;
+
+	public void tumpu(String k, String i) throws Exception;
 	// 신체 변화 기록 조회
 
 	// 음식 검색
