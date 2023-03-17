@@ -118,10 +118,9 @@ function HeaderBar(props) {
     const [activeMenu, setActiveMenu] = useState(watchingPage);
     const navigate = useNavigate();
     
-    // useEffect(()=>{
-    //     setActiveMenu(watchingPage)
-    // },[activeMenu])
-    console.log(activeMenu)
+    useEffect(()=>{
+        setActiveMenu(watchingPage)
+    },[watchingPage])
     return (
         <Wrapper>
             <BarContainer height={30} justify={"space-between"} width={100}>
@@ -144,35 +143,35 @@ function HeaderBar(props) {
             </BarContainer>
             <BarContainer height={70} justify={"center"} width={80}>
                 <LogoContainer
+                    active={activeMenu === "play"}
+                >
+                    <Menu src={Dance} 
                     onClick={() => {
                         navigate("/play");
                         setActiveMenu('play')
-                    }}
-                    active={activeMenu === "play"}
-                >
-                    <Menu src={Dance}/>
+                    }}/>
                     <span>둠칫둠칫</span>
                     <Highlight active={activeMenu === "play"}/>
                 </LogoContainer>
                 <LogoContainer
+                    active={activeMenu === "status"}
+                >
+                    <Menu src={Status}                    
                     onClick={() => {
                         navigate("/status");
                         setActiveMenu('status')
-                    }}
-                    active={activeMenu === "status"}
-                >
-                    <Menu src={Status}/>  
+                    }}/>  
                     <span>건강일지</span>
                     <Highlight active={activeMenu === "status"}/>
                 </LogoContainer>
                 <LogoContainer
+                    active={activeMenu === "photos"}
+                >
+                    <Menu src={Gallery}                    
                     onClick={() => {
                         navigate("/photos");
                         setActiveMenu('photos')
-                    }}
-                    active={activeMenu === "photos"}
-                >
-                    <Menu src={Gallery}/>
+                    }}/>
                     <span>사진첩</span>
                     <Highlight active={activeMenu === "photos"}/>
                 </LogoContainer>
