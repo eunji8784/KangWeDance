@@ -2,6 +2,9 @@ import React, { useRef, useEffect, useState } from "react"
 import styled from "styled-components"
 // import axios from "axios"
 import Webcam from "react-webcam"
+import PauseModal from "./PauseModal"
+import { Overlay } from "../common/ui/Semantics"
+import { ModalBtn } from "../status/HealthData"
 import { useInterval } from "../../hooks/useInterval"
 
 import logo from "../../assets/images/logo.png"
@@ -17,32 +20,30 @@ const Wrapper = styled.div`
   height: 100vh;
   overflow: hidden;
   position: relative;
-  .webcam {
+  .small {
     width: 100vw;
     height: 100vh;
     overflow: hidden;
   }
-  .test {
+  .big {
     position: absolute;
     bottom: 0;
     right: 0;
+    width 400px;
   }
-  .video {
-    width: 400px;
-  }
-  .overlay {
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
+  .test {
     position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    z-index: 1;
+    bottom: 0;
+    left: 0;
   }
-  .overlay > img {
-    width: 50%;
+`
+
+const MyOverlay = styled(Overlay)`
+  top: 0;
+  left: 0;
+  justify-content: normal;
+  img {
+    width: 30%;
     height: auto;
     display: none;
   }
@@ -76,6 +77,7 @@ const Wrapper = styled.div`
 
 function DanceMode(props) {
   /* eslint-disable */
+  const [camfocus, setCamfocus] = useState(false)
   const [model, setModel] = useState(null)
   const [aimedPosture, setAimedPosture] = useState("나무자세")
   const [prevPosture, setPrevPosture] = useState("기본자세")
@@ -83,6 +85,17 @@ function DanceMode(props) {
   const camref = useRef(null)
   const videoref = useRef(null)
   const imgref = useRef(null)
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  // 모달 함수
+  const handleIsModalOpen = ()=>{
+      setIsModalOpen((prev)=>!prev)
+      if (!isModalOpen) {
+        videoref.current.pause()
+      } else {
+        videoref.current.play()
+      }
+  }
 
   // 모델 불러오기
   const settingModel = async function () {
@@ -162,23 +175,41 @@ function DanceMode(props) {
     return () => clearTimeout(timeoutId)
   }, [])
 
+  const switchVideo = () => {
+    setCamfocus(!camfocus)
+  }
+
+  // test
+  const replay = () => {
+    videoref.current.currentTime = 0
+    videoref.current.play()
+  }
+
   return (
     <Wrapper>
-      <Webcam className="webcam" ref={camref} mirrored={true} />
-      <div className="overlay">
+      <Webcam
+        className={camfocus ? "big" : "small"}
+        ref={camref}
+        mirrored={true}
+      />
+      <MyOverlay>
         <img className="popup" ref={imgref} src={logo} />
-      </div>
-      <div className="test">
-        <video
-          className="video"
-          ref={videoref}
-          src="https://kangwedance.s3.ap-northeast-2.amazonaws.com/%EB%8F%99%EB%AC%BC+%ED%94%BD%EC%8A%A4.mp4"
-          onTimeUpdate={handleTimeUpdate}
-        />
-        <h1>
-          {aimedPosture} {count} {prevPosture}
-        </h1>
-      </div>
+        <div className="test">
+          <ModalBtn onClick={handleIsModalOpen}>모달 열기</ModalBtn>
+          <ModalBtn onClick={replay}>처음부터 재생</ModalBtn>
+          <ModalBtn onClick={switchVideo}>화면 전환</ModalBtn>
+          <h1>
+            {aimedPosture} {count} {prevPosture}
+          </h1>
+        </div>
+      </MyOverlay>
+      <video
+        className={camfocus ? "small" : "big"}
+        ref={videoref}
+        src="https://kangwedance.s3.ap-northeast-2.amazonaws.com/%EB%8F%99%EB%AC%BC+%ED%94%BD%EC%8A%A4.mp4"
+        onTimeUpdate={handleTimeUpdate}
+      />
+      <PauseModal handleIsModalOpen={handleIsModalOpen} isOpen={isModalOpen} />
     </Wrapper>
   )
 }

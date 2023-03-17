@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import {Wrapper, Header, Main, Article, Section, H1, H2, P, Footer} from "./Semantics";
 
-const ModalWrapper = styled(Wrapper)`
+export const ModalWrapper = styled(Wrapper)`
     display:${({isModalOpen})=>isModalOpen? "flex":"none"};
     border:1px solid transparent;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
