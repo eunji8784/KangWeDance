@@ -21,10 +21,8 @@ public interface StatusMapper {
 
 	public List<FoodsDto> selectFoodList(@Param("word") String word) throws SQLException;
 
-	// 일회성 코드 : 검색을 위해 영어 <->한국어
-	//////////////////////////////////////////////////////////
-	public String temps(int i) throws Exception;
-
-	public void tumpu(@Param("k") String k, @Param("i") String i) throws Exception;
-	/////////////////////////////////////////////////////////
+// 일회성 코드 : 검색을 위해 영어 <->한국어
+//	public String temps(int i) throws Exception;
+//
+//	public void tumpu(@Param("k") String k, @Param("i") String i) throws Exception;
 }

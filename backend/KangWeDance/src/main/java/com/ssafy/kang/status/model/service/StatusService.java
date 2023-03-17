@@ -21,12 +21,9 @@ public interface StatusService {
 	public List<FoodsDto> findFoodList(String word) throws Exception;
 
 	// 일회성 코드 : 검색을 위해 영어 <->한국어
-	//////////////////////////////////////////////////////////
-	public String temps(int i) throws Exception;
-
-	public void tumpu(String k, String i) throws Exception;
-	/////////////////////////////////////////////////////////////
+	// public String temps(int i) throws Exception;
+	// public void tumpu(String k, String i) throws Exception;
 	// 신체 변화 기록 조회
 
-	// 음식 검색
+	// 음식 검색 ->분산처리 후
 }
