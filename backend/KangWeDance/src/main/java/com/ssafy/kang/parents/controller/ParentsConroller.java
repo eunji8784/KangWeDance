@@ -1,5 +1,6 @@
 package com.ssafy.kang.parents.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,17 +42,59 @@ public class ParentsConroller {
 		ParentsDto dto = new ParentsDto();
 		try {
 			token = parentsService.getToken(code);
-			userIO = parentsService.getUserInfo(token.get("accesstoken"));
+			userIO = parentsService.getUserInfo(token.get("access_token"));
 			dto.setSocailUid(userIO.get("id"));
-			dto.setSocailUid("Kakao");
+			dto.setSocialPlatform("Kakao");
 			dto.setNickname(userIO.get("nickname"));
-			//dto = parentsService.findSocial(dto.getSocailUid());
-			
-			
+			dto = parentsService.findSocial(dto.getSocailUid());
+			return login(dto,userIO);
 		} catch (Exception e) {
-			// TODO: handle exception
+			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
 		}
-		return null;
+	}
+	@GetMapping("/social/naver")
+	public ApiResponse<?> NaverUserAdd(@RequestParam String code){
+
+		Map<String, String> token;
+		Map<String, String> userIO;
+		ParentsDto dto = new ParentsDto();
+		try {
+			token = parentsService.getNaverToken(code);
+			userIO = parentsService.getNaverUserInfo(token.get("access_token"));
+			dto.setSocailUid(userIO.get("id"));
+			dto.setSocialPlatform("Naver");
+			dto.setNickname(userIO.get("nickname"));
+			dto = parentsService.findSocial(dto.getSocailUid());
+			return login(dto,userIO);
+		} catch (Exception e) {
+			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
+		}
+	}
+	public ApiResponse<?> login(ParentsDto dto,Map<String, String> userIO) throws Exception{
+		Map<String, String> map = new HashMap<>();
+		String accessToken ="";
+		String isUser = ""; 
+		SuccessCode sc= null;
+		if(dto != null && !dto.isDeletedFlag()) {
+			accessToken = jwtUtil.createAccessToken("useridx", dto.getParentIdx());
+			isUser = "true";
+			sc = SuccessCode.LOGIN;
+		}else {
+			isUser = "false";
+			sc = SuccessCode.GO_JOIN;
+			if(dto==null) {
+				dto = new ParentsDto();					
+				dto.setSocailUid(userIO.get("id"));
+				dto.setSocialPlatform("Kakao");
+				dto.setNickname(userIO.get("nickname"));					
+				accessToken =  jwtUtil.createAccessToken("useridx",parentsService.addUser(dto));
+			}else {
+				parentsService.modifyUser(dto);
+			}
+		}
+		map.put("accessToken", accessToken);
+		map.put("isUser", isUser);
+		return ApiResponse.success(sc,map);
 	}
 	@PatchMapping("nickname")
 	public ApiResponse<?> nicknameModify(@RequestParam int accesstoken, @RequestBody String nickname){
@@ -80,5 +123,10 @@ public class ParentsConroller {
 		} catch (Exception e) {
 			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
 		}
+	}
+	@GetMapping("logout")
+	public ApiResponse<?> logout(){
+		//레디스 추후 구현
+		return ApiResponse.success(SuccessCode.LOGOUT);
 	}
 }
