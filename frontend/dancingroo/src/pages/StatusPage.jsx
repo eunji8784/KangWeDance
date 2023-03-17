@@ -26,7 +26,6 @@ function StatusPage(props) {
     }
     useEffect(()=>{
         handleWatchingPage('status')
-        return ()=> console.log('언마운트')
     },[])
     return (
         <Wrapper>

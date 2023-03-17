@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import "./App.css"
 import { Routes, Route } from "react-router-dom"
 
@@ -16,13 +16,12 @@ import OauthNaver from "./oauth/OauthNaver"
 import Registration from "./oauth/Registration"
 
 function App() {
-  // const [watchingPage, setWatchingPage] = useState('play')
-  let watchingPage = ''
+  const [watchingPage, setWatchingPage] = useState('')
   const handleWatchingPage = (menu)=>{
-    watchingPage = menu
+    setWatchingPage(menu)
   }
 
-  return (
+  return (  
     <>
       <Routes>
         {/* 헤더 있음 */}
