@@ -22,6 +22,7 @@ const OutletWrapper = styled(Outlet)`
 
 const HBLayout = (props) => {
     const {watchingPage} = props;
+    // const [watching, setWatching] = useState(watchingPage)
     // const navigate = useNavigate();
     // const isLoggedIn = useSelector((state)=>state.TOKEN.authenticated);
     
