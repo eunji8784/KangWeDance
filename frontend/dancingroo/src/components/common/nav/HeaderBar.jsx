@@ -1,4 +1,4 @@
-import React, {useState, useRef} from "react";
+import React, {useState, useRef, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -79,44 +79,49 @@ const LogoContainer = styled.div`
     }
 `
 const Highlight = styled.div`
-  position: absolute;
-  bottom: 0;
-  width: 2.5rem;
-  height: 7%;
-  background-color: orange;
-  border-radius:10px;
-  opacity: ${({ active }) => active ? 1 : 0};
-  transition: opacity 0.3s ease-in-out;
+    position: absolute;
+    bottom: 0;
+    width: 2.5rem;
+    height: 7%;
+    background-color: orange;
+    border-radius:10px;
+    opacity: ${({ active }) => active ? 1 : 0};
+    transition: opacity 0.3s ease-in-out;
 `;
 const LogOut = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 3.5rem;
-  height: 1.3rem;
-  font-size: 0.7rem;
-  background-color: #ffd8e0;
-  border-radius: 21px;
-  text-align: center;
-  font-weight: bold;
-  color: white;
-  border: 2px solid #ffd8e0;
-  transition: all 0.3s ease-in-out;
-  &:hover {
-    background-color: #ff9aa2;
-    border-color: #ff9aa2;
-    cursor: pointer;
-    font-weight: bolder;
-    font-size: 0.8rem;
-    width: 3.7rem;
-    height: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 3.5rem;
+    height: 1.3rem;
+    font-size: 0.7rem;
+    background-color: #ffd8e0;
+    border-radius: 21px;
+    text-align: center;
+    font-weight: bold;
+    color: white;
+    border: 2px solid #ffd8e0;
+    transition: all 0.3s ease-in-out;
+    &:hover {
+        background-color: #ff9aa2;
+        border-color: #ff9aa2;
+        cursor: pointer;
+        font-weight: bolder;
+        font-size: 0.8rem;
+        width: 3.7rem;
+        height: 1.5rem;
   }
 `
 
 function HeaderBar(props) {
+    const {watchingPage} = props;
+    const [activeMenu, setActiveMenu] = useState(watchingPage);
     const navigate = useNavigate();
-    const [activeMenu, setActiveMenu] = useState('play');
-
+    
+    // useEffect(()=>{
+    //     setActiveMenu(watchingPage)
+    // },[activeMenu])
+    console.log(activeMenu)
     return (
         <Wrapper>
             <BarContainer height={30} justify={"space-between"} width={100}>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 // {useEffect} from "react";
 import { Outlet } from "react-router-dom";
 // import { useNavigate,  } from "react-router-dom";
@@ -20,10 +20,11 @@ const Bodysuit = styled.div`
 const OutletWrapper = styled(Outlet)`
 `
 
-const HBLayout = () => {
+const HBLayout = (props) => {
+    const {watchingPage} = props;
     // const navigate = useNavigate();
     // const isLoggedIn = useSelector((state)=>state.TOKEN.authenticated);
-
+    
     // useEffect(()=>{
     //     if(isLoggedIn){
     //         navigate("/");
@@ -33,9 +34,9 @@ const HBLayout = () => {
     return(
         <Bodysuit>
             {/* <TopBar/> */}
-            <HeaderBar/>
+            <HeaderBar watchingPage={watchingPage}/>
             <ChildProfile/>
-            <OutletWrapper/>
+            <OutletWrapper />
         </Bodysuit>
     )
 

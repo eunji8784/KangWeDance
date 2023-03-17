@@ -117,37 +117,37 @@ function RegisterChild({childIdx}) {
             <div>
                 <InputWrapper>
                     <FormLabel htmlFor="nickname"> 닉네임</FormLabel>
-                    <FormInput value={nickname} type="text" name="nickname" id="nickname" placeholder=" 닉네임" onChange={handleNickname}/>
+                    <FormInput defaultValue={nickname} type="text" name="nickname" id="nickname" placeholder=" 닉네임" onChange={handleNickname}/>
                 </InputWrapper>
                 <InputWrapper>
                     <FormLabel htmlFor="gender"> 성별</FormLabel>
                     <div>
-                        <FormInputButton type="button" color={colorboy} value="남자아이" onClick={handleBoy}/>
-                        <FormInputButton type="button" color={colorgirl}  value="여자아이" onClick={handleGirl}/>
+                        <FormInputButton type="button" color={colorboy} defaultValue="남자아이" onClick={handleBoy}/>
+                        <FormInputButton type="button" color={colorgirl}  defaultValue="여자아이" onClick={handleGirl}/>
                     </div>
                 </InputWrapper>
                 <InputWrapper>
                     <FormLabel htmlFor="birth"> 생년월일</FormLabel>
-                    <FormInput value={birth} type="date" name="birth" id="birth" placeholder=" 닉네임" onChange={handleBirth}/>
+                    <FormInput defaultValue={birth} type="date" name="birth" id="birth" placeholder=" 닉네임" onChange={handleBirth}/>
                 </InputWrapper>
             </div>
             <InputWrapper>
                 <FormLabel> 사진</FormLabel>
                 <ProfileImage/>
                 <ButtonWrapper>
-                    <FormInputButton className="white-black-line-btn" color="white" type="button" value="수정"/>
+                    <FormInputButton className="white-black-line-btn" color="white" type="button" defaultValue="수정"/>
                     {/* <input type="file" ref={fileInput} onChange={handleChange} style={{ display: "none" }} /> */}
-                    <FormInputButton className="white-black-line-btn" color="white" type="button" value="삭제" />
+                    <FormInputButton className="white-black-line-btn" color="white" type="button" defaultValue="삭제" />
                 </ButtonWrapper>
                 {newChild ?
                 <ButtonWrapper>
                     <InputWrapper>
                         <FormLabel htmlFor="height"> 키</FormLabel>
-                        <FormInput value={height} type="text" name="height" id="height" placeholder=" cm"/>
+                        <FormInput defaultValue={height} type="text" name="height" id="height" placeholder=" cm"/>
                     </InputWrapper>
                     <InputWrapper>
                         <FormLabel htmlFor="weight"> 체중</FormLabel>
-                        <FormInput value={weight} type="text" name="weight" id="weight" placeholder=" kg"/>
+                        <FormInput defaultValue={weight} type="text" name="weight" id="weight" placeholder=" kg"/>
                     </InputWrapper>
                 </ButtonWrapper>
                 : null
@@ -155,8 +155,8 @@ function RegisterChild({childIdx}) {
             </InputWrapper>
         </Wrapper>
         <ButtonWrapper>
-            <FormButton color=" #F05475" type="button" value="수정하기"/>
-            <FormButton color=" #f8bbc7" type="button" value="삭제하기"/>
+            <FormButton color=" #F05475" type="button" defaultValue="수정하기"/>
+            <FormButton color=" #f8bbc7" type="button" defaultValue="삭제하기"/>
         </ButtonWrapper>
     </>
   )
