@@ -13,6 +13,10 @@ public interface ParentsService {
 	public int findExperience(int idx) throws Exception;
 	void modifyNickname(ParentsDto parentsDto) throws Exception;
 	void removeUser(int idx) throws Exception;
+	ParentsDto findSocial(String socailUid) throws Exception;
+	public int addUser(ParentsDto dto)throws Exception;
+	public void modifyUser(ParentsDto dto)throws Exception;
+	
 	
 	
 	

@@ -29,5 +29,4 @@ public class ParentsDto {
 	String nickname;
 	int experienceScore;
 	boolean deletedFlag;
-
 }
