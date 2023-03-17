@@ -1,7 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-
 //componment
 import RegisterChild from "../components/common/form/RegisterChild";
 import AccountInfo from "../components/users/AccountInfo";
