@@ -32,18 +32,14 @@ public class StatusServiceImpl implements StatusService {
 
 	// 일회성 코드임
 	// 검색을 위한 한국어 -> 영어로 변환하는 코드
-/////////////////////////////////////////////////////////////////
-
-	@Override
-	public String temps(int i) throws Exception {
-		return sqlSession.getMapper(StatusMapper.class).temps(i);
-	}
-
-	@Override
-	public void tumpu(String k, String i) throws Exception {
-		// TODO Auto-generated method stub
-		sqlSession.getMapper(StatusMapper.class).tumpu(k, i);
-	}
-
-	/////////////////////////////////////////////////////////////////
+	// @Override
+	// public String temps(int i) throws Exception {
+	// return sqlSession.getMapper(StatusMapper.class).temps(i);
+	// }
+	//
+	// @Override
+	// public void tumpu(String k, String i) throws Exception {
+	// // TODO Auto-generated method stub
+	// sqlSession.getMapper(StatusMapper.class).tumpu(k, i);
+	// }
 }

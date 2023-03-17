@@ -50,8 +50,7 @@ public class StatusController {
 	}
 
 	@GetMapping("/search-food/{word}")
-	public ApiResponse<?> searchHash(@PathVariable("word") String word,
-			@RequestHeader("access_token") String accessToken) {
+	public ApiResponse<?> searchHash(@PathVariable("word") String word) {
 
 		try {
 
@@ -65,21 +64,21 @@ public class StatusController {
 	}
 
 	// 검색을 위해 korean ->english 변환 API
-	@GetMapping
-	public ApiResponse<?> temp() {
-
-		try {
-			for (int i = 15912; i <= 85469; i++) {
-				String t = statusService.temps(i);
-				if (t.length() >= 30)
-					continue;
-				statusService.tumpu(unicodeKorean.KtoE(t), i + "");
-
-			} // 500여개는 글자길이가 너무 길어서 패스함
-			return ApiResponse.success(SuccessCode.CREATE_KAKAO);
-		} catch (Exception e) {
-			// TODO: handle exception
-			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
-		}
-	}
+//	@GetMapping
+//	public ApiResponse<?> temp() {
+//
+//		try {
+//			for (int i = 15912; i <= 85469; i++) {
+//				String t = statusService.temps(i);
+//				if (t.length() >= 30)
+//					continue;
+//				statusService.tumpu(unicodeKorean.KtoE(t), i + "");
+//
+//			} // 500여개는 글자길이가 너무 길어서 패스함
+//			return ApiResponse.success(SuccessCode.CREATE_KAKAO);
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
+//		}
+//	}
 }
