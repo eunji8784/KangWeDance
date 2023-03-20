@@ -42,7 +42,7 @@ public class ChildrenConroller {
 		childrenDto.setParentIdx(accesstoken);
 		childrenDto.setProfileImageUrl("https://kangwedance.s3.ap-northeast-2.amazonaws.com/%EA%B8%B0%EB%B3%B8+%ED%94%84%EB%A1%9C%ED%95%84+%EC%9D%B4%EB%AF%B8%EC%A7%80.png");
 		childrenDto.setTodayCalrories(0);
-		childrenDto.setBmi(Math.round((childrenDto.getWeight()/(Math.pow(childrenDto.getHeight()/100,2)))*10)/10.0);
+		childrenDto.setBmi(Math.round((childrenDto.getWeight()/(Math.pow(childrenDto.getHeight()/100,2)))*10.0)/10.0);
 		try {
 			childrenSerivce.addChildren(childrenDto);
 			return ApiResponse.success(SuccessCode.CREATE_CHILDREN);
@@ -70,7 +70,7 @@ public class ChildrenConroller {
 	}
 	@PatchMapping("/body-update")
 	public ApiResponse<?> childrenBodyAdd(@RequestParam int accesstoken, @RequestBody BodyRecordDto bodyRecordDto ){
-		bodyRecordDto.setBmi(Math.round((bodyRecordDto.getWeight()/(Math.pow(bodyRecordDto.getHeight()/100,2)))*10)/10.0);
+		bodyRecordDto.setBmi(Math.round((bodyRecordDto.getWeight()/(Math.pow(bodyRecordDto.getHeight()/100,2)))*10.0)/10.0);
 		try {
 			childrenSerivce.addChildrenBody(bodyRecordDto);
 			return ApiResponse.success(SuccessCode.CREATE_BODY_CHILDREN);

@@ -31,7 +31,7 @@ public class ChildrenSerivceImpl implements ChildrenSerivce {
 	}
 	@Override
 	public void addChildrenBody(BodyRecordDto bodyRecordDto) throws Exception {
-		// TODO Auto-generated method stub
+		childrenMapper.insertChildrenBody(bodyRecordDto);
 		
 	}
 	@Override
