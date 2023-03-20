@@ -4,6 +4,8 @@ import { Routes, Route } from "react-router-dom"
 
 import HBLayout from "./layout/HBLayout"
 import NHBLayout from "./layout/NHBLayout"
+import PHBLayout from "./layout/PHBLayout"
+
 // Pages
 import PlayPage from "./pages/PlayPage"
 import StatusPage from "./pages/StatusPage"
@@ -15,6 +17,7 @@ import OauthKakao from "./oauth/OauthKakao"
 import OauthNaver from "./oauth/OauthNaver"
 import Registration from "./oauth/Registration"
 
+
 function App() {
   const [watchingPage, setWatchingPage] = useState('')
   const handleWatchingPage = (menu)=>{
@@ -24,15 +27,19 @@ function App() {
   return (  
     <>
       <Routes>
-        {/* 헤더 있음 */}
+        {/* 헤더+탑바+프로필 있음 */}
         <Route element={<HBLayout watchingPage={watchingPage}/>}>
           <Route path={"/play"} element={<PlayPage handleWatchingPage={handleWatchingPage}/>} />
           <Route path={"/status"} element={<StatusPage handleWatchingPage={handleWatchingPage}/>} />
-          <Route path={"/photos"} element={<PhotosPage handleWatchingPage={handleWatchingPage}/>} />
-          <Route path={"/users"} element={<UserPage />} />
         </Route>
+        {/* 헤더+탑바 있음 */}
+        <Route element={<PHBLayout watchingPage={watchingPage}/>}>
+          <Route path={"/photos"} element={<PhotosPage handleWatchingPage={handleWatchingPage}/>} />
+        </Route>
+
         {/* 맨 윗줄 헤더만 있음 */}
         <Route element={<NHBLayout />}>
+          <Route path={"/users"} element={<UserPage />} />
           <Route path={"/users/join"} element={<Registration />}/>
           <Route path={"/users/oauth2-kakao"} element={<OauthKakao />}/>
           <Route path={"/users/oauth2-naver"} element={<OauthNaver />}/>
