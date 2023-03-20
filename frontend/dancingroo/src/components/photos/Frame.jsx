@@ -6,7 +6,7 @@ const SideSection = styled(Wrapper)`
     width:4rem;
 `
 
-function Frame(props) {
+function Frame() {
 
     return (
         <SideSection>

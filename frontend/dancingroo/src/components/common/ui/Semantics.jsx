@@ -12,6 +12,22 @@ export const Wrapper = styled.div`
   }
 `;
 
+export const PinkButton = styled.input`
+  height: 2rem;
+  width: 4rem;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background-color: #F05475;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0 1em;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  cursor: pointer;
+`;
+
+
 export const Header = styled.header`
   width:100%;
   /* background-color: #333;
@@ -68,6 +84,7 @@ export const Overlay = styled.div`
 
 export default {
   Wrapper,
+  PinkButton,
   Header,
   Main,
   Article,
