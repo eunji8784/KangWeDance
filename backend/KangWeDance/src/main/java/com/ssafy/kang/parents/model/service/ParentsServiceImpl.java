@@ -32,7 +32,7 @@ public class ParentsServiceImpl implements ParentsService {
 	public Map<String, String> getToken(String code) throws Exception {
 		String reqURL = "https://kauth.kakao.com/oauth/token";
 		String clientId = "eb3617506bc76ea56b625f99f56e42dd";
-		String redirectUri = "http://localhost:8888/dev/parents/social/kakao";
+		String redirectUri = "http://kangwedance/dev/parents/social/kakao";
 		Map<String, String> rt = new HashMap<>();
 		try {
 			String result = kakaoUtil.getToken(reqURL, clientId, redirectUri, code);
@@ -77,6 +77,7 @@ public class ParentsServiceImpl implements ParentsService {
 			String res = kakaoUtil.getInfo(host, access_token);
 			Gson gson = new Gson();
 			Map<String, Object> obj = gson.fromJson(res, Map.class);
+			System.out.println(res);
 			Map<String, Object> kakao_account = gson.fromJson(obj.get("kakao_account").toString(), Map.class);
 			Map<String, Object> properties = gson.fromJson(obj.get("properties").toString(), Map.class);
 
