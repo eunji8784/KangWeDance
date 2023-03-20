@@ -34,6 +34,10 @@ public class ParentsConroller {
 	public ParentsConroller() {
 		this.jwtUtil = new JwtUtil();
 	}
+	@GetMapping("testurl")
+	public String test() {
+		return "test";
+	}
 	@GetMapping("/social/kakao")
 	public ApiResponse<?> kakaoUserAdd(@RequestParam String code){
 
