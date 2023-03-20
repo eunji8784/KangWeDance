@@ -46,6 +46,7 @@ public class ParentsConroller {
 		ParentsDto dto = new ParentsDto();
 		try {
 			token = parentsService.getToken(code);
+			System.out.println(token);
 			userIO = parentsService.getUserInfo(token.get("access_token"));
 			dto.setSocailUid(userIO.get("id"));
 			dto.setSocialPlatform("Kakao");
