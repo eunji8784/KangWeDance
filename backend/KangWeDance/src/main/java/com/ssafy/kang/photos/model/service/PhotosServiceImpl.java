@@ -43,19 +43,29 @@ public class PhotosServiceImpl implements PhotosService {
 	}
 
 	@Override
-	public List<PhotosDto> findPhotos(int parentIdx) throws Exception {
-		return sqlSession.getMapper(PhotosMapper.class).selectPhotos(parentIdx);
+	public List<PhotosDto> findPhotos(int parentIdx, int pageNum) throws Exception {
+		return sqlSession.getMapper(PhotosMapper.class).selectPhotos(parentIdx, pageNum);
 	}
 
 	@Override
-	public List<PramesDto> findPrames(int parentIdx) throws Exception {
-		System.out.println("asdasd");
-		return sqlSession.getMapper(PhotosMapper.class).selectPrames(parentIdx);
+	public List<PramesDto> findPrames(int parentIdx, int pageNum) throws Exception {
+		return sqlSession.getMapper(PhotosMapper.class).selectPrames(parentIdx, pageNum);
 	}
 
 	@Override
 	public boolean removePhoto(int photoIdx) throws Exception {
 		return sqlSession.getMapper(PhotosMapper.class).deletePhoto(photoIdx);
+	}
+
+	@Override
+	public int findPhotosCount(int parentIdx) throws Exception {
+		return sqlSession.getMapper(PhotosMapper.class).selectPhotosCount(parentIdx);
+	}
+
+	@Override
+	public int findPramesCount(int parentIdx) throws Exception {
+		// TODO Auto-generated method stub
+		return sqlSession.getMapper(PhotosMapper.class).selectPramesCount(parentIdx);
 	}
 
 }
