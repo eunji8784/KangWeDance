@@ -32,7 +32,7 @@ public class ParentsServiceImpl implements ParentsService {
 	public Map<String, String> getToken(String code) throws Exception {
 		String reqURL = "https://kauth.kakao.com/oauth/token";
 		String clientId = "eb3617506bc76ea56b625f99f56e42dd";
-		String redirectUri = "http://kangwedance/dev/parents/social/kakao";
+		String redirectUri = "http://localhost:3000/users/oauth2-kakao";
 		Map<String, String> rt = new HashMap<>();
 		try {
 			String result = kakaoUtil.getToken(reqURL, clientId, redirectUri, code);
