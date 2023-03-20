@@ -8,7 +8,10 @@ import {IoShapesOutline} from 'react-icons/io5';
 
 
 const SideBarSection = styled(Wrapper)`
-    width:4rem;
+  width:4rem;
+  height: 100%;
+  justify-content: start;
+  border-left:solid #ffeef2;
 `
 
 const StyledDiv = styled.div`
@@ -28,7 +31,7 @@ const StyledDiv = styled.div`
         opacity: ${active ? 1 : 0};
       }
       color:${active ? "#F05475;" : '#black'};
-      background-color:${active ? "#ffebef" : '#ffffff'};
+      background-color:${active ? "#ffeef2" : '#ffffff'};
     `}
 `
 
