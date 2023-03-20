@@ -12,12 +12,13 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BodyRecordDto {
-	int weight; // 몸무게
-	int bmi; // BMI
-	int height; // 키
-	int todayCalories; // 오늘 칼로리 소모량
-	int recommendedCalorie; // 권장 칼로리량
-	int excessCalories; // 초과 칼로리
+	int childIdx;
+	double weight; // 몸무게
+	double bmi; // BMI
+	double height; // 키
+	double todayCalories; // 오늘 칼로리 소모량
+	double recommendedCalorie; // 권장 칼로리량
+	double excessCalories; // 초과 칼로리
 
 	String recordDate; // 기록 날짜
 
