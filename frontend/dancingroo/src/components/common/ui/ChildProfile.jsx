@@ -8,7 +8,7 @@ import {RiUserFill} from "react-icons/ri";
 import kangkang from "../../../assets/images/kangkang.png"
 
 const Wrapper = styled.div`
-    display: flex;
+    display: ${({display})=>display? 'none':'flex'};
     align-items: center;
     justify-content: flex-end;
     min-height:6rem;
