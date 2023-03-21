@@ -8,9 +8,22 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 
 public class KakaoUtil {
+	public int logout(String apiUrl,String access_token) {
+		HttpURLConnection con = connect(apiUrl);
+		try {
+			con.setRequestMethod("POST");
+			con.setDoOutput(true);
+			con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			con.setRequestProperty("Authorization", "Bearer " + access_token);
+			return con.getResponseCode();
+		} catch (Exception e) {
+			return 500;
+		} 
+	}
 	public String getToken(String apiUrl, String clientId, String redirectUri, String code) {
 		HttpURLConnection con = connect(apiUrl);
 		
