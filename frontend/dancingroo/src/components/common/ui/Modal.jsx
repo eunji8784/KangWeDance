@@ -22,22 +22,6 @@ export const ModalWrapper = styled(Wrapper)`
     letter-spacing:0.2rem;
     
 `;
-const ModMain = styled(Main)`
-  border:1px solid red;
-  flex-direction:column;
-  width:80%;
-  height:80%;
-`
-const ModSection = styled(Section)`
-  border:1px solid blue;
-  width:80%;
-  height:80%;
-`
-const ModArticle = styled(Article)`
-  border:1px solid green;
-  width:60%;
-  height:80%;
-`
 
 // ModalParent.jsx 확인
 
@@ -56,18 +40,18 @@ function Modal(props) {
           <Header>
               <H1>모달 헤더</H1>
           </Header>
-          <ModMain>
+          <Main>
               <H2>메인은 여기</H2>
-              <ModSection>
+              <Section>
                 <h3>섹션</h3>
-                <ModArticle>
+                <Article>
                   <h4>아티클 1</h4>
-                </ModArticle>
-                <ModArticle>
+                </Article>
+                <Article>
                   <h4>아티클 2</h4>
-                </ModArticle>
-              </ModSection>
-          </ModMain>
+                </Article>
+              </Section>
+          </Main>
           <Footer>
             <H2>푸터는 여기</H2>
             <button onClick={()=>handleIsModalOpen()}>모달 닫기</button>
