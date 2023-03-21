@@ -82,7 +82,6 @@ const MyOverlay = styled(Overlay)`
 `
 
 function DanceMode(props) {
-  /* eslint-disable */
   const [camfocus, setCamfocus] = useState(false)
   const [model, setModel] = useState(null)
   const [aimedPosture, setAimedPosture] = useState(null)
@@ -98,7 +97,7 @@ function DanceMode(props) {
   const danceTimeline = 
   [
     {
-      danceIndex: 4, // 원래 2
+      danceIndex: 2,
       startTime: 7,
       endTime: 14,
       accuracy: 0.95,
@@ -187,10 +186,33 @@ function DanceMode(props) {
     }
   ]
 
-  // const feedbackTime = danceTimeline.map(ele=>ele.startTime)
-  // let now = 0
+  // 처음에 모델 불러오기 + 동영상 N초 뒤에 자동 시작 (5000 = 5초)
+  useEffect(() => {
+    settingModel()
+    const video = videoref.current
+    const timeoutId = setTimeout(() => {
+      video.play()
+      console.log("PLAY")
+    }, 5000)
+    return () => clearTimeout(timeoutId)
+  }, [])
+  
+  // 자세 변경에 따라 카운트 올리기
+  useInterval(
+    () => {
+      setCount((count) => count + 1)
+    },
+    (prevPosture !== -1 && aimedPosture) ? aimedPosture?.countDelay : null
+  )
 
-  // 모달 함수
+  useInterval(
+    () => {
+      predict()
+    },
+    1000 / 60
+  )
+
+  // 모달 열기/닫기 함수
   const handleIsModalOpen = () => {
       setIsModalOpen((prev)=>!prev)
       if (!isModalOpen) {
@@ -200,20 +222,12 @@ function DanceMode(props) {
       }
   }
 
-  // 모델 불러오기
+  // 모델 불러오기 함수
   const settingModel = async function () {
     const model = await tmPose.load(MODELURL, METADATAURL)
     setModel(() => model)
     console.log("MODEL LOADED")
   }
-
-  // 처음에 모델 없으면 모델 불러오기
-  useEffect(() => {
-    if (model) {
-      return
-    }
-    settingModel()
-  }, [model])
 
   // 예측 함수 - 자세 상태(prevPosture)를 바꿈
   const predict = async function () {
@@ -240,31 +254,8 @@ function DanceMode(props) {
     })
   }
 
-  // 자세 변경에 따라 카운트 올리기
-  useInterval(
-    () => {
-      setCount((count) => count + 1)
-    },
-    prevPosture !== -1 ? aimedPosture?.countDelay : null
-  )
-
-  // 프레임마다 예측 함수 반복
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      if (camref.current) {
-        // const currentTime = videoref?.current?.currentTime
-        // if (currentTime >= feedbackTime[now]){
-        //   setAimedPosture(danceTimeline[now])
-        //   setCount(0)
-        //   now += 1
-        // }
-        predict()
-      }
-    }, 1000 / 60)
-    return () => clearInterval(intervalId)
-  }, [model, camref.current, aimedPosture])
-
-  // 재생 시간에 따라 피드백 이미지를 띄우는 함수
+  // 재생 시간에 따라 노래평가시간(dancetimeline) 확인해서 목표(aimedPosture) 바꾸고
+  // 카운트(count)에 따라 피드백 이미지를 띄우는 함수
   const handleTimeUpdate = () => {
     const currentTime = videoref?.current?.currentTime
     const filteredTimeline = danceTimeline.find(
@@ -272,8 +263,11 @@ function DanceMode(props) {
         e.startTime < currentTime &&
         e.endTime > currentTime
     );
-    setAimedPosture(filteredTimeline)
-    console.log("!!!")
+    if (filteredTimeline?.startTime !== aimedPosture?.startTime) {
+      console.log(filteredTimeline, aimedPosture)
+      setAimedPosture(filteredTimeline)
+      setCount(0)
+    }
     if (filteredTimeline && currentTime >= filteredTimeline.endTime-1 && currentTime < filteredTimeline.endTime) {
       if (count > filteredTimeline.countStandard) {
         openGreatFeedback()
@@ -285,22 +279,7 @@ function DanceMode(props) {
     }
   }
 
-  // // 목표 포즈 바뀌면 count 초기화
-  // useEffect(() => {
-  //   setCount(() => 0)
-  // },[aimedPosture])
-
-  // 동영상 N초 뒤에 자동 시작 (5000 = 5초)
-  useEffect(() => {
-    const video = videoref.current
-    const timeoutId = setTimeout(() => {
-      video.play()
-      console.log("PLAY")
-    }, 5000)
-    return () => clearTimeout(timeoutId)
-  }, [])
-
-  // 캠 위치 바꾸기
+  // 캠 위치 바꾸기 함수
   const switchVideo = () => {
     setCamfocus(!camfocus)
   }
@@ -351,7 +330,13 @@ function DanceMode(props) {
           <ModalBtn onClick={replay}>처음부터 재생</ModalBtn>
           <ModalBtn onClick={switchVideo}>화면 전환</ModalBtn>
           <h1>
-            {aimedPosture?.danceIndex || "?"} {count} {prevPosture}
+            {aimedPosture?.danceIndex || "?"}
+          </h1>          
+          <h1>
+            {count}
+          </h1>          
+          <h1>
+            {prevPosture}
           </h1>
         </div>
       </MyOverlay>
