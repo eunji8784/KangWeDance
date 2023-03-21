@@ -81,8 +81,7 @@ export const Overlay = styled.div`
   align-items: center;
   z-index: 1;
 `
-
-export default {
+const Semantics = {
   Wrapper,
   PinkButton,
   Header,
@@ -92,5 +91,8 @@ export default {
   H1,
   H2,
   P,
-  Footer
-};
+  Footer,
+  Overlay
+}
+
+export default Semantics
