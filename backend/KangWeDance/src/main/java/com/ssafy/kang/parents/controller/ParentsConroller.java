@@ -46,7 +46,6 @@ public class ParentsConroller {
 		ParentsDto dto = new ParentsDto();
 		try {
 			token = parentsService.getToken(code);
-			System.out.println(token);
 			userIO = parentsService.getUserInfo(token.get("access_token"));
 			dto.setSocailUid(userIO.get("id"));
 			dto.setSocialPlatform("Kakao");
@@ -78,14 +77,14 @@ public class ParentsConroller {
 	public ApiResponse<?> login(ParentsDto dto,Map<String, String> userIO) throws Exception{
 		Map<String, String> map = new HashMap<>();
 		String accessToken ="";
-		String isUser = ""; 
+		String isUser = "false";
 		SuccessCode sc= null;
 		if(dto != null && !dto.isDeletedFlag()) {
 			accessToken = jwtUtil.createAccessToken("useridx", dto.getParentIdx());
-			isUser = "true";
+			if(parentsService.findChildren(dto.getParentIdx())!=0)
+				isUser = "true";
 			sc = SuccessCode.LOGIN;
 		}else {
-			isUser = "false";
 			sc = SuccessCode.GO_JOIN;
 			if(dto==null) {
 				dto = new ParentsDto();					
@@ -130,8 +129,8 @@ public class ParentsConroller {
 		}
 	}
 	@GetMapping("logout")
-	public ApiResponse<?> logout(){
-		//레디스 추후 구현
+	public ApiResponse<?> logout(@RequestParam int accesstoken){
+		
 		return ApiResponse.success(SuccessCode.LOGOUT);
 	}
 }
