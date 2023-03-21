@@ -27,24 +27,56 @@
 	
 	<!-- 사진 조회 -->
 	<select id="selectPhotos" parameterType="int" resultMap="photosList">
-		SELECT photo_idx, photo_image_url, create_date, photo_name
-		FROM photoAlbum
-		WHERE parent_idx=#{parentIdx}
+			<![CDATA[ 
+				SELECT * 
+				FROM (
+					SELECT @rownum:=@rownum+1 as rnum,
+			        photo_idx, photo_image_url, create_date, photo_name
+						FROM photoAlbum,(select @rownum:=0) rn
+						WHERE parent_idx=#{parentIdx}
+			        ) as a
+			    WHERE rnum >(#{pageNum}-1)*10  and rnum <=(#{pageNum}*10);
+    		 ]]>
 	</select>
 	
 	<!-- 프레임 및 스티커 조회  -->
 	<select id="selectPrames" parameterType="int" resultMap="pramesList">
-		SELECT prame_idx, prame_image_url, prame_flag
-		FROM photoPrame
-		WHERE photo_idx=#{photoIdx}
+    			<![CDATA[ 
+				SELECT *
+				FROM (
+						SELECT @rownum:=@rownum+1 as rnum, prame_idx, prame_image_url, prame_flag
+						FROM photoPrame, (select @rownum:=0) rn
+						WHERE parent_idx=0
+					)as a
+			    WHERE rnum >(#{pageNum}-1)*10  and rnum <=(#{pageNum}*10);
+    		 ]]>
 	</select>
 	
 	<!-- 사진 삭제  -->
 	<delete id="deletePhoto" parameterType="int">
 	   	DELETE FROM photoAlbum
-	   	WHERE photo_idx=#{photoIdx};
+	   	WHERE parent_idx=#{photoIdx};
    </delete>
-	
+   
+   <!-- 사진 리스트 카운드 -->
+   <select id ="selectPhotosCount" parameterType="int" resultType="int">
+   SELECT count(*)
+   FROM (
+		SELECT photo_idx, photo_image_url, create_date, photo_name
+		FROM photoAlbum
+		WHERE parent_idx=#{parentIdx}
+	) as a;
+   </select>
+   
+   <!-- 프레임 리스트 카운드 -->
+   <select id ="selectPramesCount" parameterType="int" resultType="int">
+	SELECT count(*)
+	FROM (
+		SELECT prame_idx, prame_image_url, prame_flag
+		FROM photoPrame
+		WHERE parent_idx=#{parentIdx}
+	) as a;
+	</select>
 	
 	
 	
