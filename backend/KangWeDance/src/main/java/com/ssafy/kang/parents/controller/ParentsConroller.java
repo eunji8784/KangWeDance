@@ -46,13 +46,13 @@ public class ParentsConroller {
 		ParentsDto dto = new ParentsDto();
 		try {
 			token = parentsService.getToken(code);
-			System.out.println(token);
-			userIO = parentsService.getUserInfo(token.get("access_token"));
+			dto.setAccessToken(token.get("access_token"));
+			userIO = parentsService.getUserInfo(dto.getAccessToken());
 			dto.setSocailUid(userIO.get("id"));
 			dto.setSocialPlatform("Kakao");
 			dto.setNickname(userIO.get("nickname"));
 			dto = parentsService.findSocial(dto.getSocailUid());
-			return login(dto,userIO);
+			return login(dto,userIO,token);
 		} catch (Exception e) {
 			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
 		}
@@ -70,25 +70,26 @@ public class ParentsConroller {
 			dto.setSocialPlatform("Naver");
 			dto.setNickname(userIO.get("nickname"));
 			dto = parentsService.findSocial(dto.getSocailUid());
-			return login(dto,userIO);
+			return login(dto,userIO,token);
 		} catch (Exception e) {
 			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
 		}
 	}
-	public ApiResponse<?> login(ParentsDto dto,Map<String, String> userIO) throws Exception{
+	public ApiResponse<?> login(ParentsDto dto,Map<String, String> userIO,Map<String, String> token) throws Exception{
 		Map<String, String> map = new HashMap<>();
 		String accessToken ="";
-		String isUser = ""; 
+		String isUser = "false";
 		SuccessCode sc= null;
 		if(dto != null && !dto.isDeletedFlag()) {
 			accessToken = jwtUtil.createAccessToken("useridx", dto.getParentIdx());
-			isUser = "true";
+			if(parentsService.findChildren(dto.getParentIdx())!=0)
+				isUser = "true";
 			sc = SuccessCode.LOGIN;
 		}else {
-			isUser = "false";
 			sc = SuccessCode.GO_JOIN;
 			if(dto==null) {
-				dto = new ParentsDto();					
+				dto = new ParentsDto();		
+				dto.setAccessToken(token.get("access_token"));
 				dto.setSocailUid(userIO.get("id"));
 				dto.setSocialPlatform("Kakao");
 				dto.setNickname(userIO.get("nickname"));					
@@ -103,7 +104,6 @@ public class ParentsConroller {
 	}
 	@PatchMapping("nickname")
 	public ApiResponse<?> nicknameModify(@RequestParam int accesstoken, @RequestBody String nickname){
-		
 		try {
 			parentsService.modifyNickname(ParentsDto.builder().parentIdx(accesstoken).nickname(nickname).build());
 			return ApiResponse.success(SuccessCode.UPDATE_NICKNAME);
@@ -130,8 +130,8 @@ public class ParentsConroller {
 		}
 	}
 	@GetMapping("logout")
-	public ApiResponse<?> logout(){
-		//레디스 추후 구현
+	public ApiResponse<?> logout(@RequestParam int accesstoken){
+		
 		return ApiResponse.success(SuccessCode.LOGOUT);
 	}
 }
