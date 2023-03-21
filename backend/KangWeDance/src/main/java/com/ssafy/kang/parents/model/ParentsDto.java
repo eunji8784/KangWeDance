@@ -29,4 +29,5 @@ public class ParentsDto {
 	String nickname;
 	int experienceScore;
 	boolean deletedFlag;
+	String accessToken;
 }
