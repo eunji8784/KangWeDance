@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import {FaEdit} from 'react-icons/fa';
 
@@ -31,7 +31,8 @@ const ExperiencePercentage = styled.div`
 `;
 
 function AccountInfo(props) {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
+    /* eslint-disable */
     const [experiencePercentage, setExperiencePercentage] = useState(50);
 
     return (

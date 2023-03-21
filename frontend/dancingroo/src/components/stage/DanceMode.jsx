@@ -7,7 +7,9 @@ import { Overlay } from "../common/ui/Semantics"
 import { ModalBtn } from "../status/HealthData"
 import { useInterval } from "../../hooks/useInterval"
 
-import logo from "../../assets/images/logo.png"
+import greatImg from "../../assets/images/great.png"
+import goodImg from "../../assets/images/good.png"
+import cheerupImg from "../../assets/images/cheerup.png"
 
 const tmPose = window.tmPose
 const MODELURL =
@@ -29,7 +31,7 @@ const Wrapper = styled.div`
     position: absolute;
     bottom: 0;
     right: 0;
-    width 400px;
+    width: 400px;
   }
   .test {
     position: absolute;
@@ -43,11 +45,15 @@ const MyOverlay = styled(Overlay)`
   left: 0;
   justify-content: normal;
   img {
-    width: 30%;
+    width: 25%;
+    margin-top: 1rem;
     height: auto;
     display: none;
   }
   .popup {
+    /* ${({active})=>active==='great' && `
+      display:block;
+      `} */
     animation: pop-up 1s;
     @keyframes pop-up {
       0% {
@@ -79,16 +85,113 @@ function DanceMode(props) {
   /* eslint-disable */
   const [camfocus, setCamfocus] = useState(false)
   const [model, setModel] = useState(null)
-  const [aimedPosture, setAimedPosture] = useState("나무자세")
-  const [prevPosture, setPrevPosture] = useState("기본자세")
+  const [aimedPosture, setAimedPosture] = useState(null)
+  const [prevPosture, setPrevPosture] = useState(-1)
   const [count, setCount] = useState(0)
   const camref = useRef(null)
   const videoref = useRef(null)
-  const imgref = useRef(null)
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const greatimgref = useRef(null)
+  const goodimgref = useRef(null)
+  const cheerupimgref = useRef(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   
+  const danceTimeline = 
+  [
+    {
+      danceIndex: 4, // 원래 2
+      startTime: 7,
+      endTime: 14,
+      accuracy: 0.95,
+      countDelay: 100,
+      countStandard: 10,
+    },
+    {
+      danceIndex: 3,
+      startTime: 15,
+      endTime: 23,
+      accuracy: 0.95,
+      countDelay: 100,
+      countStandard: 10,
+    },
+    {
+      danceIndex: 3,
+      startTime: 23,
+      endTime: 30,
+      accuracy: 0.95,
+      countDelay: 100,
+      countStandard: 10,
+    },
+    {
+      danceIndex: 1,
+      startTime: 30,
+      endTime: 34,
+      accuracy: 0.95,
+      countDelay: 100,
+      countStandard: 10,
+    },
+    {
+      danceIndex: 3,
+      startTime: 34,
+      endTime: 42,
+      accuracy: 0.95,
+      countDelay: 100,
+      countStandard: 10,
+    },
+    {
+      danceIndex: 3,
+      startTime: 42,
+      endTime: 49,
+      accuracy: 0.95,
+      countDelay: 100,
+      countStandard: 10,
+    },
+    {
+      danceIndex: 0,
+      startTime: 49,
+      endTime: 56,
+      accuracy: 0.95,
+      countDelay: 100,
+      countStandard: 10,
+    },
+    {
+      danceIndex: 3,
+      startTime: 56,
+      endTime: 63,
+      accuracy: 0.95,
+      countDelay: 100,
+      countStandard: 10,
+    },
+    {
+      danceIndex: 3,
+      startTime: 63,
+      endTime: 71,
+      accuracy: 0.95,
+      countDelay: 100,
+      countStandard: 10,
+    },
+    {
+      danceIndex: 1,
+      startTime: 71,
+      endTime: 79,
+      accuracy: 0.95,
+      countDelay: 100,
+      countStandard: 10,
+    },
+    {
+      danceIndex: 2,
+      startTime: 79,
+      endTime: 87,
+      accuracy: 0.95,
+      countDelay: 100,
+      countStandard: 10,
+    }
+  ]
+
+  // const feedbackTime = danceTimeline.map(ele=>ele.startTime)
+  // let now = 0
+
   // 모달 함수
-  const handleIsModalOpen = ()=>{
+  const handleIsModalOpen = () => {
       setIsModalOpen((prev)=>!prev)
       if (!isModalOpen) {
         videoref.current.pause()
@@ -101,6 +204,7 @@ function DanceMode(props) {
   const settingModel = async function () {
     const model = await tmPose.load(MODELURL, METADATAURL)
     setModel(() => model)
+    console.log("MODEL LOADED")
   }
 
   // 처음에 모델 없으면 모델 불러오기
@@ -109,28 +213,29 @@ function DanceMode(props) {
       return
     }
     settingModel()
-  }, [])
+  }, [model])
 
-  // 예측 함수
+  // 예측 함수 - 자세 상태(prevPosture)를 바꿈
   const predict = async function () {
-    if (!model) {
+    if (!model || !aimedPosture) {
       return
     }
     const { pose, posenetOutput } = await model.estimatePose(
       camref.current.video
     )
     const prediction = await model.predict(posenetOutput)
-    const rtPosture = prediction[4]
+    const rtPosture = prediction[aimedPosture.danceIndex]
+    console.log(rtPosture.className, rtPosture.probability.toFixed(2))
     setPrevPosture((prevPosture) => {
       if (
-        rtPosture.probability.toFixed(2) > 0.95 &&
-        prevPosture === aimedPosture
+        rtPosture.probability.toFixed(2) > aimedPosture.accuracy &&
+        prevPosture === aimedPosture.danceIndex
       ) {
         return prevPosture
-      } else if (rtPosture.probability.toFixed(2) > 0.95) {
-        return aimedPosture
+      } else if (rtPosture.probability.toFixed(2) > aimedPosture.accuracy) {
+        return aimedPosture.danceIndex
       } else {
-        return "기본자세"
+        return -1
       }
     })
   }
@@ -140,49 +245,91 @@ function DanceMode(props) {
     () => {
       setCount((count) => count + 1)
     },
-    prevPosture !== "기본자세" ? 1000 : null
+    prevPosture !== -1 ? aimedPosture?.countDelay : null
   )
 
   // 프레임마다 예측 함수 반복
   useEffect(() => {
     const intervalId = setInterval(() => {
       if (camref.current) {
+        // const currentTime = videoref?.current?.currentTime
+        // if (currentTime >= feedbackTime[now]){
+        //   setAimedPosture(danceTimeline[now])
+        //   setCount(0)
+        //   now += 1
+        // }
         predict()
       }
     }, 1000 / 60)
     return () => clearInterval(intervalId)
-  }, [model, camref.current])
+  }, [model, camref.current, aimedPosture])
 
   // 재생 시간에 따라 피드백 이미지를 띄우는 함수
   const handleTimeUpdate = () => {
-    const img = imgref.current
-    const video = videoref.current
-    const currentTime = video.currentTime
-
-    if (currentTime >= 3 && currentTime < 6) {
-      img.style.display = "block"
-    } else {
-      img.style.display = "none"
+    const currentTime = videoref?.current?.currentTime
+    const filteredTimeline = danceTimeline.find(
+      (e) =>
+        e.startTime < currentTime &&
+        e.endTime > currentTime
+    );
+    setAimedPosture(filteredTimeline)
+    console.log("!!!")
+    if (filteredTimeline && currentTime >= filteredTimeline.endTime-1 && currentTime < filteredTimeline.endTime) {
+      if (count > filteredTimeline.countStandard) {
+        openGreatFeedback()
+      } else if (count > filteredTimeline.countStandard / 2) {
+        openGoodFeedback()
+      } else {
+        openCheerupFeedback()
+      }
     }
   }
+
+  // // 목표 포즈 바뀌면 count 초기화
+  // useEffect(() => {
+  //   setCount(() => 0)
+  // },[aimedPosture])
 
   // 동영상 N초 뒤에 자동 시작 (5000 = 5초)
   useEffect(() => {
     const video = videoref.current
     const timeoutId = setTimeout(() => {
       video.play()
+      console.log("PLAY")
     }, 5000)
     return () => clearTimeout(timeoutId)
   }, [])
 
+  // 캠 위치 바꾸기
   const switchVideo = () => {
     setCamfocus(!camfocus)
   }
 
   // test
   const replay = () => {
-    videoref.current.currentTime = 0
+    videoref.current.currentTime = 7
     videoref.current.play()
+  }
+
+  //test
+  const openGreatFeedback = () => {
+    const greatimg = greatimgref.current
+    greatimg.style.display = "block"
+    setTimeout(() => {greatimg.style.display = "none"}, 3000)
+  }
+
+  //test
+  const openGoodFeedback = () => {
+    const goodimg = goodimgref.current
+    goodimg.style.display = "block"
+    setTimeout(() => {goodimg.style.display = "none"}, 3000)
+  }
+
+  //test
+  const openCheerupFeedback = () => {
+    const cheerupimg = cheerupimgref.current
+    cheerupimg.style.display = "block"
+    setTimeout(() => {cheerupimg.style.display = "none"}, 3000)
   }
 
   return (
@@ -193,13 +340,18 @@ function DanceMode(props) {
         mirrored={true}
       />
       <MyOverlay>
-        <img className="popup" ref={imgref} src={logo} />
+        <img className="popup" ref={greatimgref} src={greatImg} alt="great"/>
+        <img className="popup" ref={goodimgref} src={goodImg} alt="good"/>
+        <img className="popup" ref={cheerupimgref} src={cheerupImg} alt="cheerup"/>
         <div className="test">
+          <ModalBtn onClick={openGreatFeedback}>Great</ModalBtn>
+          <ModalBtn onClick={openGoodFeedback}>Good</ModalBtn>
+          <ModalBtn onClick={openCheerupFeedback}>Cheer Up</ModalBtn>
           <ModalBtn onClick={handleIsModalOpen}>모달 열기</ModalBtn>
           <ModalBtn onClick={replay}>처음부터 재생</ModalBtn>
           <ModalBtn onClick={switchVideo}>화면 전환</ModalBtn>
           <h1>
-            {aimedPosture} {count} {prevPosture}
+            {aimedPosture?.danceIndex || "?"} {count} {prevPosture}
           </h1>
         </div>
       </MyOverlay>
