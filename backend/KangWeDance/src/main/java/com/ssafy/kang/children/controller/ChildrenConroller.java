@@ -19,6 +19,7 @@ import com.ssafy.kang.children.model.serivce.ChildrenSerivce;
 import com.ssafy.kang.common.ErrorCode;
 import com.ssafy.kang.common.SuccessCode;
 import com.ssafy.kang.common.dto.ApiResponse;
+import com.ssafy.kang.util.JwtUtil;
 
 @CrossOrigin(origins = { "*" }, maxAge = 6000)
 @RequestMapping("/children")
@@ -26,11 +27,14 @@ import com.ssafy.kang.common.dto.ApiResponse;
 public class ChildrenConroller {
 	@Autowired
 	private ChildrenSerivce childrenSerivce;
-	
+	private final JwtUtil jwtUtil;
+	public ChildrenConroller() {
+		this.jwtUtil = new JwtUtil();
+	}
 	@GetMapping
-	public ApiResponse<?> childrenList(@RequestParam int accesstoken){
+	public ApiResponse<?> childrenList(@RequestParam String accesstoken){
 		try {
-			return ApiResponse.success(SuccessCode.READ_CHILDREN ,childrenSerivce.findChildren(accesstoken)) ;
+			return ApiResponse.success(SuccessCode.READ_CHILDREN ,childrenSerivce.findChildren(jwtUtil.getUserIdx(accesstoken))) ;
 		} catch (Exception e) {
 			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
 		}
@@ -38,8 +42,8 @@ public class ChildrenConroller {
 		
 	}
 	@PostMapping
-	public ApiResponse<?> childrenAdd(@RequestParam int accesstoken, @RequestBody ChildrenDto childrenDto ){
-		childrenDto.setParentIdx(accesstoken);
+	public ApiResponse<?> childrenAdd(@RequestParam String accesstoken, @RequestBody ChildrenDto childrenDto ){
+		childrenDto.setParentIdx(jwtUtil.getUserIdx(accesstoken));
 		childrenDto.setProfileImageUrl("https://kangwedance.s3.ap-northeast-2.amazonaws.com/%EA%B8%B0%EB%B3%B8+%ED%94%84%EB%A1%9C%ED%95%84+%EC%9D%B4%EB%AF%B8%EC%A7%80.png");
 		childrenDto.setTodayCalrories(0);
 		childrenDto.setBmi(Math.round((childrenDto.getWeight()/(Math.pow(childrenDto.getHeight()/100,2)))*10.0)/10.0);
@@ -51,7 +55,7 @@ public class ChildrenConroller {
 		}
 	}
 	@DeleteMapping
-	public ApiResponse<?> childrenRemove(@RequestParam int accesstioken,@RequestParam int childIdx){
+	public ApiResponse<?> childrenRemove(@RequestParam String accesstioken,@RequestParam int childIdx){
 		try {
 			childrenSerivce.removeChildren(childIdx);
 			return ApiResponse.success(SuccessCode.DELETE_CHILDREN);
@@ -60,7 +64,7 @@ public class ChildrenConroller {
 		}
 	}
 	@PatchMapping
-	public ApiResponse<?> childrenModify(@RequestParam int accesstoken, @RequestBody ChildrenDto childrenDto ){
+	public ApiResponse<?> childrenModify(@RequestParam String accesstoken, @RequestBody ChildrenDto childrenDto ){
 		try {
 			childrenSerivce.modifyChildren(childrenDto);
 			return ApiResponse.success(SuccessCode.UPDATE_CHILDREN);
@@ -69,7 +73,7 @@ public class ChildrenConroller {
 		}
 	}
 	@PatchMapping("/body-update")
-	public ApiResponse<?> childrenBodyAdd(@RequestParam int accesstoken, @RequestBody BodyRecordDto bodyRecordDto ){
+	public ApiResponse<?> childrenBodyAdd(@RequestParam String accesstoken, @RequestBody BodyRecordDto bodyRecordDto ){
 		bodyRecordDto.setBmi(Math.round((bodyRecordDto.getWeight()/(Math.pow(bodyRecordDto.getHeight()/100,2)))*10.0)/10.0);
 		try {
 			childrenSerivce.addChildrenBody(bodyRecordDto);
