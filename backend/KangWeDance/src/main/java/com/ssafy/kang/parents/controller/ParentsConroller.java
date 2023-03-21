@@ -100,7 +100,7 @@ public class ParentsConroller {
 		map.put("isUser", isUser);
 		return ApiResponse.success(sc,map);
 	}
-	@PatchMapping("nickname")
+	@PatchMapping("/nickname")
 	public ApiResponse<?> nicknameModify(@RequestParam String accesstoken, @RequestBody String nickname){
 		try {
 			
@@ -128,7 +128,7 @@ public class ParentsConroller {
 			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
 		}
 	}
-	@GetMapping("logout")
+	@GetMapping("/logout")
 	public ApiResponse<?> logout(@RequestParam String accesstoken){
 		try {
 			ParentsDto dto = parentsService.findUser(jwtUtil.getUserIdx(accesstoken));
