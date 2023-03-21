@@ -2,8 +2,10 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import bigLogo from "../assets/images/bigLogo.png"
-import musicNote from "../assets/images/musicNote.png"
+import bgImg from "../assets/images/bgImg.png"
 import kangkang from "../assets/images/kangkang.png"
+import naver_login from "../assets/images/naver_login.png"
+import kakao_login from "../assets/images/kakao_login.png"
 
 const Wrapper = styled.div`
     width: 100vw;
@@ -16,47 +18,62 @@ const Wrapper = styled.div`
     justify-content:center;
     & > img:first-child {
     position: absolute;
-    width:50%;
-    top: 2rem;
+    width:60%;
+    min-width:35rem;
+    top: 12rem;
     z-index: 2;
-    }
-    &> img:nth-child(2){
-      position: absolute;
-      top:11rem;
-      width:15rem;
-      height:15rem;;
-      z-index: 3;
     }
     & > img:last-child {
       position: absolute;
       bottom:0;
       z-index: 0;
-      width:70%;
-      height:70%;
+      width:100%;
+      height:100%;
     }
     .socialLogin{
-      /* display:block; */
+      display:flex;
+      flex-direction:column;
       position: absolute;
       /* background-color:blue; */
       z-index:1;
-      width:15rem;
-      top: 30rem;
+      width:20rem;
+      top: 25rem;
+      left: auto; right:auto;
       font-size:30px;
       text-align:center;
+    }
+    .login-btn{
+    width:15rem;
+    height:3.5rem;
+    margin: 0.3rem 0;
+    border-radius:10px;
+    cursor: pointer;
+    box-shadow: 0px 3px 10px rgba(240, 84, 117, 0.3);
+    transition: box-shadow 0.3s ease-in-out;
+    &:hover{
+        box-shadow: 0px 3px 15px rgba(240, 84, 117, 0.6);
+    }
     }
 `;
 
 function PlayPage(props) {
     const navigate = useNavigate();
+    const API_KEY_KAKAO = process.env.REACT_APP_API_KEY_KAKAO;
+    const REDIRECT_URI = 'http://localhost:3000/users/oauth2-kakao'
+    const KAUTH_KAKAO = `https://kauth.kakao.com/oauth/authorize?client_id=${API_KEY_KAKAO}&redirect_uri=${REDIRECT_URI}&response_type=code`
+
     return (
         <Wrapper>
-          <img src={bigLogo} alt="" />
-          <img src={kangkang} alt="" onClick={()=>navigate('/play')}/>
+          <img src={bigLogo} alt="" onClick={()=>navigate('/play')}/>
           <div className="socialLogin">
-            <div onClick={()=>navigate('users/oauth2-kakao')}>카카오로그인</div>
-            <div onClick={()=>navigate('users/oauth2-naver')}>네이버로그인</div>
+            <a href={KAUTH_KAKAO}>
+              <img src={kakao_login} alt="" className='login-btn'/>
+            </a>
+            <a href={''}>
+              <img src={naver_login} alt="" className='login-btn'/>
+            </a>
           </div>
-          <img src={musicNote} alt="" />
+          <img src={bgImg} alt="" />
         </Wrapper>
     );
 }
