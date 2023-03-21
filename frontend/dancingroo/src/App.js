@@ -16,6 +16,8 @@ import InitPage from "./pages/InitPage"
 import OauthKakao from "./oauth/OauthKakao"
 import OauthNaver from "./oauth/OauthNaver"
 import Registration from "./oauth/Registration"
+import RegisterChild from "./components/common/form/RegisterChild"
+import ErrorPage from "./pages/ErrorPage"
 
 
 function App() {
@@ -40,9 +42,11 @@ function App() {
         {/* 맨 윗줄 헤더만 있음 */}
         <Route element={<NHBLayout />}>
           <Route path={"/users"} element={<UserPage />} />
+          <Route path={"/signup"} element={<RegisterChild />} />
           <Route path={"/users/join"} element={<Registration />}/>
           <Route path={"/users/oauth2-kakao"} element={<OauthKakao />}/>
           <Route path={"/users/oauth2-naver"} element={<OauthNaver />}/>
+          <Route path={"/error"} element={<ErrorPage/>} />
         </Route>
         {/* 헤더 없음 */}
         <Route path={"/"} element={<InitPage/>}/>
