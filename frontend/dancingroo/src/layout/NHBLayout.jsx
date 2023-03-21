@@ -15,6 +15,7 @@ const Bodysuit = styled.div`
     position: relative;
     // @ 양 옆 마진
     margin:0 8% !important;
+    z-index:2;
     /* border: 1px solid blue; */
 `;
 const OutletWrapper = styled(Outlet)`
