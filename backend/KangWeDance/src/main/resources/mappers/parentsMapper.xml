@@ -8,6 +8,7 @@
 		<result column="nickname" property="nickname" />
 		<result column="experience_score" property="experienceScore" />
 		<result column="deleted_flag" property="deletedFlag" />
+		<result column="access_token" property="accessToken" />
 	</resultMap>
 	<select id="selectExperience" parameterType="int" resultType="int">
 		select experience_score
@@ -42,4 +43,14 @@
 		set deleted_flag = 0, nickname = #{nickname}
 		where parent_idx = #{parentIdx}
 	</update>
+	<update id="updateAccessToken" parameterType="ParentsDto">
+		update parent
+		set access_token = #{accessToken}
+		where parent_idx = #{parentIdx}
+	</update>
+	<select id="selectUser" parameterType="int" resultMap="parent">
+		select *
+		from parent 
+		where parent_idx = #{parentIdx}
+	</select>
 </mapper>
