@@ -16,6 +16,7 @@ public interface ParentsService {
 	ParentsDto findSocial(String socailUid) throws Exception;
 	public int addUser(ParentsDto dto)throws Exception;
 	public void modifyUser(ParentsDto dto)throws Exception;
+	public int findChildren(int parentIdx);
 	
 	
 	
