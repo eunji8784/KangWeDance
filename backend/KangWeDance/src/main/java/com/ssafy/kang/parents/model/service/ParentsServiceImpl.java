@@ -133,6 +133,11 @@ public class ParentsServiceImpl implements ParentsService {
 		// TODO Auto-generated method stub
 		parentsMapper.updateUser(dto);
 	}
+	@Override
+	public int findChildren(int parentIdx) {
+		// TODO Auto-generated method stub
+		return parentsMapper.selectChildren(parentIdx);
+	}
 
 	
 

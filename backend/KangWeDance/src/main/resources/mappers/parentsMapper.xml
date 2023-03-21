@@ -14,7 +14,11 @@
 		from parent
 		where parent_idx = #{idx}
 	</select>
-	
+	<select id="selectChildren" parameterType="int" resultType="int">
+		select count(*)
+		from parent
+		where parent_idx = #{idx}
+	</select>
 	<update id="updateNickname" parameterType="ParentsDto">
 		update parent
 		set nickname = #{nickname}
