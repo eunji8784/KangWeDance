@@ -11,4 +11,5 @@ public interface ParentsMapper {
 	ParentsDto selectSocial(String socailUid)throws Exception;
 	int insertUser(ParentsDto dto) throws Exception;
 	void updateUser(ParentsDto dto) throws Exception;
+	int selectChildren(int parentIdx);
 }
