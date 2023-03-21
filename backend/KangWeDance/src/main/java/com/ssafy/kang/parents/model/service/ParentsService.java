@@ -16,7 +16,10 @@ public interface ParentsService {
 	ParentsDto findSocial(String socailUid) throws Exception;
 	public int addUser(ParentsDto dto)throws Exception;
 	public void modifyUser(ParentsDto dto)throws Exception;
-	public int findChildren(int parentIdx);
+	public int findChildren(int parentIdx)throws Exception;
+	public void modifyAccessToken(ParentsDto dto)throws Exception;
+	public ParentsDto findUser(int userIdx)throws Exception;
+	public void kakaoLogout(String accessToken)throws Exception;
 	
 	
 	
