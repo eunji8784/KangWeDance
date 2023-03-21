@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 // {useEffect} from "react";
 import { Outlet } from "react-router-dom";
 // import { useNavigate,  } from "react-router-dom";
 // import { useSelector } from "react-redux";
-// import TopBar from "../components/common/nav/TopBar";
-import HeaderBar from "../components/common/nav/HeaderBar";
+import TopBar from "../components/common/nav/TopBar";
+// import HeaderBar from "../components/common/nav/HeaderBar";
 import styled from "styled-components";
-import ChildProfile from "../components/common/ui/ChildProfile";
+// import ChildProfile from "../components/common/ui/ChildProfile";
 
 const Bodysuit = styled.div`
     display: flex;
@@ -20,12 +20,10 @@ const Bodysuit = styled.div`
 const OutletWrapper = styled(Outlet)`
 `
 
-const HBLayout = (props) => {
-    const {watchingPage} = props;
-    // const [watching, setWatching] = useState(watchingPage)
+const HBLayout = () => {
     // const navigate = useNavigate();
     // const isLoggedIn = useSelector((state)=>state.TOKEN.authenticated);
-    
+
     // useEffect(()=>{
     //     if(isLoggedIn){
     //         navigate("/");
@@ -34,10 +32,10 @@ const HBLayout = (props) => {
 
     return(
         <Bodysuit>
-            {/* <TopBar/> */}
-            <HeaderBar watchingPage={watchingPage}/>
-            <ChildProfile/>
-            <OutletWrapper />
+            <TopBar/>
+            {/* <HeaderBar/> */}
+            {/* <ChildProfile/> */}
+            <OutletWrapper/>
         </Bodysuit>
     )
 
