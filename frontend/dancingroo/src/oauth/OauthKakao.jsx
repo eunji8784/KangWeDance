@@ -6,7 +6,6 @@ import { Wrapper } from "../components/common/ui/Semantics";
 function OauthKakao(props) {
   const navigate = useNavigate();
   const { error, isUser, handleLogin } = useLogin();
-  const API_KEY_KAKAO = process.env.REACT_APP_API_KEY_KAKAO;
   let code = new URL(window.location.href).searchParams.get("code");
 
   useEffect(() => {
@@ -22,7 +21,7 @@ function OauthKakao(props) {
       navigate("/signup");
     }
   }, [error, isUser, navigate]);
-
+  console.log(isUser)
   return (
     <Wrapper>
       {/* Add your content here */}

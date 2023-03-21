@@ -123,7 +123,7 @@ const ModHeader = styled(Header)`
 `
 function RegisterChild({childIdx}) {
     const navigate = useNavigate();
-    const api = useApi()
+    const {data, isLoading, error, post} = useApi('/children')
     const [newChild, setNewChild] = useState(true);
     const [colorboy, setColorBoy] = useState("#FFD731");
     const [colorgirl, setColorGirl] = useState("#ffffff");
@@ -134,29 +134,36 @@ function RegisterChild({childIdx}) {
         weight:null,
         height:null,
         newChid:true,
-        gender:'boy',
+        gender:false,
     }
     const [kidState, setKidState] = useState(initialState)
     
     const SumbitChild = async()=>{
-        const response = await api.post('/children', {
+        const data = {
             nickname:kidState["nickname"],
             birthdayDate:kidState["birth"],
             gender:kidState["gender"],
-            weight:kidState["weight"],
-            height:kidState["height"],
-        })
-        console.log(response)
+            weight:Number(kidState["weight"]),
+            height:Number(kidState["height"]),
+        }
+        post(data) 
     }
+
+    console.log({            nickname:kidState["nickname"],
+    birthdayDate:kidState["birth"],
+    gender:kidState["gender"],
+    weight:Number(kidState["weight"]),
+    height:Number(kidState["height"])})
+
     const handleInputChange = (e) => {
         let { name, value } = e.target;
         if (name=="gender"){
             if(value==="남자아이"){
-                value='boy'
+                value=false
                 setColorBoy("#FFD731");
                 setColorGirl("#ffffff"); 
             } else {
-                value='girl'
+                value=true
                 setColorBoy("#ffffff");
                 setColorGirl("#FFD731");
             }
@@ -166,6 +173,7 @@ function RegisterChild({childIdx}) {
           [name]: value,
         }));
     };
+    console.log(error)
     return (
         <ModWrapper>
             <ModHeader>

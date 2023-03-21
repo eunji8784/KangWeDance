@@ -13,19 +13,24 @@ const useLogin = () => {
   const navigate = useNavigate()
 
   const handleLogin = async (Oauth, code) => {
-    setLoading(true);
-    setError(null);
     try {
-      const response = await api.get(`/parents/social/${Oauth}?code=${code}`);
-      if (response.data.status!==200){
-        alert(`로그인 실패, status:${response.data.status}`)
+      const baseURL = "https://kangwedance.site/dev"
+      const response = await fetch(baseURL + `/parents/social/${Oauth}?code=${code}`, {
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      // [변경점] 기존의 response.data가 json이라고 생각하면 됨.
+      const json = await response.json();
+      if (json.status!==200){
+        alert(`로그인 실패, status:${json.status}`)
         navigate('/')
-      } 
-      const { accessToken, isUser } = response.data.data;
+      }
+      const { accessToken, isUser } = json.data;
       console.log(accessToken, isUser)
       setCookie('accessToken', accessToken, { path: '/' }); //모든 경로에서 토큰 허용하겠다)
-      setLoading(false);
-      setIsUser(isUser)
+      setIsUser(isUser);
     } catch (error) {
       setLoading(false);
       setError(error.message);
