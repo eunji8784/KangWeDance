@@ -16,7 +16,7 @@
 	</select>
 	<select id="selectChildren" parameterType="int" resultType="int">
 		select count(*)
-		from parent
+		from children
 		where parent_idx = #{idx}
 	</select>
 	<update id="updateNickname" parameterType="ParentsDto">
@@ -34,8 +34,8 @@
 		where socail_uid = #{socailUid}
 	</select>
 	<insert id="insertUser" parameterType="ParentsDto" useGeneratedKeys="true" keyColumn="parent_idx" keyProperty="parentIdx">
-		insert into parent(social_platform,socail_uid,nickname)
-		value(#{socialPlatform},#{socailUid},#{nickname})
+		insert into parent(social_platform,socail_uid,nickname,access_token)
+		value(#{socialPlatform},#{socailUid},#{nickname},#{accessToken})
 	</insert>
 	<update id="updateUser" parameterType="ParentsDto">
 		update parent
