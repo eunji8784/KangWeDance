@@ -1,7 +1,11 @@
-import React,{useEffect, useState} from "react";
-import { useNavigate } from "react-router-dom";
+import React,{
+    // useEffect, 
+    useState} from "react";
+// import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import {Wrapper, Header, Main, Article, Section, H1, H2, P, Footer} from "../common/ui/Semantics";
+import {Wrapper, Header, Main, Article, Section, H1,
+    //  H2, 
+     P, Footer} from "../common/ui/Semantics";
 import musicNote from '../../assets/images/musicNote.png'
 
 const ModWrapper = styled(Wrapper)`
@@ -155,7 +159,7 @@ function InputModal(props) {
     const {handleIsModalOpen, isOpen} = props
     const [recentH, recentKg] = [181,78]
     const [selected, setSelected] = useState('아침')
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' });
     

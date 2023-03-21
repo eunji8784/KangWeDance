@@ -4,9 +4,9 @@ import { Outlet } from "react-router-dom";
 // import { useNavigate,  } from "react-router-dom";
 // import { useSelector } from "react-redux";
 import TopBar from "../components/common/nav/TopBar";
-import HeaderBar from "../components/common/nav/HeaderBar";
+// import HeaderBar from "../components/common/nav/HeaderBar";
 import styled from "styled-components";
-import ChildProfile from "../components/common/ui/ChildProfile";
+// import ChildProfile from "../components/common/ui/ChildProfile";
 
 const Bodysuit = styled.div`
     display: flex;
