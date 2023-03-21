@@ -28,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/parents")
 @RestController
 public class ParentsConroller {
+	
 	@Autowired
 	ParentsService parentsService;
 	private final JwtUtil jwtUtil;
