@@ -19,9 +19,14 @@ public interface PhotosService {
 
 	public void addUpdate(MultipartFile multipartFile) throws Exception;
 
-	public List<PhotosDto> findPhotos(int parentIdx) throws Exception;
+	public List<PhotosDto> findPhotos(int parentIdx, int pageNum) throws Exception;
 
-	public List<PramesDto> findPrames(int parentIdx) throws Exception;
+	public List<PramesDto> findPrames(int parentIdx, int pageNum) throws Exception;
 
 	public boolean removePhoto(int photoIdx) throws Exception;
+
+	public int findPhotosCount(int parentIdx) throws Exception;
+
+	public int findPramesCount(int parentIdx) throws Exception;
+
 }

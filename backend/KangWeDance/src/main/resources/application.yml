@@ -8,7 +8,7 @@ server:
 logging:
   level:
     root: info
-
+    
 spring:
   profiles:
     active: local
@@ -17,9 +17,6 @@ spring:
     username: kangwedance
     url: jdbc:mysql://j8a606.p.ssafy.io:3306/kangwedance?allowMultiQueries=true&useUniCode=yes&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
     password: aLo8aFitTJ7YoIe
-  mvc:
-    pathmatch:
-     matching-strategy: ant_path_matcher
     
 mybatis:
   mapper-locations: classpath:mappers/*.xml
@@ -37,7 +34,8 @@ cloud:
     region:
       static: ap-northeast-2
       auto: 'false'
-      
+
+
 ---
 
 spring:
@@ -64,3 +62,9 @@ spring:
       on-profile: set2
 server:
   port: 9002
+---
+
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
