@@ -4,6 +4,7 @@ import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 
 const useLogin = () => {
+  const api = useApi()
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [, setCookie] = useCookies(['accessToken']);
@@ -15,7 +16,7 @@ const useLogin = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await useApi.get(`/parents/social/${Oauth}?code=${code}`);
+      const response = await api.get(`/parents/social/${Oauth}?code=${code}`);
       if (response.data.status!==200){
         alert(`로그인 실패, status:${response.data.status}`)
         navigate('/')
