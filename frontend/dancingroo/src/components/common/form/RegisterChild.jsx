@@ -2,38 +2,72 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import {Wrapper, Header, Main, Article, Section, H1, H2, P, Footer, PinkButton} from "../../common/ui/Semantics";
+import bgImg from "../../../assets/images/bgImg.png"
+import kangkang from "../../../assets/images/kangkang.png"
+import useApi from "../../../hooks/auth/useApi";
 
-const Wrapper = styled.div`
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 1.5rem;
-    width: 55rem;
-    &>div{
-        width:40%;
+const ModWrapper = styled(Wrapper)`
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display:flex;
+    flex-direction:column;
+    position:fixed;
+    align-items:center;
+    z-index:-1;
+    left:0;
+    & > img {
+        position: absolute;
+        z-index: -2;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
     }
-`;
+    h2{
+        padding:0;
+        margin-bottom:-1rem;
+    }
+`
 
-const InputWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 1.5rem;
+const ModMain = styled(Main)`
+    flex-direction:row;
+    min-width: 20rem;
+    height:25rem;
+    &{
+        border:none;
+    }
+    padding-bottom:-10rem;
 `;
-
-const ButtonWrapper = styled.div`
-    display: flex;
-    justify-content: center;
-    margin-bottom: 1.5rem;
-`;
-
+const ModSection = styled(Section)`
+    border:none;
+    flex-direction:column;
+    /* align-items:center; */
+    justify-content:space-around;
+    /* height:100%; */
+    &>${Article}{
+       height:6.5rem;
+       text-align:start;
+       width:80%;
+       flex-direction:column; 
+       border:none;
+       .kids-state{
+        flex-direction:column;
+        width:100%;
+       }
+    }
+`
 const FormLabel = styled.label`
     font-size: 1rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
+    align-self:flex-start;
+    margin-left:1.5rem;
 `;
 
 const FormInput = styled.input`
     height: 2.1rem;
-    width: 80%;
+    min-width: 5rem;
     font-size: 0.8rem;
     background-color: #f8f8f8;
     border: solid 1px #e5e5e5;
@@ -43,7 +77,7 @@ const FormInput = styled.input`
 
 const FormInputButton = styled.input`
     height: 2.1rem;
-    width: 6rem;
+    width: 5rem;
     font-size: 0.8rem;
     font-weight: 600;
     background-color: ${props=>props.color};
@@ -55,111 +89,147 @@ const FormInputButton = styled.input`
     cursor: pointer;
 `;
 
-const FormButton = styled.input`
-    height: 2.5rem;
-    width: 6rem;
-    color: #ffffff;
-    font-size: 0.9rem;
-    font-weight: 600;
-    background-color:${props=>props.color};
-    border-radius: 0.5rem;
-    border: 0;
-    margin-left: 1rem;
-    margin-right: 1rem;
-    cursor: pointer;
-`;
-
 const ProfileImage = styled.img`
-    
+    height:4.5rem;
 `;
 
+const MyButton = styled(PinkButton)`
+    width:6.2rem;
+    height:2.5rem;
+    letter-spacing:0.2rem;
+    font-size:0.9rem;
+`
+const ModHeader = styled(Header)`
+    margin-top:1rem;
+    padding-bottom:0.5rem;
+    flex-direction:column;
+    .우리집{
+        /* border:1px solid red; */
+        /* margin-left:14.9rem; */
+        align-self:flex-start;
+    }
+    .우리집인풋{
+        align-self:flex-start;
+        margin-left:5rem;
+        width:15rem;
+    }
+    .house{
+        flex-direction:column;
+        /* border:1px solid blue; */
+        width:90%;
+    }
+    width:80%;
+    border-bottom: 1px solid #9b9999;
+`
 function RegisterChild({childIdx}) {
-  const navigate = useNavigate();
-  const [nickname, setNickname] = useState("");
-  const [birth, setBirth] = useState("");
-  const [weight, setWeight] = useState("");
-  const [height, setHeight] = useState("");
-  const [newChild, setNewChild] = useState(true);
-  const [boy, setBoy] = useState(true);
-  const [girl, setGirl] = useState(false);
-  const [colorboy, setColorBoy] = useState("#FFD731");
-  const [colorgirl, setColorGirl] = useState("#ffffff");
-  
-//닉네임 입력중
-  const handleNickname = e => {
-    setNickname(e.target.value);
-  }
-
-//생년월일 입력중
-  const handleBirth = e => {
-    setBirth(e.target.value);
-  }
-
-  //성별 입력중
-    const handleGirl = e => {
-        setBoy(false);
-        setGirl(true);
-        setColorBoy("#ffffff");
-        setColorGirl("#FFD731");
+    const navigate = useNavigate();
+    const api = useApi()
+    const [newChild, setNewChild] = useState(true);
+    const [colorboy, setColorBoy] = useState("#FFD731");
+    const [colorgirl, setColorGirl] = useState("#ffffff");
+    const initialState = {
+        ourhome:null,
+        nickname:null,
+        birth:"yyyy-MM-dd",
+        weight:null,
+        height:null,
+        newChid:true,
+        gender:'boy',
     }
-
-    //성별 입력중
-    const handleBoy = e => {
-        setBoy(true);
-        setGirl(false);
-        setColorBoy("#FFD731");
-        setColorGirl("#ffffff");    
+    const [kidState, setKidState] = useState(initialState)
+    
+    const SumbitChild = async()=>{
+        const response = await api.post('/children', {
+            nickname:kidState["nickname"],
+            birthdayDate:kidState["birth"],
+            gender:kidState["gender"],
+            weight:kidState["weight"],
+            height:kidState["height"],
+        })
+        console.log(response)
     }
-
-  return (
-    <>
-        <Wrapper>
-            <div>
-                <InputWrapper>
-                    <FormLabel htmlFor="nickname"> 닉네임</FormLabel>
-                    <FormInput defaultValue={nickname} type="text" name="nickname" id="nickname" placeholder=" 닉네임" onChange={handleNickname}/>
-                </InputWrapper>
-                <InputWrapper>
-                    <FormLabel htmlFor="gender"> 성별</FormLabel>
-                    <div>
-                        <FormInputButton type="button" color={colorboy} defaultValue="남자아이" onClick={handleBoy}/>
-                        <FormInputButton type="button" color={colorgirl}  defaultValue="여자아이" onClick={handleGirl}/>
-                    </div>
-                </InputWrapper>
-                <InputWrapper>
-                    <FormLabel htmlFor="birth"> 생년월일</FormLabel>
-                    <FormInput defaultValue={birth} type="date" name="birth" id="birth" placeholder=" 닉네임" onChange={handleBirth}/>
-                </InputWrapper>
-            </div>
-            <InputWrapper>
-                <FormLabel> 사진</FormLabel>
-                <ProfileImage/>
-                <ButtonWrapper>
-                    <FormInputButton className="white-black-line-btn" color="white" type="button" defaultValue="수정"/>
-                    {/* <input type="file" ref={fileInput} onChange={handleChange} style={{ display: "none" }} /> */}
-                    <FormInputButton className="white-black-line-btn" color="white" type="button" defaultValue="삭제" />
-                </ButtonWrapper>
-                {newChild ?
-                <ButtonWrapper>
-                    <InputWrapper>
-                        <FormLabel htmlFor="height"> 키</FormLabel>
-                        <FormInput defaultValue={height} type="text" name="height" id="height" placeholder=" cm"/>
-                    </InputWrapper>
-                    <InputWrapper>
-                        <FormLabel htmlFor="weight"> 체중</FormLabel>
-                        <FormInput defaultValue={weight} type="text" name="weight" id="weight" placeholder=" kg"/>
-                    </InputWrapper>
-                </ButtonWrapper>
-                : null
-                }
-            </InputWrapper>
-        </Wrapper>
-        <ButtonWrapper>
-            <FormButton color=" #F05475" type="button" defaultValue="수정하기"/>
-            <FormButton color=" #f8bbc7" type="button" defaultValue="삭제하기"/>
-        </ButtonWrapper>
-    </>
-  )
+    const handleInputChange = (e) => {
+        let { name, value } = e.target;
+        if (name=="gender"){
+            if(value==="남자아이"){
+                value='boy'
+                setColorBoy("#FFD731");
+                setColorGirl("#ffffff"); 
+            } else {
+                value='girl'
+                setColorBoy("#ffffff");
+                setColorGirl("#FFD731");
+            }
+        } 
+        setKidState((prev) => ({
+          ...prev,
+          [name]: value,
+        }));
+    };
+    return (
+        <ModWrapper>
+            <ModHeader>
+                <h1>회원가입</h1>
+                <div className="house">
+                    <FormLabel className="우리집" htmlFor="ourhome">우리 집</FormLabel>
+                    <FormInput className="우리집인풋" defaultValue={kidState["ourhome"]} type="text" name="ourhome" id="ourhome" placeholder=" 캥거루합창단" onChange={handleInputChange}/>
+                </div>
+            </ModHeader>
+            <h2>아이 프로필</h2>
+            <ModMain>
+                <ModSection>
+                    <Article>
+                        <FormLabel htmlFor="nickname"> 닉네임</FormLabel>
+                        <FormInput defaultValue={kidState["nickname"]} type="text" name="nickname" id="nickname" placeholder=" 닉네임" onChange={handleInputChange}/>
+                    </Article>
+                    <Article>
+                        <FormLabel htmlFor="gender"> 성별</FormLabel>
+                        <div>
+                            <FormInputButton type="button" color={colorboy} defaultValue="남자아이" name="gender" onClick={handleInputChange}/>
+                            <FormInputButton type="button" color={colorgirl}  defaultValue="여자아이" name="gender" onClick={handleInputChange}/>
+                        </div>
+                    </Article>
+                    <Article>
+                        <FormLabel htmlFor="birth"> 생년월일</FormLabel>
+                        <FormInput defaultValue={kidState["birth"]} type="date" name="birth" id="birth" placeholder=" 닉네임" onChange={handleInputChange}/>
+                    </Article>
+                </ModSection>
+                <ModSection>
+                    <Article>
+                        <FormLabel> 사진</FormLabel>
+                        <div className="profile-container">
+                        <ProfileImage src={kangkang}/>
+                            <FormInputButton className="white-black-line-btn" color="white" type="button" defaultValue="수정"/>
+                            {/* <input type="file" ref={fileInput} onChange={handleChange} style={{ display: "none" }} /> */}
+                            <FormInputButton className="white-black-line-btn" color="white" type="button" defaultValue="삭제" />
+                        </div>
+                    </Article>
+                    {newChild ?
+                    <>
+                    <Article>
+                        <div className="kids-state">
+                            <FormLabel htmlFor="height">키</FormLabel>
+                            <FormInput defaultValue={kidState["height"]} type="text" name="height" id="height" placeholder=" cm" onChange={handleInputChange}/>
+                        </div>
+                    </Article>
+                    <Article>
+                        <div className="kids-state">
+                            <FormLabel htmlFor="weight"> 체중</FormLabel>
+                            <FormInput defaultValue={kidState["weight"]} type="text" name="weight" id="weight" placeholder=" kg" onChange={handleInputChange}/>
+                        </div>
+                    </Article>
+                    </>
+                    : null
+                    }
+                </ModSection>
+            </ModMain>
+            <Footer>
+                <MyButton onClick={()=>SumbitChild()}>등록하기</MyButton>
+                <MyButton>삭제하기</MyButton>
+            </Footer>
+            <img src={bgImg} alt="" />
+        </ModWrapper>
+    )
 }
 
 export default RegisterChild;
