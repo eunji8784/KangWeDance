@@ -1,7 +1,7 @@
-import React,{useEffect, useState} from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import {Wrapper, Header, Main, Article, Section, H1, H2, P, Footer} from "../common/ui/Semantics";
+import {Header, Main, Article, Section, H1, H2, Footer} from "../common/ui/Semantics";
 import { ModalBtn } from "../status/HealthData";
 import {ModalWrapper} from "../common/ui/Modal"
 

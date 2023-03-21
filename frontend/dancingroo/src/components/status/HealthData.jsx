@@ -1,5 +1,7 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React
+// , { useState } 
+from "react";
+// import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -81,7 +83,7 @@ export const ModalBtn = styled.div`
 
 function HealthData(props) {
     const {handleIsModalOpen} = props;
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     
     return (
         <Wrapper>

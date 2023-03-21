@@ -19,7 +19,7 @@ function PlayCalendar(props) {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     const formattedDate = date.toLocaleDateString('ko-KR', options); 
     handleSelectedDay(formattedDate)
-  }, [date])
+  }, [date, handleSelectedDay])
   
   const onChange = (date) => {
     setDate(date);

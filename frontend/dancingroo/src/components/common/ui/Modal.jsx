@@ -1,7 +1,11 @@
-import React,{useEffect, useState} from "react";
-import { useNavigate } from "react-router-dom";
+import React
+// ,{useEffect, useState} 
+from "react";
+// import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import {Wrapper, Header, Main, Article, Section, H1, H2, P, Footer} from "./Semantics";
+import {Wrapper, Header, Main, Article, Section, H1, H2,
+  //  P, 
+  Footer} from "./Semantics";
 
 export const ModalWrapper = styled(Wrapper)`
     display:${({isModalOpen})=>isModalOpen? "flex":"none"};
