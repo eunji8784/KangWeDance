@@ -103,6 +103,7 @@ function DanceMode(props) {
       endTime: 14,
       accuracy: 0.95,
       countDelay: 100,
+      countStandard: 10,
     },
     {
       danceIndex: 3,
@@ -110,6 +111,7 @@ function DanceMode(props) {
       endTime: 23,
       accuracy: 0.95,
       countDelay: 100,
+      countStandard: 10,
     },
     {
       danceIndex: 3,
@@ -117,6 +119,7 @@ function DanceMode(props) {
       endTime: 30,
       accuracy: 0.95,
       countDelay: 100,
+      countStandard: 10,
     },
     {
       danceIndex: 1,
@@ -124,6 +127,7 @@ function DanceMode(props) {
       endTime: 34,
       accuracy: 0.95,
       countDelay: 100,
+      countStandard: 10,
     },
     {
       danceIndex: 3,
@@ -131,6 +135,7 @@ function DanceMode(props) {
       endTime: 42,
       accuracy: 0.95,
       countDelay: 100,
+      countStandard: 10,
     },
     {
       danceIndex: 3,
@@ -138,6 +143,7 @@ function DanceMode(props) {
       endTime: 49,
       accuracy: 0.95,
       countDelay: 100,
+      countStandard: 10,
     },
     {
       danceIndex: 0,
@@ -145,6 +151,7 @@ function DanceMode(props) {
       endTime: 56,
       accuracy: 0.95,
       countDelay: 100,
+      countStandard: 10,
     },
     {
       danceIndex: 3,
@@ -152,6 +159,7 @@ function DanceMode(props) {
       endTime: 63,
       accuracy: 0.95,
       countDelay: 100,
+      countStandard: 10,
     },
     {
       danceIndex: 3,
@@ -159,6 +167,7 @@ function DanceMode(props) {
       endTime: 71,
       accuracy: 0.95,
       countDelay: 100,
+      countStandard: 10,
     },
     {
       danceIndex: 1,
@@ -166,6 +175,7 @@ function DanceMode(props) {
       endTime: 79,
       accuracy: 0.95,
       countDelay: 100,
+      countStandard: 10,
     },
     {
       danceIndex: 2,
@@ -173,6 +183,7 @@ function DanceMode(props) {
       endTime: 87,
       accuracy: 0.95,
       countDelay: 100,
+      countStandard: 10,
     }
   ]
 
@@ -193,6 +204,7 @@ function DanceMode(props) {
   const settingModel = async function () {
     const model = await tmPose.load(MODELURL, METADATAURL)
     setModel(() => model)
+    console.log("MODEL LOADED")
   }
 
   // 처음에 모델 없으면 모델 불러오기
@@ -201,7 +213,7 @@ function DanceMode(props) {
       return
     }
     settingModel()
-  }, [])
+  }, [model])
 
   // 예측 함수 - 자세 상태(prevPosture)를 바꿈
   const predict = async function () {
@@ -213,6 +225,7 @@ function DanceMode(props) {
     )
     const prediction = await model.predict(posenetOutput)
     const rtPosture = prediction[aimedPosture.danceIndex]
+    console.log(rtPosture.className, rtPosture.probability.toFixed(2))
     setPrevPosture((prevPosture) => {
       if (
         rtPosture.probability.toFixed(2) > aimedPosture.accuracy &&
@@ -254,16 +267,17 @@ function DanceMode(props) {
   // 재생 시간에 따라 피드백 이미지를 띄우는 함수
   const handleTimeUpdate = () => {
     const currentTime = videoref?.current?.currentTime
-    const filteredTimeline = danceTimeline.filter(
+    const filteredTimeline = danceTimeline.find(
       (e) =>
         e.startTime < currentTime &&
         e.endTime > currentTime
-    )[0];
+    );
     setAimedPosture(filteredTimeline)
-    if (currentTime >= aimedPosture?.endTime-1 && currentTime < aimedPosture?.endTime) {
-      if (count > 10) {
+    console.log("!!!")
+    if (filteredTimeline && currentTime >= filteredTimeline.endTime-1 && currentTime < filteredTimeline.endTime) {
+      if (count > filteredTimeline.countStandard) {
         openGreatFeedback()
-      } else if (count > 5) {
+      } else if (count > filteredTimeline.countStandard / 2) {
         openGoodFeedback()
       } else {
         openCheerupFeedback()
@@ -281,6 +295,7 @@ function DanceMode(props) {
     const video = videoref.current
     const timeoutId = setTimeout(() => {
       video.play()
+      console.log("PLAY")
     }, 5000)
     return () => clearTimeout(timeoutId)
   }, [])
@@ -292,7 +307,7 @@ function DanceMode(props) {
 
   // test
   const replay = () => {
-    videoref.current.currentTime = 0
+    videoref.current.currentTime = 7
     videoref.current.play()
   }
 
@@ -325,9 +340,9 @@ function DanceMode(props) {
         mirrored={true}
       />
       <MyOverlay>
-        <img className="popup" ref={greatimgref} src={greatImg} />
-        <img className="popup" ref={goodimgref} src={goodImg} />
-        <img className="popup" ref={cheerupimgref} src={cheerupImg} />
+        <img className="popup" ref={greatimgref} src={greatImg} alt="great"/>
+        <img className="popup" ref={goodimgref} src={goodImg} alt="good"/>
+        <img className="popup" ref={cheerupimgref} src={cheerupImg} alt="cheerup"/>
         <div className="test">
           <ModalBtn onClick={openGreatFeedback}>Great</ModalBtn>
           <ModalBtn onClick={openGoodFeedback}>Good</ModalBtn>
