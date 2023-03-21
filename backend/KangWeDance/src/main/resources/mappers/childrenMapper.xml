@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.kang.children.model.mapper.ChildrenMapper">
+	<resultMap id="child" type="ChildrenDto">
+		<result column="child_idx" property="childIdx" />
+		<result column="parent_idx" property="parentIdx" />
+		<result column="nickname" property="nickname" />
+		<result column="profile_image_url" property="profileImageUrl" />
+		<result column="gender" property="gender" />
+		<result column="birth_date" property="birthDate" />
+
+	</resultMap>
+	
+	<insert id="insertChildren" parameterType="ChildrenDto" useGeneratedKeys="true" keyColumn="child_idx" keyProperty="childIdx">
+		insert into children(parent_idx, nickname,profile_image_url,gender,birth_date)
+		value (#{parentIdx},#{nickname},#{profileImageUrl},#{gender},#{birthDate});
+	</insert>
+	
+	<insert id="insertChildrenBody">
+		insert into bodyRecord(child_idx,weight,height,bmi,today_calrories,record_date)
+		value(#{childIdx},#{weight},#{height},#{bmi},#{todayCalories},now());
+	</insert>
+	<delete id="deleteChildren" parameterType="int">
+		delete from ch,br
+			using children as ch
+   			left join bodyRecord as br
+   		 	on ch.child_idx = br.child_idx
+		where br.child_idx = #{childIdx};
+	</delete>
+	<update id="updateChildren" parameterType="ChildrenDto">
+		update children
+		set nickname = #{nickname},
+		 	profile_image_url=#{profileImageUrl},
+		 	gender=#{gender},
+		 	birth_date=#{birthDate}
+		where child_idx = #{childIdx}
+	</update>
+	<select id="selectChildren" parameterType="int" resultMap="child">
+		select child_idx,parent_idx,nickname,profile_image_url,gender,birth_date
+		from children
+		where parent_idx = #{parentIdx};
+	</select>
+</mapper>
