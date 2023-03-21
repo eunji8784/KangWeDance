@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
+import com.ssafy.kang.common.SuccessCode;
 import com.ssafy.kang.parents.model.ParentsDto;
 import com.ssafy.kang.parents.model.mapper.ParentsMapper;
 import com.ssafy.kang.util.KakaoUtil;
@@ -27,6 +28,12 @@ public class ParentsServiceImpl implements ParentsService {
 	public ParentsServiceImpl() {
 		this.naverUtil = new NaverUtil();
 		this.kakaoUtil = new KakaoUtil();
+	}
+	@Override
+	public void kakaoLogout(String accessToken) throws Exception {
+		String reqURL = "https://kapi.kakao.com/v1/user/logout";
+		if(kakaoUtil.logout(reqURL,accessToken) != 200) 
+			throw new Exception();
 	}
 	@Override
 	public Map<String, String> getToken(String code) throws Exception {
@@ -135,10 +142,20 @@ public class ParentsServiceImpl implements ParentsService {
 	}
 
 	@Override
-	public int findChildren(int parentIdx) {
+	public int findChildren(int parentIdx) throws Exception{
 		// TODO Auto-generated method stub
 		return parentsMapper.selectChildren(parentIdx);
 	}
+	@Override
+	public void modifyAccessToken(ParentsDto dto) throws Exception {
+		parentsMapper.updateAccessToken(dto);
+		
+	}
+	@Override
+	public ParentsDto findUser(int userIdx) throws Exception{
+		return parentsMapper.selectUser(userIdx);
+	}
+
 
 	
 

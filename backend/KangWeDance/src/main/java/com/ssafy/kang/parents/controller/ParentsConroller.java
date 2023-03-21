@@ -34,10 +34,6 @@ public class ParentsConroller {
 	public ParentsConroller() {
 		this.jwtUtil = new JwtUtil();
 	}
-	@GetMapping("testurl")
-	public String test() {
-		return "test";
-	}
 	@GetMapping("/social/kakao")
 	public ApiResponse<?> kakaoUserAdd(@RequestParam String code){
 
@@ -81,7 +77,9 @@ public class ParentsConroller {
 		String isUser = "false";
 		SuccessCode sc= null;
 		if(dto != null && !dto.isDeletedFlag()) {
+			dto.setAccessToken(token.get("access_token"));
 			accessToken = jwtUtil.createAccessToken("useridx", dto.getParentIdx());
+			parentsService.modifyAccessToken(dto);
 			if(parentsService.findChildren(dto.getParentIdx())!=0)
 				isUser = "true";
 			sc = SuccessCode.LOGIN;
@@ -103,9 +101,10 @@ public class ParentsConroller {
 		return ApiResponse.success(sc,map);
 	}
 	@PatchMapping("nickname")
-	public ApiResponse<?> nicknameModify(@RequestParam int accesstoken, @RequestBody String nickname){
+	public ApiResponse<?> nicknameModify(@RequestParam String accesstoken, @RequestBody String nickname){
 		try {
-			parentsService.modifyNickname(ParentsDto.builder().parentIdx(accesstoken).nickname(nickname).build());
+			
+			parentsService.modifyNickname(ParentsDto.builder().parentIdx(jwtUtil.getUserIdx(accesstoken)).nickname(nickname).build());
 			return ApiResponse.success(SuccessCode.UPDATE_NICKNAME);
 		} catch (Exception e) {
 			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
@@ -113,25 +112,34 @@ public class ParentsConroller {
 		
 	}
 	@GetMapping("/experience-score")
-	public ApiResponse<?> experienceDetails(@RequestParam int accesstoken){//추후 엑세스 토큰으로 대체
+	public ApiResponse<?> experienceDetails(@RequestParam String accesstoken){//추후 엑세스 토큰으로 대체
 		try {
-			return ApiResponse.success(SuccessCode.READ_EXPERIENCE,parentsService.findExperience(accesstoken));
+			return ApiResponse.success(SuccessCode.READ_EXPERIENCE,parentsService.findExperience(jwtUtil.getUserIdx(accesstoken)));
 		} catch (Exception e) {
 			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
 		}
 	}
 	@DeleteMapping
-	public ApiResponse<?> userRemove(@RequestParam int accesstoken){
+	public ApiResponse<?> userRemove(@RequestParam String accesstoken){
 		try {
-			parentsService.removeUser(accesstoken);
+			parentsService.removeUser(jwtUtil.getUserIdx(accesstoken));
 			return ApiResponse.success(SuccessCode.DELETE_USER);
 		} catch (Exception e) {
 			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
 		}
 	}
 	@GetMapping("logout")
-	public ApiResponse<?> logout(@RequestParam int accesstoken){
-		
-		return ApiResponse.success(SuccessCode.LOGOUT);
+	public ApiResponse<?> logout(@RequestParam String accesstoken){
+		try {
+			ParentsDto dto = parentsService.findUser(jwtUtil.getUserIdx(accesstoken));
+			if(dto.getSocialPlatform().equals("Kakao")) {
+				parentsService.kakaoLogout(dto.getAccessToken());
+			}else if(dto.getSocialPlatform().equals("Naver")) {
+				
+			}
+			return ApiResponse.success(SuccessCode.LOGOUT);
+		} catch (Exception e) {
+			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
+		}
 	}
 }
