@@ -30,6 +30,12 @@ dependencies {
     implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
     implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
     implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.10.5'
+    // https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-client
+	implementation group: 'org.apache.hadoop', name: 'hadoop-client', version: '3.3.1'
+    // https://mvnrepository.com/artifact/org.apache.spark/spark-core
+	implementation group: 'org.apache.spark', name: 'spark-core_2.13', version: '3.2.3'
+    // https://mvnrepository.com/artifact/org.apache.spark/spark-sql
+	compileOnly group: 'org.apache.spark', name: 'spark-sql_2.13', version: '3.2.3'
     
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.10.5'
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.10.5'
