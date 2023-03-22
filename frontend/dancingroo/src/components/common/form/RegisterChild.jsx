@@ -1,5 +1,5 @@
 // 회원가입-정보 등록
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import {Wrapper, Header, Main, Article, Section, H1, H2, P, Footer, PinkButton} from "../../common/ui/Semantics";
@@ -135,25 +135,27 @@ function RegisterChild({childIdx}) {
         height:null,
         newChid:true,
         gender:false,
+        ProfileImageUrl:"https://kangwedance.s3.ap-northeast-2.amazonaws.com/기본+프로필+이미지.png",
     }
     const [kidState, setKidState] = useState(initialState)
     
-    const SumbitChild = async()=>{
-        const data = {
+    const SumbitChild = ()=>{
+        const body = {
             nickname:kidState["nickname"],
-            birthdayDate:kidState["birth"],
+            birthDate:kidState["birth"],
             gender:kidState["gender"],
             weight:Number(kidState["weight"]),
             height:Number(kidState["height"]),
+            ProfileImageUrl:"https://kangwedance.s3.ap-northeast-2.amazonaws.com/기본+프로필+이미지.png",
         }
-        post(data) 
+        post(body)
     }
-
-    console.log({            nickname:kidState["nickname"],
-    birthdayDate:kidState["birth"],
-    gender:kidState["gender"],
-    weight:Number(kidState["weight"]),
-    height:Number(kidState["height"])})
+    useEffect(()=>{
+        console.log(data)
+        if (data) {
+            data.success===true? navigate('/play') : console.error('아이 프로필 등록 실패')
+          }
+    },[data])
 
     const handleInputChange = (e) => {
         let { name, value } = e.target;
@@ -173,7 +175,6 @@ function RegisterChild({childIdx}) {
           [name]: value,
         }));
     };
-    console.log(error)
     return (
         <ModWrapper>
             <ModHeader>
