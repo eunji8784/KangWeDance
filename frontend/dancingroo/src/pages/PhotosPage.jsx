@@ -32,6 +32,8 @@ function PhotosPage(props) {
     const [section, setSection] = useState('gallery')
     const [imge, setImge] = useState('')
     const [frameImage, setFrameImage] = useState('')
+    const [stickerImage, setStickerImage] = useState('')
+    const [stickerNum, setStickerNum] = useState(0)
     const {handleWatchingPage} = props
 
     useEffect(()=>{
@@ -50,15 +52,20 @@ function PhotosPage(props) {
         setFrameImage(imgeUrl)
     }
 
+    const handleSticker = (imgeUrl)=>{
+        setStickerImage(imgeUrl)
+        setStickerNum(stickerNum+1)
+    }
+
     return (
         <PhotosSection>
             <SideBar handleSection={handleSection}/>
             <SideSection>
                 {section==='gallery' && <PhotoList handleImge={handleImge}/>}
                 {section==='frame' && <FrameList handleFrame={handleFrame}/>}
-                {section==='sticker' && <StickerList/>}
+                {section==='sticker' && <StickerList handleSticker={handleSticker}/>}
             </SideSection>
-            <RightArea frameImage={frameImage} imge={imge}/>
+            <RightArea stickerNum={stickerNum} stickerImage={stickerImage} frameImage={frameImage} imge={imge}/>
         </PhotosSection>
     );
 }
