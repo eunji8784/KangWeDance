@@ -61,7 +61,7 @@ public class PhotosController {
 	}
 
 	@GetMapping
-	public ApiResponse<?> photosDetails(@RequestHeader("access_token") String accessToken,
+	public ApiResponse<?> photosDetails(@RequestHeader("accesstoken") String accessToken,
 			@RequestParam("pageNum") int pageNum) throws Exception {
 		// 페이징 처리를 위한 Map 선언
 		Map<String, Object> page = new HashMap<>();
@@ -85,18 +85,40 @@ public class PhotosController {
 	}
 
 	@GetMapping("/prames")
-	public ApiResponse<?> pramesDetails(@RequestHeader("access_token") String accessToken,
-			@RequestParam("pageNum") int pageNum) throws Exception {
+	public ApiResponse<?> pramesDetails(@RequestParam("pageNum") int pageNum) throws Exception {
 
 		// 페이징 처리를 위한 Map 선언
 		Map<String, Object> page = new HashMap<>();
 		try {
 			// 임시값 -> 토큰 구현전까지만 이렇게 사용
-			int parentIdx = jwtService.getUserIdx(accessToken);
-			List<PramesDto> pramesDto = photosService.findPrames(parentIdx, pageNum);
+			int parentIdx = 2;
+			int parentExperience = photosService.findLevel(parentIdx);
+
+			int level = 1;
+
+			if (parentExperience >= 100 && 150 > parentExperience)
+				level = 2;
+			else if (parentExperience >= 150 && parentExperience < 225)
+				level = 3;
+			else if (parentExperience >= 225 && parentExperience < 337)
+				level = 4;
+			else if (parentExperience >= 337 && parentExperience < 506)
+				level = 5;
+			else if (parentExperience >= 506 && parentExperience < 759)
+				level = 6;
+			else if (parentExperience >= 759 && parentExperience < 1138)
+				level = 7;
+			else if (parentExperience >= 1138 && parentExperience < 1707)
+				level = 8;
+			else if (parentExperience >= 1707 && parentExperience < 2560)
+				level = 9;
+			else if (parentExperience >= 2560)
+				level = 10;
+
+			List<PramesDto> pramesDto = photosService.findPrames(level, pageNum);
 
 			// 페이징 처리를 위한 코드 - 전체 카운트
-			int total = photosService.findPramesCount(parentIdx);
+			int total = photosService.findPramesCount(level);
 			page.put("prameList", pramesDto);
 			page.put("pageNum", new PhotosPageDto(pageNum, total));
 
