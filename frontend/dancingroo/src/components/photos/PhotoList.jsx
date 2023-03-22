@@ -6,8 +6,8 @@ import imge from "../../assets/images/dummy.jpg"
 
 //임시
 const Dummy = styled.div`
-    height: 7.2rem;
-    width: 12.8rem;
+    height: 6.3rem;
+    width: 11.2rem;
     background-image:url(${imge});
     background-size:cover;
     filter: drop-shadow(0px 1.5px 1.5px rgba(0, 0, 0, 0.25));
@@ -16,7 +16,7 @@ const Dummy = styled.div`
     margin-top: 0.5rem;
 `;
 
-function Gallery(props) {
+function PhotoList(props) {
     const [newDate, setNewDate] = useState(true);
     const [Date, setDate] = useState("");
     const {handleImge} = props;
@@ -40,10 +40,10 @@ function Gallery(props) {
             <Dummy onClick={()=>handleClick(imge)}/>
             {/* {photos.map((photo, index) => {
                 checkDate(photo.date);
-                return <Photo key={index} date={photo.date} imgUrl={photo.imageUrl} newDate={photo.newDate}/>;
+                return <GalleryItem key={index} date={photo.date} imgUrl={photo.imageUrl} newDate={photo.newDate}/>;
             })} */}
         </Wrapper>
     );
 }
 
-export default Gallery;
+export default PhotoList;
