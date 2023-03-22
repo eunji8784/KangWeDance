@@ -8,7 +8,10 @@
 		<result column="profile_image_url" property="profileImageUrl" />
 		<result column="gender" property="gender" />
 		<result column="birth_date" property="birthDate" />
-
+		<result column="weight" property="weight" />
+		<result column="height" property="height" />
+		<result column="bmi" property="bmi" />
+		<result column="today_calrories" property="todayCalrories" />
 	</resultMap>
 	
 	<insert id="insertChildren" parameterType="ChildrenDto" useGeneratedKeys="true" keyColumn="child_idx" keyProperty="childIdx">
@@ -18,7 +21,7 @@
 	
 	<insert id="insertChildrenBody">
 		insert into bodyRecord(child_idx,weight,height,bmi,today_calrories,record_date)
-		value(#{childIdx},#{weight},#{height},#{bmi},#{todayCalories},now());
+		value(#{childIdx},#{weight},#{height},#{bmi},#{todayCalrories},now());
 	</insert>
 	<delete id="deleteChildren" parameterType="int">
 		delete from ch,br
