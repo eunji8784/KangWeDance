@@ -20,13 +20,15 @@ public interface PhotosMapper {
 
 	public List<PhotosDto> selectPhotos(int parentIdx, int pageNum) throws SQLException;
 
-	public List<PramesDto> selectPrames(int parentIdx, int pageNum) throws SQLException;
+	public List<PramesDto> selectPrames(int level, int pageNum) throws SQLException;
 
 	public boolean deletePhoto(int photoIdx) throws SQLException;
 
 	public int selectPhotosCount(int parentIdx) throws SQLException;
 
-	public int selectPramesCount(int parentIdx) throws SQLException;
+	public int selectPramesCount(int level) throws SQLException;
+
+	public int selectLevel(int parentIdx) throws SQLException;
 
 	// 카카오 공유하기 -> 나중
 
