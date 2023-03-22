@@ -27,8 +27,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 public class StatusController {
-	@Autowired
-	private JwtUtil jwtService;
+	private JwtUtil jwtService = new JwtUtil();
 //	| orderList() | 목록 조회 유형의 서비스 |
 //	| orderDetails() | 단 건 상세 조회 유형의 controller 메서드 |
 //	| orderSave() | 등록/수정/삭제 가 동시에 일어나는 유형의 controller 메서드 |
@@ -40,8 +39,8 @@ public class StatusController {
 	UnicodeKorean unicodeKorean = new UnicodeKorean();
 
 	@GetMapping("/play-record")
-	public ApiResponse<?> playRecordDetails(@RequestParam("pageNum") int childIdx,
-			@RequestHeader("access_token") String accessToken) throws Exception {
+	public ApiResponse<?> playRecordDetails(@RequestParam("childIdx") int childIdx,
+			@RequestHeader("accesstoken") String accesstoken) throws Exception {
 		try {
 			// 임시값 -> 토큰 구현전까지만 이렇게 사용
 			List<PlayRecordDto> playRecordDto = statusService.findplayRecord(childIdx);
@@ -54,7 +53,7 @@ public class StatusController {
 
 	@GetMapping("/search-food/{word}")
 	public ApiResponse<?> searchHash(@PathVariable("word") String word,
-			@RequestHeader("access_token") String accessToken) {
+			@RequestHeader("accesstoken") String accesstoken) {
 
 		try {
 
