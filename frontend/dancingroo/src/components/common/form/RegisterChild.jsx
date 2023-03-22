@@ -1,5 +1,5 @@
 // 회원가입-정보 등록
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import {Wrapper, Header, Main, Article, Section, H1, H2, P, Footer, PinkButton} from "../../common/ui/Semantics";
@@ -123,7 +123,7 @@ const ModHeader = styled(Header)`
 `
 function RegisterChild({childIdx}) {
     const navigate = useNavigate();
-    const api = useApi()
+    const {data, isLoading, error, post} = useApi('/children')
     const [newChild, setNewChild] = useState(true);
     const [colorboy, setColorBoy] = useState("#FFD731");
     const [colorgirl, setColorGirl] = useState("#ffffff");
@@ -134,29 +134,38 @@ function RegisterChild({childIdx}) {
         weight:null,
         height:null,
         newChid:true,
-        gender:'boy',
+        gender:false,
+        ProfileImageUrl:"https://kangwedance.s3.ap-northeast-2.amazonaws.com/기본+프로필+이미지.png",
     }
     const [kidState, setKidState] = useState(initialState)
     
-    const SumbitChild = async()=>{
-        const response = await api.post('/children', {
+    const SumbitChild = ()=>{
+        const body = {
             nickname:kidState["nickname"],
-            birthdayDate:kidState["birth"],
+            birthDate:kidState["birth"],
             gender:kidState["gender"],
-            weight:kidState["weight"],
-            height:kidState["height"],
-        })
-        console.log(response)
+            weight:Number(kidState["weight"]),
+            height:Number(kidState["height"]),
+            ProfileImageUrl:"https://kangwedance.s3.ap-northeast-2.amazonaws.com/기본+프로필+이미지.png",
+        }
+        post(body)
     }
+    useEffect(()=>{
+        console.log(data)
+        if (data) {
+            data.success===true? navigate('/play') : console.error('아이 프로필 등록 실패')
+          }
+    },[data])
+
     const handleInputChange = (e) => {
         let { name, value } = e.target;
         if (name=="gender"){
             if(value==="남자아이"){
-                value='boy'
+                value=false
                 setColorBoy("#FFD731");
                 setColorGirl("#ffffff"); 
             } else {
-                value='girl'
+                value=true
                 setColorBoy("#ffffff");
                 setColorGirl("#FFD731");
             }
