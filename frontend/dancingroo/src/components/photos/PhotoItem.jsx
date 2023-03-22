@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 
 const Gallery = styled.div`
+    height: 7.2rem;
+    width: 12.8rem;
     background-image:url(${(props)=>props.imageUrl});
     background-size:cover;
     filter: drop-shadow(0px 1.5px 1.5px rgba(0, 0, 0, 0.25));
