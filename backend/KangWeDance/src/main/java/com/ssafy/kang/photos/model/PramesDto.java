@@ -13,6 +13,7 @@ import lombok.ToString;
 @NoArgsConstructor
 public class PramesDto {
 	int prameIdx;
+	int level;
 	String prameURL;// 이미지 URL
 	int prameFlag; // 스티커-0/ 프레임 -1
 
