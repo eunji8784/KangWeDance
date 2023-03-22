@@ -6,6 +6,8 @@ import {Wrapper, Header, Main, Article, Section, H1, H2, P, Footer, PinkButton} 
 import bgImg from "../../../assets/images/bgImg.png"
 import kangkang from "../../../assets/images/kangkang.png"
 import useApi from "../../../hooks/auth/useApi";
+import { login, updateChildState } from "../../../store/userSlice";
+import { useDispatch,useSelector } from "react-redux";
 
 const ModWrapper = styled(Wrapper)`
     width: 100vw;
@@ -122,22 +124,16 @@ const ModHeader = styled(Header)`
     border-bottom: 1px solid #9b9999;
 `
 function RegisterChild({childIdx}) {
+    const thisChild = useSelector(state=>state.userState.children[0]) // 디폴트는 첫째
+    const familyname = useSelector(state=>state.userState.familyname)
+    const dispatch = useDispatch()
     const navigate = useNavigate();
     const {data, isLoading, error, post} = useApi('/children')
     const [newChild, setNewChild] = useState(true);
     const [colorboy, setColorBoy] = useState("#FFD731");
     const [colorgirl, setColorGirl] = useState("#ffffff");
-    const initialState = {
-        ourhome:null,
-        nickname:null,
-        birth:"yyyy-MM-dd",
-        weight:null,
-        height:null,
-        newChid:true,
-        gender:false,
-        ProfileImageUrl:"https://kangwedance.s3.ap-northeast-2.amazonaws.com/기본+프로필+이미지.png",
-    }
-    const [kidState, setKidState] = useState(initialState)
+    const [familynameState, ] = useState(familyname)
+    const [kidState, setKidState] = useState(thisChild)
     
     useEffect(()=>{
         if (data) {
@@ -145,16 +141,20 @@ function RegisterChild({childIdx}) {
           }
     },[data])
 
+    console.log(kidState)
     const SumbitChild = ()=>{
         const body = {
             nickname:kidState["nickname"],
-            birthDate:kidState["birth"],
+            birthDate:kidState["birthDate"],
             gender:kidState["gender"],
             weight:Number(kidState["weight"]),
             height:Number(kidState["height"]),
-            ProfileImageUrl:"https://kangwedance.s3.ap-northeast-2.amazonaws.com/기본+프로필+이미지.png",
+            ProfileImageUrl:kidState["profileImageUrl"],
         }
         post(body)
+        // 집이름 추가해서 리덕스 태워 보내기
+        body["familyname"] = kidState["familyname"]
+        dispatch(updateChildState(body))
     }
     const handleInputChange = (e) => {
         let { name, value } = e.target;
@@ -179,8 +179,8 @@ function RegisterChild({childIdx}) {
             <ModHeader>
                 <h1>회원가입</h1>
                 <div className="house">
-                    <FormLabel className="우리집" htmlFor="ourhome">우리 집</FormLabel>
-                    <FormInput className="우리집인풋" defaultValue={kidState["ourhome"]} type="text" name="ourhome" id="ourhome" placeholder=" 캥거루합창단" onChange={handleInputChange}/>
+                    <FormLabel className="우리집" htmlFor="familyname">우리 집</FormLabel>
+                    <FormInput className="우리집인풋" defaultValue={familynameState} type="text" name="familyname" id="familyname" placeholder=" 캥거루합창단" onChange={handleInputChange}/>
                 </div>
             </ModHeader>
             <h2>아이 프로필</h2>
@@ -198,8 +198,8 @@ function RegisterChild({childIdx}) {
                         </div>
                     </Article>
                     <Article>
-                        <FormLabel htmlFor="birth"> 생년월일</FormLabel>
-                        <FormInput defaultValue={kidState["birth"]} type="date" name="birth" id="birth" placeholder=" 닉네임" onChange={handleInputChange}/>
+                        <FormLabel htmlFor="birthDate"> 생년월일</FormLabel>
+                        <FormInput defaultValue={kidState["birthDate"]} type="date" name="birthDate" id="birthDate" placeholder=" 닉네임" onChange={handleInputChange}/>
                     </Article>
                 </ModSection>
                 <ModSection>
