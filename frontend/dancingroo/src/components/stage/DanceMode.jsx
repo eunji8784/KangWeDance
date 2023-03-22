@@ -3,10 +3,11 @@ import styled from "styled-components"
 // import axios from "axios"
 import Webcam from "react-webcam"
 import PauseModal from "./PauseModal"
+import PlayResult from "./PlayResult"
 import { Overlay } from "../common/ui/Semantics"
 import { ModalBtn } from "../status/HealthData"
 import { useInterval } from "../../hooks/useInterval"
-
+import bgImg from "../../assets/images/bgImg.png"
 import greatImg from "../../assets/images/great.png"
 import goodImg from "../../assets/images/good.png"
 import cheerupImg from "../../assets/images/cheerup.png"
@@ -17,12 +18,12 @@ const MODELURL =
 const METADATAURL =
   "https://teachablemachine.withgoogle.com/models/7g9Z9_ogC/metadata.json"
 
-const Wrapper = styled.div`
+const Screen = styled.div`
   width: 100vw;
   height: 100vh;
   overflow: hidden;
   position: relative;
-  .small {
+  .small {   // 반대로 바꿔야함
     width: 100vw;
     height: 100vh;
     overflow: hidden;
@@ -38,6 +39,12 @@ const Wrapper = styled.div`
     bottom: 0;
     left: 0;
   }
+  .background-img {
+    position: absolute;
+    z-index: -1;
+    width:100%;
+    height:100%;
+  }
 `
 
 const MyOverlay = styled(Overlay)`
@@ -50,10 +57,12 @@ const MyOverlay = styled(Overlay)`
     height: auto;
     display: none;
   }
+  .exit {
+    position: absolute;
+    right: 1rem;
+    top: 0;
+  }
   .popup {
-    /* ${({active})=>active==='great' && `
-      display:block;
-      `} */
     animation: pop-up 1s;
     @keyframes pop-up {
       0% {
@@ -87,6 +96,7 @@ function DanceMode(props) {
   const [aimedPosture, setAimedPosture] = useState(null)
   const [prevPosture, setPrevPosture] = useState(-1)
   const [count, setCount] = useState(0)
+  const [showResult, setShowResult] = useState(false)
   const camref = useRef(null)
   const videoref = useRef(null)
   const greatimgref = useRef(null)
@@ -286,7 +296,7 @@ function DanceMode(props) {
 
   // test
   const replay = () => {
-    videoref.current.currentTime = 7
+    videoref.current.currentTime = 90
     videoref.current.play()
   }
 
@@ -312,42 +322,52 @@ function DanceMode(props) {
   }
 
   return (
-    <Wrapper>
-      <Webcam
-        className={camfocus ? "big" : "small"}
-        ref={camref}
-        mirrored={true}
-      />
-      <MyOverlay>
-        <img className="popup" ref={greatimgref} src={greatImg} alt="great"/>
-        <img className="popup" ref={goodimgref} src={goodImg} alt="good"/>
-        <img className="popup" ref={cheerupimgref} src={cheerupImg} alt="cheerup"/>
-        <div className="test">
-          <ModalBtn onClick={openGreatFeedback}>Great</ModalBtn>
-          <ModalBtn onClick={openGoodFeedback}>Good</ModalBtn>
-          <ModalBtn onClick={openCheerupFeedback}>Cheer Up</ModalBtn>
-          <ModalBtn onClick={handleIsModalOpen}>모달 열기</ModalBtn>
-          <ModalBtn onClick={replay}>처음부터 재생</ModalBtn>
-          <ModalBtn onClick={switchVideo}>화면 전환</ModalBtn>
-          <h1>
-            {aimedPosture?.danceIndex || "?"}
-          </h1>          
-          <h1>
-            {count}
-          </h1>          
-          <h1>
-            {prevPosture}
-          </h1>
-        </div>
-      </MyOverlay>
-      <video
-        className={camfocus ? "small" : "big"}
-        ref={videoref}
-        src="https://kangwedance.s3.ap-northeast-2.amazonaws.com/%EB%8F%99%EB%AC%BC+%ED%94%BD%EC%8A%A4.mp4"
-        onTimeUpdate={handleTimeUpdate}
-      />
-      <PauseModal handleIsModalOpen={handleIsModalOpen} isOpen={isModalOpen} />
-    </Wrapper>
+    <Screen>
+      <img className="background-img" src={bgImg} alt="background" />
+      {showResult ? 
+      <>
+        <PlayResult/>
+      </>
+      :
+      <>
+        <Webcam
+          className={camfocus ? "big" : "small"}
+          ref={camref}
+          mirrored={true}
+        />
+        <MyOverlay>
+          <img className="popup" ref={greatimgref} src={greatImg} alt="great"/>
+          <img className="popup" ref={goodimgref} src={goodImg} alt="good"/>
+          <img className="popup" ref={cheerupimgref} src={cheerupImg} alt="cheerup"/>
+          <ModalBtn className="exit" onClick={handleIsModalOpen}>나가기</ModalBtn>
+          <div className="test">
+            <ModalBtn onClick={openGreatFeedback}>Great</ModalBtn>
+            <ModalBtn onClick={openGoodFeedback}>Good</ModalBtn>
+            <ModalBtn onClick={openCheerupFeedback}>Cheer Up</ModalBtn>
+            <ModalBtn onClick={replay}>종료 전으로 가기</ModalBtn>
+            <ModalBtn onClick={switchVideo}>화면 전환</ModalBtn>
+            <h1>
+              평가자세 : {aimedPosture?.danceIndex || "X"}
+            </h1>          
+            <h1>
+              현재자세 : {prevPosture}
+            </h1>
+            <h1>
+              자세점수 : {count}
+            </h1>          
+          </div>
+        </MyOverlay>
+        <video
+          className={camfocus ? "small" : "big"}
+          ref={videoref}
+          src="https://kangwedance.s3.ap-northeast-2.amazonaws.com/%EB%8F%99%EB%AC%BC+%ED%94%BD%EC%8A%A4.mp4"
+          onTimeUpdate={handleTimeUpdate}
+          onEnded={()=>setShowResult(true)}
+        />
+        <PauseModal handleIsModalOpen={handleIsModalOpen} isOpen={isModalOpen} />
+      </>
+      }
+    </Screen>
   )
 }
 
