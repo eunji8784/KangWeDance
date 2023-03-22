@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -28,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/parents")
 @RestController
 public class ParentsConroller {
+	
 	@Autowired
 	ParentsService parentsService;
 	private final JwtUtil jwtUtil;
@@ -101,7 +103,7 @@ public class ParentsConroller {
 		return ApiResponse.success(sc,map);
 	}
 	@PatchMapping("/nickname")
-	public ApiResponse<?> nicknameModify(@RequestParam String accesstoken, @RequestBody String nickname){
+	public ApiResponse<?> nicknameModify(@RequestHeader("accesstoken") String accesstoken, @RequestBody String nickname){
 		try {
 			
 			parentsService.modifyNickname(ParentsDto.builder().parentIdx(jwtUtil.getUserIdx(accesstoken)).nickname(nickname).build());
@@ -112,7 +114,7 @@ public class ParentsConroller {
 		
 	}
 	@GetMapping("/experience-score")
-	public ApiResponse<?> experienceDetails(@RequestParam String accesstoken){//추후 엑세스 토큰으로 대체
+	public ApiResponse<?> experienceDetails(@RequestHeader("accesstoken") String accesstoken){//추후 엑세스 토큰으로 대체
 		try {
 			return ApiResponse.success(SuccessCode.READ_EXPERIENCE,parentsService.findExperience(jwtUtil.getUserIdx(accesstoken)));
 		} catch (Exception e) {
@@ -120,7 +122,7 @@ public class ParentsConroller {
 		}
 	}
 	@DeleteMapping
-	public ApiResponse<?> userRemove(@RequestParam String accesstoken){
+	public ApiResponse<?> userRemove(@RequestHeader("accesstoken") String accesstoken){
 		try {
 			parentsService.removeUser(jwtUtil.getUserIdx(accesstoken));
 			return ApiResponse.success(SuccessCode.DELETE_USER);
@@ -129,7 +131,7 @@ public class ParentsConroller {
 		}
 	}
 	@GetMapping("/logout")
-	public ApiResponse<?> logout(@RequestParam String accesstoken){
+	public ApiResponse<?> logout(@RequestHeader("accesstoken") String accesstoken){
 		try {
 			ParentsDto dto = parentsService.findUser(jwtUtil.getUserIdx(accesstoken));
 			if(dto.getSocialPlatform().equals("Kakao")) {
