@@ -24,7 +24,7 @@ const StickerItem = styled.div`
 `;
 
 function StickerList(props) {
-
+    const {handleSticker} = props;
     //더미
     const stickers = [
         {
@@ -42,11 +42,15 @@ function StickerList(props) {
         }
     ]
 
+    const handleClick = (imge) => {
+        handleSticker(imge);   
+    };
+
     return (
         <Wrapper>
             <AlbumContainer>
                 {stickers.map((sticker, index) => {
-                    return <StickerItem key={index} imageUrl={sticker.imageUrl}/>;
+                    return <StickerItem key={index} imageUrl={sticker.imageUrl}  onClick={()=>handleClick(sticker.imageUrl)}/>;
                 })}
             </AlbumContainer>
         </Wrapper>
