@@ -38,8 +38,7 @@ public class PhotosController {
 	@Autowired
 	PhotosService photosService;
 	private final AmazonS3Client amazonS3Client;
-	@Autowired
-	private JwtUtil jwtService;
+	private JwtUtil jwtService = new JwtUtil();
 	@Value("${cloud.aws.s3.bucket}")
 	private String bucket;
 
