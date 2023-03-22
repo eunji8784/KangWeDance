@@ -4,32 +4,34 @@ import styled from "styled-components";
 import { Wrapper } from "../components/common/ui/Semantics";
 
 import SideBar from "../components/photos/SideBar";
-import Frame from "../components/photos/Frame";
-import Gallery from "../components/photos/Gallery";
-import Sticker from "../components/photos/Sticker";
-import Deco from "../components/photos/Deco";
+import FrameList from "../components/photos/FrameList";
+import PhotoList from "../components/photos/PhotoList";
+import StickerList from "../components/photos/StickerList";
+import RightArea from "../components/photos/RightArea";
 
 const PhotosSection = styled(Wrapper)`
     flex-direction: row;
-    align-items: flex-start;
     height: 100%;
     width: 100%;
-    min-width: 50rem;
+    min-width: 35rem;
     margin-top: 0.2rem;
+    border-top: solid 0.1rem #ffeef2;
+    border-bottom: solid 0.1rem #ffeef2;
 `
 
 const SideSection = styled(Wrapper)`
-    width: 30%;
+    width: 16%;
     height: 100%;
+    min-width: 14rem;
     justify-content: flex-start;
-    background-color: #ffeef2;
-    padding-top: 0.2rem;
+    border: solid 0.2rem #ffeef2;
 `
 
 function PhotosPage(props) {
     const navigate = useNavigate();
     const [section, setSection] = useState('gallery')
     const [imge, setImge] = useState('')
+    const [frameImage, setFrameImage] = useState('')
     const {handleWatchingPage} = props
 
     useEffect(()=>{
@@ -43,16 +45,20 @@ function PhotosPage(props) {
     const handleImge = (imgeUrl)=>{
         setImge(imgeUrl)
     }
+    
+    const handleFrame = (imgeUrl)=>{
+        setFrameImage(imgeUrl)
+    }
 
     return (
         <PhotosSection>
             <SideBar handleSection={handleSection}/>
             <SideSection>
-                {section==='gallery' && <Gallery handleImge={handleImge}/>}
-                {section==='frame' && <Frame/>}
-                {section==='sticker' && <Sticker/>}
+                {section==='gallery' && <PhotoList handleImge={handleImge}/>}
+                {section==='frame' && <FrameList handleFrame={handleFrame}/>}
+                {section==='sticker' && <StickerList/>}
             </SideSection>
-            <Deco imge={imge}/>
+            <RightArea frameImage={frameImage} imge={imge}/>
         </PhotosSection>
     );
 }
