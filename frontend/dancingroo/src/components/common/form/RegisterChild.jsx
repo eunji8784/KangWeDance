@@ -139,6 +139,12 @@ function RegisterChild({childIdx}) {
     }
     const [kidState, setKidState] = useState(initialState)
     
+    useEffect(()=>{
+        if (data) {
+            data.success===true? navigate('/play') : console.error('아이 프로필 등록 실패')
+          }
+    },[data])
+
     const SumbitChild = ()=>{
         const body = {
             nickname:kidState["nickname"],
@@ -150,13 +156,6 @@ function RegisterChild({childIdx}) {
         }
         post(body)
     }
-    useEffect(()=>{
-        console.log(data)
-        if (data) {
-            data.success===true? navigate('/play') : console.error('아이 프로필 등록 실패')
-          }
-    },[data])
-
     const handleInputChange = (e) => {
         let { name, value } = e.target;
         if (name=="gender"){
