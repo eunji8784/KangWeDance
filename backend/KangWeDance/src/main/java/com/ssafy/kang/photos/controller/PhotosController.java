@@ -26,6 +26,7 @@ import com.ssafy.kang.photos.model.PhotosDto;
 import com.ssafy.kang.photos.model.PhotosPageDto;
 import com.ssafy.kang.photos.model.PramesDto;
 import com.ssafy.kang.photos.model.service.PhotosService;
+import com.ssafy.kang.util.JwtUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -37,7 +38,8 @@ public class PhotosController {
 	@Autowired
 	PhotosService photosService;
 	private final AmazonS3Client amazonS3Client;
-
+	@Autowired
+	private JwtUtil jwtService;
 	@Value("${cloud.aws.s3.bucket}")
 	private String bucket;
 
@@ -67,7 +69,8 @@ public class PhotosController {
 
 		try {
 			// 임시값 -> 토큰 구현전까지만 이렇게 사용
-			int parentIdx = 0;
+			int parentIdx = jwtService.getUserIdx(accessToken);
+
 			List<PhotosDto> photosDto = photosService.findPhotos(parentIdx, pageNum);
 
 			// 페이징 처리를 위한 코드 전체 카운트
@@ -90,7 +93,7 @@ public class PhotosController {
 		Map<String, Object> page = new HashMap<>();
 		try {
 			// 임시값 -> 토큰 구현전까지만 이렇게 사용
-			int parentIdx = 0;
+			int parentIdx = jwtService.getUserIdx(accessToken);
 			List<PramesDto> pramesDto = photosService.findPrames(parentIdx, pageNum);
 
 			// 페이징 처리를 위한 코드 - 전체 카운트
