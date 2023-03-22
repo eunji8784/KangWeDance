@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 // import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -10,7 +10,12 @@ const Wrapper = styled.div`
 `;
 
 function PlayPage(props) {
+    const {handleWatchingPage} = props
     // const navigate = useNavigate();
+    useEffect(()=>{
+        handleWatchingPage('play')
+    },[])
+
     return (
         <Wrapper>
             PlayPage
