@@ -41,7 +41,7 @@ const LevelUpExpBar = styled.div`
   height: 100%;
   border-radius: 8px;
   background-color: #F05475;
-  transition: width 2.5s cubic-bezier(0.65, 0, 0.35, 1);
+  transition: width 1.5s cubic-bezier(0.65, 0, 0.35, 1);
 `
 
 const ExpText = styled.div`
@@ -98,8 +98,13 @@ function UserEXP({userLevel,startEXP, endEXP, totalLevelEXP, nextLevelEXP}) {
 
   useEffect(() => {
     if (!showLevelUp) return;
-    const nextPercent = (endEXP - totalLevelEXP) / nextLevelEXP * 100
-    setNextExpPercent(nextPercent);
+    setTimeout(() => {
+      const nextPercent = (endEXP - totalLevelEXP) / nextLevelEXP * 100
+      setNextExpPercent(nextPercent);
+    }, 500);
+    // const nextPercent = (endEXP - totalLevelEXP) / nextLevelEXP * 100
+    // console.log("!!!")
+    // setNextExpPercent(nextPercent);
   },[showLevelUp, endEXP, totalLevelEXP, nextLevelEXP])
 
   useEffect(() => {
@@ -116,7 +121,7 @@ function UserEXP({userLevel,startEXP, endEXP, totalLevelEXP, nextLevelEXP}) {
         currentValue += increment;
         setCurrentExp(currentValue);
       }
-    }, 25);
+    }, showLevelUp ? 15 :25);
     return () => clearInterval(intervalId);
   }, [showLevelUp, endEXP, totalLevelEXP]);
 

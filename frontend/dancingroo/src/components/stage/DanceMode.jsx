@@ -4,13 +4,11 @@ import styled from "styled-components"
 import Webcam from "react-webcam"
 import PauseModal from "./PauseModal"
 import PlayResult from "./PlayResult"
+import Feedback from "./Feedback"
 import { Overlay } from "../common/ui/Semantics"
 import { ModalBtn } from "../status/HealthData"
 import { useInterval } from "../../hooks/useInterval"
 import bgImg from "../../assets/images/bgImg.png"
-import greatImg from "../../assets/images/great.png"
-import goodImg from "../../assets/images/good.png"
-import cheerupImg from "../../assets/images/cheerup.png"
 
 const tmPose = window.tmPose
 const MODELURL =
@@ -51,42 +49,10 @@ const MyOverlay = styled(Overlay)`
   top: 0;
   left: 0;
   justify-content: normal;
-  img {
-    width: 25%;
-    margin-top: 1rem;
-    height: auto;
-    display: none;
-  }
   .exit {
     position: absolute;
     right: 1rem;
     top: 0;
-  }
-  .popup {
-    animation: pop-up 1s;
-    @keyframes pop-up {
-      0% {
-        transform: scale(1);
-      }
-      50% {
-        transform: scale(1.4);
-      }
-      60% {
-        transform: scale(1.1);
-      }
-      70% {
-        transform: scale(1.2);
-      }
-      80% {
-        transform: scale(1);
-      }
-      90% {
-        transform: scale(1.1);
-      }
-      100% {
-        transform: scale(1);
-      }
-    }
   }
 `
 
@@ -97,17 +63,17 @@ function DanceMode(props) {
   const [prevPosture, setPrevPosture] = useState(-1)
   const [count, setCount] = useState(0)
   const [showResult, setShowResult] = useState(false)
+  const [showGreat, setShowGreat] = useState(false)
+  const [showGood, setShowGood] = useState(false)
+  const [showCheerUp, setShowCheerUp] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const camref = useRef(null)
   const videoref = useRef(null)
-  const greatimgref = useRef(null)
-  const goodimgref = useRef(null)
-  const cheerupimgref = useRef(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
   
   const danceTimeline = 
   [
     {
-      danceIndex: 2,
+      danceIndex: 2, 
       startTime: 7,
       endTime: 14,
       accuracy: 0.95,
@@ -249,7 +215,6 @@ function DanceMode(props) {
     )
     const prediction = await model.predict(posenetOutput)
     const rtPosture = prediction[aimedPosture.danceIndex]
-    console.log(rtPosture.className, rtPosture.probability.toFixed(2))
     setPrevPosture((prevPosture) => {
       if (
         rtPosture.probability.toFixed(2) > aimedPosture.accuracy &&
@@ -274,18 +239,22 @@ function DanceMode(props) {
         e.endTime > currentTime
     );
     if (filteredTimeline?.startTime !== aimedPosture?.startTime) {
-      console.log(filteredTimeline, aimedPosture)
       setAimedPosture(filteredTimeline)
       setCount(0)
     }
     if (filteredTimeline && currentTime >= filteredTimeline.endTime-1 && currentTime < filteredTimeline.endTime) {
-      if (count > filteredTimeline.countStandard) {
-        openGreatFeedback()
-      } else if (count > filteredTimeline.countStandard / 2) {
-        openGoodFeedback()
-      } else {
-        openCheerupFeedback()
-      }
+      if (!showGreat && !showGood && !showCheerUp) {
+        if (count > filteredTimeline.countStandard) {
+          setShowGreat(true)
+          setTimeout(() => setShowGreat(false), 3000)
+        } else if (count > filteredTimeline.countStandard / 2) {
+          setShowGood(true)
+          setTimeout(() => setShowGood(false), 3000)
+        } else {
+          setShowCheerUp(true)
+          setTimeout(() => setShowCheerUp(false), 3000)
+        }
+      }  
     }
   }
 
@@ -302,23 +271,20 @@ function DanceMode(props) {
 
   //test
   const openGreatFeedback = () => {
-    const greatimg = greatimgref.current
-    greatimg.style.display = "block"
-    setTimeout(() => {greatimg.style.display = "none"}, 3000)
+    setShowGreat(true)
+    setTimeout(() => setShowGreat(false), 3000)
   }
 
   //test
   const openGoodFeedback = () => {
-    const goodimg = goodimgref.current
-    goodimg.style.display = "block"
-    setTimeout(() => {goodimg.style.display = "none"}, 3000)
+    setShowGood(true)
+    setTimeout(() => setShowGood(false), 3000)
   }
 
   //test
   const openCheerupFeedback = () => {
-    const cheerupimg = cheerupimgref.current
-    cheerupimg.style.display = "block"
-    setTimeout(() => {cheerupimg.style.display = "none"}, 3000)
+    setShowCheerUp(true)
+    setTimeout(() => setShowCheerUp(false), 3000)
   }
 
   return (
@@ -336,9 +302,7 @@ function DanceMode(props) {
           mirrored={true}
         />
         <MyOverlay>
-          <img className="popup" ref={greatimgref} src={greatImg} alt="great"/>
-          <img className="popup" ref={goodimgref} src={goodImg} alt="good"/>
-          <img className="popup" ref={cheerupimgref} src={cheerupImg} alt="cheerup"/>
+          <Feedback showGreat={showGreat} showGood={showGood} showCheerUp={showCheerUp}/>
           <ModalBtn className="exit" onClick={handleIsModalOpen}>나가기</ModalBtn>
           <div className="test">
             <ModalBtn onClick={openGreatFeedback}>Great</ModalBtn>
