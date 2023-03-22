@@ -1,14 +1,15 @@
 import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { Wrapper, PinkButton } from "../common/ui/Semantics";
-// import html2canvas from "html2canvas";
-// import { Stage, Layer, Image } from 'react-konva';
-// import useImage from 'use-image';
+import { Stage, Layer, Image, Rect } from "react-konva";
+import useImage from 'use-image';
+
+import two from "../../assets/images/two.png"
 
 const MainSection = styled(Wrapper)`
     width: 60%;
     height: 100%;
-    min-width: 5rem;
+    min-width: 25rem;
     justify-content: start;
     border-right: solid 0.2rem #ffeef2;
 `
@@ -22,112 +23,107 @@ const ButtonSection = styled(Wrapper)`
 `
 
 const Card = styled.div`
-  position: relative;
-  width: 80%;
-  height: 0;
-  padding-bottom: 45%;
+    width: 80%;
 `;
 
-const ImageFrame = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background-image:url(${(props)=>props.imageUrl});
-  background-size:cover;
-  #canvas{
-    border: 1rem solid red;
-  }
-`;
-
-const Sticker = styled.div`
-    position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  border: solid 0.1rem red;
-`;
-
-// const URLImage = ({ image }) => {
-//     const [img] = useImage(image.src);
-//     return (
-//       <Image
-//         image={img}
-//         x={image.x}
-//         y={image.y}
-//         offsetX={img ? img.width / 2 : 0}
-//         offsetY={img ? img.height / 2 : 0}
-//       />
-//     );
-//   };
+const URLImage = ({ image }) => {
+    const [img] = useImage(image.src);
+    return (
+      <Image
+        image={img}
+        x={image.x}
+        y={image.y}
+        offsetX={img ? img.width / 2 : 0}
+        offsetY={img ? img.height / 2 : 0}
+      />
+    );
+  };
   
+
+  const BackGroungImage = ({ image }) => {
+    const [img] = useImage(image);
+    return (
+      <Image
+        image={img}
+        width={window.innerWidth/2.2}
+        height={window.innerWidth*0.2557}
+      />
+    );
+  };
+
 function RightArea({imge, frameImage}) {
     const dragUrl = useRef();
     const stageRef = useRef();
+    const layertRef = useRef(null);
     const [images, setImages] = useState([]);
     const [base64, setBase64] = useState();
-     
-    // const imgeDownload = async() => {
-    //     await html2canvas(document.getElementById("card"))
-    //     .then(function(canvas) {
-    //         setBase64(canvas.toDataURL("image/png"));
-    //     });
-    // };
+    const [resize, setResize] = useState();
 
-    // const a = (e) => {
-    //     e.preventDefault();
-    //     // register event position
-    //     stageRef.current.setPointersPositions(e);
-    //     // add image
-    //     setImages(
-    //       images.concat([
-    //         {
-    //           ...stageRef.current.getPointerPosition(),
-    //           src: dragUrl.current,
-    //         },
-    //       ])
-    //     );
-      
-    // }
+    
+    useEffect(() => {
+        window.addEventListener("resize", handleResize);
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
 
-    // const b = (e) => {
-    //     e.preventDefault();
-    // }
+    const handleResize = () => {
+      setResize(window.innerWidth);
+    };
+    
+    const downloadURI = async() => {
+        const uri = stageRef.current.toDataURL();
+        setBase64(uri);
+    };
+
+    //이미지 드랍해서 추가
+    const drop = (e) => {
+        e.preventDefault();
+        stageRef.current.setPointersPositions(e);
+        setImages(
+          images.concat([
+            {
+              ...stageRef.current.getPointerPosition(),
+              src: dragUrl.current,
+            },
+          ])
+        );
+    }
+
+    const drag = (e) => {
+        e.preventDefault();
+    }
 
     return (
         <MainSection>
             <ButtonSection>
                 <PinkButton>공유하기</PinkButton>
-                {/* <Button type="button" value="다운로드" onClick={imgeDownload}/> */}
+                <PinkButton onClick={downloadURI}>다운로드</PinkButton>
             </ButtonSection>
             {/* <img
-                alt="lion"
-                src="https://konvajs.org/assets/lion.png"
+                src={two}
                 draggable="true"
                 onDragStart={(e) => {
                 dragUrl.current = e.target.src;
                 }}
             /> */}
-            <Card id="card">
-                <ImageFrame imageUrl={imge}/>
-                <ImageFrame imageUrl={frameImage}/>
-                {/* <div  onDrop={a} onDragOver={b}>
+             <Card onDrop={drop} onDragOver={drag}>
                     <Stage
-                    width={100}
-                    height={window.innerHeight}
-                    style={{ border: '1px solid grey' }}
-                    ref={stageRef}
-                    >
-                    <Layer>
-                        {images.map((image) => {
-                        return <URLImage image={image} />;
-                        })}
-                    </Layer>
+                        width={window.innerWidth/2.2}
+                        height={window.innerWidth*0.2557}
+                        ref={stageRef}
+                        >
+                        <Layer ref={layertRef}> 
+                            <BackGroungImage image={imge}/>
+                            <BackGroungImage image={frameImage}/>
+                            {images.map((image, key) => {
+                            return <URLImage key={key} image={image} />;
+                            })}
+                        </Layer>
                     </Stage>
-                </div> */}
             </Card>
+
+            {/* <img src = {imge}/> */}
             <img src = {base64}/>
         </MainSection>
     );
