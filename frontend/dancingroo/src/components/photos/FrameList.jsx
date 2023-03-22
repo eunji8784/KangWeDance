@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Wrapper } from "../common/ui/Semantics";
 
-import framedummy from "../../assets/images/framedummy.png"
+import fd1 from "../../assets/images/fd1.png"
 import fd2 from "../../assets/images/fd2.png"
+import fd3 from "../../assets/images/fd3.png"
+import fd4 from "../../assets/images/fd4.png"
 import {MdLock} from 'react-icons/md'
 
 const SideSection = styled(Wrapper)`
@@ -47,12 +49,20 @@ function FrameList(props) {
     //더미
     const frames = [
         {
-            imageUrl : framedummy,
+            imageUrl : fd1,
             lock : false
         },
         {
             imageUrl : fd2,
-            lock : true
+            lock : false
+        },
+        {
+            imageUrl : fd3,
+            lock : false
+        },
+        {
+            imageUrl : fd4,
+            lock : false
         }
 
     ]
