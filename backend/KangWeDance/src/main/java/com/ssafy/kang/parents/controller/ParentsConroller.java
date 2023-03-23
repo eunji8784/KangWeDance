@@ -52,7 +52,7 @@ public class ParentsConroller {
 			userIO = parentsService.getUserInfo(dto.getAccessToken());
 			dto.setSocailUid(userIO.get("id"));
 			dto.setSocialPlatform("Kakao");
-			dto.setNickname(userIO.get("nickname"));
+			dto.setFamilyname(userIO.get("nickname"));
 			dto = parentsService.findSocial(dto.getSocailUid());
 			return login(dto,userIO,token);
 		} catch (Exception e) {
@@ -70,7 +70,7 @@ public class ParentsConroller {
 			userIO = parentsService.getNaverUserInfo(token.get("access_token"));
 			dto.setSocailUid(userIO.get("id"));
 			dto.setSocialPlatform("Naver");
-			dto.setNickname(userIO.get("nickname"));
+			dto.setFamilyname(userIO.get("nickname"));
 			dto = parentsService.findSocial(dto.getSocailUid());
 			return login(dto,userIO,token);
 		} catch (Exception e) {
@@ -81,6 +81,7 @@ public class ParentsConroller {
 		Map<String, String> map = new HashMap<>();
 		String accessToken ="";
 		String isUser = "false";
+		String nickname = "";
 		SuccessCode sc= null;
 		if(dto != null && !dto.isDeletedFlag()) {
 			dto.setAccessToken(token.get("access_token"));
@@ -88,6 +89,7 @@ public class ParentsConroller {
 			parentsService.modifyAccessToken(dto);
 			if(parentsService.findChildren(dto.getParentIdx())!=0)
 				isUser = "true";
+			nickname = dto.getFamilyname();
 			sc = SuccessCode.LOGIN;
 		}else {
 			sc = SuccessCode.GO_JOIN;
@@ -96,21 +98,24 @@ public class ParentsConroller {
 				dto.setAccessToken(token.get("access_token"));
 				dto.setSocailUid(userIO.get("id"));
 				dto.setSocialPlatform("Kakao");
-				dto.setNickname(userIO.get("nickname"));					
+				dto.setFamilyname(userIO.get("nickname"));					
+				nickname = dto.getFamilyname();
 				accessToken =  jwtUtil.createAccessToken("useridx",parentsService.addUser(dto));
 			}else {
 				parentsService.modifyUser(dto);
 			}
 		}
+		
 		map.put("accessToken", accessToken);
 		map.put("isUser", isUser);
+		map.put("familyname", nickname);
 		return ApiResponse.success(sc,map);
 	}
+	
 	@PatchMapping("/nickname")
-	public ApiResponse<?> nicknameModify(@RequestHeader("accesstoken") String accesstoken, @RequestBody String nickname){
+	public ApiResponse<?> nicknameModify(@RequestHeader("accesstoken") String accesstoken, @RequestBody String familyname){
 		try {
-			
-			parentsService.modifyNickname(ParentsDto.builder().parentIdx(jwtUtil.getUserIdx(accesstoken)).nickname(nickname).build());
+			parentsService.modifyNickname(ParentsDto.builder().parentIdx(jwtUtil.getUserIdx(accesstoken)).familyname(familyname).build());
 			return ApiResponse.success(SuccessCode.UPDATE_NICKNAME);
 		} catch (Exception e) {
 			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
