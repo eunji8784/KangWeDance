@@ -26,7 +26,7 @@ public enum SuccessCode {
 	READ_PRAME_LIST(SUCCESS, "스티커 및 프레임 조회 성공"), CREATE_KAKAO(SUCCESS, "카카오톡 공유하기 성공"),
 	DELETE_PHOTO(SUCCESS, "사진 삭제하기 성공"),
 	// play
-	READ_PLAY_LIST(SUCCESS, "플레이 목록 조회 성공"),
+	READ_PLAY_LIST(SUCCESS, "플레이 목록 조회 성공"), CREATE_PLAY_RESULT(SUCCESS, "플레이 결과 등록 성공"),
 	// status
 	READ_PLAYRECORD_LIST(SUCCESS, "운동 기록 조회 성공"), READ_FOOD_LIST(SUCCESS, "음식 검색 성공");
 
