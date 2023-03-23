@@ -81,6 +81,7 @@ public class ParentsConroller {
 		Map<String, String> map = new HashMap<>();
 		String accessToken ="";
 		String isUser = "false";
+		String nickname = "";
 		SuccessCode sc= null;
 		if(dto != null && !dto.isDeletedFlag()) {
 			dto.setAccessToken(token.get("access_token"));
@@ -88,6 +89,7 @@ public class ParentsConroller {
 			parentsService.modifyAccessToken(dto);
 			if(parentsService.findChildren(dto.getParentIdx())!=0)
 				isUser = "true";
+			nickname = dto.getNickname();
 			sc = SuccessCode.LOGIN;
 		}else {
 			sc = SuccessCode.GO_JOIN;
@@ -97,13 +99,16 @@ public class ParentsConroller {
 				dto.setSocailUid(userIO.get("id"));
 				dto.setSocialPlatform("Kakao");
 				dto.setNickname(userIO.get("nickname"));					
+				nickname = dto.getNickname();
 				accessToken =  jwtUtil.createAccessToken("useridx",parentsService.addUser(dto));
 			}else {
 				parentsService.modifyUser(dto);
 			}
 		}
+		
 		map.put("accessToken", accessToken);
 		map.put("isUser", isUser);
+		map.put("nickname", nickname);
 		return ApiResponse.success(sc,map);
 	}
 	@PatchMapping("/nickname")
