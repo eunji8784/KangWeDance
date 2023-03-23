@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import {Wrapper, Header, Main, Article, Section, H1, H2, P, Footer, PinkButton} from "../../common/ui/Semantics";
-import bgImg from "../../../assets/images/bgImg.png"
 import kangkang from "../../../assets/images/kangkang.png"
 import useApi from "../../../hooks/auth/useApi";
 import { login, updateChildState } from "../../../store/userSlice";
@@ -19,13 +18,7 @@ const ModWrapper = styled(Wrapper)`
     align-items:center;
     z-index:-1;
     left:0;
-    & > img {
-        position: absolute;
-        z-index: -2;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-    }
+    bottom:-5rem;
     h2{
         padding:0;
         margin-bottom:-1rem;
@@ -59,7 +52,7 @@ const ModSection = styled(Section)`
        }
     }
 `
-const FormLabel = styled.label`
+export const FormLabel = styled.label`
     font-size: 1rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
@@ -67,7 +60,7 @@ const FormLabel = styled.label`
     margin-left:1.5rem;
 `;
 
-const FormInput = styled.input`
+export const FormInput = styled.input`
     height: 2.1rem;
     min-width: 5rem;
     font-size: 0.8rem;
@@ -101,38 +94,14 @@ const MyButton = styled(PinkButton)`
     letter-spacing:0.2rem;
     font-size:0.9rem;
 `
-const ModHeader = styled(Header)`
-    margin-top:1rem;
-    padding-bottom:0.5rem;
-    flex-direction:column;
-    .우리집{
-        /* border:1px solid red; */
-        /* margin-left:14.9rem; */
-        align-self:flex-start;
-    }
-    .우리집인풋{
-        align-self:flex-start;
-        margin-left:5rem;
-        width:15rem;
-    }
-    .house{
-        flex-direction:column;
-        /* border:1px solid blue; */
-        width:90%;
-    }
-    width:80%;
-    border-bottom: 1px solid #9b9999;
-`
 function RegisterChild({childIdx}) {
-    const thisChild = useSelector(state=>state.userState.children[0]) // 디폴트는 첫째
-    const familyname = useSelector(state=>state.userState.familyname)
+    const thisChild = useSelector(state=>state.userState.children[childIdx]) // 디폴트는 첫째
     const dispatch = useDispatch()
     const navigate = useNavigate();
     const {data, isLoading, error, post} = useApi('/children')
     const [newChild, setNewChild] = useState(true);
     const [colorboy, setColorBoy] = useState("#FFD731");
     const [colorgirl, setColorGirl] = useState("#ffffff");
-    const [familynameState, ] = useState(familyname)
     const [kidState, setKidState] = useState(thisChild)
     
     useEffect(()=>{
@@ -141,7 +110,6 @@ function RegisterChild({childIdx}) {
           }
     },[data])
 
-    console.log(kidState)
     const SumbitChild = ()=>{
         const body = {
             nickname:kidState["nickname"],
@@ -176,14 +144,6 @@ function RegisterChild({childIdx}) {
     };
     return (
         <ModWrapper>
-            <ModHeader>
-                <h1>회원가입</h1>
-                <div className="house">
-                    <FormLabel className="우리집" htmlFor="familyname">우리 집</FormLabel>
-                    <FormInput className="우리집인풋" defaultValue={familynameState} type="text" name="familyname" id="familyname" placeholder=" 캥거루합창단" onChange={handleInputChange}/>
-                </div>
-            </ModHeader>
-            <h2>아이 프로필</h2>
             <ModMain>
                 <ModSection>
                     <Article>
@@ -235,7 +195,6 @@ function RegisterChild({childIdx}) {
                 <MyButton onClick={()=>SumbitChild()}>등록하기</MyButton>
                 <MyButton>삭제하기</MyButton>
             </Footer>
-            <img src={bgImg} alt="" />
         </ModWrapper>
     )
 }
