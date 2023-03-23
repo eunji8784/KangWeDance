@@ -48,8 +48,8 @@ public class PhotosServiceImpl implements PhotosService {
 	}
 
 	@Override
-	public List<PramesDto> findPrames(int parentIdx, int pageNum) throws Exception {
-		return sqlSession.getMapper(PhotosMapper.class).selectPrames(parentIdx, pageNum);
+	public List<PramesDto> findPrames(int level, int pageNum) throws Exception {
+		return sqlSession.getMapper(PhotosMapper.class).selectPrames(level, pageNum);
 	}
 
 	@Override
@@ -63,9 +63,14 @@ public class PhotosServiceImpl implements PhotosService {
 	}
 
 	@Override
-	public int findPramesCount(int parentIdx) throws Exception {
+	public int findPramesCount(int level) throws Exception {
 		// TODO Auto-generated method stub
-		return sqlSession.getMapper(PhotosMapper.class).selectPramesCount(parentIdx);
+		return sqlSession.getMapper(PhotosMapper.class).selectPramesCount(level);
+	}
+
+	@Override
+	public int findLevel(int parentIdx) throws Exception {
+		return sqlSession.getMapper(PhotosMapper.class).selectLevel(parentIdx);
 	}
 
 }
