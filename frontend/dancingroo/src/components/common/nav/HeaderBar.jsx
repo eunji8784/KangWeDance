@@ -2,6 +2,7 @@ import React, {useState, useRef, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import useLogout from "../../../hooks/auth/useLogout";
+import { useSelector } from "react-redux";
 //logo
 import logo from "../../../assets/images/logo.png"
 import {RiUserFill} from "react-icons/ri";
@@ -115,6 +116,8 @@ const LogOut = styled.div`
 
 function HeaderBar(props) {
     const {watchingPage} = props;
+    const isLoggedIn = useSelector(state=>state.userState.isLoggedIn);
+    const familyname = useSelector(state=>state.userState.familyname)
     const {isLoading, error, handleLogout} = useLogout()
     const [activeMenu, setActiveMenu] = useState(watchingPage);
     const API_KEY_KAKAO = process.env.REACT_APP_API_KEY_KAKAO;
@@ -138,6 +141,11 @@ function HeaderBar(props) {
                     setActiveMenu("play");
                 }}
                     />
+                <div className="username">
+                    {isLoggedIn &&
+                        `${familyname || '캥거루합창단'} 환영합니다!`
+                    }
+                </div>
                 <div className="user-menu">
                     <LogOut onClick={() => {
                             handleClick()

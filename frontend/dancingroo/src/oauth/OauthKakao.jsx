@@ -24,7 +24,7 @@ function OauthKakao(props) {
       return;
     }
     if (data) {
-      data.data.isUser === "true" ? navigate("/play") : navigate("/signup");
+      data.data.isUser === "true" ? navigate("/play") : navigate("/users/join");
     }
 
   }, [loading, data, error, navigate]);
