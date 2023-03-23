@@ -4,6 +4,9 @@ import { Routes, Route } from "react-router-dom"
 import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "./store/userSlice";
+// Layoutimport { useCookies } from "react-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "./store/userSlice";
 // Layout
 import HBLayout from "./layout/HBLayout"
 import NHBLayout from "./layout/NHBLayout"
@@ -24,13 +27,14 @@ import ErrorPage from "./pages/ErrorPage"
 function App() {
   const dispatch = useDispatch()
   const isLoggedIn = useSelector(state=>state.userState.isLoggedIn)
+  const dispatch = useDispatch()
+  const isLoggedIn = useSelector(state=>state.userState.isLoggedIn)
   const [watchingPage, setWatchingPage] = useState('')
   const [Cookie, setCookie, removeCookie] = useCookies('accessToken')
 
   useEffect(()=>{
     const existingToken = Cookie.accessToken;
     if (existingToken) {
-
       dispatch(login(existingToken));
     }
   },[dispatch, Cookie.accessToken])

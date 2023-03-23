@@ -7,6 +7,8 @@ import kangkang from "../../../assets/images/kangkang.png"
 import useApi from "../../../hooks/auth/useApi";
 import { login, updateChildState } from "../../../store/userSlice";
 import { useDispatch,useSelector } from "react-redux";
+import { login, updateChildState } from "../../../store/userSlice";
+import { useDispatch,useSelector } from "react-redux";
 
 const ModWrapper = styled(Wrapper)`
     width: 100vw;
@@ -110,16 +112,22 @@ function RegisterChild({childIdx}) {
           }
     },[data])
 
+    console.log(kidState)
     const SumbitChild = ()=>{
         const body = {
             nickname:kidState["nickname"],
+            birthDate:kidState["birthDate"],
             birthDate:kidState["birthDate"],
             gender:kidState["gender"],
             weight:Number(kidState["weight"]),
             height:Number(kidState["height"]),
             ProfileImageUrl:kidState["profileImageUrl"],
+            ProfileImageUrl:kidState["profileImageUrl"],
         }
         post(body)
+        // 집이름 추가해서 리덕스 태워 보내기
+        body["familyname"] = kidState["familyname"]
+        dispatch(updateChildState(body))
         // 집이름 추가해서 리덕스 태워 보내기
         body["familyname"] = kidState["familyname"]
         dispatch(updateChildState(body))
@@ -158,6 +166,8 @@ function RegisterChild({childIdx}) {
                         </div>
                     </Article>
                     <Article>
+                        <FormLabel htmlFor="birthDate"> 생년월일</FormLabel>
+                        <FormInput defaultValue={kidState["birthDate"]} type="date" name="birthDate" id="birthDate" placeholder=" 닉네임" onChange={handleInputChange}/>
                         <FormLabel htmlFor="birthDate"> 생년월일</FormLabel>
                         <FormInput defaultValue={kidState["birthDate"]} type="date" name="birthDate" id="birthDate" placeholder=" 닉네임" onChange={handleInputChange}/>
                     </Article>
