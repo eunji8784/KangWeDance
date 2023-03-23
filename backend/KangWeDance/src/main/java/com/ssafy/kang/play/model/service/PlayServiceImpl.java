@@ -6,6 +6,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ssafy.kang.play.model.PlayRequestDto;
+import com.ssafy.kang.play.model.ScoreRequestDto;
 import com.ssafy.kang.play.model.SongListDto;
 import com.ssafy.kang.play.model.SongMotionDto;
 import com.ssafy.kang.play.model.mapper.PlayMapper;
@@ -27,4 +29,25 @@ public class PlayServiceImpl implements PlayService {
 	public List<SongMotionDto> findSongMotionList(int songIdx) throws Exception {
 		return sqlSession.getMapper(PlayMapper.class).selectSongMotionList(songIdx);
 	}
+
+	@Override
+	public void addPlayRecord(PlayRequestDto playRequestDto) throws Exception {
+		sqlSession.getMapper(PlayMapper.class).insertPlayRecord(playRequestDto);
+	}
+
+	@Override
+	public void addScoreRecord(ScoreRequestDto scoreRequestDto) throws Exception {
+		sqlSession.getMapper(PlayMapper.class).insertScoreRecord(scoreRequestDto);
+	}
+	
+	@Override
+	public int findExperienceScore(int childIdx) throws Exception {
+		return sqlSession.getMapper(PlayMapper.class).selectExperienceScore(childIdx);
+	}
+	
+	@Override
+	public void modifyExperienceScore(int param1, int param2) throws Exception {
+		sqlSession.getMapper(PlayMapper.class).updateExperienceScore(param1, param2);
+	}
+	
 }

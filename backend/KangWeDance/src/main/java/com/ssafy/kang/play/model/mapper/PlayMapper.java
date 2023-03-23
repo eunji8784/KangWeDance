@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.ssafy.kang.play.model.PlayRequestDto;
+import com.ssafy.kang.play.model.ScoreRequestDto;
 import com.ssafy.kang.play.model.SongListDto;
 import com.ssafy.kang.play.model.SongMotionDto;
 
@@ -19,5 +21,13 @@ public interface PlayMapper {
 	public List<SongListDto> selectSongList() throws SQLException;
 
 	public List<SongMotionDto> selectSongMotionList(int songIdx) throws SQLException;
+
+	public void insertPlayRecord(PlayRequestDto playRequestDto) throws SQLException;
+
+	public void insertScoreRecord(ScoreRequestDto scoreRequestDto) throws SQLException;
+
+	public int selectExperienceScore(int childIdx) throws SQLException;
+	
+	public void updateExperienceScore(int param1, int param2) throws SQLException;
 
 }
