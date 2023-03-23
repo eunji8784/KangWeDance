@@ -5,6 +5,8 @@ const initialState = {
   isLoggedIn: false,
   accessToken: null,
   familyname:null,
+  level:1,
+  exp:0,
   children:[
     { 
       index:0,
