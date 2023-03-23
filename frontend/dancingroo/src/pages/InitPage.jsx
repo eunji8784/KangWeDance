@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+// 로고
 import bigLogo from "../assets/images/bigLogo.png"
 import bgImg from "../assets/images/bgImg.png"
-import kangkang from "../assets/images/kangkang.png"
 import naver_login from "../assets/images/naver_login.png"
 import kakao_login from "../assets/images/kakao_login.png"
 
@@ -56,15 +56,15 @@ const Wrapper = styled.div`
     }
 `;
 
-function PlayPage(props) {
+function InitPage(props) {
     const navigate = useNavigate();
     const API_KEY_KAKAO = process.env.REACT_APP_API_KEY_KAKAO;
-    const REDIRECT_URI = 'http://localhost:3000/users/oauth2-kakao'
+    const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI
     const KAUTH_KAKAO = `https://kauth.kakao.com/oauth/authorize?client_id=${API_KEY_KAKAO}&redirect_uri=${REDIRECT_URI}&response_type=code`
 
     return (
         <Wrapper>
-          <img src={bigLogo} alt="" onClick={()=>navigate('/play')}/>
+          <img src={bigLogo} alt=""/>
           <div className="socialLogin">
             <a href={KAUTH_KAKAO}>
               <img src={kakao_login} alt="" className='login-btn'/>
@@ -78,4 +78,4 @@ function PlayPage(props) {
     );
 }
 
-export default PlayPage;
+export default InitPage;

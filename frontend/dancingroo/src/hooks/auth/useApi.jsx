@@ -5,7 +5,7 @@ function useApi(url) {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [cookies] = useCookies(['accessToken']);
+  const [cookie] = useCookies('accessToken');
 
   const baseURL = "https://kangwedance.site/dev"
 
@@ -16,7 +16,7 @@ function useApi(url) {
         method: method,
         headers: {
           'Content-Type': 'application/json',
-          accesstoken: cookies.accessToken,
+          accesstoken: cookie.accessToken,
         },
         body: JSON.stringify(requestBody)
       });
