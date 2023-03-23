@@ -34,4 +34,20 @@ public class AmazonS3ResourceStorage {
             }
         }
     }
+
+	public String getUrl(String fullPath, MultipartFile multipartFile)  {
+		File file = new File(MultipartUtil.getLocalHomeDirectory(), fullPath);
+        try {
+            multipartFile.transferTo(file);
+            amazonS3Client.putObject(new PutObjectRequest(bucket, fullPath, file)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
+            return amazonS3Client.getUrl(bucket, fullPath).toString();
+        } catch (Exception e) {
+            throw new RuntimeException();
+        } finally {
+            if (file.exists()) {
+                file.delete();
+            }
+        }
+	}
 }
