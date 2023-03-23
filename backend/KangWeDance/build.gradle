@@ -2,12 +2,16 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.9'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id 'project-report'
 }
 
 group = 'com.ssafy.kang'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
-
+configurations.all {
+    exclude module: 'logback-classi'
+    exclude module: 'slf4j-reload4j'
+}
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
@@ -19,7 +23,7 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.3.0'
 	implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-aws', version: '2.0.1.RELEASE'
@@ -30,7 +34,11 @@ dependencies {
     implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
     implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
     implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.10.5'
-    
+    // https://mvnrepository.com/artifact/org.apache.spark/spark-sql
+	compileOnly group: 'org.apache.spark', name: 'spark-sql_2.12', version: '3.2.3'
+	// https://mvnrepository.com/artifact/org.apache.spark/spark-core
+	implementation group: 'org.apache.spark', name: 'spark-core_2.12', version: '3.2.3'
+	
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.10.5'
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.10.5'
 	compileOnly 'org.projectlombok:lombok'

@@ -46,7 +46,7 @@
 				FROM (
 						SELECT @rownum:=@rownum+1 as rnum, prame_idx, prame_image_url, prame_flag
 						FROM photoPrame, (select @rownum:=0) rn
-						WHERE parent_idx=0
+						where level between 1 and #{level}
 					)as a
 			    WHERE rnum >(#{pageNum}-1)*10  and rnum <=(#{pageNum}*10);
     		 ]]>
@@ -68,14 +68,18 @@
 	) as a;
    </select>
    
+   <!-- 사용자의 경험치 -->
+   <select id ="selectLevel" parameterType="int" resultType="int">
+   SELECT experience_score 
+   FROM parent 
+   WHERE parent_idx=#{parentIdx}
+   </select>
+   
    <!-- 프레임 리스트 카운드 -->
    <select id ="selectPramesCount" parameterType="int" resultType="int">
 	SELECT count(*)
-	FROM (
-		SELECT prame_idx, prame_image_url, prame_flag
-		FROM photoPrame
-		WHERE parent_idx=#{parentIdx}
-	) as a;
+	FROM photoPrame
+	where level between 1 and #{level}
 	</select>
 	
 	
