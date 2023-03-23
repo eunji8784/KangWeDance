@@ -5,27 +5,31 @@ import { Wrapper } from "../components/common/ui/Semantics";
 
 function OauthKakao(props) {
   const navigate = useNavigate();
-  const { error, isUser, handleLogin } = useLogin();
-  const API_KEY_KAKAO = process.env.REACT_APP_API_KEY_KAKAO;
+  const { data, loading, error, handleSocialLogin } = useLogin();
   let code = new URL(window.location.href).searchParams.get("code");
 
   useEffect(() => {
-    handleLogin("kakao", code);
+    handleSocialLogin("kakao", code);
   }, []);
-
+ 
   useEffect(() => {
+    //useLogin이 성공했을 때 : data에 response.data, erorr:null 반환
+    // 실패했을 때, data:null, erorr에 에러 메시지 반환
     if (error) {
+      console.error(error);
       navigate("/error");
-    } else if (isUser === "true") {
-      navigate("/play");
-    } else if (isUser === "false") {
-      navigate("/signup");
+      return;
     }
-  }, [error, isUser, navigate]);
+    if (data) {
+      // console.log(data);
+      data.data.isUser === "true" ? navigate("/play") : navigate("/signup");
+    }
 
+  }, [loading, data, error, navigate]);
+  
   return (
     <Wrapper>
-      {/* Add your content here */}
+      카카오 로그인 중입니다...
     </Wrapper>
   );
 }

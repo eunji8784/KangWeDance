@@ -1,7 +1,7 @@
 import React, {useState, useRef, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-
+import useApi from "../../../hooks/auth/useApi";
 //logo
 import logo from "../../../assets/images/logo.png"
 import {RiUserFill} from "react-icons/ri";
@@ -64,7 +64,7 @@ const LogoContainer = styled.div`
     align-items:center;
     width:13rem;
     height:5.8rem;
-    font-size:0.8rem;
+    font-size: 0.95rem;
     padding:0;
     &>span{
         font-weight:${props=>props.active? "bold":"normal"};
@@ -115,12 +115,30 @@ const LogOut = styled.div`
 
 function HeaderBar(props) {
     const {watchingPage} = props;
+    const {data, isLoading, error, get} =useApi('/parents/logout')
     const [activeMenu, setActiveMenu] = useState(watchingPage);
+    const API_KEY_KAKAO = process.env.REACT_APP_API_KEY_KAKAO;
+    const LOGOUT_REDIRECT_URI = 'http://localhost:3000/'
+
     const navigate = useNavigate();
-    
     useEffect(()=>{
         setActiveMenu(watchingPage)
     },[watchingPage])
+
+    useEffect(()=>{
+        if (error) {
+            console.error(error)
+            navigate('/error')
+        }
+        if (data){
+            // 로그아웃 성공했으면, 카카오 로그아웃 시키고 홈으로 리다이렉트
+            window.location.href = `https://kauth.kakao.com/oauth/logout?client_id=${API_KEY_KAKAO}&logout_redirect_uri=${LOGOUT_REDIRECT_URI}`
+        }
+    },[data])
+
+    const handleLogOut = ()=>{
+        get()
+    }
     return (
         <Wrapper>
             <BarContainer height={30} justify={"space-between"} width={100}>
@@ -131,7 +149,7 @@ function HeaderBar(props) {
                     />
                 <div className="user-menu">
                     <LogOut onClick={() => {
-                            navigate(`/`);
+                            handleLogOut()
                         }}>로그아웃</LogOut>
                     <div
                         onClick={() => {
