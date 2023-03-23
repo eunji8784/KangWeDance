@@ -68,3 +68,12 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+
+#hive:
+#  driver:
+#    classname: org.apache.hive.jdbc.HiveDriver
+#  connection:
+#    url: jdbc:hive2://cluster.p.ssafy.io:10000/default?socketTimeout=1000000&connectTimeout=1000000
+#    username: App
+#    password: mine
+
