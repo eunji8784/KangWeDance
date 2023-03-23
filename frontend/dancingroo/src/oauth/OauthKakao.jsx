@@ -24,7 +24,6 @@ function OauthKakao(props) {
       return;
     }
     if (data) {
-      dispatch(login(data.data.accessToken))
       data.data.isUser === "true" ? navigate("/play") : navigate("/signup");
     }
 

@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react"
 import "./App.css"
 import { Routes, Route } from "react-router-dom"
-
+import { useCookies } from "react-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "./store/userSlice";
+// Layout
 import HBLayout from "./layout/HBLayout"
 import NHBLayout from "./layout/NHBLayout"
 import PHBLayout from "./layout/PHBLayout"
-
 // Pages
 import PlayPage from "./pages/PlayPage"
 import StatusPage from "./pages/StatusPage"
@@ -21,11 +23,22 @@ import ErrorPage from "./pages/ErrorPage"
 
 
 function App() {
+  const dispatch = useDispatch()
+  const isLoggedIn = useSelector(state=>state.userState.isLoggedIn)
   const [watchingPage, setWatchingPage] = useState('')
+  const [Cookie, setCookie, removeCookie] = useCookies('accessToken')
+
+  useEffect(()=>{
+    const existingToken = Cookie.accessToken;
+    if (existingToken) {
+      dispatch(login(existingToken));
+    }
+  },[dispatch, Cookie.accessToken])
+
+
   const handleWatchingPage = (menu)=>{
     setWatchingPage(menu)
-  }
-
+  }  
   return (  
     <>
       <Routes>
