@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { useCookies } from 'react-cookie';
-import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { login } from '../../store/userSlice';
 
 const useLogin = () => {
+  const dispatch = useDispatch()
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [, setCookie] = useCookies(['accessToken']);
+  const [, setCookie] = useCookies('accessToken');
 
   const handleSocialLogin = async (Oauth, code) => {
     try {
@@ -24,6 +26,7 @@ const useLogin = () => {
       const { accessToken, isUser } = json.data;
       console.log(accessToken, isUser)
       setCookie('accessToken', accessToken, { path: '/' }); //모든 경로에서 토큰 허용하겠다)
+      dispatch(login(accessToken))
     } catch (error) {
       setError(error.message); 
     } finally {

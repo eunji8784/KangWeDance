@@ -49,7 +49,7 @@ const userSlice = createSlice({
     login(state, action) {
       state.isLoggedIn = true
       state.accessToken = action.payload
-      console.log(`로그인 성공`)
+      console.log(`store에 토큰 저장 성공!`)
     },
     logout(state, action) {
       state.isLoggedIn = false
