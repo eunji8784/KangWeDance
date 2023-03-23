@@ -63,7 +63,7 @@ const LogoContainer = styled.div`
     align-items:center;
     width:13rem;
     height:5.8rem;
-    font-size:0.8rem;
+    font-size: 0.95rem;
     padding:0;
     &>span{
         font-weight:${props=>props.active? "bold":"normal"};
