@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.ssafy.kang.play.model.PlayRequestDto;
+import com.ssafy.kang.play.model.ScoreRequestDto;
 import com.ssafy.kang.play.model.SongListDto;
 import com.ssafy.kang.play.model.SongMotionDto;
 
@@ -18,5 +20,13 @@ public interface PlayService {
 	public List<SongListDto> findSongList() throws Exception;
 
 	public List<SongMotionDto> findSongMotionList(int songIdx) throws Exception;
+
+	public void addPlayRecord(PlayRequestDto playRequestDto) throws Exception;
+
+	public void addScoreRecord(ScoreRequestDto scoreRequestDto) throws Exception;
+
+	public void modifyExperienceScore(int experienceScore, int childIdx) throws Exception;
+
+	public int findExperienceScore(int childIdx) throws Exception;
 
 }
