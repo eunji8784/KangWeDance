@@ -3,7 +3,7 @@ import React
 from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-
+import { useSelector } from "react-redux";
 //logo
 import logo from "../../../assets/images/logo.png"
 import {RiUserFill} from "react-icons/ri";
@@ -77,6 +77,8 @@ const LogOut = styled.div`
 
 function HeaderBar(props) {
     const navigate = useNavigate();
+    const isLoggedIn = useSelector(state=>state.userState.isLoggedIn);
+    const familyname = useSelector(state=>state.userState.familyname)
 
     return (
         <Wrapper>
@@ -85,6 +87,11 @@ function HeaderBar(props) {
                     navigate("/play");
                 }}
                     />
+                <div className="username">
+                    {isLoggedIn &&
+                    `${familyname || '캥거루합창단'} 환영합니다!`
+                    }
+                </div>
                 <div className="user-menu">
                     <LogOut onClick={() => {
                             navigate(`/`);
@@ -98,6 +105,7 @@ function HeaderBar(props) {
                 </div>
             </BarContainer>
             {/* <div className="bottom-line" /> */}
+            <div className="bottom-line" />
         </Wrapper>
     );
 }
