@@ -16,5 +16,6 @@ public class FramesDto {
 	int level;
 	String frameURL;// 이미지 URL
 	int frameFlag; // 스티커-0/ 프레임 -1
+	boolean lock;
 
 }
