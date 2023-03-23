@@ -26,7 +26,7 @@ public class ParentsDto {
 	int parentIdx;
 	String socialPlatform;
 	String socailUid;
-	String nickname;
+	String familyname;
 	int experienceScore;
 	boolean deletedFlag;
 	String accessToken;

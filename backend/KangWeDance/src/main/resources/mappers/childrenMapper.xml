@@ -3,6 +3,7 @@
 <mapper namespace="com.ssafy.kang.children.model.mapper.ChildrenMapper">
 	<resultMap id="child" type="ChildrenDto">
 		<result column="child_idx" property="childIdx" />
+		<result column="familyname" property="familyname" />
 		<result column="parent_idx" property="parentIdx" />
 		<result column="nickname" property="nickname" />
 		<result column="profile_image_url" property="profileImageUrl" />
@@ -39,8 +40,8 @@
 		where child_idx = #{childIdx}
 	</update>
 	<select id="selectChildren" parameterType="int" resultMap="child">
-		select child_idx,parent_idx,nickname,profile_image_url,gender,birth_date
-		from children
-		where parent_idx = #{parentIdx};
+		select child_idx,a.parent_idx as parent_idx,nickname,familyname,profile_image_url,gender,birth_date
+		from children a join parent b on a.parent_idx = b.parent_idx 
+		where a.parent_idx = #{parentIdx};
 	</select>
 </mapper>

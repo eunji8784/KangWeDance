@@ -5,7 +5,7 @@
 		<result column="parent_idx" property="parentIdx" />
 		<result column="social_platform" property="socialPlatform" />
 		<result column="socail_uid" property="socailUid" />
-		<result column="nickname" property="nickname" />
+		<result column="familyname" property="familyname" />
 		<result column="experience_score" property="experienceScore" />
 		<result column="deleted_flag" property="deletedFlag" />
 		<result column="access_token" property="accessToken" />
@@ -22,7 +22,7 @@
 	</select>
 	<update id="updateNickname" parameterType="ParentsDto">
 		update parent
-		set nickname = #{nickname}
+		set familyname = #{familyname}
 		where parent_idx =#{parentIdx}
 	</update>
 	<delete id="deleteUser" parameterType="int">
@@ -35,12 +35,12 @@
 		where socail_uid = #{socailUid}
 	</select>
 	<insert id="insertUser" parameterType="ParentsDto" useGeneratedKeys="true" keyColumn="parent_idx" keyProperty="parentIdx">
-		insert into parent(social_platform,socail_uid,nickname,access_token)
-		value(#{socialPlatform},#{socailUid},#{nickname},#{accessToken})
+		insert into parent(social_platform,socail_uid,familyname,access_token)
+		value(#{socialPlatform},#{socailUid},#{familyname},#{accessToken})
 	</insert>
 	<update id="updateUser" parameterType="ParentsDto">
 		update parent
-		set deleted_flag = 0, nickname = #{nickname}
+		set deleted_flag = 0, familyname = #{familyname}
 		where parent_idx = #{parentIdx}
 	</update>
 	<update id="updateAccessToken" parameterType="ParentsDto">
