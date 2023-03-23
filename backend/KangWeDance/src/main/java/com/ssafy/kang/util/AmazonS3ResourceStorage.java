@@ -26,7 +26,6 @@ public class AmazonS3ResourceStorage {
             multipartFile.transferTo(file);
             amazonS3Client.putObject(new PutObjectRequest(bucket, fullPath, file)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
-            System.out.println(2);
         } catch (Exception e) {
             throw new RuntimeException();
         } finally {
