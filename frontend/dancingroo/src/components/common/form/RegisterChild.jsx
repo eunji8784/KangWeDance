@@ -124,6 +124,9 @@ function RegisterChild({childIdx}) {
         // 집이름 추가해서 리덕스 태워 보내기
         body["familyname"] = kidState["familyname"]
         dispatch(updateChildState(body))
+        // 집이름 추가해서 리덕스 태워 보내기
+        body["familyname"] = kidState["familyname"]
+        dispatch(updateChildState(body))
     }
     const handleInputChange = (e) => {
         let { name, value } = e.target;
