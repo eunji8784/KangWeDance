@@ -11,10 +11,10 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class PramesDto {
-	int prameIdx;
+public class FramesDto {
+	int frameIdx;
 	int level;
-	String prameURL;// 이미지 URL
-	int prameFlag; // 스티커-0/ 프레임 -1
+	String frameURL;// 이미지 URL
+	int frameFlag; // 스티커-0/ 프레임 -1
 
 }
