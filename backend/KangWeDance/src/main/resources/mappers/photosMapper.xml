@@ -43,7 +43,7 @@
 	<select id="selectFrames" resultMap="framesList">
     	SELECT  frame_idx, frame_image_url, frame_flag
 		FROM photoFrame 
-		where frame_flag =1 and level between 1 and #{level};
+		where frame_flag =1
 	</select>
 	
 	<!-- 사진 삭제  -->
