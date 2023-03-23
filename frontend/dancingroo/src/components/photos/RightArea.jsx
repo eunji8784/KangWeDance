@@ -68,8 +68,8 @@ const BackGroungImage = ({ image }) => {
                 });
             }}
             image={img}
-            width={window.innerWidth/10}
-            height={window.innerWidth/10}
+            width={window.innerWidth/18}
+            height={window.innerWidth/18}
             />
         }
         </>
@@ -78,7 +78,6 @@ const BackGroungImage = ({ image }) => {
 
 function RightArea({imge, frameImage, stickerImage, stickerNum}) {
     const stageRef = useRef();
-    const [base64, setBase64] = useState();
     const [resize, setResize] = useState();
     const [rectangles, setRectangles] = useState([]);
     const [selectedId, selectShape] = useState(null);
@@ -114,20 +113,69 @@ function RightArea({imge, frameImage, stickerImage, stickerNum}) {
       setResize(window.innerWidth);
     };
     
-    const downloadURI = async() => {
-        const uri = stageRef.current.toDataURL();
-        setBase64(uri);
-    };
-
     const cleanSticker = () => {
         setRectangles([]);
+    }
+
+    const downloadURI = (uri, name) => {
+        var link = document.createElement("a");
+        link.download = name;
+        link.href = uri;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        // delete link;
+      }
+
+    const downloadImage = () => {
+        const url = stageRef.current.toDataURL();
+
+        const today = new Date();
+        const year = today.getFullYear(); // 년도
+        const month = today.getMonth() + 1;  // 월
+        const date = today.getDate();  // 날짜
+
+        console.log(url)
+        downloadURI(url, 'KangWeDance'+ year + month + date);
+    }
+
+    const kakaoShare = () => {
+        if (window.Kakao) {
+            const kakao = window.Kakao;
+            if (!kakao.isInitialized()) {
+                kakao.init('710e5b0067f96bfdfa687085d33b61a7')
+            }
+            
+            kakao.Share.sendDefault({
+                objectType: 'feed',
+                content: {
+                  title: '오늘의 기록',
+                  description: '캥위댄스에서 편지가 왔어요',
+                  imageUrl:
+                    'https://mud-kage.kakao.com/dn/NTmhS/btqfEUdFAUf/FjKzkZsnoeE4o19klTOVI1/openlink_640x640s.jpg',
+                  link: {
+                    mobileWebUrl: 'https://developers.kakao.com',
+                    webUrl: 'https://developers.kakao.com',
+                  },
+                },
+                buttons: [
+                  {
+                    title: '다운로드하기',
+                    link: {
+                      mobileWebUrl: 'https://developers.kakao.com',
+                      webUrl: 'https://developers.kakao.com',
+                    },
+                  },
+                ],
+            })
+         }
     }
 
     return (
         <MainSection>
             <ButtonSection>
-                <PinkButton>공유하기</PinkButton>
-                <PinkButton onClick={downloadURI}>다운로드</PinkButton>
+                <PinkButton onClick={kakaoShare}>공유하기</PinkButton>
+                <PinkButton onClick={downloadImage}>다운로드</PinkButton>
             </ButtonSection>
              <Card 
              onMouseDown={checkDeselect} 
@@ -162,10 +210,11 @@ function RightArea({imge, frameImage, stickerImage, stickerNum}) {
                     </Stage>
             </Card>
             <ButtonSection>
-                스티커 전체 삭제
-                <MdCleaningServices color="#F05475" size="30" onClick={()=>cleanSticker()}/>
+                <span onClick={()=>cleanSticker()}>
+                    스티커 전체 삭제
+                    <MdCleaningServices color="#F05475" size="30"/>
+                </span>
             </ButtonSection>
-            <img src = {base64}/>
         </MainSection>
     );
 }
