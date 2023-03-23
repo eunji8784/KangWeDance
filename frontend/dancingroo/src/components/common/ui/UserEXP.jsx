@@ -77,7 +77,7 @@ const AnimatedUserLevel = styled(UserLevel)`
   scale: 1.15;
 `;
 
-function UserEXP({userLevel,startEXP, endEXP, totalLevelEXP, nextLevelEXP}) {
+function UserEXP({userLevel, startEXP, endEXP, totalLevelEXP, nextLevelEXP}) {
   const [expPercent, setExpPercent] = useState(startEXP ? startEXP / totalLevelEXP * 100 : 0);
   const [nextExpPercent, setNextExpPercent] = useState(0)
   const [level, setLevel] = useState(userLevel)
@@ -86,8 +86,9 @@ function UserEXP({userLevel,startEXP, endEXP, totalLevelEXP, nextLevelEXP}) {
 
   useEffect(() => {
     const percent = (endEXP / totalLevelEXP) * 100;
-    setExpPercent(percent > 100 ? 100 : percent);
-
+    setTimeout(() => {
+      setExpPercent(percent > 100 ? 100 : percent);
+    }, 500);
     if (totalLevelEXP <= endEXP) {
       setTimeout(() => {
         setShowLevelUp(true);
@@ -132,7 +133,7 @@ function UserEXP({userLevel,startEXP, endEXP, totalLevelEXP, nextLevelEXP}) {
     </>
     :
     <>
-      <ExpBar style={{ width: `${expPercent}%`}} />
+      <ExpBar style={{ width: `${expPercent}%`}} /> 
       <UserLevel>Lv {level}</UserLevel>
     </>
     }
