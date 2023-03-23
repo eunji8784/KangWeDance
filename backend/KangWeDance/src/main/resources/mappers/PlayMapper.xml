@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafy.kang.play.model.mapper.PlayMapper">
-	
 	<resultMap type="SongListDto" id="songList">
 		<result column="song_idx" property="songIdx" />
 		<result column="play_mode" property="playMode" />
 		<result column="thumbnail_url" property="thumbnailUrl" />
 		<result column="video_url" property="videoUrl" />
 		<result column="preview_music_url" property="previewMusicUrl" />
-		<result column="motion_tag" property="tag"/>
+		<result column="motion_tag" property="tag" />
 		<result column="calorie_consumption" property="calorieConsumption" />
 	</resultMap>
-	
 	<resultMap type="SongMotionDto" id="songMotionList">
 		<result column="motion_type_idx" property="danceIndex" />
 		<result column="start_time" property="startTime" />
@@ -19,8 +17,8 @@
 		<result column="count_delay" property="countDelay" />
 		<result column="count_standard" property="countStandard" />
 	</resultMap>
-
-	<select id="selectSongList" resultMap="songList" >
+	
+	<select id="selectSongList" resultMap="songList">
 		SELECT s.song_idx, s.play_mode, s.title, s.thumbnail_url, s.video_url, s.preview_music_url,
 			   m.motion_tag, s.difficulty, s.calorie_consumption 
 		FROM songList s
@@ -28,9 +26,35 @@
 		ON s.motion_type_idx = m.motion_type_idx
 	</select>
 	
-	<select id="selectSongMotionList" parameterType="int" resultMap="songMotionList" >
+	<select id="selectSongMotionList" parameterType="int" resultMap="songMotionList">
 		SELECT * FROM songMotion WHERE song_idx = #{songIdx}
 	</select>
-
-</mapper>
 	
+	<insert id="insertPlayRecord" parameterType="PlayRequestDto">
+		INSERT INTO playRecord(child_idx, song_idx, play_mode) 
+		VALUES(#{childIdx}, #{songIdx}, #{playMode})
+	</insert>
+	
+	<insert id="insertScoreRecord" parameterType="ScoreRequestDto">
+		<selectKey resultType="int" keyProperty="playRecordIdx" order="BEFORE">
+			SELECT MAX(play_record_idx) FROM playRecord
+		</selectKey>
+		INSERT INTO scoreRecord(play_record_idx, motion_type_idx, count, time, count_standard, score) 
+		VALUES(#{playRecordIdx}, #{danceIdx}, #{count}, #{time}, #{countStandard}, #{score})
+	</insert>
+	
+	<select id="selectExperienceScore" parameterType="int" resultType="int">
+		SELECT experience_score 
+		FROM parent 
+		WHERE 
+		parent_idx = 
+				(SELECT parent_idx FROM children WHERE child_idx = #{childIdx});
+	</select>
+	
+	<update id="updateExperienceScore" parameterType="int">
+		UPDATE parent SET experience_score = #{param1} 
+		WHERE 
+		parent_idx = 
+				(SELECT parent_idx FROM children WHERE child_idx = #{param2});
+	</update>
+</mapper>
