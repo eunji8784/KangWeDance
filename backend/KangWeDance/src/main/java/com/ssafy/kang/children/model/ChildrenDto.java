@@ -12,6 +12,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChildrenDto {
+	String familyname;
 	int childIdx; // 아이 고유 번호
 	int parentIdx;
 	boolean gender;// 성별 - 0: 남자/ 1: 여자
