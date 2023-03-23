@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ssafy.kang.photos.model.FramesDto;
 import com.ssafy.kang.photos.model.PhotosDto;
-import com.ssafy.kang.photos.model.PramesDto;
 
 @Service
 public interface PhotosService {
@@ -21,7 +21,7 @@ public interface PhotosService {
 
 	public List<PhotosDto> findPhotos(int parentIdx, int pageNum) throws Exception;
 
-	public List<PramesDto> findPrames(int level, int pageNum) throws Exception;
+	public List<FramesDto> findFrames(int level) throws Exception;
 
 	public boolean removePhoto(int photoIdx) throws Exception;
 
@@ -30,5 +30,7 @@ public interface PhotosService {
 	public int findPramesCount(int level) throws Exception;
 
 	public int findLevel(int parentIdx) throws Exception;
+
+	public List<FramesDto> findStickers() throws Exception;
 
 }

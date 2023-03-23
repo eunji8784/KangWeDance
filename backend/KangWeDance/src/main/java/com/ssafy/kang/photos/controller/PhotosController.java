@@ -22,9 +22,9 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.ssafy.kang.common.ErrorCode;
 import com.ssafy.kang.common.SuccessCode;
 import com.ssafy.kang.common.dto.ApiResponse;
+import com.ssafy.kang.photos.model.FramesDto;
 import com.ssafy.kang.photos.model.PhotosDto;
 import com.ssafy.kang.photos.model.PhotosPageDto;
-import com.ssafy.kang.photos.model.PramesDto;
 import com.ssafy.kang.photos.model.service.PhotosService;
 import com.ssafy.kang.util.JwtUtil;
 
@@ -84,14 +84,14 @@ public class PhotosController {
 		}
 	}
 
-	@GetMapping("/prames")
-	public ApiResponse<?> pramesDetails(@RequestParam("pageNum") int pageNum) throws Exception {
+	@GetMapping("/frames")
+	public ApiResponse<?> framesDetails(@RequestHeader("accesstoken") String accessToken) throws Exception {
 
 		// 페이징 처리를 위한 Map 선언
 		Map<String, Object> page = new HashMap<>();
 		try {
 			// 임시값 -> 토큰 구현전까지만 이렇게 사용
-			int parentIdx = 2;
+			int parentIdx = jwtService.getUserIdx(accessToken);
 			int parentExperience = photosService.findLevel(parentIdx);
 
 			int level = 1;
@@ -115,12 +115,12 @@ public class PhotosController {
 			else if (parentExperience >= 2560)
 				level = 10;
 
-			List<PramesDto> pramesDto = photosService.findPrames(level, pageNum);
+			List<FramesDto> frameDto = photosService.findFrames(level);
+			List<FramesDto> stickerDto = photosService.findStickers();
 
-			// 페이징 처리를 위한 코드 - 전체 카운트
-			int total = photosService.findPramesCount(level);
-			page.put("prameList", pramesDto);
-			page.put("pageNum", new PhotosPageDto(pageNum, total));
+			// 스티커랑 프레임 전송
+			page.put("frame", frameDto);
+			page.put("sticker", stickerDto);
 
 			return ApiResponse.success(SuccessCode.READ_PRAME_LIST, page);
 		} catch (Exception e) {
