@@ -9,10 +9,10 @@
 		<result column="photo_name" property="photoName" />
 	</resultMap>
 	
-	<resultMap type="PramesDto" id="pramesList">
-		<result column="prame_idx" property="prameIdx" />
-		<result column="prame_image_url" property="prameURL" />
-		<result column="prame_flag" property="prameFlag" />
+	<resultMap type="FramesDto" id="framesList">
+		<result column="frame_idx" property="frameIdx" />
+		<result column="frame_image_url" property="frameURL" />
+		<result column="frame_flag" property="frameFlag" />
 	</resultMap>
 	
 	
@@ -30,7 +30,7 @@
 			<![CDATA[ 
 				SELECT * 
 				FROM (
-					SELECT @rownum:=@rownum+1 as rnum,
+					SELECT @rownum:=@rownum+1 as rnum,	
 			        photo_idx, photo_image_url, create_date, photo_name
 						FROM photoAlbum,(select @rownum:=0) rn
 						WHERE parent_idx=#{parentIdx}
@@ -39,17 +39,11 @@
     		 ]]>
 	</select>
 	
-	<!-- 프레임 및 스티커 조회  -->
-	<select id="selectPrames" parameterType="int" resultMap="pramesList">
-    			<![CDATA[ 
-				SELECT *
-				FROM (
-						SELECT @rownum:=@rownum+1 as rnum, prame_idx, prame_image_url, prame_flag
-						FROM photoPrame, (select @rownum:=0) rn
-						where level between 1 and #{level}
-					)as a
-			    WHERE rnum >(#{pageNum}-1)*10  and rnum <=(#{pageNum}*10);
-    		 ]]>
+	<!-- 프레임 조회  -->
+	<select id="selectFrames" resultMap="framesList">
+    	SELECT  frame_idx, frame_image_url, frame_flag
+		FROM photoFrame 
+		where frame_flag =1 and level between 1 and #{level};
 	</select>
 	
 	<!-- 사진 삭제  -->
@@ -74,14 +68,14 @@
    FROM parent 
    WHERE parent_idx=#{parentIdx}
    </select>
-   
-   <!-- 프레임 리스트 카운드 -->
-   <select id ="selectPramesCount" parameterType="int" resultType="int">
-	SELECT count(*)
-	FROM photoPrame
-	where level between 1 and #{level}
-	</select>
+
 	
+	<!-- 스티커 리스트 -->
+	 <select id ="selectStickers" resultMap="framesList">
+    	SELECT  frame_idx, frame_image_url, frame_flag
+		FROM photoFrame 
+		where frame_flag=0
+	</select>
 	
 	
 </mapper>
