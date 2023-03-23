@@ -4,6 +4,9 @@ import { Routes, Route } from "react-router-dom"
 import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "./store/userSlice";
+// Layoutimport { useCookies } from "react-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "./store/userSlice";
 // Layout
 import HBLayout from "./layout/HBLayout"
 import NHBLayout from "./layout/NHBLayout"
@@ -18,11 +21,12 @@ import InitPage from "./pages/InitPage"
 import OauthKakao from "./oauth/OauthKakao"
 import OauthNaver from "./oauth/OauthNaver"
 import Registration from "./oauth/Registration"
-import RegisterChild from "./components/common/form/RegisterChild"
 import ErrorPage from "./pages/ErrorPage"
 
 
 function App() {
+  const dispatch = useDispatch()
+  const isLoggedIn = useSelector(state=>state.userState.isLoggedIn)
   const dispatch = useDispatch()
   const isLoggedIn = useSelector(state=>state.userState.isLoggedIn)
   const [watchingPage, setWatchingPage] = useState('')
@@ -43,19 +47,18 @@ function App() {
     <>
       <Routes>
         {/* 헤더+탑바+프로필 있음 */}
-        <Route element={<HBLayout watchingPage={watchingPage}/>}>
+        <Route element={<HBLayout watchingPage={watchingPage} isLoggedIn={isLoggedIn}/>}>
           <Route path={"/play"} element={<PlayPage handleWatchingPage={handleWatchingPage}/>} />
           <Route path={"/status"} element={<StatusPage handleWatchingPage={handleWatchingPage}/>} />
         </Route>
         {/* 헤더+탑바 있음 */}
-        <Route element={<PHBLayout watchingPage={watchingPage}/>}>
+        <Route element={<PHBLayout watchingPage={watchingPage} isLoggedIn={isLoggedIn}/>}>
           <Route path={"/photos"} element={<PhotosPage handleWatchingPage={handleWatchingPage}/>} />
         </Route>
 
         {/* 맨 윗줄 헤더만 있음 */}
-        <Route element={<NHBLayout />}>
+        <Route element={<NHBLayout isLoggedIn={isLoggedIn}/>}>
           <Route path={"/users"} element={<UserPage />} />
-          <Route path={"/signup"} element={<RegisterChild />} />
           <Route path={"/users/join"} element={<Registration />}/>
           <Route path={"/users/oauth2-kakao"} element={<OauthKakao />}/>
           <Route path={"/users/oauth2-naver"} element={<OauthNaver />}/>

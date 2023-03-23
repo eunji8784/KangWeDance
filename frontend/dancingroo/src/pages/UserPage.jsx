@@ -30,13 +30,17 @@ const Title = styled.div`
 `;
 
 const Deleted = styled.div`
-    width: 50rem;
+    /* width: 50rem; */
     display: flex;
     justify-content: end;
     color: #9e9d9d;
     font-size: 1rem;
     font-weight: 600;
     margin-top: 1.5rem;
+    position:absolute;
+    bottom:3rem;
+    right:1rem;
+    cursor: pointer;
 `;
 
 const Line = styled.div`
