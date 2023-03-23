@@ -22,6 +22,7 @@ import com.ssafy.kang.common.dto.ApiResponse;
 import com.ssafy.kang.parents.model.ParentsDto;
 import com.ssafy.kang.parents.model.service.ParentsService;
 import com.ssafy.kang.util.JwtUtil;
+import com.ssafy.kang.util.LevelUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,8 +34,11 @@ public class ParentsConroller {
 	@Autowired
 	ParentsService parentsService;
 	private final JwtUtil jwtUtil;
+	private final LevelUtil levelUtil;
+	
 	public ParentsConroller() {
 		this.jwtUtil = new JwtUtil();
+		this.levelUtil = new LevelUtil();
 	}
 	@GetMapping("/social/kakao")
 	public ApiResponse<?> kakaoUserAdd(@RequestParam String code){
@@ -116,7 +120,12 @@ public class ParentsConroller {
 	@GetMapping("/experience-score")
 	public ApiResponse<?> experienceDetails(@RequestHeader("accesstoken") String accesstoken){//추후 엑세스 토큰으로 대체
 		try {
-			return ApiResponse.success(SuccessCode.READ_EXPERIENCE,parentsService.findExperience(jwtUtil.getUserIdx(accesstoken)));
+			int experience =parentsService.findExperience(jwtUtil.getUserIdx(accesstoken));
+			
+			Map<String, Integer> map = new HashMap<>(); 
+			map.put("experience", experience);
+			map.put("level", levelUtil.getLevel(experience));
+			return ApiResponse.success(SuccessCode.READ_EXPERIENCE,map);
 		} catch (Exception e) {
 			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
 		}
