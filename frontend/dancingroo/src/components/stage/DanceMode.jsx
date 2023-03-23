@@ -21,12 +21,12 @@ const Screen = styled.div`
   height: 100vh;
   overflow: hidden;
   position: relative;
-  .small {   // 반대로 바꿔야함
+  .big {
     width: 100vw;
     height: 100vh;
     overflow: hidden;
   }
-  .big {
+  .small {
     position: absolute;
     bottom: 0;
     right: 0;
@@ -49,7 +49,9 @@ const MyOverlay = styled(Overlay)`
   top: 0;
   left: 0;
   justify-content: normal;
-  .exit {
+  .button {
+    display: flex;
+    flex-direction: row;
     position: absolute;
     right: 1rem;
     top: 0;
@@ -70,6 +72,7 @@ function DanceMode(props) {
   const camref = useRef(null)
   const videoref = useRef(null)
   
+  // 지우기
   const danceTimeline = 
   [
     {
@@ -162,25 +165,22 @@ function DanceMode(props) {
     }
   ]
 
-  // 처음에 모델 불러오기 + 동영상 N초 뒤에 자동 시작 (5000 = 5초)
+  // 처음에 모델 불러오기
   useEffect(() => {
     settingModel()
-    const video = videoref.current
-    const timeoutId = setTimeout(() => {
-      video.play()
-      console.log("PLAY")
-    }, 5000)
-    return () => clearTimeout(timeoutId)
   }, [])
   
   // 자세 변경에 따라 카운트 올리기
   useInterval(
     () => {
-      setCount((count) => count + 1)
+      if (!isModalOpen) {
+        setCount((count) => count + 1)
+      }
     },
     (prevPosture !== -1 && aimedPosture) ? aimedPosture?.countDelay : null
   )
-
+  
+  // 60fps로 predict 함수 돌리기
   useInterval(
     () => {
       predict()
@@ -205,9 +205,9 @@ function DanceMode(props) {
     console.log("MODEL LOADED")
   }
 
-  // 예측 함수 - 자세 상태(prevPosture)를 바꿈
+  // 예측 함수 - 캠에 따라 자세 상태(prevPosture)를 바꿈
   const predict = async function () {
-    if (!model || !aimedPosture) {
+    if (!model || !aimedPosture || !isModalOpen) {
       return
     }
     const { pose, posenetOutput } = await model.estimatePose(
@@ -265,27 +265,32 @@ function DanceMode(props) {
 
   // test
   const replay = () => {
-    videoref.current.currentTime = 90
+    videoref.current.currentTime = videoref.current.duration - 1
     videoref.current.play()
   }
 
-  //test
-  const openGreatFeedback = () => {
-    setShowGreat(true)
-    setTimeout(() => setShowGreat(false), 3000)
-  }
+  // //test
+  // const openGreatFeedback = () => {
+  //   setShowGreat(true)
+  //   setTimeout(() => setShowGreat(false), 3000)
+  // }
 
-  //test
-  const openGoodFeedback = () => {
-    setShowGood(true)
-    setTimeout(() => setShowGood(false), 3000)
-  }
+  // //test
+  // const openGoodFeedback = () => {
+  //   setShowGood(true)
+  //   setTimeout(() => setShowGood(false), 3000)
+  // }
 
-  //test
-  const openCheerupFeedback = () => {
-    setShowCheerUp(true)
-    setTimeout(() => setShowCheerUp(false), 3000)
-  }
+  // //test
+  // const openCheerupFeedback = () => {
+  //   setShowCheerUp(true)
+  //   setTimeout(() => setShowCheerUp(false), 3000)
+  // }
+
+  // //test
+  // const plusCount = () => {
+  //   setCount((prev)=>prev+1)
+  // }
 
   return (
     <Screen>
@@ -303,13 +308,16 @@ function DanceMode(props) {
         />
         <MyOverlay>
           <Feedback showGreat={showGreat} showGood={showGood} showCheerUp={showCheerUp}/>
-          <ModalBtn className="exit" onClick={handleIsModalOpen}>나가기</ModalBtn>
+          <div className="button">
+            <ModalBtn onClick={switchVideo}>화면 전환</ModalBtn>
+            <ModalBtn onClick={handleIsModalOpen}>나가기</ModalBtn>
+          </div>
           <div className="test">
+            {/* <ModalBtn onClick={plusCount}>Count +1</ModalBtn>
             <ModalBtn onClick={openGreatFeedback}>Great</ModalBtn>
             <ModalBtn onClick={openGoodFeedback}>Good</ModalBtn>
-            <ModalBtn onClick={openCheerupFeedback}>Cheer Up</ModalBtn>
+            <ModalBtn onClick={openCheerupFeedback}>Cheer Up</ModalBtn> */}
             <ModalBtn onClick={replay}>종료 전으로 가기</ModalBtn>
-            <ModalBtn onClick={switchVideo}>화면 전환</ModalBtn>
             <h1>
               평가자세 : {aimedPosture?.danceIndex || "X"}
             </h1>          
@@ -325,6 +333,7 @@ function DanceMode(props) {
           className={camfocus ? "small" : "big"}
           ref={videoref}
           src="https://kangwedance.s3.ap-northeast-2.amazonaws.com/%EB%8F%99%EB%AC%BC+%ED%94%BD%EC%8A%A4.mp4"
+          onCanPlayThrough={()=>videoref.current.play()}
           onTimeUpdate={handleTimeUpdate}
           onEnded={()=>setShowResult(true)}
         />
