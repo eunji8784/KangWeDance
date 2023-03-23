@@ -118,6 +118,10 @@ public class PhotosController {
 			List<FramesDto> frameDto = photosService.findFrames(level);
 			List<FramesDto> stickerDto = photosService.findStickers();
 
+			for (int i = 0; i < level; i++) {
+				frameDto.get(i).setLock(true);
+			}
+
 			// 스티커랑 프레임 전송
 			page.put("frame", frameDto);
 			page.put("sticker", stickerDto);
