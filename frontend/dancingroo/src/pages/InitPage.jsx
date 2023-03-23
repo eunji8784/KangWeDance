@@ -1,12 +1,17 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+// 로고
 import bigLogo from "../assets/images/bigLogo.png"
 import bgImg from "../assets/images/bgImg.png"
-import kangkang from "../assets/images/kangkang.png"
 import naver_login from "../assets/images/naver_login.png"
 import kakao_login from "../assets/images/kakao_login.png"
+
 import { useSelector } from "react-redux";
+import useApi from "../hooks/auth/useApi";
+import { logout } from "../store/userSlice";
+import { useDispatch } from "react-redux";
+import { useCookies } from "react-cookie";
 
 const Wrapper = styled.div`
     width: 100vw;
@@ -59,14 +64,32 @@ const Wrapper = styled.div`
 
 function InitPage(props) {
     const navigate = useNavigate();
-    const isLoggedIn = useSelector(state=>state.userState.isLoggedIn)
+    const {data, isLoading, error, get} =useApi('/parents/logout')
+    const dispatch = useDispatch()
+    const [, ,removeCookie] = useCookies();
     const API_KEY_KAKAO = process.env.REACT_APP_API_KEY_KAKAO;
     const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI
     const KAUTH_KAKAO = `https://kauth.kakao.com/oauth/authorize?client_id=${API_KEY_KAKAO}&redirect_uri=${REDIRECT_URI}&response_type=code`
+    let isLoggedOut = new URL(window.location.href).searchParams.get("state");
+
     useEffect(()=>{
-      if (isLoggedIn) navigate('/play')
-      console.log(`로그인 ? : ${isLoggedIn}`)
-    },[isLoggedIn])
+      // 로그아웃해서 홈으로 리다이렉트 && 로그아웃요청 아직 보내지 않은 상태이면,
+      if (isLoggedOut==='logout' && !data){
+        get()
+      }
+    },[isLoggedOut])
+
+    useEffect(()=>{
+      if (error) {
+        console.error(error)
+        navigate('/error')
+      }
+      if (data){
+        dispatch(logout())
+        removeCookie("accessToken")
+      }
+    },[data, error])
+
     return (
         <Wrapper>
           <img src={bigLogo} alt=""/>
