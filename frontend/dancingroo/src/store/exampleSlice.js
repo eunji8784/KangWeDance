@@ -14,5 +14,5 @@ const exampleSlice = createSlice({
   },
 })
 
-export const exampleActions = exampleSlice.actions
+export const {changeExample,} = exampleSlice.actions
 export default exampleSlice.reducer
