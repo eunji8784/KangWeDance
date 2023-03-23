@@ -122,12 +122,18 @@ function HeaderBar(props) {
     const [activeMenu, setActiveMenu] = useState(watchingPage);
     const API_KEY_KAKAO = process.env.REACT_APP_API_KEY_KAKAO;
     const LOGOUT_REDIRECT_URI = process.env.REACT_APP_LOGOUT_REDIRECT_URI
+    const LOGOUT_REDIRECT_URI = process.env.REACT_APP_LOGOUT_REDIRECT_URI
     const navigate = useNavigate();
+    
     
     useEffect(()=>{
         setActiveMenu(watchingPage)
     },[watchingPage])
 
+    const handleClick = ()=>{
+        // 로그아웃처리하고, 카카오 로그아웃 후 홈으로 리다이렉트
+        handleLogout()
+        window.location.href = `https://kauth.kakao.com/oauth/logout?client_id=${API_KEY_KAKAO}&logout_redirect_uri=${LOGOUT_REDIRECT_URI}&state=logout`
     const handleClick = ()=>{
         // 로그아웃처리하고, 카카오 로그아웃 후 홈으로 리다이렉트
         handleLogout()
@@ -148,6 +154,7 @@ function HeaderBar(props) {
                 </div>
                 <div className="user-menu">
                     <LogOut onClick={() => {
+                            handleClick()
                             handleClick()
                         }}>로그아웃</LogOut>
                     <div
