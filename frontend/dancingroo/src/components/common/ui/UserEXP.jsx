@@ -102,9 +102,6 @@ function UserEXP({userLevel,startEXP, endEXP, totalLevelEXP, nextLevelEXP}) {
       const nextPercent = (endEXP - totalLevelEXP) / nextLevelEXP * 100
       setNextExpPercent(nextPercent);
     }, 500);
-    // const nextPercent = (endEXP - totalLevelEXP) / nextLevelEXP * 100
-    // console.log("!!!")
-    // setNextExpPercent(nextPercent);
   },[showLevelUp, endEXP, totalLevelEXP, nextLevelEXP])
 
   useEffect(() => {
