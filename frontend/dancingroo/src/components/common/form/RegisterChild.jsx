@@ -7,8 +7,6 @@ import kangkang from "../../../assets/images/kangkang.png"
 import useApi from "../../../hooks/auth/useApi";
 import { login, updateChildState } from "../../../store/userSlice";
 import { useDispatch,useSelector } from "react-redux";
-import { login, updateChildState } from "../../../store/userSlice";
-import { useDispatch,useSelector } from "react-redux";
 
 const ModWrapper = styled(Wrapper)`
     width: 100vw;
@@ -97,7 +95,7 @@ const MyButton = styled(PinkButton)`
     font-size:0.9rem;
 `
 function RegisterChild({childIdx}) {
-    const thisChild = useSelector(state=>state.userState.children[childIdx]) // 디폴트는 첫째
+    const thisChild = useSelector(state=>state.userState.children[0]) // 디폴트는 첫째
     const dispatch = useDispatch()
     const navigate = useNavigate();
     const {data, isLoading, error, post} = useApi('/children')
@@ -117,11 +115,9 @@ function RegisterChild({childIdx}) {
         const body = {
             nickname:kidState["nickname"],
             birthDate:kidState["birthDate"],
-            birthDate:kidState["birthDate"],
             gender:kidState["gender"],
             weight:Number(kidState["weight"]),
             height:Number(kidState["height"]),
-            ProfileImageUrl:kidState["profileImageUrl"],
             ProfileImageUrl:kidState["profileImageUrl"],
         }
         post(body)
@@ -166,8 +162,6 @@ function RegisterChild({childIdx}) {
                         </div>
                     </Article>
                     <Article>
-                        <FormLabel htmlFor="birthDate"> 생년월일</FormLabel>
-                        <FormInput defaultValue={kidState["birthDate"]} type="date" name="birthDate" id="birthDate" placeholder=" 닉네임" onChange={handleInputChange}/>
                         <FormLabel htmlFor="birthDate"> 생년월일</FormLabel>
                         <FormInput defaultValue={kidState["birthDate"]} type="date" name="birthDate" id="birthDate" placeholder=" 닉네임" onChange={handleInputChange}/>
                     </Article>

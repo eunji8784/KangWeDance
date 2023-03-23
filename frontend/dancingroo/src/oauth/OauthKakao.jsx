@@ -4,11 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { Wrapper } from "../components/common/ui/Semantics";
 import { login } from "../store/userSlice";
 import { useDispatch } from "react-redux";
-import { login } from "../store/userSlice";
-import { useDispatch } from "react-redux";
 
 function OauthKakao(props) {
-  const dispatch = useDispatch()
   const dispatch = useDispatch()
   const navigate = useNavigate();
   const { data, loading, error, handleSocialLogin } = useLogin();
