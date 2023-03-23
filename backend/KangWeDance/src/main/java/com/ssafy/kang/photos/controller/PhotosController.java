@@ -119,7 +119,7 @@ public class PhotosController {
 			List<FramesDto> stickerDto = photosService.findStickers();
 
 			for (int i = 0; i < level; i++) {
-				frameDto.get(i).setLock(true);
+				frameDto.get(i).setUnLock(true);
 			}
 
 			// 스티커랑 프레임 전송
