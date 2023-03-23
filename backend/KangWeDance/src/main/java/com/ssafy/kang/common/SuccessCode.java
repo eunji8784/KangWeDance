@@ -19,6 +19,7 @@ public enum SuccessCode {
 	LOGIN(SUCCESS,"로그인 성공"),GO_JOIN(SUCCESS,"회원 가입"),
 	//아이
 	CREATE_CHILDREN(SUCCESS,"아이 등록 성공"),DELETE_CHILDREN(SUCCESS,"아이 삭제 성공"),
+	READ_PROFILEURL(SUCCESS,"프로필 URL 조회 성공"),
 	UPDATE_CHILDREN(SUCCESS,"아이 수정 성공"),CREATE_BODY_CHILDREN(SUCCESS,"아이 신체정보 성공"),
 	READ_CHILDREN(SUCCESS,"아이 조회 성공"),
 	//사진
