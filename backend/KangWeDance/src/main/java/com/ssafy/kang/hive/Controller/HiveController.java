@@ -1,4 +1,4 @@
-package com.ssafy.kang.util;
+package com.ssafy.kang.hive.Controller;
 
 import java.util.List;
 import java.util.Map;
@@ -19,12 +19,12 @@ public class HiveController {
 	@Autowired
 	@Qualifier("jdbcHiveTemplate")
 	private JdbcTemplate jdbcTemplate;
-	
+
 	@GetMapping("/databases")
-	public ApiResponse<?> showDatabases(){
-		List<Map<String,Object>> row = null;
+	public ApiResponse<?> showDatabases() {
+		List<Map<String, Object>> row = null;
 		System.out.println(1);
 		row = jdbcTemplate.queryForList("show databases");
-		return ApiResponse.success(SuccessCode.CREATE_BODY_CHILDREN,row);
+		return ApiResponse.success(SuccessCode.CREATE_BODY_CHILDREN, row);
 	}
 }
