@@ -15,6 +15,16 @@
 		<result column="today_calrories" property="todayCalrories" />
 	</resultMap>
 	
+	<resultMap id="hadoop" type="BodyRecordForHadoop">
+			<result column="body_record_idx" property="bodyRecordIdx" />
+			<result column="child_idx" property="childIdx" />
+			<result column="weight" property="weight" />
+			<result column="height" property="height" />
+			<result column="bmi" property="bmi" />
+			<result column="today_calrories" property="todayCalrories" />
+			<result column="record_date" property="recordDate" />
+	</resultMap>
+	
 	<insert id="insertChildren" parameterType="ChildrenDto" useGeneratedKeys="true" keyColumn="child_idx" keyProperty="childIdx">
 		insert into children(parent_idx, nickname,profile_image_url,gender,birth_date)
 		value (#{parentIdx},#{nickname},#{profileImageUrl},#{gender},#{birthDate});
@@ -43,5 +53,11 @@
 		select child_idx,a.parent_idx as parent_idx,nickname,familyname,profile_image_url,gender,birth_date
 		from children a join parent b on a.parent_idx = b.parent_idx 
 		where a.parent_idx = #{parentIdx};
+	</select>
+	
+	<select id="selectBodyRecordForHadoop" resultMap="hadoop">
+		select *
+		from bodyRecord
+		where record_date=curdate();
 	</select>
 </mapper>
