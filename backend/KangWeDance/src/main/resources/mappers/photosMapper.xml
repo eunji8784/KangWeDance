@@ -50,7 +50,7 @@
 	<!-- 사진 삭제  -->
 	<delete id="deletePhoto" parameterType="int">
 	   	DELETE FROM photoAlbum
-	   	WHERE parent_idx=#{photoIdx};
+	   	WHERE photo_idx=#{photoIdx};
    </delete>
    
    <!-- 사진 리스트 카운드 -->
