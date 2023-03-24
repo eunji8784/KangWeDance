@@ -40,14 +40,13 @@ public class PhotosController {
 	private JwtUtil jwtService = new JwtUtil();
 	@Value("${cloud.aws.s3.bucket}")
 	private String bucket;
-
+	
 //	| orderList() | 목록 조회 유형의 서비스 |
 //	| orderDetails() | 단 건 상세 조회 유형의 controller 메서드 |
 //	| orderSave() | 등록/수정/삭제 가 동시에 일어나는 유형의 controller 메서드 |
 //	| orderAdd() | 등록만 하는 유형의 controller 메서드 |
 //	| orderModify() | 수정만 하는 유형의 controller 메서드 |
 //	| orderRemove() | 삭제만 하는 유형의 controller 메서드 |
-
 	@PostMapping
 	public ApiResponse<?> photosAdd(@RequestPart("file") MultipartFile file) throws Exception {
 		try {
