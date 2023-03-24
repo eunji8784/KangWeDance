@@ -13,7 +13,7 @@ const Wrapper = styled.div`
     flex-direction: column;
     align-items: center; 
 `;
-const Wrapper2 = styled.div`
+export const Wrapper2 = styled.div`
     width: 45rem;
     display: flex;
     justify-content: space-between;
@@ -49,22 +49,7 @@ const Line = styled.div`
 `;
 
 function UserPage(props) {
-    const {data, isLoading, error, get} = useApi(`/children`)
     const navigate = useNavigate();
-
-    // useEffect(()=>{
-    //     get()
-    // },[])
-
-    // useEffect(()=>{ 
-    //     if(error){
-    //         console.error(error)
-    //         navigate('/error')
-    //     }
-    //     if (data){
-            
-    //     }
-    // },[])
     
     return (
         <Wrapper>
