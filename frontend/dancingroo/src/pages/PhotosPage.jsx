@@ -32,7 +32,7 @@ const SideSection = styled(Wrapper)`
 
 function PhotosPage(props) {
     const [section, setSection] = useState('gallery')
-    const [imge, setImge] = useState('')
+    const [imge, setImge] = useState('https://kangwedance.s3.ap-northeast-2.amazonaws.com/photoInit.png')
     const [frameImage, setFrameImage] = useState('')
     const [stickerImage, setStickerImage] = useState('')
 
