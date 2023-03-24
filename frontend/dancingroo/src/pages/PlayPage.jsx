@@ -9,6 +9,8 @@ const Wrapper = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    padding-bottom: 5rem;
 `;
 
 function PlayPage({handleWatchingPage}) {
