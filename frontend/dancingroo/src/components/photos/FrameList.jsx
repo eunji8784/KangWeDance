@@ -3,10 +3,6 @@ import styled from "styled-components";
 import { Wrapper } from "../common/ui/Semantics";
 
 import {MdDoNotDisturb} from "react-icons/md";
-import fd1 from "../../assets/images/fd1.png"
-import fd2 from "../../assets/images/fd2.png"
-import fd3 from "../../assets/images/fd3.png"
-import fd4 from "../../assets/images/fd4.png"
 import {MdLock} from 'react-icons/md'
 
 const SideSection = styled(Wrapper)`
