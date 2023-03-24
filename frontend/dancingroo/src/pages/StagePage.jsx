@@ -1,7 +1,5 @@
 import React from "react";
-import { 
-    // useNavigate, 
-    useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import DanceMode from "../components/stage/DanceMode";
 import CountMode from "../components/stage/CountMode";
@@ -13,8 +11,7 @@ const Wrapper = styled.div`
     justify-content: center;
 `;
 
-function StagePage(props) {
-    // const navigate = useNavigate();
+function StagePage() {
     const params = useParams();
     return (
         <Wrapper>
