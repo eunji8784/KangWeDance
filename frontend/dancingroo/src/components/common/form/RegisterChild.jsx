@@ -94,11 +94,11 @@ const MyButton = styled(PinkButton)`
     letter-spacing:0.2rem;
     font-size:0.9rem;
 `
-function RegisterChild({childIdx}) {
+function RegisterChild({childIdx, userPage}) {
     const thisChild = useSelector(state=>state.userState.children[0]) // 디폴트는 첫째
     const dispatch = useDispatch()
     const navigate = useNavigate();
-    const {data, isLoading, error, post} = useApi('/children')
+    const {data, isLoading, error, fetchApi} = useApi()
     const [newChild, setNewChild] = useState(true);
     const [colorboy, setColorBoy] = useState("#FFD731");
     const [colorgirl, setColorGirl] = useState("#ffffff");
@@ -110,7 +110,6 @@ function RegisterChild({childIdx}) {
           }
     },[data])
 
-    console.log(kidState)
     const SumbitChild = ()=>{
         const body = {
             nickname:kidState["nickname"],
@@ -120,13 +119,7 @@ function RegisterChild({childIdx}) {
             height:Number(kidState["height"]),
             ProfileImageUrl:kidState["profileImageUrl"],
         }
-        post(body)
-        // 집이름 추가해서 리덕스 태워 보내기
-        body["familyname"] = kidState["familyname"]
-        dispatch(updateChildState(body))
-        // 집이름 추가해서 리덕스 태워 보내기
-        body["familyname"] = kidState["familyname"]
-        dispatch(updateChildState(body))
+        fetchApi('POST', '/children', body)
     }
     const handleInputChange = (e) => {
         let { name, value } = e.target;
@@ -197,7 +190,7 @@ function RegisterChild({childIdx}) {
             </ModMain>
             <Footer>
                 <MyButton onClick={()=>SumbitChild()}>등록하기</MyButton>
-                <MyButton>삭제하기</MyButton>
+                <MyButton style={{display: userPage? 'flex':'none'}}>삭제하기</MyButton>
             </Footer>
         </ModWrapper>
     )
