@@ -1,15 +1,16 @@
-import React, {useState
+import React, {useEffect, useState
   // , useRef
 } from "react";
 // import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-
 //logo
 /* eslint-disable */
 import logo from "../../../assets/images/logo.png"
 import {RiUserFill} from "react-icons/ri";
 import kangkang from "../../../assets/images/kangkang.png"
-
+import { useDispatch, useSelector } from "react-redux";
+import { childSelect, updateChildState } from "../../../store/userSlice";
+import useApi from "../../../hooks/auth/useApi";
 const Wrapper = styled.div`
     display: ${({display})=>display? 'none':'flex'};
     align-items: center;
@@ -46,16 +47,28 @@ const ProfileImg = styled.img`
 
 function ChildProfile(props) {
     // const navigate = useNavigate();
-    /* eslint-disable */
+    const dispatch = useDispatch()
+    const {data, isLoading, error, fetchApi} = useApi()
     const [profileImg, setProfileImg] = useState(kangkang)
     const [active, setActive] = useState([true, false, false]); 
 
+    useEffect(()=>{
+      fetchApi("GET", '/children')
+      dispatch(childSelect(0))
+    },[])
+
+    useEffect(()=>{
+      if (data){
+        dispatch(updateChildState(data.data))
+      }
+    }, [data])
+
     const handleClick = (childIdx) => {
+      dispatch(childSelect(childIdx))
       setActive((prevActive)=>
       prevActive.map((active, idx)=>idx===childIdx? true : false)
       );
     };
-
     return (
         <Wrapper>
           {/* bool값은 html에서 유효하지 않기 떄문에 string으로 바꿔서 보내줌 */}
