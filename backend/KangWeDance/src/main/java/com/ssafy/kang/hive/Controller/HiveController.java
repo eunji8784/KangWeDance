@@ -24,7 +24,7 @@ public class HiveController {
 	public ApiResponse<?> showDatabases() {
 		List<Map<String, Object>> row = null;
 		System.out.println(1);
-		row = jdbcTemplate.queryForList("show databases");
+		row = jdbcTemplate.queryForList("select * from playRecord");
 		return ApiResponse.success(SuccessCode.CREATE_BODY_CHILDREN, row);
 	}
 }
