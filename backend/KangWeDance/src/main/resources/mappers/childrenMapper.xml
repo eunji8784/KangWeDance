@@ -53,6 +53,6 @@
 
 		select body.child_idx,ch.parent_idx as parent_idx,nickname,familyname,profile_image_url,gender,birth_date,weight,height
 		from children ch join parent p on ch.parent_idx = p.parent_idx join  body_record_details body on ch.child_idx = body.child_idx
-		where ch.parent_idx =7;
+		where ch.parent_idx =#{parentIdx};
 	</select>
 </mapper>
