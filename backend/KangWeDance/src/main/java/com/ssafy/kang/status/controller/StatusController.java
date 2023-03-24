@@ -17,7 +17,6 @@ import com.ssafy.kang.common.dto.ApiResponse;
 import com.ssafy.kang.play.model.PlayRecordDto;
 import com.ssafy.kang.status.model.FoodsDto;
 import com.ssafy.kang.status.model.service.StatusService;
-import com.ssafy.kang.util.JwtUtil;
 import com.ssafy.kang.util.UnicodeKorean;
 
 import lombok.RequiredArgsConstructor;
@@ -27,7 +26,6 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 public class StatusController {
-	private JwtUtil jwtService = new JwtUtil();
 //	| orderList() | 목록 조회 유형의 서비스 |
 //	| orderDetails() | 단 건 상세 조회 유형의 controller 메서드 |
 //	| orderSave() | 등록/수정/삭제 가 동시에 일어나는 유형의 controller 메서드 |

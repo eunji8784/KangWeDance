@@ -37,7 +37,6 @@ import lombok.RequiredArgsConstructor;
 public class PhotosController {
 	@Autowired
 	PhotosService photosService;
-	private final AmazonS3Client amazonS3Client;
 	private JwtUtil jwtService = new JwtUtil();
 	@Value("${cloud.aws.s3.bucket}")
 	private String bucket;
