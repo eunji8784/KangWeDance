@@ -22,11 +22,11 @@ const ModHeader = styled(Header)`
     }
     .house{
         flex-direction:column;
-        /* border:1px solid blue; */
         width:90%;
+        margin-bottom:0.5rem;
     }
-    width:80%;
-    border-bottom: 1px solid #9b9999;
+    width:90%;
+    border-bottom: 2px solid #F05475;
 `
 
 function Registration(props) {
@@ -46,7 +46,7 @@ function Registration(props) {
                     <FormInput className="우리집인풋" defaultValue={familynameState} type="text" name="familyname" id="familyname" placeholder=" 캥거루합창단" onChange={handleInputChange}/>
                 </div>
             </ModHeader>
-            <RegisterChild childIdx={0}/>
+            <RegisterChild/>
         </Wrapper>
     );
 }
