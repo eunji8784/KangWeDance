@@ -40,8 +40,19 @@
 		where child_idx = #{childIdx}
 	</update>
 	<select id="selectChildren" parameterType="int" resultMap="child">
-		select child_idx,a.parent_idx as parent_idx,nickname,familyname,profile_image_url,gender,birth_date
-		from children a join parent b on a.parent_idx = b.parent_idx 
-		where a.parent_idx = #{parentIdx};
+		with latest_body_record as(
+		SELECT child_idx, max(record_date) as record_date  
+		FROM bodyRecord 
+		group by child_idx
+		),
+		body_record_details  as(
+		select body_record_idx, br.child_idx, weight,height,bmi,today_calrories,br.record_date
+		from bodyRecord br join latest_body_record latest
+		where br.child_idx =latest.child_idx and br.record_date = latest.record_date
+		)
+
+		select body.child_idx,ch.parent_idx as parent_idx,nickname,familyname,profile_image_url,gender,birth_date,weight,height
+		from children ch join parent p on ch.parent_idx = p.parent_idx join  body_record_details body on ch.child_idx = body.child_idx
+		where ch.parent_idx =7;
 	</select>
 </mapper>
