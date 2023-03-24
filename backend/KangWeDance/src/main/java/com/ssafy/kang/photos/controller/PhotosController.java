@@ -133,7 +133,7 @@ public class PhotosController {
 
 	@DeleteMapping("/{photoIdx}")
 	public ApiResponse<?> photoRemove(@PathVariable("photoIdx") int photoIdx,
-			@RequestHeader("access_token") String accessToken) throws Exception {
+			@RequestHeader("accesstoken") String accessToken) throws Exception {
 		try {
 			// 임시값 -> 토큰 구현전까지만 이렇게 사용
 
