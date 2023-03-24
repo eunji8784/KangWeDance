@@ -1,10 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit"
-import exampleSlice from "./exampleSlice"
 import userSlice from "./userSlice"
+import stageSlice from "./stageSlice"
 
 const store = configureStore({
   reducer: {
     userState: userSlice,
+    stage: stageSlice,
   },
 })
 
