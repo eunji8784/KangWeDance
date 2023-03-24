@@ -38,6 +38,8 @@ const userSlice = createSlice({
     },
     getChildState(state, action) {
       const childData = action.payload
+      const {familyname} = action.payload[0]
+      state.familyname = familyname
       const defaultChild = {
         childIdx: null,
         nickname: null,
