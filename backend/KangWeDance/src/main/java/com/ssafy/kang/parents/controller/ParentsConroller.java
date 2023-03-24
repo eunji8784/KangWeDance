@@ -12,10 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.amazonaws.services.s3.AmazonS3Client;
 import com.ssafy.kang.common.ErrorCode;
 import com.ssafy.kang.common.SuccessCode;
 import com.ssafy.kang.common.dto.ApiResponse;
@@ -23,8 +21,6 @@ import com.ssafy.kang.parents.model.ParentsDto;
 import com.ssafy.kang.parents.model.service.ParentsService;
 import com.ssafy.kang.util.JwtUtil;
 import com.ssafy.kang.util.LevelUtil;
-
-import lombok.RequiredArgsConstructor;
 
 @CrossOrigin(origins = { "*" }, maxAge = 6000)
 @RequestMapping("/parents")
