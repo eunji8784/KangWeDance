@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from "react"
+import { useSelector } from "react-redux"
 import styled from "styled-components"
-// import axios from "axios"
 import Webcam from "react-webcam"
 import PauseModal from "./PauseModal"
 import PlayResult from "./PlayResult"
@@ -58,11 +58,13 @@ const MyOverlay = styled(Overlay)`
   }
 `
 
-function CountMode(props) {
+function CountMode() {
+  const stageItem = useSelector((state) => state.stage.stageItem)
+
   const [camfocus, setCamfocus] = useState(true)
   const [model, setModel] = useState(null)
   const [aimedPosture, setAimedPosture] = useState(null)
-  const [prevPosture, setPrevPosture] = useState(-1)
+  const [prevPosture, setPrevPosture] = useState(10)
   const [count, setCount] = useState(0)
   const [showResult, setShowResult] = useState(false)
   const [showGreat, setShowGreat] = useState(false)
@@ -77,51 +79,7 @@ function CountMode(props) {
   const [gameStart, setGameStart] = useState(false)
   const [playTime, setPlayTime] = useState(null)
 
-  
-  // 바꾸기
-  const playTimeline = 
-  [
-    {
-      danceIndex: 8, 
-      startTime: 0,
-      endTime: 3,
-      accuracy: 0.95,
-      countDelay: 100,
-      countStandard: 10,
-    },
-    {
-      danceIndex: 8, 
-      startTime: 3,
-      endTime: 6,
-      accuracy: 0.95,
-      countDelay: 100,
-      countStandard: 10,
-    },
-    {
-      danceIndex: 8, 
-      startTime: 6,
-      endTime: 9,
-      accuracy: 0.95,
-      countDelay: 100,
-      countStandard: 10,
-    },
-    {
-      danceIndex: 8, 
-      startTime: 9,
-      endTime: 12,
-      accuracy: 0.95,
-      countDelay: 100,
-      countStandard: 10,
-    },
-    {
-      danceIndex: 8, 
-      startTime: 12,
-      endTime: 15,
-      accuracy: 0.95,
-      countDelay: 100,
-      countStandard: 10,
-    }
-  ]
+  const playTimeline = stageItem.songMotionList
 
   // 처음에 모델 불러오기
   useEffect(() => {
@@ -135,7 +93,7 @@ function CountMode(props) {
         setCount((count) => count + 1)
       }
     },
-    (prevPosture !== -1 && aimedPosture) ? aimedPosture?.countDelay : null
+    (prevPosture !== 10 && aimedPosture) ? aimedPosture?.countDelay : null
   )
   
   // 60fps로 predict 함수 돌리기
@@ -155,14 +113,14 @@ function CountMode(props) {
 
   // 모달 열기/닫기 함수 -> time 따로 만들어서 저장후 다시 돌리기
   const handleIsModalOpen = () => {
-      setIsModalOpen((prev)=>!prev)
-      if (!afterDirection) {
-        if (!isModalOpen) {
-          videoref.current.pause()
-        } else {
-          videoref.current.play()
-        }
+    setIsModalOpen((prev)=>!prev)
+    if (!afterDirection) {
+      if (!isModalOpen) {
+        videoref.current.pause()
+      } else {
+        videoref.current.play()
       }
+    }
   }
 
   // 예측 함수 - 캠에 따라 자세 상태(prevPosture)를 바꿈
@@ -174,17 +132,17 @@ function CountMode(props) {
       camref.current.video
     )
     const prediction = await model.predict(posenetOutput)
-    const rtPosture = prediction[aimedPosture.danceIndex]
+    const rtPosture = prediction[aimedPosture.danceIndex-1]
     setPrevPosture((prevPosture) => {
       if (
         rtPosture.probability.toFixed(2) > aimedPosture.accuracy &&
-        prevPosture === aimedPosture.danceIndex
+        prevPosture === aimedPosture.danceIndex-1
       ) {
         return prevPosture
       } else if (rtPosture.probability.toFixed(2) > aimedPosture.accuracy) {
-        return aimedPosture.danceIndex
+        return aimedPosture.danceIndex-1
       } else {
-        return -1
+        return 10
       }
     })
   }
@@ -326,7 +284,7 @@ function CountMode(props) {
         <video
           className={camfocus ? "small" : "big"}
           ref={videoref}
-          src="https://kangwedance.s3.ap-northeast-2.amazonaws.com/%EB%8F%99%EB%AC%BC+%ED%94%BD%EC%8A%A4.mp4"
+          src={stageItem.videoUrl || `https://kangwedance.s3.ap-northeast-2.amazonaws.com/%EB%8F%99%EB%AC%BC+%ED%94%BD%EC%8A%A4.mp4`} //빼기
           onCanPlayThrough={()=>videoref.current.play()}
           onEnded={handleAfterDirection}
         />}
