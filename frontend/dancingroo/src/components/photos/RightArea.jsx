@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Wrapper, PinkButton } from "../common/ui/Semantics";
 import { Stage, Layer, Image } from "react-konva";
 import useImage from 'use-image';
-
+import useApi from "../../hooks/auth/useApi"
 import {MdCleaningServices} from 'react-icons/md';
 
 const MainSection = styled(Wrapper)`
@@ -28,7 +28,7 @@ const Card = styled.div`
 `;
 
 const BackGroungImage = ({ image }) => {
-    const [img] = useImage(image);
+    const [img] = useImage(image, 'Anonymous');
     return (
       <Image
         image={img}
@@ -42,7 +42,7 @@ const BackGroungImage = ({ image }) => {
   const Rectangle = ({ url, isSelected, onSelect, onChange }) => {
     const shapeRef = useRef();
     const trRef = useRef();
-  
+    const [img] = useImage(url, 'Anonymous');
     useEffect(() => {
       if (isSelected) {
         trRef.current.nodes([shapeRef.current]);
@@ -50,7 +50,6 @@ const BackGroungImage = ({ image }) => {
       }
     }, [isSelected]);
   
-    const [img] = useImage(url);
     return (
         <>
         {!onSelect ?
@@ -129,14 +128,33 @@ function RightArea({imge, frameImage, stickerImage, stickerNum}) {
 
     const downloadImage = () => {
         const url = stageRef.current.toDataURL();
-
+        
         const today = new Date();
         const year = today.getFullYear(); // 년도
         const month = today.getMonth() + 1;  // 월
         const date = today.getDate();  // 날짜
 
-        console.log(url)
         downloadURI(url, 'KangWeDance'+ year + month + date);
+    }
+
+    const shareImage = () =>{
+        getUrl();
+        kakaoShare();
+    }
+
+    const getImageUrl = useApi()
+    const getUrl = () => {
+        const base64 = stageRef.current.toDataURL();
+        fetch(base64)
+        .then(res => res.blob())
+        .then(blob => {
+          const fd = new FormData();
+          const file = new File([blob], "filename.png");
+          fd.append('image', file)
+          console.log("Dd")
+          console.log(fd)
+        //   getImageUrl.fetchApi('POST', `/children/profile`, {file:fd})
+        })
     }
 
     const kakaoShare = () => {
@@ -174,7 +192,7 @@ function RightArea({imge, frameImage, stickerImage, stickerNum}) {
     return (
         <MainSection>
             <ButtonSection>
-                <PinkButton onClick={kakaoShare}>공유하기</PinkButton>
+                <PinkButton onClick={shareImage}>공유하기</PinkButton>
                 <PinkButton onClick={downloadImage}>다운로드</PinkButton>
             </ButtonSection>
              <Card 
