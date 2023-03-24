@@ -24,7 +24,9 @@ const ButtonSection = styled(Wrapper)`
 `
 
 const Card = styled.div`
-    width: 80%;
+    width : ${window.innerWidth/2.2};
+    height : ${window.innerWidth*0.2557};
+    border: 0.1rem solid rgba(0, 0, 0, 0.1);
 `;
 
 const BackGroungImage = ({ image }) => {
@@ -39,17 +41,10 @@ const BackGroungImage = ({ image }) => {
 };
 
   //움직이는 도형 컨포넌트
-  const Rectangle = ({ url, isSelected, onSelect, onChange }) => {
+  const Rectangle = ({ url, onSelect, onChange }) => {
     const shapeRef = useRef();
-    const trRef = useRef();
+    
     const [img] = useImage(url, 'Anonymous');
-    useEffect(() => {
-      if (isSelected) {
-        trRef.current.nodes([shapeRef.current]);
-        trRef.current.getLayer().batchDraw();
-      }
-    }, [isSelected]);
-  
     return (
         <>
         {!onSelect ?
@@ -128,13 +123,13 @@ function RightArea({imge, frameImage, stickerImage, stickerNum}) {
 
     const downloadImage = () => {
         const url = stageRef.current.toDataURL();
-        
         const today = new Date();
         const year = today.getFullYear(); // 년도
         const month = today.getMonth() + 1;  // 월
         const date = today.getDate();  // 날짜
-
+    
         downloadURI(url, 'KangWeDance'+ year + month + date);
+        
     }
 
     const shareImage = () =>{
