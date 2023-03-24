@@ -7,6 +7,7 @@ const initialState = {
   familyname:null,
   level:1,
   exp:0,
+  select:0,  // 아이프로필 몇번째 선택상태인지.
   children:[
     { 
       index:0,
@@ -59,24 +60,16 @@ const userSlice = createSlice({
       console.log(`로그아웃 성공`)
     },
     updateChildState(state, action) {
-      const payload = action.payload;
-      console.log(payload)
-      const selectedChild = state.children.find(child => child.selected);
-      console.log('전 : ', selectedChild)
-      if (selectedChild) {
-        selectedChild.nickname = payload.nickname;
-        selectedChild.profileImageUrl = payload.profileImageUrl;
-        selectedChild.gender = payload.gender;
-        selectedChild.birthDate = payload.birthDate;
-        selectedChild.weight = payload.weight;
-        selectedChild.height = payload.height;
-      }
-      if (payload.familyname) state.familyname = payload.familyname
-
-      console.log('후 : ', selectedChild)
+      const childData = action.payload
+      state.children = [...childData.splice(0,3)]
+      console.log('아이 정보 저장완료!')
+    },
+    childSelect(state, action){
+      state.select = action.payload
+      console.log(state.select,'번째 아이 플레이 중!')
     }
   },
 })
 
-export const {login, logout, updateChildState} = userSlice.actions
+export const {login, logout, updateChildState, childSelect} = userSlice.actions
 export default userSlice.reducer
