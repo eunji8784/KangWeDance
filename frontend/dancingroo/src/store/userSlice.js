@@ -8,9 +8,9 @@ const initialState = {
   level:1,
   exp:0,
   select:0,  // 아이프로필 몇번째 선택상태인지.
+  addChild:true,
   children:[
     { 
-      index:0,
       childIdx:null,
       nickname:null,
       profileImageUrl:"https://kangwedance.s3.ap-northeast-2.amazonaws.com/기본+프로필+이미지.png",
@@ -18,29 +18,6 @@ const initialState = {
       birthDate:null,
       weight:null,
       height:null,
-      selected:true,
-    },
-    { 
-      index:1,
-      childIdx:null,
-      nickname:null,
-      profileImageUrl:"https://kangwedance.s3.ap-northeast-2.amazonaws.com/기본+프로필+이미지.png",
-      gender:false,
-      birthDate:null,
-      weight:null,
-      height:null,
-      selected:false,
-    },
-    {
-      index:2,
-      childIdx:null,
-      nickname:null,
-      profileImageUrl:"https://kangwedance.s3.ap-northeast-2.amazonaws.com/기본+프로필+이미지.png",
-      gender:false,
-      birthDate:null,
-      weight:null,
-      height:null,
-      selected:false,
     },
   ]
 }
@@ -59,17 +36,39 @@ const userSlice = createSlice({
       state.accessToken = null
       console.log(`로그아웃 성공`)
     },
-    updateChildState(state, action) {
+    getChildState(state, action) {
       const childData = action.payload
-      state.children = [...childData.splice(0,3)]
-      console.log('아이 정보 저장완료!')
+      const defaultChild = {
+        childIdx: null,
+        nickname: null,
+        profileImageUrl:null,
+        gender: false,
+        birthDate: null,
+        weight: null,
+        height: null,
+      }
+      if (childData.length < 3) {
+        const addDefault = new Array(3 - childData.length).fill(defaultChild)
+        state.children = [...childData, ...addDefault]
+      } else {
+        state.children = [...childData.slice(0, 3)]
+      }
+      console.log('아이 정보 불러오기완료!')
+    },
+    patchChildState(state, action) {
+      const {selectedIdx,name,value} = action.payload 
+      state.children[selectedIdx][name] = value
+      console.log('아이 정보 수정완료!')
     },
     childSelect(state, action){
-      state.select = action.payload
-      console.log(state.select,'번째 아이 플레이 중!')
+      const selectedIdx = action.payload
+      state.select = selectedIdx
+      if (state.children[selectedIdx].childIdx===null) state.addChild = true
+      else state.addChild = false
+      console.log(state.select,'번째 아이 플레이 중!', '아이등록중?', state.addChild)
     }
   },
 })
 
-export const {login, logout, updateChildState, childSelect} = userSlice.actions
+export const {login, logout, getChildState, patchChildState, childSelect} = userSlice.actions
 export default userSlice.reducer
