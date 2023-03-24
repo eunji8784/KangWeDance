@@ -70,7 +70,7 @@ function PlayItem({item}) {
 
   return (
     <ItemWrapper onClick={startStage}>
-      <img className="thumbnail" src={testImg} alt="thumbnail"/>
+      <img className="thumbnail" src={item.thumbnailUrl === 'url' ? testImg : item.thumbnailUrl} alt="thumbnail"/>
       <InfoWrapper>
         <H2>
           {item?.title}
