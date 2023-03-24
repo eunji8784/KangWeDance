@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from "react"
+import { useSelector } from "react-redux"
 import styled from "styled-components"
-// import axios from "axios"
 import Webcam from "react-webcam"
 import PauseModal from "./PauseModal"
 import PlayResult from "./PlayResult"
@@ -58,11 +58,13 @@ const MyOverlay = styled(Overlay)`
   }
 `
 
-function DanceMode(props) {
+function DanceMode() {
+  const stageItem = useSelector((state) => state.stage.stageItem)
+
   const [camfocus, setCamfocus] = useState(false)
   const [model, setModel] = useState(null)
   const [aimedPosture, setAimedPosture] = useState(null)
-  const [prevPosture, setPrevPosture] = useState(-1)
+  const [prevPosture, setPrevPosture] = useState(10)
   const [count, setCount] = useState(0)
   const [showResult, setShowResult] = useState(false)
   const [showGreat, setShowGreat] = useState(false)
@@ -72,98 +74,7 @@ function DanceMode(props) {
   const camref = useRef(null)
   const videoref = useRef(null)
   
-  // 지우기
-  const danceTimeline = 
-  [
-    {
-      danceIndex: 2, 
-      startTime: 7,
-      endTime: 14,
-      accuracy: 0.95,
-      countDelay: 100,
-      countStandard: 10,
-    },
-    {
-      danceIndex: 3,
-      startTime: 15,
-      endTime: 23,
-      accuracy: 0.95,
-      countDelay: 100,
-      countStandard: 10,
-    },
-    {
-      danceIndex: 3,
-      startTime: 23,
-      endTime: 30,
-      accuracy: 0.95,
-      countDelay: 100,
-      countStandard: 10,
-    },
-    {
-      danceIndex: 1,
-      startTime: 30,
-      endTime: 34,
-      accuracy: 0.95,
-      countDelay: 100,
-      countStandard: 10,
-    },
-    {
-      danceIndex: 3,
-      startTime: 34,
-      endTime: 42,
-      accuracy: 0.95,
-      countDelay: 100,
-      countStandard: 10,
-    },
-    {
-      danceIndex: 3,
-      startTime: 42,
-      endTime: 49,
-      accuracy: 0.95,
-      countDelay: 100,
-      countStandard: 10,
-    },
-    {
-      danceIndex: 0,
-      startTime: 49,
-      endTime: 56,
-      accuracy: 0.95,
-      countDelay: 100,
-      countStandard: 10,
-    },
-    {
-      danceIndex: 3,
-      startTime: 56,
-      endTime: 63,
-      accuracy: 0.95,
-      countDelay: 100,
-      countStandard: 10,
-    },
-    {
-      danceIndex: 3,
-      startTime: 63,
-      endTime: 71,
-      accuracy: 0.95,
-      countDelay: 100,
-      countStandard: 10,
-    },
-    {
-      danceIndex: 1,
-      startTime: 71,
-      endTime: 79,
-      accuracy: 0.95,
-      countDelay: 100,
-      countStandard: 10,
-    },
-    {
-      danceIndex: 2,
-      startTime: 79,
-      endTime: 87,
-      accuracy: 0.95,
-      countDelay: 100,
-      countStandard: 10,
-    }
-  ]
+  const danceTimeline = stageItem.songMotionList
 
   // 처음에 모델 불러오기
   useEffect(() => {
@@ -177,7 +88,7 @@ function DanceMode(props) {
         setCount((count) => count + 1)
       }
     },
-    (prevPosture !== -1 && aimedPosture) ? aimedPosture?.countDelay : null
+    (prevPosture !== 10 && aimedPosture) ? aimedPosture?.countDelay : null
   )
   
   // 60fps로 predict 함수 돌리기
@@ -190,12 +101,12 @@ function DanceMode(props) {
 
   // 모달 열기/닫기 함수
   const handleIsModalOpen = () => {
-      setIsModalOpen((prev)=>!prev)
-      if (!isModalOpen) {
-        videoref.current.pause()
-      } else {
-        videoref.current.play()
-      }
+    setIsModalOpen((prev)=>!prev)
+    if (!isModalOpen) {
+      videoref.current.pause()
+    } else {
+      videoref.current.play()
+    }
   }
 
   // 모델 불러오기 함수
@@ -214,17 +125,17 @@ function DanceMode(props) {
       camref.current.video
     )
     const prediction = await model.predict(posenetOutput)
-    const rtPosture = prediction[aimedPosture.danceIndex]
+    const rtPosture = prediction[aimedPosture.danceIndex-1]
     setPrevPosture((prevPosture) => {
       if (
         rtPosture.probability.toFixed(2) > aimedPosture.accuracy &&
-        prevPosture === aimedPosture.danceIndex
+        prevPosture === aimedPosture.danceIndex-1
       ) {
         return prevPosture
       } else if (rtPosture.probability.toFixed(2) > aimedPosture.accuracy) {
-        return aimedPosture.danceIndex
+        return aimedPosture.danceIndex-1
       } else {
-        return -1
+        return 10
       }
     })
   }
@@ -332,7 +243,7 @@ function DanceMode(props) {
         <video
           className={camfocus ? "small" : "big"}
           ref={videoref}
-          src="https://kangwedance.s3.ap-northeast-2.amazonaws.com/%EB%8F%99%EB%AC%BC+%ED%94%BD%EC%8A%A4.mp4"
+          src={stageItem.videoUrl || `https://kangwedance.s3.ap-northeast-2.amazonaws.com/%EB%8F%99%EB%AC%BC+%ED%94%BD%EC%8A%A4.mp4`} // 빼기
           onCanPlayThrough={()=>videoref.current.play()}
           onTimeUpdate={handleTimeUpdate}
           onEnded={()=>setShowResult(true)}

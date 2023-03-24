@@ -1,6 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom"
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import { setStageItem } from "../../store/stageSlice";
 import {Wrapper, H2, PinkButton} from "../common/ui/Semantics";
 import {TbStarFilled} from "react-icons/tb";
 import testImg from "../../assets/images/fd2.png";
@@ -24,12 +26,12 @@ const InfoWrapper = styled(Wrapper)`
     margin-left: auto;
     margin-right: 5%;
   }
-`
+`;
 
 const TagWrapper = styled(Wrapper)`
   width: 100%;
   flex-direction: row;
-`
+`;
 
 const Star = styled(TbStarFilled)`
   color: yellow;
@@ -41,14 +43,19 @@ const Tag = styled(PinkButton)`
   font-size: 1rem;
   font-weight: 500;
   cursor: default;
-`
+`;
 
 function PlayItem({item}) {
 
   const navigate = useNavigate();
-  
+  const dispatch = useDispatch();
+
   const Stars = () => {
-    return Array(item.difficulty).fill(null).map((_, idx) => <Star key={idx} />)
+    return (
+      <div className="stars">
+        {Array(item.difficulty).fill(null).map((_, idx) => <Star key={idx} />)}
+      </div>
+    )
   }
 
   const Tags = () => {
@@ -56,16 +63,19 @@ function PlayItem({item}) {
     return tags.map(tag => <Tag key={tag}> { `#${tag}` } </Tag>)
   }
 
+  const startStage = () => {
+    dispatch(setStageItem(item))
+    navigate(`/play/${item.playMode}/${item.songIdx}`)
+  }
+
   return (
-    <ItemWrapper onClick={()=>navigate(`/play/${item.playMode}/${item.songIdx}`)}>
+    <ItemWrapper onClick={startStage}>
       <img className="thumbnail" src={testImg} alt="thumbnail"/>
       <InfoWrapper>
         <H2>
           {item?.title}
         </H2>
-        <div className="stars">
-          <Stars />
-        </div>
+        <Stars />
       </InfoWrapper>
       {item?.tag &&
       <TagWrapper>
