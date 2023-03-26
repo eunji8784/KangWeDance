@@ -18,6 +18,15 @@
 		<result column="count_standard" property="countStandard" />
 	</resultMap>
 	
+	<resultMap type="PlayRecordForHadoop" id="playRecordForHadoop">
+		<result column="record_date" property="recordDate" />
+		<result column="play_record_idx" property="PlayrecordIdx" />
+		<result column="child_idx" property="childIdx" />
+		<result column="song_idx" property="songIdx" />
+		<result column="play_mode" property="playMode" />
+	</resultMap>
+	
+	
 	<select id="selectSongList" resultMap="songList">
 		SELECT s.song_idx, s.play_mode, s.title, s.thumbnail_url, s.video_url, s.preview_music_url,
 			   m.motion_tag, s.difficulty, s.calorie_consumption 
@@ -57,4 +66,12 @@
 		parent_idx = 
 				(SELECT parent_idx FROM children WHERE child_idx = #{param2});
 	</update>
+	
+	<select id="selectPlayRecordForHadoop" resultMap="playRecordForHadoop" >
+		SELECT *
+		FROM playRecord
+		WHERE date_format(record_date, '%Y-%m-%d')  = curdate();
+	</select>
+		
+		
 </mapper>
