@@ -67,8 +67,8 @@
 	</select>
 	
 	<select id="selectBodyRecordForHadoop" resultMap="hadoop">
-		SELECT *
-		FROM playRecord
-		WHERE date_format(record_date, '%Y-%m-%d')  =curdate();
+		select *
+		from bodyRecord
+		where record_date=curdate();
 	</select>
 </mapper>
