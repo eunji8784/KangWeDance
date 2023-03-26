@@ -23,14 +23,15 @@ public enum SuccessCode {
 	// 사진
 	CREATE_PHOTO(SUCCESS, "사진 등록 성공"), READ_PHOTO_LIST(SUCCESS, "사진 리스트 조회 성공"),
 	READ_PRAME_LIST(SUCCESS, "스티커 및 프레임 조회 성공"), CREATE_KAKAO(SUCCESS, "카카오톡 공유하기 성공"),
-	DELETE_PHOTO(SUCCESS, "사진 삭제하기 성공"),SHARE_PHOTO(SUCCESS,"사진 공유 URI 생성 성공"),
+	DELETE_PHOTO(SUCCESS, "사진 삭제하기 성공"), SHARE_PHOTO(SUCCESS, "사진 공유 URI 생성 성공"),
 	// play
 	READ_PLAY_LIST(SUCCESS, "플레이 목록 조회 성공"), CREATE_PLAY_RESULT(SUCCESS, "플레이 결과 등록 성공"),
 	// status
 	READ_PLAYRECORD_LIST(SUCCESS, "운동 기록 조회 성공"), READ_FOOD_LIST(SUCCESS, "음식 검색 성공"),
 
 	// hadoop(hive)
-	CREATE_BODYRECORD(SUCCESS, "신체 기록 하둡에 업로드 성공"), READ_BODYRECORD(SUCCESS, "신체 기록 하둡에서 불러오기 성공");
+	CREATE_BODYRECORD(SUCCESS, "신체 기록 하둡에 업로드 성공"), READ_BODYRECORD(SUCCESS, "신체 기록 하둡에서 불러오기 성공"),
+	CREATE_PLAYRECORD(SUCCESS, "플레이 기록 하둡에 업로드 성공");
 
 	private final StatusCode statusCode;
 	private final String message;
