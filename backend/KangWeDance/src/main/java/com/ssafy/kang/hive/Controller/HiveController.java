@@ -15,6 +15,8 @@ import com.ssafy.kang.children.model.mapper.ChildrenMapper;
 import com.ssafy.kang.common.ErrorCode;
 import com.ssafy.kang.common.SuccessCode;
 import com.ssafy.kang.common.dto.ApiResponse;
+import com.ssafy.kang.play.model.PlayRecordForHadoop;
+import com.ssafy.kang.play.model.service.PlayService;
 
 @RestController
 @RequestMapping("/hive")
@@ -26,6 +28,9 @@ public class HiveController {
 
 	@Autowired
 	private ChildrenMapper childrenMapper;
+
+	@Autowired
+	PlayService playService;
 
 	@GetMapping("/tables")
 	public ApiResponse<?> showDatabases() {
@@ -63,13 +68,40 @@ public class HiveController {
 			recordDate = bodyRecordDto.get(i).getRecordDate();
 			bmi = bodyRecordDto.get(i).getBmi();
 
+			// 하둡에 insert하는 코드
 			int result = jdbcTemplate.update("insert into table bodyRecord values (" + bodyRecordIdx + "," + childIdx
 					+ "," + weight + "," + height + "," + bmi + "," + todayCalories + ",'" + recordDate + "')");
-
-			System.out.println(recordDate);
 		}
-		// 하둡에 insert하는 코드
 		return ApiResponse.success(SuccessCode.CREATE_BODYRECORD);
+	}
+
+	// playRecord insert API
+	@GetMapping("/play_record")
+	public ApiResponse<?> playRecord() throws Exception {
+
+		List<PlayRecordForHadoop> playRecordDto = playService.findplayRecordForHadoop();
+
+		String recordDate;
+		int playrecordIdx;
+		int childIdx;
+		int songIdx;
+		int playMode;
+
+		int result = 0;
+
+		for (int i = 0; i < playRecordDto.size(); i++) {
+			recordDate = playRecordDto.get(i).getRecordDate();
+			playrecordIdx = playRecordDto.get(i).getPlayrecordIdx();
+			childIdx = playRecordDto.get(i).getChildIdx();
+			songIdx = playRecordDto.get(i).getSongIdx();
+			playMode = playRecordDto.get(i).getPlayMode();
+
+			// System.out.println(playrecordIdx);
+			result = jdbcTemplate.update("insert into table playRecord values (" + playrecordIdx + "," + childIdx + ","
+					+ songIdx + "," + playMode + ",'" + recordDate + "')");
+		}
+		return ApiResponse.success(SuccessCode.CREATE_PLAYRECORD);
+
 	}
 }
 // insert into table bodyRecord values (1, 1, 30, 140, 22.3, 0, '2023-03-24');
