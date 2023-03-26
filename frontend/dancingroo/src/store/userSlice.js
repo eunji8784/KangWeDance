@@ -8,7 +8,7 @@ const initialState = {
   level:1,
   exp:0,
   select:0,  // 아이프로필 몇번째 선택상태인지.
-  addChild:true,
+  addChild:false,
   children:[
     { 
       childIdx:null,

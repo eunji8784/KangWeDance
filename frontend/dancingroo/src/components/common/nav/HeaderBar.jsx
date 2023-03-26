@@ -2,7 +2,8 @@ import React, {useState, useRef, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import useLogout from "../../../hooks/auth/useLogout";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { childSelect } from "../../../store/userSlice";
 //logo
 import logo from "../../../assets/images/logo.png"
 import {RiUserFill} from "react-icons/ri";
@@ -116,6 +117,7 @@ const LogOut = styled.div`
 
 function HeaderBar(props) {
     const {watchingPage} = props;
+    const dispatch = useDispatch()
     const isLoggedIn = useSelector(state=>state.userState.isLoggedIn);
     const familyname = useSelector(state=>state.userState.familyname)
     const {isLoading, error, handleLogout} = useLogout()
@@ -139,6 +141,7 @@ function HeaderBar(props) {
         <Wrapper>
             <BarContainer height={30} justify={"space-between"} width={100}>
                 <Logo onClick={() => {
+                    dispatch(childSelect(0))
                     navigate("/play");
                     setActiveMenu("play");
                 }}
@@ -150,7 +153,6 @@ function HeaderBar(props) {
                 </div>
                 <div className="user-menu">
                     <LogOut onClick={() => {
-                            handleClick()
                             handleClick()
                         }}>로그아웃</LogOut>
                     <div

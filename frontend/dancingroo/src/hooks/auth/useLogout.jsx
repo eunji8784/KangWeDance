@@ -21,6 +21,7 @@ const useLogout = () => {
           accesstoken: cookie.accessToken,
         },
       })
+      if (!response.ok) throw new Error(`HTTP error: ${response.status}`)
       const json = await response.json();
     } catch (error) {
       setError(error.message); 
