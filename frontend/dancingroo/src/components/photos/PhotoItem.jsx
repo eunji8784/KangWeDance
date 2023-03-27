@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
 import useApi from "../../hooks/auth/useApi";
 import {TiDelete} from "react-icons/ti";
-
 
 const Photo = styled.div`
     height: 7.2rem;
@@ -38,9 +37,7 @@ const DateText = styled.div`
 
 function PhotoItem({imgUrl, newDay, date, handleImge, photoIdx}) {
     const deletephoto = useApi()
-    
     const deletePhoto = (photoIdx) => {
-        console.log(photoIdx)
         deletephoto.fetchApi('DELETE', `/photos/${photoIdx}`);
     }
 

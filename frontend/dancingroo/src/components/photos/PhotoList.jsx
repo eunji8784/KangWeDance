@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { Wrapper } from "../common/ui/Semantics";
 import PhotoItem from "./PhotoItem"
 
-
 const Empty = styled.div`
     height: 7.2rem;
     width: 12.8rem;
@@ -16,7 +15,7 @@ const Empty = styled.div`
 function PhotoList({handleImge, photoList}) {
     const [newDay, setNewDay] = useState([]);
     
-    //스티커랑 프레임 리스트
+    //같은 날짜 사진들은 날짜 하나만 출력
     useEffect(()=>{
         if (photoList.length !== 0) {
             var arr = [];
@@ -31,12 +30,11 @@ function PhotoList({handleImge, photoList}) {
             }
             setNewDay(arr) 
         }
-
     },[photoList])
 
     return (
         <Wrapper>
-            {photoList?
+            {photoList.length?
                 photoList.map((photo, index) => {
                 return <PhotoItem handleImge={handleImge} key={index} date={photo.createDate} imgUrl={photo.photoImageUrl} newDay={newDay[index]} 
                 photoIdx = {photo.photoIdx}/>;
