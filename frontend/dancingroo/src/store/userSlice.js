@@ -71,9 +71,13 @@ const userSlice = createSlice({
     },
     editFamilyname(state, action){
       state.familyname = action.payload
-    }
+    },
+    intoJoinPage(state, action){
+      state.addChild = !state.addChild
+      console.log('아이등록중?', state.addChild)
+    },
   },
 })
 
-export const {login, logout, getChildState, patchChildState, childSelect, editFamilyname} = userSlice.actions
+export const {login, logout, getChildState, patchChildState, childSelect, editFamilyname, intoJoinPage} = userSlice.actions
 export default userSlice.reducer
