@@ -6,6 +6,8 @@ import InputModal from "../components/status/InputModal";
 import PlayData from "../components/status/PlayData";
 import StatusBar from "../components/status/StatusBar";
 
+import useApi from "../hooks/auth/useApi";
+
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
@@ -18,15 +20,29 @@ function StatusPage(props) {
     const {handleWatchingPage} = props
     const [section, setSection] = useState('health')
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [playRecord, setPlayRecord] = useState([]);
     const handleSection = (mode)=>{
         setSection(mode)
     }
     const handleIsModalOpen = ()=>{
         setIsModalOpen((prev)=>!prev)
     }
+
+    const palyReco = useApi()
+
     useEffect(()=>{
         handleWatchingPage('status')
+        // palyReco.fetchApi('GET', `/status/play-record`)
     },[])
+
+    
+    useEffect(()=>{
+        if(palyReco.data){
+            setPlayRecord(palyReco.data)
+        }
+        console.log(palyReco.data)
+    }, [palyReco.data])
+
     return (
         <Wrapper>
             <StatusBar handleSection={handleSection}/>

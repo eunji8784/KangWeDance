@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { Wrapper } from "../common/ui/Semantics";
 
 import {MdDoNotDisturb} from "react-icons/md";
 import {MdLock} from 'react-icons/md'
-
-const SideSection = styled(Wrapper)`
-`
 
 const FrameItem = styled.div`
     height: 7.2rem;
@@ -42,7 +39,7 @@ const Gary = styled.div`
 
 function FrameList({handleFrame, frameList}) {
     return (
-        <SideSection>
+        <Wrapper>
             <MdDoNotDisturb color="#F05475" style={{margin:'1rem'}} size="30" onClick={()=>handleFrame()}/>
             {frameList.map((frame, key) => {
                 return ( frame.unLock ?
@@ -55,7 +52,7 @@ function FrameList({handleFrame, frameList}) {
                     </LockFrameItem>
                 )
             })}
-        </SideSection>
+        </Wrapper>
     );
 }
 
