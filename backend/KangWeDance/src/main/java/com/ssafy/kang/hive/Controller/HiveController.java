@@ -56,22 +56,21 @@ public class HiveController {
 		double bmi; // BMI
 		double height; // 키
 		double todayCalories; // 오늘 칼로리 소모량
-		double bodyRecordIdx; // 권장 칼로리량
+		int bodyRecordIdx; // 권장 칼로리량
 		String recordDate; // 기록 날짜
 
-		for (int i = 0; i < bodyRecordDto.size(); i++) {
-			childIdx = bodyRecordDto.get(i).getChildIdx();
-			weight = bodyRecordDto.get(i).getWeight();
-			height = bodyRecordDto.get(i).getHeight();
-			todayCalories = bodyRecordDto.get(i).getTodayCalrories();
-			bodyRecordIdx = bodyRecordDto.get(i).getBodyRecordIdx();
-			recordDate = bodyRecordDto.get(i).getRecordDate();
-			bmi = bodyRecordDto.get(i).getBmi();
+		childIdx = bodyRecordDto.get(0).getChildIdx();
+		weight = bodyRecordDto.get(0).getWeight();
+		height = bodyRecordDto.get(0).getHeight();
+		todayCalories = bodyRecordDto.get(0).getTodayCalrories();
+		bodyRecordIdx = (int) bodyRecordDto.get(0).getBodyRecordIdx();
+		recordDate = bodyRecordDto.get(0).getRecordDate();
+		bmi = bodyRecordDto.get(0).getBmi();
 
-			// 하둡에 insert하는 코드
-			int result = jdbcTemplate.update("insert into table bodyRecord values (" + bodyRecordIdx + "," + childIdx
-					+ "," + weight + "," + height + "," + bmi + "," + todayCalories + ",'" + recordDate + "')");
-		}
+		// 하둡에 insert하는 코드
+		int result = jdbcTemplate.update("insert into table bodyRecord values (" + bodyRecordIdx + "," + childIdx + ","
+				+ weight + "," + height + "," + bmi + "," + todayCalories + ",'" + recordDate + "')");
+
 		return ApiResponse.success(SuccessCode.CREATE_BODYRECORD);
 	}
 
@@ -79,6 +78,7 @@ public class HiveController {
 	@GetMapping("/play_record")
 	public ApiResponse<?> playRecord() throws Exception {
 
+		// 김민식이 바꿀 코드 -> db까지 안가고 바로 하둡으로 다이렉트 저장
 		List<PlayRecordForHadoop> playRecordDto = playService.findplayRecordForHadoop();
 
 		String recordDate;
@@ -101,7 +101,7 @@ public class HiveController {
 					+ songIdx + "," + playMode + ",'" + recordDate + "')");
 		}
 		return ApiResponse.success(SuccessCode.CREATE_PLAYRECORD);
-
 	}
+
 }
 // insert into table bodyRecord values (1, 1, 30, 140, 22.3, 0, '2023-03-24');
