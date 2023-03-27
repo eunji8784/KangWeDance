@@ -7,7 +7,9 @@ import AccountInfo from "../components/users/AccountInfo";
 import ChildProfile from "../components/common/ui/ChildProfile";
 // api
 import useApi from "../hooks/auth/useApi";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { useCookies } from 'react-cookie';
+import { logout } from "../store/userSlice";
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
@@ -50,7 +52,20 @@ const Line = styled.div`
 
 function UserPage(props) {
     const navigate = useNavigate();
-    
+    const dispatch = useDispatch()
+    const [, , removeCookie] = useCookies('accessToken');
+    const withdrawAccount = useApi()
+
+    const withdrawAccountHandler = ()=>{
+        if (window.confirm('정말로 계정탈퇴하시겠습니까?')){
+            const onSuccess = ()=>{
+                removeCookie('accessToken', { path: '/' })
+                dispatch(logout())
+                navigate('/')
+            }
+            withdrawAccount.fetchApi('DELETE', '/parents', onSuccess)
+        }
+    }
     return (
         <Wrapper>
             <Title>회원 정보</Title>
@@ -60,7 +75,7 @@ function UserPage(props) {
             </Wrapper2>
             <Line/>
             <RegisterChild userPage={true}/>
-            <Deleted>회원 탈퇴하기</Deleted>
+            <Deleted onClick={withdrawAccountHandler}>회원 탈퇴하기</Deleted>
         </Wrapper>
     );
 }

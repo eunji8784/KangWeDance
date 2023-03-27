@@ -36,8 +36,8 @@ function Registration(props) {
     const [familynameState, setFamilynameState] = useState(familyname)
 
     useEffect(()=>{
-        dispatch(intoJoinPage())
-        return ()=>dispatch(intoJoinPage())
+        dispatch(intoJoinPage(true))
+        return ()=>dispatch(intoJoinPage(false))
     },[])
     const handleInputChange = (e)=>{    
         setFamilynameState(()=>e.target.value)
@@ -45,7 +45,7 @@ function Registration(props) {
     return (
         <Wrapper>
             <ModHeader>
-                <h1>회원가입</h1>
+                <h1>아이 프로필 등록하기</h1>
                 <div className="house">
                     <FormLabel className="우리집" htmlFor="familyname">우리 집</FormLabel>
                     <FormInput className="우리집인풋" defaultValue={familynameState} type="text" name="familyname" id="familyname" placeholder=" 캥거루합창단" onChange={handleInputChange}/>
