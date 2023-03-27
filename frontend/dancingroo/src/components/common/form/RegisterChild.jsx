@@ -1,12 +1,11 @@
 // 회원가입-정보 등록
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import {Wrapper, Header, Main, Article, Section, H1, H2, P, Footer, PinkButton} from "../../common/ui/Semantics";
-import bgImg from "../../../assets/images/bgImg.png"
 import kangkang from "../../../assets/images/kangkang.png"
 import useApi from "../../../hooks/auth/useApi";
-import { login, updateChildState } from "../../../store/userSlice";
+import { login, getChildState,patchChildState,childSelect } from "../../../store/userSlice";
 import { useDispatch,useSelector } from "react-redux";
 
 const ModWrapper = styled(Wrapper)`
@@ -19,13 +18,7 @@ const ModWrapper = styled(Wrapper)`
     align-items:center;
     z-index:-1;
     left:0;
-    & > img {
-        position: absolute;
-        z-index: -2;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-    }
+    bottom:-5rem;
     h2{
         padding:0;
         margin-bottom:-1rem;
@@ -59,7 +52,7 @@ const ModSection = styled(Section)`
        }
     }
 `
-const FormLabel = styled.label`
+export const FormLabel = styled.label`
     font-size: 1rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
@@ -67,7 +60,7 @@ const FormLabel = styled.label`
     margin-left:1.5rem;
 `;
 
-const FormInput = styled.input`
+export const FormInput = styled.input`
     height: 2.1rem;
     min-width: 5rem;
     font-size: 0.8rem;
@@ -82,7 +75,7 @@ const FormInputButton = styled.input`
     width: 5rem;
     font-size: 0.8rem;
     font-weight: 600;
-    background-color: ${props=>props.color};
+    background-color: ${props=>props.color==="true"? "#FFD731":"#ffffff"};
     border: solid 1px #e5e5e5;
     border-radius: 0.5rem;
     padding: 0 1em;
@@ -101,141 +94,132 @@ const MyButton = styled(PinkButton)`
     letter-spacing:0.2rem;
     font-size:0.9rem;
 `
-const ModHeader = styled(Header)`
-    margin-top:1rem;
-    padding-bottom:0.5rem;
-    flex-direction:column;
-    .우리집{
-        /* border:1px solid red; */
-        /* margin-left:14.9rem; */
-        align-self:flex-start;
-    }
-    .우리집인풋{
-        align-self:flex-start;
-        margin-left:5rem;
-        width:15rem;
-    }
-    .house{
-        flex-direction:column;
-        /* border:1px solid blue; */
-        width:90%;
-    }
-    width:80%;
-    border-bottom: 1px solid #9b9999;
-`
-function RegisterChild({childIdx}) {
-    const thisChild = useSelector(state=>state.userState.children[0]) // 디폴트는 첫째
-    const familyname = useSelector(state=>state.userState.familyname)
+function RegisterChild({userPage}) {
+    const selectedIdx = useSelector(state=>state.userState.select)
+    const {nickname, weight, height, gender, profileImageUrl, childIdx, birthDate} = useSelector(state=>state.userState.children[selectedIdx||0]) // 디폴트는 첫째
+    const firstChildIdx = useSelector(state=>state.userState.children[0].childIdx)
+    const addChild = useSelector(state=>state.userState.addChild)
     const dispatch = useDispatch()
     const navigate = useNavigate();
-    const {data, isLoading, error, post} = useApi('/children')
-    const [newChild, setNewChild] = useState(true);
-    const [colorboy, setColorBoy] = useState("#FFD731");
-    const [colorgirl, setColorGirl] = useState("#ffffff");
-    const [familynameState, ] = useState(familyname)
-    const [kidState, setKidState] = useState(thisChild)
-    
-    useEffect(()=>{
-        if (data) {
-            data.success===true? navigate('/play') : console.error('아이 프로필 등록 실패')
-          }
-    },[data])
+    const getImgUrl = useApi()
+    const addNewChild = useApi()
+    const patchChild = useApi()
+    const deleteChild = useApi()
+    const [btnColor, setBtnColor] = useState(gender)
+    const fileInput = useRef(null);
 
-    console.log(kidState)
+    const onProfileUpdateSuccess = (json)=>{
+        alert('아이 프로필 등록이 완료되었습니다.')
+        dispatch(childSelect(0))
+        navigate('/play')
+    }
+
+    const handleUploadImg=(e)=>{
+        const file = e.target.files[0]
+        const formData = new FormData();
+        formData.append('file', file);
+        getImgUrl.fetchApi('POST', "/children/profile", formData)
+    }
+    const uploadImg=()=>{
+        fileInput.current.click()
+    }
+    const handleDeleteChild = ()=>{
+        if (window.confirm('아이 프로필 삭제하시겠습니까?')){
+            const onSuccess = ()=>{
+                alert('아이 프로필이 삭제되었습니다.')
+                if (childIdx===firstChildIdx){ // 첫째아이 삭제했으면 store에 등록된 아이프로필 지우고, 다시 조인페이지로 보냄
+                    dispatch(getChildState([{}]))
+                    navigate('/users/join')
+                } else {
+                    dispatch(childSelect(0))
+                    navigate('/play')
+                } 
+            }
+            deleteChild.fetchApi('DELETE', `/children?childIdx=${childIdx}`, onSuccess)
+        }
+    }
     const SumbitChild = ()=>{
         const body = {
-            nickname:kidState["nickname"],
-            birthDate:kidState["birthDate"],
-            gender:kidState["gender"],
-            weight:Number(kidState["weight"]),
-            height:Number(kidState["height"]),
-            ProfileImageUrl:kidState["profileImageUrl"],
+            nickname,
+            birthDate,
+            gender,
+            weight,
+            height,
+            ProfileImageUrl:profileImageUrl||"https://d3qb4vbeyp8phu.cloudfront.net/기본+프로필+이미지.png",
         }
-        post(body)
-        // 집이름 추가해서 리덕스 태워 보내기
-        body["familyname"] = kidState["familyname"]
-        dispatch(updateChildState(body))
+        const patchBody = {
+            nickname,
+            birthDate,
+            gender,
+            ProfileImageUrl:profileImageUrl||"https://d3qb4vbeyp8phu.cloudfront.net/기본+프로필+이미지.png",
+            childIdx,
+        }
+        if (addChild) addNewChild.fetchApi('POST', '/children', body, onProfileUpdateSuccess)
+        else patchChild.fetchApi('PATCH', '/children', patchBody, onProfileUpdateSuccess)
     }
     const handleInputChange = (e) => {
         let { name, value } = e.target;
-        if (name=="gender"){
+        if (name==="gender"){
             if(value==="남자아이"){
                 value=false
-                setColorBoy("#FFD731");
-                setColorGirl("#ffffff"); 
+                setBtnColor(value)
             } else {
                 value=true
-                setColorBoy("#ffffff");
-                setColorGirl("#FFD731");
+                setBtnColor(value)
             }
-        } 
-        setKidState((prev) => ({
-          ...prev,
-          [name]: value,
-        }));
+        }
+        if(name==="weight"||name==="height") value = Number(value) 
+        dispatch(patchChildState({selectedIdx,name,value}));
     };
     return (
         <ModWrapper>
-            <ModHeader>
-                <h1>회원가입</h1>
-                <div className="house">
-                    <FormLabel className="우리집" htmlFor="familyname">우리 집</FormLabel>
-                    <FormInput className="우리집인풋" defaultValue={familynameState} type="text" name="familyname" id="familyname" placeholder=" 캥거루합창단" onChange={handleInputChange}/>
-                </div>
-            </ModHeader>
-            <h2>아이 프로필</h2>
             <ModMain>
                 <ModSection>
                     <Article>
                         <FormLabel htmlFor="nickname"> 닉네임</FormLabel>
-                        <FormInput defaultValue={kidState["nickname"]} type="text" name="nickname" id="nickname" placeholder=" 닉네임" onChange={handleInputChange}/>
+                        <FormInput value={nickname||''} type="text" name="nickname" id="nickname" placeholder=" 닉네임" onChange={handleInputChange}/>
                     </Article>
                     <Article>
                         <FormLabel htmlFor="gender"> 성별</FormLabel>
                         <div>
-                            <FormInputButton type="button" color={colorboy} defaultValue="남자아이" name="gender" onClick={handleInputChange}/>
-                            <FormInputButton type="button" color={colorgirl}  defaultValue="여자아이" name="gender" onClick={handleInputChange}/>
+                            <FormInputButton type="button" color={gender? "false":"true"} value="남자아이" name="gender" onClick={handleInputChange}/>
+                            <FormInputButton type="button" color={gender? "true":"false"}  value="여자아이" name="gender" onClick={handleInputChange}/>
                         </div>
                     </Article>
                     <Article>
                         <FormLabel htmlFor="birthDate"> 생년월일</FormLabel>
-                        <FormInput defaultValue={kidState["birthDate"]} type="date" name="birthDate" id="birthDate" placeholder=" 닉네임" onChange={handleInputChange}/>
+                        <FormInput value={birthDate||''} type="date" name="birthDate" id="birthDate" placeholder=" 닉네임" onChange={handleInputChange}/>
                     </Article>
                 </ModSection>
                 <ModSection>
                     <Article>
                         <FormLabel> 사진</FormLabel>
                         <div className="profile-container">
-                        <ProfileImage src={kangkang}/>
-                            <FormInputButton className="white-black-line-btn" color="white" type="button" defaultValue="수정"/>
-                            {/* <input type="file" ref={fileInput} onChange={handleChange} style={{ display: "none" }} /> */}
-                            <FormInputButton className="white-black-line-btn" color="white" type="button" defaultValue="삭제" />
+                        <ProfileImage src={profileImageUrl||kangkang}/>
+                            <FormInputButton className="white-black-line-btn" color="white" type="button" value="수정" onClick={()=>uploadImg()}/>
+                            <input ref={fileInput} type="file" style={{ display: "none" }} onChange={(e) => {handleUploadImg(e)}}
+                            />
+                            <FormInputButton className="white-black-line-btn" color="white" type="button" value="삭제" />
                         </div>
                     </Article>
-                    {newChild ?
-                    <>
                     <Article>
                         <div className="kids-state">
                             <FormLabel htmlFor="height">키</FormLabel>
-                            <FormInput defaultValue={kidState["height"]} type="text" name="height" id="height" placeholder=" cm" onChange={handleInputChange}/>
+                            <FormInput value={height||''} type="text" name="height" id="height" placeholder=" cm" onChange={handleInputChange} disabled={!addChild}/>
                         </div>
                     </Article>
                     <Article>
                         <div className="kids-state">
                             <FormLabel htmlFor="weight"> 체중</FormLabel>
-                            <FormInput defaultValue={kidState["weight"]} type="text" name="weight" id="weight" placeholder=" kg" onChange={handleInputChange}/>
+                            <FormInput value={weight||''} type="text" name="weight" id="weight" placeholder=" kg" onChange={handleInputChange} disabled={!addChild}/>
                         </div>
                     </Article>
-                    </>
-                    : null
-                    }
                 </ModSection>
             </ModMain>
             <Footer>
-                <MyButton onClick={()=>SumbitChild()}>등록하기</MyButton>
-                <MyButton>삭제하기</MyButton>
+                <MyButton onClick={()=>SumbitChild()}>{!addChild? '수정하기' : '등록하기'}</MyButton>
+                <MyButton style={{display: !addChild? 'flex':'none'}} onClick={()=>handleDeleteChild()}>삭제하기</MyButton>
             </Footer>
-            <img src={bgImg} alt="" />
         </ModWrapper>
     )
 }
