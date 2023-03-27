@@ -17,6 +17,13 @@
 		<result column="count_delay" property="countDelay" />
 		<result column="count_standard" property="countStandard" />
 	</resultMap>
+	<resultMap type="PlayRecordForHadoop" id="playRecordForHadoop">
+		<result column="record_date" property="recordDate" />
+		<result column="play_record_idx" property="PlayrecordIdx" />
+		<result column="child_idx" property="childIdx" />
+		<result column="song_idx" property="songIdx" />
+		<result column="play_mode" property="playMode" />
+	</resultMap>
 	<select id="selectSongList" resultMap="songList">
 		SELECT 
 		    s.song_idx,
@@ -84,6 +91,11 @@
 		parent_idx = 
 				(SELECT parent_idx FROM children WHERE child_idx = #{param2});
 	</update>
+	<select id="selectPlayRecordForHadoop" resultMap="playRecordForHadoop" >
+		SELECT *
+		FROM playRecord
+		WHERE date_format(record_date, '%Y-%m-%d')  = curdate();
+	</select>
 	<select id="selectChildren" parameterType="int" resultType="int">
 		SELECT child_idx 
 		FROM children 
