@@ -42,7 +42,9 @@ public class AmazonS3ResourceStorage {
             multipartFile.transferTo(file);
             amazonS3Client.putObject(new PutObjectRequest(bucket, fullPath, file)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
-            return amazonS3Client.getUrl(bucket, fullPath).toString();
+            String makeurl = amazonS3Client.getUrl(bucket, fullPath).toString();
+            makeurl = "https://d3qb4vbeyp8phu.cloudfront.net/"+makeurl.substring(52,makeurl.length());
+            return makeurl;
         } catch (Exception e) {
             throw new RuntimeException();
         } finally {
