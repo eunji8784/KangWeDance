@@ -135,7 +135,7 @@ function HeaderBar(props) {
     const handleClick = ()=>{
         // 로그아웃처리하고, 카카오 로그아웃 후 홈으로 리다이렉트
         handleLogout()
-        window.location.href = `https://kauth.kakao.com/oauth/logout?client_id=${API_KEY_KAKAO}&logout_redirect_uri=${LOGOUT_REDIRECT_URI_SITE}&state=logout`
+        window.location.href = `https://kauth.kakao.com/oauth/logout?client_id=${API_KEY_KAKAO}&logout_redirect_uri=${LOGOUT_REDIRECT_URI}&state=logout`
     }
     return (
         <Wrapper>
