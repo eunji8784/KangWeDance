@@ -71,18 +71,15 @@ const Table = styled.table`
   }
 `;
 
-function PlayData(props) {
-    const {handleIsModalOpen} = props;
-    // const navigate = useNavigate();
+function PlayData({handleIsModalOpen, username}) {
     const [selectedDay, setSelectedDay] = useState()
-
     const handleSelectedDay = (date)=>{
         setSelectedDay(date)
     }
     return (
         <Wrapper>
             <section className="section header">
-                <h3>{props.username}(이)는 이번 달 총 OO회 운동했어요</h3>
+                <h3>{username}(이)는 이번 달 총 OO회 운동했어요</h3>
                 <ModalBtn onClick={()=>handleIsModalOpen()}>오늘의 정보 입력</ModalBtn>
             </section>
             <section className="section main">
