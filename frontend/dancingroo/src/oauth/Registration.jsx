@@ -1,11 +1,11 @@
-import React,{useState} from "react";
+import React,{useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Wrapper, Main, Header, Footer, Section, Article } from "../components/common/ui/Semantics";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { FormLabel,FormInput } from "../components/common/form/RegisterChild";
 import RegisterChild from "../components/common/form/RegisterChild";
-
+import { intoJoinPage } from "../store/userSlice";
 const ModHeader = styled(Header)`
     margin-top:1rem;
     padding-bottom:0.5rem;
@@ -31,10 +31,15 @@ const ModHeader = styled(Header)`
 
 function Registration(props) {
     const navigate = useNavigate();
+    const dispatch = useDispatch()
     const familyname = useSelector(state=>state.userState.familyname)
     const [familynameState, setFamilynameState] = useState(familyname)
 
-    const handleInputChange = (e)=>{
+    useEffect(()=>{
+        dispatch(intoJoinPage())
+        return ()=>dispatch(intoJoinPage())
+    },[])
+    const handleInputChange = (e)=>{    
         setFamilynameState(()=>e.target.value)
     }
     return (
