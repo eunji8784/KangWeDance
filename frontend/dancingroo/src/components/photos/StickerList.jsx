@@ -17,13 +17,13 @@ const StickerItem = styled.div`
     cursor: pointer;
     margin: 0.5rem;
 `;
-
+//  console.log(imgUrl)
 function StickerList({handleSticker, stickerList}) {
     return (
         <Wrapper>
             <AlbumContainer>
                 {stickerList?.map((sticker, index) => {
-                    return <StickerItem key={index} imageUrl={sticker.frameURL} onClick={()=>handleSticker(`https://d6jyvlc4duh9a.cloudfront.net/` + sticker.frameURL.substr(52 , sticker.frameURL.length))}/>;
+                    return <StickerItem key={index} imageUrl={sticker.frameURL} onClick={()=>handleSticker(sticker.frameURL)}/>;
                 })}
             </AlbumContainer>
         </Wrapper>
