@@ -49,7 +49,7 @@ function AccountInfo(props) {
     const dispatch = useDispatch()
     const familyname = useSelector(state=>state.userState.familyname)
     const [newFamilyname, setNewFamilyname] = useState(familyname||'');
-    const [experiencePercentage, setExperiencePercentage] = useState(30);
+    const [experiencePercentage, setExperiencePercentage] = useState(0);
     const patchFamilyname = useApi()
     const getExp = useApi()
 
