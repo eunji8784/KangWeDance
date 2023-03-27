@@ -1,47 +1,49 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Wrapper } from "../common/ui/Semantics";
+import PhotoItem from "./PhotoItem"
 
-import imge from "../../assets/images/dummy.jpg"
-
-//임시
-const Dummy = styled.div`
-    height: 6.3rem;
-    width: 11.2rem;
-    background-image:url(${imge});
-    background-size:cover;
-    filter: drop-shadow(0px 1.5px 1.5px rgba(0, 0, 0, 0.25));
-    border-radius: 0.2rem;
-    cursor: pointer;
-    margin-top: 0.5rem;
+const Empty = styled.div`
+    height: 7.2rem;
+    width: 12.8rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
 `;
 
-function PhotoList(props) {
-    const [newDate, setNewDate] = useState(true);
-    const [Date, setDate] = useState("");
-    const {handleImge} = props;
-
-    const checkDate = (e) => {
-        if(Date !== e){
-            setNewDate(true);
-            setDate(e);
-        } else{
-            setNewDate(false);
+function PhotoList({handleImge, photoList}) {
+    const [newDay, setNewDay] = useState([]);
+    
+    //같은 날짜 사진들은 날짜 하나만 출력
+    useEffect(()=>{
+        if (photoList.length !== 0) {
+            var arr = [];
+            var date = '';
+            for (var i = 0; i < photoList.length; i++) {
+                if(date != photoList[i].createDate){
+                    arr.push(true);
+                    date = photoList[i].createDate;
+                } else{
+                    arr.push(false);
+                }
+            }
+            setNewDay(arr) 
         }
-    }
-
-    const handleClick = (imge) => {
-        handleImge(imge);   
-    };
+    },[photoList])
 
     return (
         <Wrapper>
-            갤러리자냐
-            <Dummy onClick={()=>handleClick(imge)}/>
-            {/* {photos.map((photo, index) => {
-                checkDate(photo.date);
-                return <GalleryItem key={index} date={photo.date} imgUrl={photo.imageUrl} newDate={photo.newDate}/>;
-            })} */}
+            {photoList.length?
+                photoList.map((photo, index) => {
+                return <PhotoItem handleImge={handleImge} key={index} date={photo.createDate} imgUrl={photo.photoImageUrl} newDay={newDay[index]} 
+                photoIdx = {photo.photoIdx}/>;
+                })
+                :
+                <Empty>
+                    아직 사진이 없어요!
+                </Empty>
+            }
         </Wrapper>
     );
 }

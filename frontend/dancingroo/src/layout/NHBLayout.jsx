@@ -23,7 +23,6 @@ const OutletWrapper = styled(Outlet)`
 
 const HBLayout = () => {
     // const navigate = useNavigate();
-    // const isLoggedIn = useSelector((state)=>state.TOKEN.authenticated);
 
     // useEffect(()=>{
     //     if(isLoggedIn){
