@@ -3,9 +3,8 @@ import styled from "styled-components";
 import { Wrapper } from "../common/ui/Semantics";
 
 import {MdOutlineInsertPhoto}  from 'react-icons/md';
-import {RxFrame} from 'react-icons/rx';
 import {IoShapesOutline} from 'react-icons/io5';
-
+import {RxFrame} from 'react-icons/rx';
 
 const SideBarSection = styled(Wrapper)`
   width:4rem;
@@ -39,8 +38,7 @@ const Highlight = styled.div`
 
 `;
 
-function SideBar(props) {
-    const {handleSection} = props;
+function SideBar({handleSection}) {
     const [activeState, setActiveState] = useState('gallery'); 
 
     const handleClick = (mode)=>{

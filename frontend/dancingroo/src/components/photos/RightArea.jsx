@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
-import { Wrapper, PinkButton } from "../common/ui/Semantics";
 import { Stage, Layer, Image } from "react-konva";
 import useImage from 'use-image';
+
+import { Wrapper, PinkButton } from "../common/ui/Semantics";
+import useApi from "../../hooks/auth/useApi"
 
 import {MdCleaningServices} from 'react-icons/md';
 
@@ -24,11 +26,13 @@ const ButtonSection = styled(Wrapper)`
 `
 
 const Card = styled.div`
-    width: 80%;
+    width : ${window.innerWidth/2.2};
+    height : ${window.innerWidth*0.2557};
+    border: 0.1rem solid rgba(0, 0, 0, 0.1);
 `;
 
 const BackGroungImage = ({ image }) => {
-    const [img] = useImage(image);
+    const [img] = useImage(image, 'Anonymous');
     return (
       <Image
         image={img}
@@ -39,18 +43,10 @@ const BackGroungImage = ({ image }) => {
 };
 
   //움직이는 도형 컨포넌트
-  const Rectangle = ({ url, isSelected, onSelect, onChange }) => {
+const Rectangle = ({ url, onSelect, onChange }) => {
     const shapeRef = useRef();
-    const trRef = useRef();
-  
-    useEffect(() => {
-      if (isSelected) {
-        trRef.current.nodes([shapeRef.current]);
-        trRef.current.getLayer().batchDraw();
-      }
-    }, [isSelected]);
-  
-    const [img] = useImage(url);
+    const [img] = useImage(url, 'Anonymous');
+    
     return (
         <>
         {!onSelect ?
@@ -68,44 +64,29 @@ const BackGroungImage = ({ image }) => {
                 });
             }}
             image={img}
-            width={window.innerWidth/10}
-            height={window.innerWidth/10}
+            width={window.innerWidth/18}
+            height={window.innerWidth/18}
             />
         }
         </>
     );
   };
 
-function RightArea({imge, frameImage, stickerImage, stickerNum}) {
+function RightArea({image, frameImage, stickerImage, stickerNum}) {
     const stageRef = useRef();
-    const [base64, setBase64] = useState();
     const [resize, setResize] = useState();
     const [rectangles, setRectangles] = useState([]);
     const [selectedId, selectShape] = useState(null);
 
-    useEffect(() => {
-        setRectangles(rectangles.concat({
-            x: 0,
-            y: 0,
-            id: rectangles.length+1,
-            url: stickerImage
-        }))
-      }, [stickerNum]);
-
-    const checkDeselect = (e) => {
-        const clickedOnEmpty = e.target === e.target.getStage;
-        if (clickedOnEmpty) {
-            selectShape(null);
-        }
-    };
-
+    //화면 크기에 따라 사이즈 변화시키기
     useEffect(() => {
         window.addEventListener("resize", handleResize);    
         return () => {
             window.removeEventListener("resize", handleResize);
         };
     }, []);
-    
+
+    //화면 크기 변화시키기
     const handleResize = () => {
         // rectangles.map((rect) => {
         //     rect.x = rect.x + window.innerWidth/10;
@@ -114,20 +95,107 @@ function RightArea({imge, frameImage, stickerImage, stickerNum}) {
       setResize(window.innerWidth);
     };
     
-    const downloadURI = async() => {
-        const uri = stageRef.current.toDataURL();
-        setBase64(uri);
-    };
+    //스티커 추가했을때
+    useEffect(() => {
+        setRectangles(rectangles.concat({
+            x: 0,
+            y: 0,
+            id: rectangles.length+1,
+            url: stickerImage
+        }))
+    }, [stickerNum]);
 
+    //스티커 전삭
     const cleanSticker = () => {
         setRectangles([]);
+    }
+
+    //스티커 누르고 위치 변경할때
+    const checkDeselect = (e) => {
+        const clickedOnEmpty = e.target === e.target.getStage;
+        if (clickedOnEmpty) {
+            selectShape(null);
+        }
+    };
+
+    //이미지 다운로드
+   const downloadImage = () => {
+       const url = stageRef.current.toDataURL();
+       const today = new Date();
+       const year = today.getFullYear(); // 년도
+       const month = today.getMonth() + 1;  // 월
+       const date = today.getDate();  // 날짜
+   
+       downloadURI(url, 'KangWeDance'+ year + month + date);   
+   }
+
+    //이미지 uri 다운로드 함수
+    const downloadURI = (uri, name) => {
+        var link = document.createElement("a");
+        link.download = name;
+        link.href = uri;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        // delete link;
+      }
+
+    //이미지 공유하기
+    const shareImage = () =>{
+        getUrl();
+        kakaoShare();
+    }
+
+    //이미지 MultipartFile로 변경
+    const getImageUrl = useApi()
+    const getUrl = () => {
+        const base64 = stageRef.current.toDataURL();
+        fetch(base64)
+        .then(res => res.blob())
+        .then(blob => {
+          const fd = new FormData();
+          const file = new File([blob], "filename.png");
+          fd.append('image', file)
+          console.log("Dd")
+          console.log(fd)
+        //   getImageUrl.fetchApi('POST', `/children/profile`, {file:fd})
+        })
+    }
+
+    //카카오톡 공유하기
+    const kakaoShare = () => {
+        if (window.Kakao) {
+            const kakao = window.Kakao
+            if (!kakao.isInitialized()) {
+                kakao.init(process.env.REACT_APP_API_KEY_KAKAO)
+            }
+            
+            kakao.Share.sendDefault({
+                objectType: 'feed',
+                content: {
+                  title: '오늘의 기록',
+                  description: '캥위댄스에서 편지가 왔어요',
+                  imageUrl:
+                    'https://mud-kage.kakao.com/dn/NTmhS/btqfEUdFAUf/FjKzkZsnoeE4o19klTOVI1/openlink_640x640s.jpg',
+                },
+                buttons: [
+                  {
+                    title: '다운로드하기',
+                    link: {
+                      mobileWebUrl: 'https://developers.kakao.com',
+                      webUrl: 'https://developers.kakao.com',
+                    },
+                  },
+                ],
+            })
+         }
     }
 
     return (
         <MainSection>
             <ButtonSection>
-                <PinkButton>공유하기</PinkButton>
-                <PinkButton onClick={downloadURI}>다운로드</PinkButton>
+                <PinkButton onClick={shareImage}>공유하기</PinkButton>
+                <PinkButton onClick={downloadImage}>다운로드</PinkButton>
             </ButtonSection>
              <Card 
              onMouseDown={checkDeselect} 
@@ -139,7 +207,7 @@ function RightArea({imge, frameImage, stickerImage, stickerNum}) {
                         ref={stageRef}
                         >
                         <Layer> 
-                            <BackGroungImage image={imge}/>
+                            <BackGroungImage image={image}/>
                             <BackGroungImage image={frameImage}/>
                             {rectangles.map((rect, i) => {
                             return (
@@ -162,10 +230,11 @@ function RightArea({imge, frameImage, stickerImage, stickerNum}) {
                     </Stage>
             </Card>
             <ButtonSection>
-                스티커 전체 삭제
-                <MdCleaningServices color="#F05475" size="30" onClick={()=>cleanSticker()}/>
+                <span onClick={()=>cleanSticker()}>
+                    스티커 전체 삭제
+                    <MdCleaningServices color="#F05475" size="30"/>
+                </span>
             </ButtonSection>
-            <img src = {base64}/>
         </MainSection>
     );
 }
