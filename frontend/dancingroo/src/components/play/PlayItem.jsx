@@ -8,13 +8,13 @@ import {TbStarFilled} from "react-icons/tb";
 import testImg from "../../assets/images/fd2.png";
 
 const ItemWrapper = styled(Wrapper)`
-  border:1px solid green; // ?
   width: 100%;
   height: 100%; // ?
   justify-content: normal;
   cursor: pointer;
   .thumbnail {
     width: 100%;
+    border-radius: 12px;
   }
 `;
 
@@ -40,12 +40,12 @@ const Star = styled(TbStarFilled)`
 
 const Tag = styled(PinkButton)`
   border-radius: 18px;
-  font-size: 1rem;
+  font-size: 0.8rem;
   font-weight: 500;
   cursor: default;
 `;
 
-function PlayItem({item}) {
+function PlayItem({item, tags}) {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -77,7 +77,7 @@ function PlayItem({item}) {
         </H2>
         <Stars />
       </InfoWrapper>
-      {item?.tag &&
+      {tags &&
       <TagWrapper>
         <Tags />
       </TagWrapper>}
