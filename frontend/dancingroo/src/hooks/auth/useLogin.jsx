@@ -19,9 +19,10 @@ const useLogin = () => {
           'Content-Type': 'application/json',
         },
       })
+      if (!response.ok) throw new Error(`HTTP error: ${response.status}`)
       // [변경점] 기존의 response.data가 json이라고 생각하면 됨.
       const json = await response.json();
-      // console.log(json)
+      console.log(json)
       setData(json)
       const { accessToken, isUser } = json.data;
       console.log(accessToken, isUser)

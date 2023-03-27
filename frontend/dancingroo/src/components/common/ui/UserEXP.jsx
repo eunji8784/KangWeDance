@@ -77,7 +77,7 @@ const AnimatedUserLevel = styled(UserLevel)`
   scale: 1.15;
 `;
 
-function UserEXP({userLevel,startEXP, endEXP, totalLevelEXP, nextLevelEXP}) {
+function UserEXP({userLevel, startEXP, endEXP, totalLevelEXP, nextLevelEXP}) {
   const [expPercent, setExpPercent] = useState(startEXP ? startEXP / totalLevelEXP * 100 : 0);
   const [nextExpPercent, setNextExpPercent] = useState(0)
   const [level, setLevel] = useState(userLevel)
@@ -86,8 +86,9 @@ function UserEXP({userLevel,startEXP, endEXP, totalLevelEXP, nextLevelEXP}) {
 
   useEffect(() => {
     const percent = (endEXP / totalLevelEXP) * 100;
-    setExpPercent(percent > 100 ? 100 : percent);
-
+    setTimeout(() => {
+      setExpPercent(percent > 100 ? 100 : percent);
+    }, 500);
     if (totalLevelEXP <= endEXP) {
       setTimeout(() => {
         setShowLevelUp(true);
@@ -108,7 +109,7 @@ function UserEXP({userLevel,startEXP, endEXP, totalLevelEXP, nextLevelEXP}) {
     let intervalId;
     const aimedExp = showLevelUp ? (endEXP - totalLevelEXP) : Math.min(endEXP, totalLevelEXP)
     const difference = aimedExp - (showLevelUp ? 0 : currentExp)
-    const increment = parseInt(difference / 100);
+    const increment = difference / 100;
     let currentValue = showLevelUp ? 0 : currentExp;
     intervalId = setInterval(() => {
       if (currentValue + increment >= aimedExp) {
@@ -116,7 +117,7 @@ function UserEXP({userLevel,startEXP, endEXP, totalLevelEXP, nextLevelEXP}) {
         clearInterval(intervalId);
       } else {
         currentValue += increment;
-        setCurrentExp(currentValue);
+        setCurrentExp(parseInt(currentValue));
       }
     }, showLevelUp ? 15 :25);
     return () => clearInterval(intervalId);
@@ -132,7 +133,7 @@ function UserEXP({userLevel,startEXP, endEXP, totalLevelEXP, nextLevelEXP}) {
     </>
     :
     <>
-      <ExpBar style={{ width: `${expPercent}%`}} />
+      <ExpBar style={{ width: `${expPercent}%`}} /> 
       <UserLevel>Lv {level}</UserLevel>
     </>
     }
