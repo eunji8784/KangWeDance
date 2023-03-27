@@ -29,4 +29,8 @@ public interface PlayService {
 
 	public int findExperienceScore(int childIdx) throws Exception;
 
+	public List<Integer> findChildren(int parentIdx) throws Exception;
+
+	public SongListDto findPlayRecommendation(int childIdx) throws Exception;
+
 }

@@ -17,24 +17,53 @@
 		<result column="count_delay" property="countDelay" />
 		<result column="count_standard" property="countStandard" />
 	</resultMap>
-	
 	<select id="selectSongList" resultMap="songList">
-		SELECT s.song_idx, s.play_mode, s.title, s.thumbnail_url, s.video_url, s.preview_music_url,
-			   m.motion_tag, s.difficulty, s.calorie_consumption 
-		FROM songList s
-		LEFT JOIN motionType m
-		ON s.motion_type_idx = m.motion_type_idx
+		SELECT 
+		    s.song_idx,
+		    s.play_mode,
+		    s.title,
+		    s.thumbnail_url,
+		    s.video_url,
+		    s.preview_music_url,
+		    m.motion_tag,
+		    s.difficulty,
+		    s.calorie_consumption
+		FROM
+		    songList s
+		        LEFT JOIN
+		    motionType m ON s.motion_type_idx = m.motion_type_idx
 	</select>
-	
 	<select id="selectSongMotionList" parameterType="int" resultMap="songMotionList">
-		SELECT * FROM songMotion WHERE song_idx = #{songIdx}
+		SELECT 
+		    *
+		FROM
+		    songMotion
+		WHERE
+		    song_idx = #{songIdx}
 	</select>
-	
+	<select id="selectSongListByMotionTagIdx" parameterType="int" resultMap="songList">
+		SELECT 
+		    m.motion_type_idx,
+		    s.song_idx,
+		    s.play_mode,
+		    s.title,
+		    s.thumbnail_url,
+		    s.video_url,
+		    s.preview_music_url,
+		    m.motion_tag,
+		    s.difficulty,
+		    s.calorie_consumption
+		FROM
+		    songList s
+		        LEFT JOIN
+		    motionType m ON s.motion_type_idx = m.motion_type_idx
+		WHERE
+		    m.motion_type_idx = #{motionTypeIdx}
+	</select>
 	<insert id="insertPlayRecord" parameterType="PlayRequestDto">
 		INSERT INTO playRecord(child_idx, song_idx, play_mode) 
 		VALUES(#{childIdx}, #{songIdx}, #{playMode})
 	</insert>
-	
 	<insert id="insertScoreRecord" parameterType="ScoreRequestDto">
 		<selectKey resultType="int" keyProperty="playRecordIdx" order="BEFORE">
 			SELECT MAX(play_record_idx) FROM playRecord
@@ -42,7 +71,6 @@
 		INSERT INTO scoreRecord(play_record_idx, motion_type_idx, count, time, count_standard, score) 
 		VALUES(#{playRecordIdx}, #{danceIdx}, #{count}, #{time}, #{countStandard}, #{score})
 	</insert>
-	
 	<select id="selectExperienceScore" parameterType="int" resultType="int">
 		SELECT experience_score 
 		FROM parent 
@@ -50,11 +78,64 @@
 		parent_idx = 
 				(SELECT parent_idx FROM children WHERE child_idx = #{childIdx});
 	</select>
-	
 	<update id="updateExperienceScore" parameterType="int">
 		UPDATE parent SET experience_score = #{param1} 
 		WHERE 
 		parent_idx = 
 				(SELECT parent_idx FROM children WHERE child_idx = #{param2});
 	</update>
+	<select id="selectChildren" parameterType="int" resultType="int">
+		SELECT child_idx 
+		FROM children 
+		WHERE parent_idx = #{parentIdx} 
+	</select>
+	<select id="selectTag" parameterType="int" resultType="String">
+		SELECT 
+	    	m.motion_tag
+		FROM
+		    motionType m
+		        INNER JOIN
+		    (SELECT 
+		        s.motion_type_idx, SUM(s.score) AS score_sum
+		    FROM
+		        playRecord p
+		    RIGHT JOIN scoreRecord s ON p.play_record_idx = s.play_record_idx
+		    WHERE
+		        child_idx = #{childIdx}
+		    GROUP BY motion_type_idx
+		    ORDER BY score_sum
+		    LIMIT 1) AS t ON m.motion_type_idx = t.motion_type_idx
+	</select>
+	<select id="selectSongByTag" resultMap="songList">
+		SELECT 
+		    s.song_idx,
+		    s.play_mode,
+		    s.title,
+		    s.thumbnail_url,
+		    s.video_url,
+		    s.preview_music_url,
+		    m.motion_tag,
+		    s.difficulty,
+		    s.calorie_consumption
+		FROM
+		    songList s
+		        RIGHT JOIN
+		    (SELECT 
+		        motion_type_idx, motion_tag
+		    FROM
+		        (SELECT 
+		        *
+		    FROM
+		        motionType
+		    WHERE
+		        motion_type_idx BETWEEN 5 AND 9) AS t
+		    WHERE
+		        motion_tag LIKE
+		<foreach collection="array" item="arr" separator="OR motion_tag LIKE">
+				 CONCAT('%', #{arr}, '%')
+		</foreach>
+			) AS m ON s.motion_type_idx = m.motion_type_idx
+		ORDER BY RAND()
+		LIMIT 1
+	</select>
 </mapper>
