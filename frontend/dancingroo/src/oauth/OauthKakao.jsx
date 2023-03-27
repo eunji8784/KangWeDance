@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import useLogin from "../hooks/auth/useLogin";
 import { useNavigate } from "react-router-dom";
 import { Wrapper } from "../components/common/ui/Semantics";
-import { login } from "../store/userSlice";
 import { useDispatch } from "react-redux";
 
 function OauthKakao(props) {

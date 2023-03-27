@@ -132,7 +132,7 @@ function HeaderBar(props) {
         setActiveMenu(watchingPage)
     },[watchingPage])
 
-    const handleClick = ()=>{
+    const logoutHandler = ()=>{
         // 로그아웃처리하고, 카카오 로그아웃 후 홈으로 리다이렉트
         handleLogout()
         window.location.href = `https://kauth.kakao.com/oauth/logout?client_id=${API_KEY_KAKAO}&logout_redirect_uri=${LOGOUT_REDIRECT_URI}&state=logout`
@@ -152,15 +152,17 @@ function HeaderBar(props) {
                     }
                 </div>
                 <div className="user-menu">
-                    <LogOut onClick={() => {
-                            handleClick()
-                        }}>로그아웃</LogOut>
+                    {isLoggedIn &&
+                    <>
+                    <LogOut onClick={logoutHandler}>로그아웃</LogOut>
                     <div
-                        onClick={() => {
-                            navigate(`/users`);
-                        }}>   
+                    onClick={() => {
+                        navigate(`/users`);
+                    }}>   
                         <RiUserFill color="#F05475" size="2rem"/>
                     </div>
+                    </>
+                    }
                 </div>
             </BarContainer>
             <BarContainer height={70} justify={"center"} width={80}>
