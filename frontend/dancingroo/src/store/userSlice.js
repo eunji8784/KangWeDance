@@ -73,7 +73,7 @@ const userSlice = createSlice({
       state.familyname = action.payload
     },
     intoJoinPage(state, action){
-      state.addChild = !state.addChild
+      state.addChild = action.payload
       console.log('아이등록중?', state.addChild)
     },
   },

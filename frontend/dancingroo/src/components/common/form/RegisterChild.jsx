@@ -97,6 +97,7 @@ const MyButton = styled(PinkButton)`
 function RegisterChild({userPage}) {
     const selectedIdx = useSelector(state=>state.userState.select)
     const {nickname, weight, height, gender, profileImageUrl, childIdx, birthDate} = useSelector(state=>state.userState.children[selectedIdx||0]) // 디폴트는 첫째
+    const firstChildIdx = useSelector(state=>state.userState.children[0].childIdx)
     const addChild = useSelector(state=>state.userState.addChild)
     const dispatch = useDispatch()
     const navigate = useNavigate();
@@ -108,7 +109,7 @@ function RegisterChild({userPage}) {
     const fileInput = useRef(null);
 
     const onProfileUpdateSuccess = (json)=>{
-        alert('아이 프로필 업데이트 완료되었습니다.')
+        alert('아이 프로필 등록이 완료되었습니다.')
         dispatch(childSelect(0))
         navigate('/play')
     }
@@ -129,8 +130,20 @@ function RegisterChild({userPage}) {
     const uploadImg=()=>{
         fileInput.current.click()
     }
-    const handleDeleteChild = async()=>{
-        await deleteChild.fetchApi('DELETE', `/children?childIdx=${childIdx}`, onProfileUpdateSuccess)
+    const handleDeleteChild = ()=>{
+        if (window.confirm('아이 프로필 삭제하시겠습니까?')){
+            const onSuccess = ()=>{
+                alert('아이 프로필이 삭제되었습니다.')
+                if (childIdx===firstChildIdx){ // 첫째아이 삭제했으면 store에 등록된 아이프로필 지우고, 다시 조인페이지로 보냄
+                    dispatch(getChildState([{}]))
+                    navigate('/users/join')
+                } else {
+                    dispatch(childSelect(0))
+                    navigate('/play')
+                } 
+            }
+            deleteChild.fetchApi('DELETE', `/children?childIdx=${childIdx}`, onSuccess)
+        }
     }
     const SumbitChild = ()=>{
         const body = {
