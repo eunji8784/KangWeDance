@@ -19,8 +19,8 @@ public class StatusServiceImpl implements StatusService {
 	private SqlSession sqlSession;
 
 	@Override
-	public List<PlayRecordDto> findplayRecord(int childIdx) throws Exception {
-		return sqlSession.getMapper(StatusMapper.class).selectPlayRecord(childIdx);
+	public List<PlayRecordDto> findplayRecord(String date) throws Exception {
+		return sqlSession.getMapper(StatusMapper.class).selectPlayRecord(date);
 
 	}
 
