@@ -22,7 +22,7 @@ function useApi() {
         headers: {
           'Content-Type': 'application/json',
           accesstoken: cookie.accessToken,
-          Origin : `https://kangwedance.site/`
+          Origin : `*`
         },
         body: JSON.stringify(requestBody)
       });
