@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { Wrapper } from "../common/ui/Semantics";
+import React from "react";
 import styled from "styled-components";
-
+import { Wrapper } from "../common/ui/Semantics";
 
 const AlbumContainer = styled.div`
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.5rem;
-      align-items: center;
-      justify-content: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
 `
 const StickerItem = styled.div`
     height: 4rem;
