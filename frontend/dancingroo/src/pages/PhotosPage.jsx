@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Wrapper } from "../components/common/ui/Semantics";
 
@@ -8,8 +7,8 @@ import FrameList from "../components/photos/FrameList";
 import PhotoList from "../components/photos/PhotoList";
 import StickerList from "../components/photos/StickerList";
 import RightArea from "../components/photos/RightArea";
-
 import useApi from "../hooks/auth/useApi"
+
 
 const PhotosSection = styled(Wrapper)`
     flex-direction: row;
@@ -30,11 +29,12 @@ const SideSection = styled(Wrapper)`
     /* overflow: scroll; */
 `
 
-function PhotosPage(props) {
+function PhotosPage({handleWatchingPage}) {
     const [section, setSection] = useState('gallery')
-    const [imge, setImge] = useState('https://kangwedance.s3.ap-northeast-2.amazonaws.com/photoInit.png')
+    const [image, setImage] = useState('https://kangwedance.s3.ap-northeast-2.amazonaws.com/photoInit.png')
     const [frameImage, setFrameImage] = useState('')
     const [stickerImage, setStickerImage] = useState('')
+    const [stickerNum, setStickerNum] = useState(0)
 
     const [photoList, setPhotoList] = useState([])
     const [frameList, setFrameList] = useState([])
@@ -43,8 +43,6 @@ function PhotosPage(props) {
     const photos = useApi()
     const framestickers = useApi()
 
-    const [stickerNum, setStickerNum] = useState(0)
-    const {handleWatchingPage} = props
 
     useEffect(()=>{
         handleWatchingPage('photos')
@@ -71,17 +69,16 @@ function PhotosPage(props) {
         setSection(mode)
     }
 
-    const handleImge = (imgeUrl)=>{
-        console.log(imgeUrl)
-        setImge(imgeUrl)
+    const handleImge = (imageUrl)=>{
+        setImage(imageUrl)
     }
     
-    const handleFrame = (imgeUrl)=>{
-        setFrameImage(imgeUrl)
+    const handleFrame = (imageUrl)=>{
+        setFrameImage(imageUrl)
     }
 
-    const handleSticker = (imgeUrl)=>{
-        setStickerImage(imgeUrl)
+    const handleSticker = (imageUrl)=>{
+        setStickerImage(imageUrl)
         setStickerNum(stickerNum+1)
     }
 
@@ -93,7 +90,7 @@ function PhotosPage(props) {
                 {section==='frame' && <FrameList frameList={frameList} handleFrame={handleFrame}/>}
                 {section==='sticker' && <StickerList stickerList={stickerList} handleSticker={handleSticker}/>}
             </SideSection>
-            <RightArea stickerNum={stickerNum} stickerImage={stickerImage} frameImage={frameImage} imge={imge}/>
+            <RightArea stickerNum={stickerNum} stickerImage={stickerImage} frameImage={frameImage} image={image}/>
         </PhotosSection>
     );
 }
