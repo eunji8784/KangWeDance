@@ -30,7 +30,15 @@ public interface PlayMapper {
 	public int selectExperienceScore(int childIdx) throws SQLException;
 
 	public void updateExperienceScore(int param1, int param2) throws SQLException;
-
+	
 	public List<PlayRecordForHadoop> selectPlayRecordForHadoop() throws SQLException;
+
+	public List<Integer> selectChildren(int parentIdx) throws SQLException;
+
+	public String selectTag(int childIdx) throws SQLException;
+
+	public SongListDto selectSongByTag(String[] tagList) throws SQLException;
+
+	public SongListDto selectSongListByMotionTagIdx(int motionTypeIdx) throws SQLException;
 
 }

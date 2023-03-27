@@ -115,15 +115,16 @@ public class ParentsConroller {
 	}
 	
 	@PatchMapping("/nickname")
-	public ApiResponse<?> nicknameModify(@RequestHeader("accesstoken") String accesstoken, @RequestBody String familyname){
-		try {
-			parentsService.modifyNickname(ParentsDto.builder().parentIdx(jwtUtil.getUserIdx(accesstoken)).familyname(familyname).build());
-			return ApiResponse.success(SuccessCode.UPDATE_NICKNAME);
-		} catch (Exception e) {
-			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
-		}
-		
-	}
+    public ApiResponse<?> nicknameModify(@RequestHeader("accesstoken") String accesstoken, @RequestBody ParentsDto parentsDto){
+        try {
+            parentsDto.setParentIdx(jwtUtil.getUserIdx(accesstoken));
+            parentsService.modifyNickname(parentsDto);
+            return ApiResponse.success(SuccessCode.UPDATE_NICKNAME);
+        } catch (Exception e) {
+            return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
+        }    
+    }
+
 	@GetMapping("/experience-score")
 	public ApiResponse<?> experienceDetails(@RequestHeader("accesstoken") String accesstoken){//추후 엑세스 토큰으로 대체
 		try {
