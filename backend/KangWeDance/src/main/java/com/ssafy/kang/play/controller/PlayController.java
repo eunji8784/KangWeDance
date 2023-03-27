@@ -1,5 +1,6 @@
 package com.ssafy.kang.play.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.kang.common.ErrorCode;
 import com.ssafy.kang.common.SuccessCode;
 import com.ssafy.kang.common.dto.ApiResponse;
+import com.ssafy.kang.play.model.PlayRecommendationDto;
 import com.ssafy.kang.play.model.PlayRequestDto;
 import com.ssafy.kang.play.model.PlayResultResponseDto;
 import com.ssafy.kang.play.model.SongListDto;
 import com.ssafy.kang.play.model.SongMotionDto;
 import com.ssafy.kang.play.model.service.PlayService;
+import com.ssafy.kang.util.JwtUtil;
 import com.ssafy.kang.util.LevelUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -32,7 +35,14 @@ public class PlayController {
 	@Autowired
 	PlayService playService;
 
-	private final LevelUtil levelUtil = new LevelUtil();
+	private final LevelUtil levelUtil;
+
+	private final JwtUtil jwtUtil;
+
+	public PlayController() {
+		this.jwtUtil = new JwtUtil();
+		this.levelUtil = new LevelUtil();
+	}
 
 //	| orderList() | 목록 조회 유형의 서비스 |
 //	| orderDetails() | 단 건 상세 조회 유형의 controller 메서드 |
@@ -97,6 +107,31 @@ public class PlayController {
 			return ApiResponse.success(SuccessCode.CREATE_PLAY_RESULT, playResultResponseDto);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
+		}
+	}
+
+	@GetMapping("/recommendation")
+	public ApiResponse<?> playRecommendationList(@RequestHeader("accesstoken") String accesstoken) throws Exception {
+		try {
+			int parentIdx = jwtUtil.getUserIdx(accesstoken);
+			
+			// 아이 리스트 가져오기
+			List<Integer> childList = playService.findChildren(parentIdx);
+			// 아이 별 추천 플레이 목록
+			List<PlayRecommendationDto> recommendationList = new ArrayList<>();
+			// 아이 별 추천 플레이 조회
+			for (int i = 0; i < childList.size(); i++) {
+				PlayRecommendationDto playRecommendationDto = new PlayRecommendationDto();
+				playRecommendationDto.setChildIdx(childList.get(i));
+				SongListDto songList = playService.findPlayRecommendation(childList.get(i));
+				playRecommendationDto.setRecommendationSong(songList);
+				recommendationList.add(playRecommendationDto);
+			}
+			
+			return ApiResponse.success(SuccessCode.READ_PLAY_RECOMMENDATION, recommendationList);
+		} catch (Exception e) {
+			e.printStackTrace();
 			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
 		}
 	}
