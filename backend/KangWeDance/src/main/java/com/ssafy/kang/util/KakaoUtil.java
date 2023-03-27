@@ -45,6 +45,7 @@ public class KakaoUtil {
 			bw.flush();
 			bw.close();
 			int responseCode = con.getResponseCode();
+			System.out.println("kakaoToken: "+ responseCode);
 			if (responseCode == HttpURLConnection.HTTP_OK) { // 정상 호출
 				return readBody(con.getInputStream());
 			} else { // 에러 발생
