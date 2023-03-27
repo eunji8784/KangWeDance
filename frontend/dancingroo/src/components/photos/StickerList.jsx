@@ -1,18 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { Wrapper } from "../common/ui/Semantics";
+import React from "react";
 import styled from "styled-components";
-
-import one from "../../assets/images/one.png"
-import two from "../../assets/images/two.png"
-import three from "../../assets/images/three.png"
-import four from "../../assets/images/four.png"
+import { Wrapper } from "../common/ui/Semantics";
 
 const AlbumContainer = styled.div`
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.5rem;
-      align-items: center;
-      justify-content: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
 `
 const StickerItem = styled.div`
     height: 4rem;
@@ -22,35 +17,13 @@ const StickerItem = styled.div`
     cursor: pointer;
     margin: 0.5rem;
 `;
-
-function StickerList(props) {
-    const {handleSticker} = props;
-    //더미
-    const stickers = [
-        {
-            imageUrl : one,
-        },
-        {
-            imageUrl : two,
-        },
-        {
-            imageUrl : three,
-        }
-        ,
-        {
-            imageUrl : four,
-        }
-    ]
-
-    const handleClick = (imge) => {
-        handleSticker(imge);   
-    };
-
+//  console.log(imgUrl)
+function StickerList({handleSticker, stickerList}) {
     return (
         <Wrapper>
             <AlbumContainer>
-                {stickers.map((sticker, index) => {
-                    return <StickerItem key={index} imageUrl={sticker.imageUrl}  onClick={()=>handleClick(sticker.imageUrl)}/>;
+                {stickerList?.map((sticker, index) => {
+                    return <StickerItem key={index} imageUrl={sticker.frameURL} onClick={()=>handleSticker(sticker.frameURL)}/>;
                 })}
             </AlbumContainer>
         </Wrapper>

@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from "react"
+import { useSelector } from "react-redux"
 import styled from "styled-components"
-// import axios from "axios"
 import Webcam from "react-webcam"
 import PauseModal from "./PauseModal"
 import PlayResult from "./PlayResult"
@@ -8,25 +8,27 @@ import Feedback from "./Feedback"
 import { Overlay } from "../common/ui/Semantics"
 import { ModalBtn } from "../status/HealthData"
 import { useInterval } from "../../hooks/useInterval"
+import useApi from "../../hooks/auth/useApi"
 import bgImg from "../../assets/images/bgImg.png"
 
 const tmPose = window.tmPose
 const MODELURL =
-  "https://teachablemachine.withgoogle.com/models/7g9Z9_ogC/model.json"
+"https://teachablemachine.withgoogle.com/models/7g9Z9_ogC/model.json"
 const METADATAURL =
   "https://teachablemachine.withgoogle.com/models/7g9Z9_ogC/metadata.json"
-
+let scoreRecordList = []
+  
 const Screen = styled.div`
   width: 100vw;
   height: 100vh;
   overflow: hidden;
   position: relative;
-  .small {   // 반대로 바꿔야함
+  .big {
     width: 100vw;
     height: 100vh;
     overflow: hidden;
   }
-  .big {
+  .small {
     position: absolute;
     bottom: 0;
     right: 0;
@@ -49,20 +51,25 @@ const MyOverlay = styled(Overlay)`
   top: 0;
   left: 0;
   justify-content: normal;
-  .exit {
+  .button {
+    display: flex;
+    flex-direction: row;
     position: absolute;
     right: 1rem;
     top: 0;
   }
-`
+  `
 
-function DanceMode(props) {
+function DanceMode() {
+  const stageItem = useSelector((state) => state.stage.stageItem)
+  const children = useSelector((state) => state.userState.children)
+  const select = useSelector((state) => state.userState.select)
+
   const [camfocus, setCamfocus] = useState(false)
   const [model, setModel] = useState(null)
   const [aimedPosture, setAimedPosture] = useState(null)
-  const [prevPosture, setPrevPosture] = useState(-1)
+  const [prevPosture, setPrevPosture] = useState(10)
   const [count, setCount] = useState(0)
-  const [showResult, setShowResult] = useState(false)
   const [showGreat, setShowGreat] = useState(false)
   const [showGood, setShowGood] = useState(false)
   const [showCheerUp, setShowCheerUp] = useState(false)
@@ -70,117 +77,26 @@ function DanceMode(props) {
   const camref = useRef(null)
   const videoref = useRef(null)
   
-  const danceTimeline = 
-  [
-    {
-      danceIndex: 2, 
-      startTime: 7,
-      endTime: 14,
-      accuracy: 0.95,
-      countDelay: 100,
-      countStandard: 10,
-    },
-    {
-      danceIndex: 3,
-      startTime: 15,
-      endTime: 23,
-      accuracy: 0.95,
-      countDelay: 100,
-      countStandard: 10,
-    },
-    {
-      danceIndex: 3,
-      startTime: 23,
-      endTime: 30,
-      accuracy: 0.95,
-      countDelay: 100,
-      countStandard: 10,
-    },
-    {
-      danceIndex: 1,
-      startTime: 30,
-      endTime: 34,
-      accuracy: 0.95,
-      countDelay: 100,
-      countStandard: 10,
-    },
-    {
-      danceIndex: 3,
-      startTime: 34,
-      endTime: 42,
-      accuracy: 0.95,
-      countDelay: 100,
-      countStandard: 10,
-    },
-    {
-      danceIndex: 3,
-      startTime: 42,
-      endTime: 49,
-      accuracy: 0.95,
-      countDelay: 100,
-      countStandard: 10,
-    },
-    {
-      danceIndex: 0,
-      startTime: 49,
-      endTime: 56,
-      accuracy: 0.95,
-      countDelay: 100,
-      countStandard: 10,
-    },
-    {
-      danceIndex: 3,
-      startTime: 56,
-      endTime: 63,
-      accuracy: 0.95,
-      countDelay: 100,
-      countStandard: 10,
-    },
-    {
-      danceIndex: 3,
-      startTime: 63,
-      endTime: 71,
-      accuracy: 0.95,
-      countDelay: 100,
-      countStandard: 10,
-    },
-    {
-      danceIndex: 1,
-      startTime: 71,
-      endTime: 79,
-      accuracy: 0.95,
-      countDelay: 100,
-      countStandard: 10,
-    },
-    {
-      danceIndex: 2,
-      startTime: 79,
-      endTime: 87,
-      accuracy: 0.95,
-      countDelay: 100,
-      countStandard: 10,
-    }
-  ]
+  const danceTimeline = stageItem.songMotionList
 
-  // 처음에 모델 불러오기 + 동영상 N초 뒤에 자동 시작 (5000 = 5초)
+  const {data, isLoading, error, fetchApi:playRecordListApi} = useApi()
+
+  // 처음에 모델 불러오기
   useEffect(() => {
     settingModel()
-    const video = videoref.current
-    const timeoutId = setTimeout(() => {
-      video.play()
-      console.log("PLAY")
-    }, 5000)
-    return () => clearTimeout(timeoutId)
   }, [])
   
   // 자세 변경에 따라 카운트 올리기
   useInterval(
     () => {
-      setCount((count) => count + 1)
+      if (!isModalOpen) {
+        setCount((count) => count + 1)
+      }
     },
-    (prevPosture !== -1 && aimedPosture) ? aimedPosture?.countDelay : null
+    (prevPosture !== 10 && aimedPosture) ? aimedPosture?.countDelay : null
   )
-
+  
+  // 60fps로 predict 함수 돌리기
   useInterval(
     () => {
       predict()
@@ -190,12 +106,12 @@ function DanceMode(props) {
 
   // 모달 열기/닫기 함수
   const handleIsModalOpen = () => {
-      setIsModalOpen((prev)=>!prev)
-      if (!isModalOpen) {
-        videoref.current.pause()
-      } else {
-        videoref.current.play()
-      }
+    if (!isModalOpen) {
+      videoref.current.pause()
+    } else {
+      videoref.current.play()
+    }
+    setIsModalOpen((prev)=>!prev)
   }
 
   // 모델 불러오기 함수
@@ -205,26 +121,26 @@ function DanceMode(props) {
     console.log("MODEL LOADED")
   }
 
-  // 예측 함수 - 자세 상태(prevPosture)를 바꿈
+  // 예측 함수 - 캠에 따라 자세 상태(prevPosture)를 바꿈
   const predict = async function () {
-    if (!model || !aimedPosture) {
+    if (!model || !aimedPosture || isModalOpen) {
       return
     }
     const { pose, posenetOutput } = await model.estimatePose(
       camref.current.video
     )
     const prediction = await model.predict(posenetOutput)
-    const rtPosture = prediction[aimedPosture.danceIndex]
+    const rtPosture = prediction[aimedPosture.danceIndex-1]
     setPrevPosture((prevPosture) => {
       if (
         rtPosture.probability.toFixed(2) > aimedPosture.accuracy &&
-        prevPosture === aimedPosture.danceIndex
+        prevPosture === aimedPosture.danceIndex-1
       ) {
         return prevPosture
       } else if (rtPosture.probability.toFixed(2) > aimedPosture.accuracy) {
-        return aimedPosture.danceIndex
+        return aimedPosture.danceIndex-1
       } else {
-        return -1
+        return 10
       }
     })
   }
@@ -239,6 +155,14 @@ function DanceMode(props) {
         e.endTime > currentTime
     );
     if (filteredTimeline?.startTime !== aimedPosture?.startTime) {
+      if (aimedPosture) {
+        let scoreRecord = {}
+        scoreRecord.danceIndex = aimedPosture.danceIndex
+        scoreRecord.count = count
+        scoreRecord.time = aimedPosture.endTime - aimedPosture.startTime
+        scoreRecord.countStandard = aimedPosture.countStandard
+        scoreRecordList = [...scoreRecordList, scoreRecord]
+      }
       setAimedPosture(filteredTimeline)
       setCount(0)
     }
@@ -265,34 +189,51 @@ function DanceMode(props) {
 
   // test
   const replay = () => {
-    videoref.current.currentTime = 90
+    videoref.current.currentTime = videoref.current.duration - 1
     videoref.current.play()
   }
 
-  //test
-  const openGreatFeedback = () => {
-    setShowGreat(true)
-    setTimeout(() => setShowGreat(false), 3000)
-  }
+  // //test
+  // const openGreatFeedback = () => {
+  //   setShowGreat(true)
+  //   setTimeout(() => setShowGreat(false), 3000)
+  // }
+
+  // //test
+  // const openGoodFeedback = () => {
+  //   setShowGood(true)
+  //   setTimeout(() => setShowGood(false), 3000)
+  // }
+
+  // //test
+  // const openCheerupFeedback = () => {
+  //   setShowCheerUp(true)
+  //   setTimeout(() => setShowCheerUp(false), 3000)
+  // }
 
   //test
-  const openGoodFeedback = () => {
-    setShowGood(true)
-    setTimeout(() => setShowGood(false), 3000)
+  const plusCount = () => {
+    setCount((prev)=>prev+1)
   }
 
-  //test
-  const openCheerupFeedback = () => {
-    setShowCheerUp(true)
-    setTimeout(() => setShowCheerUp(false), 3000)
-  }
+  useEffect(() => {
+    if (scoreRecordList.length === danceTimeline.length) {
+      const playData = {
+        childIdx: children[select].childIdx,
+        songIdx: stageItem.songIdx,
+        playMode: stageItem.playMode,
+        scoreRecordList: scoreRecordList,
+      }
+      playRecordListApi('POST', '/play', playData)
+    }
+  },[scoreRecordList])
 
   return (
     <Screen>
       <img className="background-img" src={bgImg} alt="background" />
-      {showResult ? 
+      {!isLoading ? 
       <>
-        <PlayResult/>
+        <PlayResult data={data.data} playMode={stageItem.playMode}/>
       </>
       :
       <>
@@ -303,13 +244,16 @@ function DanceMode(props) {
         />
         <MyOverlay>
           <Feedback showGreat={showGreat} showGood={showGood} showCheerUp={showCheerUp}/>
-          <ModalBtn className="exit" onClick={handleIsModalOpen}>나가기</ModalBtn>
-          <div className="test">
-            <ModalBtn onClick={openGreatFeedback}>Great</ModalBtn>
-            <ModalBtn onClick={openGoodFeedback}>Good</ModalBtn>
-            <ModalBtn onClick={openCheerupFeedback}>Cheer Up</ModalBtn>
-            <ModalBtn onClick={replay}>종료 전으로 가기</ModalBtn>
+          <div className="button">
             <ModalBtn onClick={switchVideo}>화면 전환</ModalBtn>
+            <ModalBtn onClick={handleIsModalOpen}>나가기</ModalBtn>
+          </div>
+          <div className="test">
+            <ModalBtn onClick={plusCount}>Count +1</ModalBtn>
+            {/* <ModalBtn onClick={openGreatFeedback}>Great</ModalBtn>
+            <ModalBtn onClick={openGoodFeedback}>Good</ModalBtn>
+            <ModalBtn onClick={openCheerupFeedback}>Cheer Up</ModalBtn> */}
+            <ModalBtn onClick={replay}>종료 전으로 가기</ModalBtn>
             <h1>
               평가자세 : {aimedPosture?.danceIndex || "X"}
             </h1>          
@@ -324,9 +268,9 @@ function DanceMode(props) {
         <video
           className={camfocus ? "small" : "big"}
           ref={videoref}
-          src="https://kangwedance.s3.ap-northeast-2.amazonaws.com/%EB%8F%99%EB%AC%BC+%ED%94%BD%EC%8A%A4.mp4"
+          src={stageItem.videoUrl !== 'url' ? stageItem.videoUrl : `https://kangwedance.s3.ap-northeast-2.amazonaws.com/%EB%8F%99%EB%AC%BC.MOV`} // 빼기
+          onCanPlayThrough={()=>videoref.current.play()}
           onTimeUpdate={handleTimeUpdate}
-          onEnded={()=>setShowResult(true)}
         />
         <PauseModal handleIsModalOpen={handleIsModalOpen} isOpen={isModalOpen} />
       </>
