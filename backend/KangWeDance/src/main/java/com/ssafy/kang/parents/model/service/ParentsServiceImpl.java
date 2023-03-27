@@ -106,8 +106,6 @@ public class ParentsServiceImpl implements ParentsService {
         Map<String, Object> obj = gson.fromJson(responseBody, Map.class);
         Map<String, Object> naver_account = gson.fromJson(obj.get("response").toString(), Map.class);
 		result.put("id", naver_account.get("id").toString());
-		result.put("nickname", naver_account.get("nickname").toString());
-
         return result;
 	}
 	@Override
