@@ -16,7 +16,7 @@ public interface StatusService {
 //	| saveOrder() | 등록/수정/삭제 가 동시에 일어나는 유형의 service 메서드 |
 
 	// 아이별 운동 기록 조회
-	public List<PlayRecordDto> findplayRecord(int childIdx) throws Exception;
+	public List<PlayRecordDto> findplayRecord(String date) throws Exception;
 
 	public List<FoodsDto> findFoodList(String word) throws Exception;
 

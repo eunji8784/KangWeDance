@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ssafy.kang.play.model.PlayRecordForHadoop;
 import com.ssafy.kang.play.model.PlayRequestDto;
 import com.ssafy.kang.play.model.ScoreRequestDto;
 import com.ssafy.kang.play.model.SongListDto;

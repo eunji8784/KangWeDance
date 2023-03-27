@@ -5,6 +5,7 @@
 	<resultMap type="PlayRecordDto" id="playRecordList">
 		<result column="calorie_consumption" property="burnedCalories" />
 		<result column="score" property="score" />
+		<result column="child_idx" property="childIdx" />
 		<result column="title" property="title" />
 		<result column="record_date" property="recordDate" />
 	</resultMap>
@@ -14,7 +15,7 @@
 		<result column="category" property="category" />
 	</resultMap>
 	
-	<select id="selectPlayRecord" parameterType="int" resultMap="playRecordList" >
+	<select id="selectPlayRecord" parameterType="String" resultMap="playRecordList" >
 		<!--
 			동작별 점수 총합 ->score
 			칼로리 소모량
@@ -22,11 +23,11 @@
 			기록날짜
 		 -->
 		 
-		SELECT  tmp1.calorie_consumption, tmp1.title, tmp1.record_date, tmp2.score
+	SELECT tmp1.child_idx,tmp1.calorie_consumption, tmp1.title, tmp1.record_date, tmp2.score
 		FROM 
-		 (SELECT s.song_idx, s.calorie_consumption, s.title, p.record_date, p.play_record_idx
+		 (SELECT s.song_idx, s.calorie_consumption, s.title, p.record_date, p.play_record_idx, p.child_idx
 			FROM songList s join playRecord p ON s.song_idx=p.song_idx
-   			WHERE p.child_idx=#{childIdx}
+   			WHERE p.record_date LIKE CONCAT(#{date}, '%')
     	  )as tmp1
 		
 		LEFT JOIN

@@ -34,6 +34,7 @@
 			        photo_idx, photo_image_url, create_date, photo_name
 						FROM photoAlbum,(select @rownum:=0) rn
 						WHERE parent_idx=#{parentIdx}
+						order by photo_idx desc
 			        ) as a
 			    WHERE rnum >(#{pageNum}-1)*10  and rnum <=(#{pageNum}*10);
     		 ]]>
@@ -49,7 +50,7 @@
 	<!-- 사진 삭제  -->
 	<delete id="deletePhoto" parameterType="int">
 	   	DELETE FROM photoAlbum
-	   	WHERE parent_idx=#{photoIdx};
+	   	WHERE photo_idx=#{photoIdx};
    </delete>
    
    <!-- 사진 리스트 카운드 -->
