@@ -50,12 +50,12 @@ public class PlayServiceImpl implements PlayService {
 	public void modifyExperienceScore(int param1, int param2) throws Exception {
 		sqlSession.getMapper(PlayMapper.class).updateExperienceScore(param1, param2);
 	}
-	
+
 	@Override
 	public List<PlayRecordForHadoop> findplayRecordForHadoop() throws Exception {
 		return sqlSession.getMapper(PlayMapper.class).selectPlayRecordForHadoop();
 	}
-	
+
 	@Override
 	public List<Integer> findChildren(int parentIdx) throws Exception {
 		return sqlSession.getMapper(PlayMapper.class).selectChildren(parentIdx);
@@ -68,17 +68,13 @@ public class PlayServiceImpl implements PlayService {
 		if (tag == null) {
 			int motionTypeIdx = (int) ((Math.random() * 5) + 4);
 			songList = sqlSession.getMapper(PlayMapper.class).selectSongListByMotionTagIdx(motionTypeIdx);
-			List<SongMotionDto> SongMotionList = sqlSession.getMapper(PlayMapper.class)
-					.selectSongMotionList(songList.getSongIdx());
-			songList.setSongMotionList(SongMotionList);
 		} else {
 			String[] tagList = tag.substring(1).split("#");
 			songList = sqlSession.getMapper(PlayMapper.class).selectSongByTag(tagList);
-			List<SongMotionDto> SongMotionList = sqlSession.getMapper(PlayMapper.class)
-					.selectSongMotionList(songList.getSongIdx());
-			songList.setSongMotionList(SongMotionList);
-
 		}
+		List<SongMotionDto> SongMotionList = sqlSession.getMapper(PlayMapper.class)
+				.selectSongMotionList(songList.getSongIdx());
+		songList.setSongMotionList(SongMotionList);
 		return songList;
 	}
 
