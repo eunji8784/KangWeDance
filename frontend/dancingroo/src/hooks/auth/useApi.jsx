@@ -26,6 +26,7 @@ function useApi() {
         },
         body: JSON.stringify(requestBody)
       });
+      console.log('리퀘스트 바디(json) : ', JSON.stringify(requestBody))
       if (!response.ok) throw new Error(`HTTP error: ${response.status}`)
       const json = await response.json();
       console.log(json)
