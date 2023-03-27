@@ -3,7 +3,8 @@ import React
 from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
+import { childSelect } from "../../../store/userSlice";
 //logo
 import logo from "../../../assets/images/logo.png"
 import {RiUserFill} from "react-icons/ri";
@@ -77,6 +78,7 @@ const LogOut = styled.div`
 
 function HeaderBar(props) {
     const navigate = useNavigate();
+    const dispatch = useDispatch()
     const isLoggedIn = useSelector(state=>state.userState.isLoggedIn);
     const familyname = useSelector(state=>state.userState.familyname)
 
@@ -84,6 +86,7 @@ function HeaderBar(props) {
         <Wrapper>
             <BarContainer height={100} justify={"space-between"} width={100}>
                 <Logo onClick={() => {
+                    dispatch(childSelect(0))
                     navigate("/play");
                 }}
                     />
