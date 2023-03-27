@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.kang.common.ErrorCode;
@@ -36,12 +35,11 @@ public class StatusController {
 	StatusService statusService;
 	UnicodeKorean unicodeKorean = new UnicodeKorean();
 
-	@GetMapping("/play-record")
-	public ApiResponse<?> playRecordDetails(@RequestParam("childIdx") int childIdx,
+	@GetMapping("/play-record/{date}")
+	public ApiResponse<?> playRecordDetails(@PathVariable("date") String date,
 			@RequestHeader("accesstoken") String accesstoken) throws Exception {
 		try {
-			// 임시값 -> 토큰 구현전까지만 이렇게 사용
-			List<PlayRecordDto> playRecordDto = statusService.findplayRecord(childIdx);
+			List<PlayRecordDto> playRecordDto = statusService.findplayRecord(date);
 			return ApiResponse.success(SuccessCode.READ_PLAYRECORD_LIST, playRecordDto);
 		} catch (Exception e) {
 			e.printStackTrace();
