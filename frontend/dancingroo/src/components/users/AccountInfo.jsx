@@ -73,7 +73,7 @@ function AccountInfo(props) {
             const onSuccess = ()=>{
                 dispatch(editFamilyname(newFamilyname))
             }
-            patchFamilyname.fetchApi('PATCH', '/parents/nickname', {nickname:newFamilyname}, onSuccess) // [2]. 4개 인자 모두 사용한 경우
+            patchFamilyname.fetchApi('PATCH', '/parents/nickname', {familyname:newFamilyname}, onSuccess) // [2]. 4개 인자 모두 사용한 경우
         }
     }
     const handleInputChange = (e) => {
