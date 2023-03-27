@@ -43,7 +43,7 @@ function FrameList({handleFrame, frameList}) {
             <MdDoNotDisturb color="#F05475" style={{margin:'1rem'}} size="30" onClick={()=>handleFrame()}/>
             {frameList.map((frame, key) => {
                 return ( frame.unLock ?
-                    <FrameItem key={key} imageUrl={frame.frameURL} onClick={()=>handleFrame(frame.frameURL)}/>
+                    <FrameItem key={key} imageUrl={frame.frameURL} onClick={()=>handleFrame(`https://d6jyvlc4duh9a.cloudfront.net/` + frame.frameURL.substr(52 , frame.frameURL.length))}/>
                     :
                     <LockFrameItem key={key} imageUrl={frame.frameURL}>
                         <Gary>

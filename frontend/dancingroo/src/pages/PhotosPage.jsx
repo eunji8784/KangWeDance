@@ -31,13 +31,14 @@ const SideSection = styled(Wrapper)`
 
 function PhotosPage({handleWatchingPage}) {
     const [section, setSection] = useState('gallery')
-    const [image, setImage] = useState('https://kangwedance.s3.ap-northeast-2.amazonaws.com/photoInit.png')
+    const [image, setImage] = useState('https://d6jyvlc4duh9a.cloudfront.net/photoInit.png')
     const [frameImage, setFrameImage] = useState('')
     const [stickerImage, setStickerImage] = useState('')
     const [stickerNum, setStickerNum] = useState(0)
 
     const [photoList, setPhotoList] = useState([])
     const [frameList, setFrameList] = useState([])
+
     const [stickerList, setStickerList] = useState([])
 
     const photos = useApi()
