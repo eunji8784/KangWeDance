@@ -27,6 +27,7 @@ public class PhotosServiceImpl implements PhotosService {
 	@Override
 	public void addUpdate(MultipartFile multipartFile) throws Exception {
 		FileDto fileDto = FileDto.multipartOf(multipartFile);
+		System.out.println(fileDto.getPath());
 		String url = amazonS3ResourceStorage.getUrl(fileDto.getPath(), multipartFile);
 
 		PhotosDto photosDto = new PhotosDto();
