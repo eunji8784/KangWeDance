@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import DanceMode from "../components/stage/DanceMode";
 import CountMode from "../components/stage/CountMode";
+import Timemode from "../components/stage/TimeMode";
 
 const Wrapper = styled.div`
     display: flex;
@@ -17,6 +18,7 @@ function StagePage() {
         <Wrapper>
           {params.modeId === "0" && <DanceMode/>}
           {params.modeId === "1" && <CountMode/>}
+          {params.modeId === "2" && <Timemode/>}
         </Wrapper>
     );
 }
