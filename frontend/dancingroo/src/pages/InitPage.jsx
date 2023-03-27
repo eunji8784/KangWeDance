@@ -67,8 +67,7 @@ function InitPage(props) {
     // 네이버
     const API_KEY_NAVER = process.env.REACT_APP_API_KEY_NAVER
     const STATE_TOKEN = process.env.REACT_APP_STATE_TOKEN 
-    const OAUTH_NAVER = `https://nid.naver.com/oauth2.0/authorize?client_id=${API_KEY_NAVER}&response_type=code&redirect_uri=${REDIRECT_URI+'naver'}&state=${STATE_TOKEN}`
-    console.log(REDIRECT_URI+'kakao')
+    const OAUTH_NAVER = `https://nid.naver.com/oauth2.0/authorize?client_id=${API_KEY_NAVER}&response_type=code&redirect_uri=${REDIRECT_URI_SITE+'naver'}&state=${STATE_TOKEN}`
     return (
         <Wrapper>
           <img src={bigLogo} alt=""/>
