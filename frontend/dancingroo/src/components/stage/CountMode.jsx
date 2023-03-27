@@ -113,19 +113,19 @@ function CountMode() {
 
   // 모달 열기/닫기 함수 -> time 따로 만들어서 저장후 다시 돌리기
   const handleIsModalOpen = () => {
-    setIsModalOpen((prev)=>!prev)
     if (!afterDirection) {
       if (!isModalOpen) {
         videoref.current.pause()
       } else {
         videoref.current.play()
       }
+      setIsModalOpen((prev)=>!prev)
     }
   }
 
   // 예측 함수 - 캠에 따라 자세 상태(prevPosture)를 바꿈
   const predict = async function () {
-    if (!model || !aimedPosture || !isModalOpen) {
+    if (!model || !aimedPosture || isModalOpen) {
       return
     }
     const { pose, posenetOutput } = await model.estimatePose(
@@ -284,7 +284,7 @@ function CountMode() {
         <video
           className={camfocus ? "small" : "big"}
           ref={videoref}
-          src={stageItem.videoUrl || `https://kangwedance.s3.ap-northeast-2.amazonaws.com/%EB%8F%99%EB%AC%BC+%ED%94%BD%EC%8A%A4.mp4`} //빼기
+          src={stageItem?.videoUrl || `https://kangwedance.s3.ap-northeast-2.amazonaws.com/%EB%8F%99%EB%AC%BC.MOV`} //빼기
           onCanPlayThrough={()=>videoref.current.play()}
           onEnded={handleAfterDirection}
         />}
