@@ -149,6 +149,10 @@ public class ParentsServiceImpl implements ParentsService {
 	public ParentsDto findUser(int userIdx) throws Exception{
 		return parentsMapper.selectUser(userIdx);
 	}
+	@Override
+	public void getNaverLogout(String accessToken) throws Exception {
+		naverUtil.logout(accessToken);
+	}
 
 
 	
