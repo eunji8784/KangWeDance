@@ -41,11 +41,10 @@ function PhotoItem({imgUrl, newDay, date, handleImge, photoIdx}) {
         deletephoto.fetchApi('DELETE', `/photos/${photoIdx}`);
     }
 
-    console.log(imgUrl)
     return (
         <>
             {newDay && <DateText>{date}</DateText>}
-            <Photo imgUrl={imgUrl} onClick={()=>handleImge(`https://d6jyvlc4duh9a.cloudfront.net/` + imgUrl.substr(52 , imgUrl.length))}>
+            <Photo imgUrl={imgUrl} onClick={()=>handleImge(imgUrl)}>
                 <Back>
                     <TiDelete color="black" size="25" onClick={()=>deletePhoto(photoIdx)}/>
                 </Back>
