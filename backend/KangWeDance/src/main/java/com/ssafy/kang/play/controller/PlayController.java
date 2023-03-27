@@ -81,9 +81,13 @@ public class PlayController {
 			// 동작별 점수 기록 등록
 
 			int scoreTotal = 0; // 총점
+			int songMotionTotal = playRequestDto.getScoreRecordList().size(); // 모션 총 개수
+
 			for (int i = 0; i < playRequestDto.getScoreRecordList().size(); i++) {
-				// FIXME: 점수 계산 필요
-				int score = playRequestDto.getScoreRecordList().get(i).getCount();
+				// 점수 계산
+				int count = playRequestDto.getScoreRecordList().get(i).getCount();
+				int countStandard = playRequestDto.getScoreRecordList().get(i).getCountStandard();
+				int score = Math.min(count, countStandard) / countStandard;
 				// 동작별 점수를 계산해서 Dto에 세팅한다.
 				playRequestDto.getScoreRecordList().get(i).setScore(score);
 
@@ -96,11 +100,14 @@ public class PlayController {
 			int childIdx = playRequestDto.getChildIdx();
 			// 현재 경험치 조회
 			int experienceScore = playService.findExperienceScore(childIdx);
-			// 경험치에 총점을 더한다.
-			experienceScore += scoreTotal;
+			// 경험치에 총점 X 2를 더한다.
+			experienceScore += (scoreTotal * 2);
 			// 경험치를 업데이트한다.
 			playService.modifyExperienceScore(experienceScore, childIdx);
 
+			// 총점을 백점 만점으로 환산한다.
+			scoreTotal = Math.round(scoreTotal * (100 / songMotionTotal));
+					
 			PlayResultResponseDto playResultResponseDto = new PlayResultResponseDto(experienceScore, scoreTotal,
 					levelUtil.getLevel(experienceScore));
 
