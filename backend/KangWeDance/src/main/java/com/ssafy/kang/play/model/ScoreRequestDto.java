@@ -13,7 +13,7 @@ import lombok.ToString;
 @NoArgsConstructor
 public class ScoreRequestDto {
 	int playRecordIdx;
-	int danceIdx;
+	int danceIndex;
 	int count;
 	int time;
 	int countStandard;
