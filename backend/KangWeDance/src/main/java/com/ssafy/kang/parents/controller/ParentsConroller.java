@@ -153,9 +153,9 @@ public class ParentsConroller {
 			if(dto.getSocialPlatform().equals("Kakao")) {
 				parentsService.kakaoLogout(dto.getAccessToken());
 			}else if(dto.getSocialPlatform().equals("Naver")) {
-				
+				parentsService.getNaverLogout(dto.getAccessToken());
 			}
-			return ApiResponse.success(SuccessCode.LOGOUT);
+			return ApiResponse.success(SuccessCode.LOGOUT,dto.getSocialPlatform());
 		} catch (Exception e) {
 			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
 		}
