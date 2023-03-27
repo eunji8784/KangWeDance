@@ -29,6 +29,8 @@ public interface PlayService {
 	public void modifyExperienceScore(int experienceScore, int childIdx) throws Exception;
 
 	public int findExperienceScore(int childIdx) throws Exception;
+	
+	public List<PlayRecordForHadoop> findplayRecordForHadoop() throws Exception;
 
 	public List<Integer> findChildren(int parentIdx) throws Exception;
 
