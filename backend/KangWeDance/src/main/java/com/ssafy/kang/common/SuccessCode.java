@@ -26,6 +26,7 @@ public enum SuccessCode {
 	DELETE_PHOTO(SUCCESS, "사진 삭제하기 성공"), SHARE_PHOTO(SUCCESS, "사진 공유 URI 생성 성공"),
 	// play
 	READ_PLAY_LIST(SUCCESS, "플레이 목록 조회 성공"), CREATE_PLAY_RESULT(SUCCESS, "플레이 결과 등록 성공"),
+	READ_PLAY_RECOMMENDATION(SUCCESS, "추천 플레이 조회 성공"),
 	// status
 	READ_PLAYRECORD_LIST(SUCCESS, "운동 기록 조회 성공"), READ_FOOD_LIST(SUCCESS, "음식 검색 성공"),
 
