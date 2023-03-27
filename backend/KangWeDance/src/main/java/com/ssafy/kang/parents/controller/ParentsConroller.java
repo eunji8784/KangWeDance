@@ -47,10 +47,12 @@ public class ParentsConroller {
 			dto.setAccessToken(token.get("access_token"));
 			userIO = parentsService.getUserInfo(dto.getAccessToken());
 			dto.setSocailUid(userIO.get("id"));
-			dto.setSocialPlatform("Kakao");
-			dto.setFamilyname(userIO.get("nickname"));
+			String social ="Kakao";
+			String nick = "갱거루 합창단";
+			dto.setSocialPlatform(social);
+			dto.setFamilyname(nick);
 			dto = parentsService.findSocial(dto.getSocailUid());
-			return login(dto,userIO,token);
+			return login(dto,userIO,token,nick,social);
 		} catch (Exception e) {
 			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
 		}
@@ -63,21 +65,25 @@ public class ParentsConroller {
 		ParentsDto dto = new ParentsDto();
 		try {
 			token = parentsService.getNaverToken(code);
+			System.out.println(token);
 			userIO = parentsService.getNaverUserInfo(token.get("access_token"));
+			System.out.println(userIO);
 			dto.setSocailUid(userIO.get("id"));
+			String social ="Naver";
 			dto.setSocialPlatform("Naver");
-			dto.setFamilyname(userIO.get("nickname"));
+			String nick = "갱거루 합창단";
+			dto.setFamilyname(nick);
 			dto = parentsService.findSocial(dto.getSocailUid());
-			return login(dto,userIO,token);
+			return login(dto,userIO,token,nick,social);
 		} catch (Exception e) {
 			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
 		}
 	}
-	public ApiResponse<?> login(ParentsDto dto,Map<String, String> userIO,Map<String, String> token) throws Exception{
+	public ApiResponse<?> login(ParentsDto dto,Map<String, String> userIO,Map<String, String> token,String nick,String social) throws Exception{
 		Map<String, String> map = new HashMap<>();
 		String accessToken ="";
 		String isUser = "false";
-		String nickname = "";
+		String nickname = nick;
 		SuccessCode sc= null;
 		if(dto != null && !dto.isDeletedFlag()) {
 			dto.setAccessToken(token.get("access_token"));
@@ -93,8 +99,8 @@ public class ParentsConroller {
 				dto = new ParentsDto();		
 				dto.setAccessToken(token.get("access_token"));
 				dto.setSocailUid(userIO.get("id"));
-				dto.setSocialPlatform("Kakao");
-				dto.setFamilyname(userIO.get("nickname"));					
+				dto.setSocialPlatform(social);
+				dto.setFamilyname(nickname);					
 				nickname = dto.getFamilyname();
 				accessToken =  jwtUtil.createAccessToken("useridx",parentsService.addUser(dto));
 			}else {
