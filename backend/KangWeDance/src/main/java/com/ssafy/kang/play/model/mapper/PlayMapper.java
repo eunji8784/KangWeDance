@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.ssafy.kang.play.model.PlayRecordForHadoop;
 import com.ssafy.kang.play.model.PlayRequestDto;
 import com.ssafy.kang.play.model.ScoreRequestDto;
 import com.ssafy.kang.play.model.SongListDto;
@@ -27,7 +28,7 @@ public interface PlayMapper {
 	public void insertScoreRecord(ScoreRequestDto scoreRequestDto) throws SQLException;
 
 	public int selectExperienceScore(int childIdx) throws SQLException;
-	
+
 	public void updateExperienceScore(int param1, int param2) throws SQLException;
 
 	public List<Integer> selectChildren(int parentIdx) throws SQLException;
