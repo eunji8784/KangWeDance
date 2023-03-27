@@ -112,12 +112,12 @@ public class PlayController {
 	}
 
 	@GetMapping("/recommendation")
-	public ApiResponse<?> playRecommendationList() throws Exception {
+	public ApiResponse<?> playRecommendationList(@RequestHeader("accesstoken") String accesstoken) throws Exception {
 		try {
-//			int parentIdx = jwtUtil.getUserIdx(accesstoken);
+			int parentIdx = jwtUtil.getUserIdx(accesstoken);
 			
 			// 아이 리스트 가져오기
-			List<Integer> childList = playService.findChildren(5);
+			List<Integer> childList = playService.findChildren(parentIdx);
 			// 아이 별 추천 플레이 목록
 			List<PlayRecommendationDto> recommendationList = new ArrayList<>();
 			// 아이 별 추천 플레이 조회
