@@ -10,6 +10,22 @@ import java.net.URL;
 import java.util.Map;
 
 public class NaverUtil {
+	
+	public int logout(String access_token) {
+		String clientid = "GBp5LyAN_0Wl9eQyjVmb";
+		String clientSecret = "wGkyPOs6Y7";
+		String uri = "https://nid.naver.com/oauth2.0/token?grant_type=delete&"
+		+ "client_id="+clientid+"&client_secret="+clientSecret+"&access_token="+access_token
+		+"&service_provider=NAVER";
+		HttpURLConnection con = connect(uri);
+		try {
+		    con.setRequestMethod("GET");
+		    return con.getResponseCode();
+		} catch (Exception e) {
+			return 500;
+		} 
+	}
+	
     public String getInfo(String apiUrl, Map<String, String> requestHeaders){
         HttpURLConnection con = connect(apiUrl);
         try {
