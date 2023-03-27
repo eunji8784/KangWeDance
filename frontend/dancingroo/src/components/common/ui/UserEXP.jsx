@@ -109,7 +109,7 @@ function UserEXP({userLevel, startEXP, endEXP, totalLevelEXP, nextLevelEXP}) {
     let intervalId;
     const aimedExp = showLevelUp ? (endEXP - totalLevelEXP) : Math.min(endEXP, totalLevelEXP)
     const difference = aimedExp - (showLevelUp ? 0 : currentExp)
-    const increment = parseInt(difference / 100);
+    const increment = difference / 100;
     let currentValue = showLevelUp ? 0 : currentExp;
     intervalId = setInterval(() => {
       if (currentValue + increment >= aimedExp) {
@@ -117,7 +117,7 @@ function UserEXP({userLevel, startEXP, endEXP, totalLevelEXP, nextLevelEXP}) {
         clearInterval(intervalId);
       } else {
         currentValue += increment;
-        setCurrentExp(currentValue);
+        setCurrentExp(parseInt(currentValue));
       }
     }, showLevelUp ? 15 :25);
     return () => clearInterval(intervalId);

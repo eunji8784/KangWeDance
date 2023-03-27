@@ -8,6 +8,7 @@ import Feedback from "./Feedback"
 import { Overlay } from "../common/ui/Semantics"
 import { ModalBtn } from "../status/HealthData"
 import { useInterval } from "../../hooks/useInterval"
+import useApi from "../../hooks/auth/useApi"
 import bgImg from "../../assets/images/bgImg.png"
 
 const tmPose = window.tmPose
@@ -15,6 +16,7 @@ const MODELURL =
   "https://teachablemachine.withgoogle.com/models/7g9Z9_ogC/model.json"
 const METADATAURL =
   "https://teachablemachine.withgoogle.com/models/7g9Z9_ogC/metadata.json"
+let scoreRecordList = []
 
 const Screen = styled.div`
   width: 100vw;
@@ -60,13 +62,14 @@ const MyOverlay = styled(Overlay)`
 
 function CountMode() {
   const stageItem = useSelector((state) => state.stage.stageItem)
+  const children = useSelector((state) => state.userState.children)
+  const select = useSelector((state) => state.userState.select)
 
-  const [camfocus, setCamfocus] = useState(true)
+  const [camfocus, setCamfocus] = useState(false)
   const [model, setModel] = useState(null)
   const [aimedPosture, setAimedPosture] = useState(null)
   const [prevPosture, setPrevPosture] = useState(10)
   const [count, setCount] = useState(0)
-  const [showResult, setShowResult] = useState(false)
   const [showGreat, setShowGreat] = useState(false)
   const [showGood, setShowGood] = useState(false)
   const [showCheerUp, setShowCheerUp] = useState(false)
@@ -80,6 +83,8 @@ function CountMode() {
   const [playTime, setPlayTime] = useState(null)
 
   const playTimeline = stageItem.songMotionList
+
+  const {data, isLoading, error, fetchApi:playRecordListApi} = useApi()
 
   // 처음에 모델 불러오기
   useEffect(() => {
@@ -210,6 +215,14 @@ function CountMode() {
             e.endTime * 1000 > playTime
         );
         if (filteredTimeline?.startTime !== aimedPosture?.startTime) {
+          if (aimedPosture) {
+            let scoreRecord = {}
+            scoreRecord.danceIndex = aimedPosture.danceIndex
+            scoreRecord.count = count
+            scoreRecord.time = aimedPosture.endTime - aimedPosture.startTime
+            scoreRecord.countStandard = aimedPosture.countStandard
+            scoreRecordList = [...scoreRecordList, scoreRecord]
+          }
           setAimedPosture(filteredTimeline)
           setCount(0)
         }
@@ -230,20 +243,29 @@ function CountMode() {
       }
       if (playTime && playTime > playTimeline[playTimeline.length-1]?.endTime * 1000) {
         setGameStart(false)
-        setTimeout(() => {
-          setShowResult(true)
-        }, 3000);
       }
     },
     10
   )
 
+  useEffect(() => {
+    if (scoreRecordList.length === playTimeline.length) {
+      const playData = {
+        childIdx: children[select].childIdx,
+        songIdx: stageItem.songIdx,
+        playMode: stageItem.playMode,
+        scoreRecordList: scoreRecordList,
+      }
+      playRecordListApi('POST', '/play', playData)
+    }
+  },[scoreRecordList])
+
   return (
     <Screen>
       <img className="background-img" src={bgImg} alt="background" />
-      {showResult ? 
+      {!isLoading ? 
       <>
-        <PlayResult/>
+        <PlayResult data={data.data} playMode={stageItem.playMode}/>
       </>
       :
       <>
@@ -284,7 +306,7 @@ function CountMode() {
         <video
           className={camfocus ? "small" : "big"}
           ref={videoref}
-          src={stageItem?.videoUrl || `https://kangwedance.s3.ap-northeast-2.amazonaws.com/%EB%8F%99%EB%AC%BC.MOV`} //빼기
+          src={stageItem.videoUrl !== 'url' ? stageItem.videoUrl : `https://kangwedance.s3.ap-northeast-2.amazonaws.com/%EB%8F%99%EB%AC%BC.MOV`} // 빼기
           onCanPlayThrough={()=>videoref.current.play()}
           onEnded={handleAfterDirection}
         />}
