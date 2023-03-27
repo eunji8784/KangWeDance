@@ -11,6 +11,12 @@ const Wrapper = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    hr {
+        width: 100%;
+        height: 2px;
+        border: white;
+        box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+    }
 
     padding-bottom: 5rem;
 `;
@@ -29,8 +35,10 @@ function PlayPage({handleWatchingPage}) {
 
     return (
         <Wrapper>
-            <RecommendSection recommendData={recommendedData?.data}/>      
+            <RecommendSection recommendData={recommendedData?.data}/>
+            <hr />
             <DanceSection danceData={playData?.data.filter((e)=>e.playMode===0)} />
+            <hr />
             <GameSection gameData={playData?.data.filter((e)=>e.playMode!==0)} />
         </Wrapper>
     );

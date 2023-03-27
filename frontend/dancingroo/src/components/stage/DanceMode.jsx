@@ -34,11 +34,11 @@ const Screen = styled.div`
     right: 0;
     width: 400px;
   }
-  .test {
+  /* .test {
     position: absolute;
     bottom: 0;
     left: 0;
-  }
+  } */
   .background-img {
     position: absolute;
     z-index: -1;
@@ -188,10 +188,10 @@ function DanceMode() {
   }
 
   // test
-  const replay = () => {
-    videoref.current.currentTime = videoref.current.duration - 1
-    videoref.current.play()
-  }
+  // const replay = () => {
+  //   videoref.current.currentTime = videoref.current.duration - 1
+  //   videoref.current.play()
+  // }
 
   // //test
   // const openGreatFeedback = () => {
@@ -212,9 +212,9 @@ function DanceMode() {
   // }
 
   //test
-  const plusCount = () => {
-    setCount((prev)=>prev+1)
-  }
+  // const plusCount = () => {
+  //   setCount((prev)=>prev+1)
+  // }
 
   useEffect(() => {
     if (scoreRecordList.length === danceTimeline.length) {
@@ -248,11 +248,11 @@ function DanceMode() {
             <ModalBtn onClick={switchVideo}>화면 전환</ModalBtn>
             <ModalBtn onClick={handleIsModalOpen}>나가기</ModalBtn>
           </div>
-          <div className="test">
+          {/* <div className="test">
             <ModalBtn onClick={plusCount}>Count +1</ModalBtn>
-            {/* <ModalBtn onClick={openGreatFeedback}>Great</ModalBtn>
+            <ModalBtn onClick={openGreatFeedback}>Great</ModalBtn>
             <ModalBtn onClick={openGoodFeedback}>Good</ModalBtn>
-            <ModalBtn onClick={openCheerupFeedback}>Cheer Up</ModalBtn> */}
+            <ModalBtn onClick={openCheerupFeedback}>Cheer Up</ModalBtn>
             <ModalBtn onClick={replay}>종료 전으로 가기</ModalBtn>
             <h1>
               평가자세 : {aimedPosture?.danceIndex || "X"}
@@ -263,12 +263,12 @@ function DanceMode() {
             <h1>
               자세점수 : {count}
             </h1>          
-          </div>
+          </div> */}
         </MyOverlay>
         <video
           className={camfocus ? "small" : "big"}
           ref={videoref}
-          src={stageItem.videoUrl !== 'url' ? stageItem.videoUrl : `https://kangwedance.s3.ap-northeast-2.amazonaws.com/%EB%8F%99%EB%AC%BC.MOV`} // 빼기
+          src={stageItem.videoUrl !== 'url' ? stageItem.videoUrl : `https://d3qb4vbeyp8phu.cloudfront.net/%EB%8F%99%EB%AC%BC.MOV`} // 빼기
           onCanPlayThrough={()=>videoref.current.play()}
           onTimeUpdate={handleTimeUpdate}
         />
