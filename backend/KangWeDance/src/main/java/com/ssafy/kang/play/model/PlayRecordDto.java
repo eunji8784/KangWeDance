@@ -12,6 +12,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PlayRecordDto {
+	int childIdx;
 	int score; // 점수
 	int burnedCalories; // 소모 칼로리
 	String title; // 노래 제목

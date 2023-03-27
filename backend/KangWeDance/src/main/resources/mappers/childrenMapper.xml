@@ -69,6 +69,6 @@
 	<select id="selectBodyRecordForHadoop" resultMap="hadoop">
 		select *
 		from bodyRecord
-		where record_date=curdate();
+		where record_date=curdate()-1;
 	</select>
 </mapper>
