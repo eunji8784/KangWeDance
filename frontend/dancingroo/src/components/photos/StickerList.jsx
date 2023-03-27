@@ -23,7 +23,7 @@ function StickerList({handleSticker, stickerList}) {
         <Wrapper>
             <AlbumContainer>
                 {stickerList?.map((sticker, index) => {
-                    return <StickerItem key={index} imageUrl={sticker.frameURL} onClick={()=>handleSticker(sticker.frameURL)}/>;
+                    return <StickerItem key={index} imageUrl={sticker.frameURL} onClick={()=>handleSticker(`https://d6jyvlc4duh9a.cloudfront.net/` + sticker.frameURL.substr(52 , sticker.frameURL.length))}/>;
                 })}
             </AlbumContainer>
         </Wrapper>
