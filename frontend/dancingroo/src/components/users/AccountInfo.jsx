@@ -49,7 +49,7 @@ function AccountInfo(props) {
     const dispatch = useDispatch()
     const familyname = useSelector(state=>state.userState.familyname)
     const [newFamilyname, setNewFamilyname] = useState(familyname||'');
-    const [experiencePercentage, setExperiencePercentage] = useState(30);
+    const [experiencePercentage, setExperiencePercentage] = useState(0);
     const patchFamilyname = useApi()
     const getExp = useApi()
 
@@ -73,7 +73,7 @@ function AccountInfo(props) {
             const onSuccess = ()=>{
                 dispatch(editFamilyname(newFamilyname))
             }
-            patchFamilyname.fetchApi('PATCH', '/parents/nickname', {nickname:newFamilyname}, onSuccess) // [2]. 4개 인자 모두 사용한 경우
+            patchFamilyname.fetchApi('PATCH', '/parents/nickname', {familyname:newFamilyname}, onSuccess) // [2]. 4개 인자 모두 사용한 경우
         }
     }
     const handleInputChange = (e) => {

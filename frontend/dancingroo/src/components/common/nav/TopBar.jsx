@@ -1,10 +1,9 @@
-import React
-// , {useState, useRef} 
-from "react";
+import React, {useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useSelector,useDispatch } from "react-redux";
 import { childSelect } from "../../../store/userSlice";
+import useLogout from "../../../hooks/auth/useLogout";
 //logo
 import logo from "../../../assets/images/logo.png"
 import {RiUserFill} from "react-icons/ri";
@@ -81,7 +80,25 @@ function HeaderBar(props) {
     const dispatch = useDispatch()
     const isLoggedIn = useSelector(state=>state.userState.isLoggedIn);
     const familyname = useSelector(state=>state.userState.familyname)
+    const {data, isLoading, error, handleLogout} = useLogout()
+    const API_KEY_KAKAO = process.env.REACT_APP_API_KEY_KAKAO;
+    const LOGOUT_REDIRECT_URI = process.env.REACT_APP_LOGOUT_REDIRECT_URI
 
+    useEffect(()=>{
+        if (data){
+            const social = data.data
+            if (social==="Naver"){
+                window.location.href = 'https://kangwedance.site'
+            } 
+            else if (social==="Kakao"){
+                window.location.href = `https://kauth.kakao.com/oauth/logout?client_id=${API_KEY_KAKAO}&logout_redirect_uri=${LOGOUT_REDIRECT_URI}&state=logout`
+            } 
+        }
+    },[data])
+
+    const logoutHandler = ()=>{
+        handleLogout()
+    }
     return (
         <Wrapper>
             <BarContainer height={100} justify={"space-between"} width={100}>
@@ -96,15 +113,17 @@ function HeaderBar(props) {
                     }
                 </div>
                 <div className="user-menu">
-                    <LogOut onClick={() => {
-                            navigate(`/`);
-                        }}>로그아웃</LogOut>
+                    {isLoggedIn &&
+                    <>
+                    <LogOut onClick={logoutHandler}>로그아웃</LogOut>
                     <div
-                        onClick={() => {
-                            navigate(`/users`);
-                        }}>   
+                    onClick={() => {
+                        navigate(`/users`);
+                    }}>   
                         <RiUserFill color="#F05475" size="2rem"/>
                     </div>
+                    </>
+                    }
                 </div>
             </BarContainer>
             {/* <div className="bottom-line" /> */}
