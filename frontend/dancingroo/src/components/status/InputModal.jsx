@@ -25,25 +25,22 @@ const ModWrapper = styled(Wrapper)`
 const ModMain = styled(Main)`
     flex-direction:column;
     height:25rem;
-    width:90%;  
-    /* border:1px solid black;  */
+    width:90%;
+    border:none;  
     justify-content:flex-start; 
 `
 const ModSection = styled(Section)`
     width:90%; 
-    /* justify-content:flex-start;  */
-
+    border:none; 
 `
 const ModArticle = styled(Article)`
     flex-direction:column;
-    /* border:1px solid red; */
+    border:none;  
     height:100%;
     width:90%;
     .row{
         height:50%;
         &>div{
-            /* width:13rem; */
-            /* border:1px solid black;  */
             justify-content:flex-start;
         }
     }

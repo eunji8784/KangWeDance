@@ -24,10 +24,10 @@ function StatusPage(props) {
     const handleSection = (mode)=>{
         setSection(mode)
     }
+
     const handleIsModalOpen = ()=>{
         setIsModalOpen((prev)=>!prev)
     }
-
     const palyReco = useApi()
 
     useEffect(()=>{
@@ -35,7 +35,6 @@ function StatusPage(props) {
         // palyReco.fetchApi('GET', `/status/play-record`)
     },[])
 
-    
     useEffect(()=>{
         if(palyReco.data){
             setPlayRecord(palyReco.data)
