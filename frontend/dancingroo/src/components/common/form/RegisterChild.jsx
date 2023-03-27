@@ -102,21 +102,24 @@ function RegisterChild({userPage}) {
     const navigate = useNavigate();
     const getImgUrl = useApi()
     const addNewChild = useApi()
-    const {data, isLoading, error, fetchApi} = useApi()
+    const patchChild = useApi()
     const deleteChild = useApi()
     const [btnColor, setBtnColor] = useState(gender)
     const fileInput = useRef(null);
 
-    useEffect(()=>{
-        if (error){
-            console.error(error)
-        }
-        if (data||addNewChild.data||deleteChild.data) {
-            alert('아이 프로필 업데이트 완료되었습니다.')
-            dispatch(childSelect(0))
-            navigate('/play')
-        }
-    },[data, error,addNewChild.data,deleteChild.data])
+    const onProfileUpdateSuccess = (json)=>{
+        alert('아이 프로필 업데이트 완료되었습니다.')
+        dispatch(childSelect(0))
+        navigate('/play')
+    }
+    // 확인 후 오류 없음 삭제
+    // useEffect(()=>{
+    //     if (data||addNewChild.data||deleteChild.data) {
+    //         alert('아이 프로필 업데이트 완료되었습니다.')
+    //         dispatch(childSelect(0))
+    //         navigate('/play')
+    //     }
+    // },[data,addNewChild.data,deleteChild.data])
     const handleUploadImg=(e)=>{
         const file = e.target.files[0]
         const formData = new FormData();
@@ -127,7 +130,7 @@ function RegisterChild({userPage}) {
         fileInput.current.click()
     }
     const handleDeleteChild = async()=>{
-        await deleteChild.fetchApi('DELETE', `/children?childIdx=${childIdx}`)
+        await deleteChild.fetchApi('DELETE', `/children?childIdx=${childIdx}`, onProfileUpdateSuccess)
     }
     const SumbitChild = ()=>{
         const body = {
@@ -145,8 +148,8 @@ function RegisterChild({userPage}) {
             ProfileImageUrl:profileImageUrl||"https://kangwedance.s3.ap-northeast-2.amazonaws.com/기본+프로필+이미지.png",
             childIdx,
         }
-        if (addChild) addNewChild.fetchApi('POST', '/children', body)
-        else fetchApi('PATCH', '/children', patchBody)
+        if (addChild) addNewChild.fetchApi('POST', '/children', body, onProfileUpdateSuccess)
+        else patchChild.fetchApi('PATCH', '/children', patchBody, onProfileUpdateSuccess)
     }
     const handleInputChange = (e) => {
         let { name, value } = e.target;
