@@ -1,4 +1,4 @@
-package com.ssafy.kang.photos.model;
+package com.ssafy.kang.play.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,10 +11,11 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class PramesDto {
-	int prameIdx;
-	int level;
-	String prameURL;// 이미지 URL
-	int prameFlag; // 스티커-0/ 프레임 -1
+public class PlayRecordForHadoop {
+	String recordDate;
+	int PlayrecordIdx;
+	int childIdx;
+	int songIdx;
+	int playMode;
 
 }
