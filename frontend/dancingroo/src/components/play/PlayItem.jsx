@@ -34,7 +34,7 @@ const TagWrapper = styled(Wrapper)`
 `;
 
 const Star = styled(TbStarFilled)`
-  color: yellow;
+  color: #FFD732;
   font-size: 2rem;
 `;
 
