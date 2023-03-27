@@ -1,19 +1,15 @@
 package com.ssafy.kang.parents.model.service;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
-import com.ssafy.kang.common.SuccessCode;
 import com.ssafy.kang.parents.model.ParentsDto;
 import com.ssafy.kang.parents.model.mapper.ParentsMapper;
 import com.ssafy.kang.util.KakaoUtil;
@@ -110,8 +106,6 @@ public class ParentsServiceImpl implements ParentsService {
         Map<String, Object> obj = gson.fromJson(responseBody, Map.class);
         Map<String, Object> naver_account = gson.fromJson(obj.get("response").toString(), Map.class);
 		result.put("id", naver_account.get("id").toString());
-		result.put("nickname", naver_account.get("nickname").toString());
-
         return result;
 	}
 	@Override

@@ -1,7 +1,5 @@
 package com.ssafy.kang.children.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ssafy.kang.children.model.BodyRecordDto;
 import com.ssafy.kang.children.model.ChildrenDto;
@@ -32,6 +32,15 @@ public class ChildrenConroller {
 	public ChildrenConroller() {
 		this.jwtUtil = new JwtUtil();
 	}
+	@PostMapping("/profile")
+	public ApiResponse<?> profileUrlDetails(@RequestPart("file") MultipartFile file){
+		try {
+			return ApiResponse.success(SuccessCode.READ_PROFILEURL,childrenSerivce.findProfileUrl(file));
+		} catch (Exception e) {
+			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
+		}
+		
+	}
 	@GetMapping
 	public ApiResponse<?> childrenList(@RequestHeader("accesstoken")String accesstoken){
 		try {
@@ -48,7 +57,6 @@ public class ChildrenConroller {
 		childrenDto.setTodayCalrories(0);
 		childrenDto.setBmi(Math.round((childrenDto.getWeight()/(Math.pow(childrenDto.getHeight()/100,2)))*10.0)/10.0);
 		try {
-System.out.println(childrenDto);
 			childrenSerivce.addChildren(childrenDto);
 			return ApiResponse.success(SuccessCode.CREATE_CHILDREN);
 		} catch (Exception e) {

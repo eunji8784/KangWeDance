@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ssafy.kang.photos.model.FramesDto;
 import com.ssafy.kang.photos.model.PhotosDto;
-import com.ssafy.kang.photos.model.PramesDto;
 import com.ssafy.kang.photos.model.mapper.PhotosMapper;
 import com.ssafy.kang.util.AmazonS3ResourceStorage;
 import com.ssafy.kang.util.FileDto;
@@ -27,11 +27,12 @@ public class PhotosServiceImpl implements PhotosService {
 	@Override
 	public void addUpdate(MultipartFile multipartFile) throws Exception {
 		FileDto fileDto = FileDto.multipartOf(multipartFile);
-		amazonS3ResourceStorage.store(fileDto.getPath(), multipartFile);
+		System.out.println(fileDto.getPath());
+		String url = amazonS3ResourceStorage.getUrl(fileDto.getPath(), multipartFile);
 
 		PhotosDto photosDto = new PhotosDto();
 		photosDto.setPhotoName(fileDto.getName());
-		photosDto.setPhotoImageUrl(fileDto.getPath());
+		photosDto.setPhotoImageUrl(url);
 
 		sqlSession.getMapper(PhotosMapper.class).insertPhoto(photosDto);
 
@@ -48,8 +49,8 @@ public class PhotosServiceImpl implements PhotosService {
 	}
 
 	@Override
-	public List<PramesDto> findPrames(int level, int pageNum) throws Exception {
-		return sqlSession.getMapper(PhotosMapper.class).selectPrames(level, pageNum);
+	public List<FramesDto> findFrames(int level) throws Exception {
+		return sqlSession.getMapper(PhotosMapper.class).selectFrames(level);
 	}
 
 	@Override
@@ -71,6 +72,11 @@ public class PhotosServiceImpl implements PhotosService {
 	@Override
 	public int findLevel(int parentIdx) throws Exception {
 		return sqlSession.getMapper(PhotosMapper.class).selectLevel(parentIdx);
+	}
+
+	@Override
+	public List<FramesDto> findStickers() throws Exception {
+		return sqlSession.getMapper(PhotosMapper.class).selectStickers();
 	}
 
 }
