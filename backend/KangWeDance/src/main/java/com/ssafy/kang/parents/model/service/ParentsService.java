@@ -20,6 +20,7 @@ public interface ParentsService {
 	public void modifyAccessToken(ParentsDto dto)throws Exception;
 	public ParentsDto findUser(int userIdx)throws Exception;
 	public void kakaoLogout(String accessToken)throws Exception;
+	public void getNaverLogout(String accessToken)throws Exception;
 	
 	
 	
