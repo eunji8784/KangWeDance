@@ -34,11 +34,11 @@ const Screen = styled.div`
     right: 0;
     width: 400px;
   }
-  .test {
+  /* .test {
     position: absolute;
     bottom: 0;
     left: 0;
-  }
+  } */
   .background-img {
     position: absolute;
     z-index: -1;
@@ -159,15 +159,15 @@ function Timemode() {
   }
   
   // test
-  const handleShowResult = () => {
-    setPlayTime(playTimeline[playTimeline.length-1]?.endTime * 1000)
-  }
+  // const handleShowResult = () => {
+  //   setPlayTime(playTimeline[playTimeline.length-1]?.endTime * 1000)
+  // }
 
   // test
-  const replay = () => {
-    videoref.current.currentTime = videoref.current.duration - 1
-    videoref.current.play()
-  }
+  // const replay = () => {
+  //   videoref.current.currentTime = videoref.current.duration - 1
+  //   videoref.current.play()
+  // }
 
   // //test
   // const openGreatFeedback = () => {
@@ -281,14 +281,14 @@ function Timemode() {
             {!afterDirection && <ModalBtn onClick={switchVideo}>화면 전환</ModalBtn>}
             <ModalBtn onClick={handleIsModalOpen}>나가기</ModalBtn>
           </div>
-          <div className="test">
+          {/* <div className="test">
             <ModalBtn onClick={handleShowResult}>플레이 시간 종료</ModalBtn>
             <ModalBtn onClick={replay}>종료 전으로 가기</ModalBtn>
-            {/* <ModalBtn onClick={plusCount}>Count +1</ModalBtn>
+            <ModalBtn onClick={plusCount}>Count +1</ModalBtn>
             <ModalBtn onClick={openReadyGoFeedback}>ReadyGo</ModalBtn>
             <ModalBtn onClick={openGreatFeedback}>Great</ModalBtn>
             <ModalBtn onClick={openGoodFeedback}>Good</ModalBtn>
-            <ModalBtn onClick={openCheerupFeedback}>Cheer Up</ModalBtn> */}
+            <ModalBtn onClick={openCheerupFeedback}>Cheer Up</ModalBtn>
             <h1>
               평가자세 : {aimedPosture?.danceIndex || "X"}
             </h1>          
@@ -301,13 +301,13 @@ function Timemode() {
             <h1>
               시간 : {playTime}
             </h1>             
-          </div>
+          </div> */}
         </MyOverlay>
         {!afterDirection && 
         <video
           className={camfocus ? "small" : "big"}
           ref={videoref}
-          src={stageItem.videoUrl !== 'url' ? stageItem.videoUrl : `https://kangwedance.s3.ap-northeast-2.amazonaws.com/%EB%8F%99%EB%AC%BC.MOV`} // 빼기
+          src={stageItem.videoUrl !== 'url' ? stageItem.videoUrl : `https://d3qb4vbeyp8phu.cloudfront.net/%EB%8F%99%EB%AC%BC.MOV`} // 빼기
           onCanPlayThrough={()=>videoref.current.play()}
           onEnded={handleAfterDirection}
         />}
