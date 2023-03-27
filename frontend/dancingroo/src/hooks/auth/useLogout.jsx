@@ -5,6 +5,7 @@ import { logout } from '../../store/userSlice';
 
 const useLogout = () => {
   const dispatch = useDispatch();
+  const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [cookie, , removeCookie] = useCookies('accessToken');
@@ -23,6 +24,8 @@ const useLogout = () => {
       })
       if (!response.ok) throw new Error(`HTTP error: ${response.status}`)
       const json = await response.json();
+      console.log(json)
+      setData(json)
     } catch (error) {
       setError(error.message); 
     } finally {
@@ -30,7 +33,7 @@ const useLogout = () => {
     }
   };
 
-  return { loading, error, handleLogout };
+  return { data, loading, error, handleLogout };
 };
 
 export default useLogout;
