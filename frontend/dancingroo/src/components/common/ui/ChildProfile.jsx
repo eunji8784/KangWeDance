@@ -54,7 +54,8 @@ function ChildProfile(props) {
     const {data, isLoading, error, fetchApi} = useApi()
     const [profileImg, setProfileImg] = useState([kangkang, plus, plus])
     const [active, setActive] = useState([true, false, false]); 
-
+    
+    // 데이터 있으면 프사 띄우고, 더미차일드면 플러스이미지 띄우기
     useEffect(()=>{
       const profileState = children.map((child)=>{
         if (child.childIdx===null){
@@ -65,18 +66,19 @@ function ChildProfile(props) {
       })
       setProfileImg(profileState)
     },[children])
+    // 프로필 클릭하면 선택됐다는 CSS효과 옮겨주기
     useEffect(()=>{
-      fetchApi("GET", '/children')
       setActive((prevActive)=>
       prevActive.map((active, idx)=>idx===selectedIdx? true : false)
       );
     },[selectedIdx])
+    // 아이 정보 불러오기
     useEffect(()=>{
-      if (data){
-        dispatch(getChildState(data.data))
-      }
-    }, [data])
-    
+      fetchApi("GET", '/children', onGetChildStateSuccess)
+    }, [])
+    const onGetChildStateSuccess = (json)=>{
+      dispatch(getChildState(json.data))
+    }
     const handleClick = (childIdx) => {
         dispatch(childSelect(childIdx))
         if (profileImg[childIdx] === plus) navigate('/users/')
