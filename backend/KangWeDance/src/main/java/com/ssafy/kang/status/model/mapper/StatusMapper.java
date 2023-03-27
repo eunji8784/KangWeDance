@@ -17,7 +17,7 @@ public interface StatusMapper {
 //	| updateOrder() | 변경 유형의 mapper 메서드 |
 //	| deleteOrder() | 삭제 유형의 mapper 메서드 |
 
-	public List<PlayRecordDto> selectPlayRecord(int childIdx) throws SQLException;
+	public List<PlayRecordDto> selectPlayRecord(@Param("date") String date) throws SQLException;
 
 	public List<FoodsDto> selectFoodList(@Param("word") String word) throws SQLException;
 
