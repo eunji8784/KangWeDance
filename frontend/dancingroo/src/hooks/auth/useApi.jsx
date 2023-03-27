@@ -10,7 +10,12 @@ function useApi() {
   const baseURL = "https://kangwedance.site/dev"
 
   // [1]. method는 restful api의 메소드, requestBody는 api요청 시 필요한 데이터(객체)
-  async function fetchApi(method, url, requestBody) {
+  async function fetchApi(method, url, requestBodyOrCallback, onSuccess) {
+    // 3번째 인자 body인지 콜백인지 확인
+    let requestBody;
+    if (typeof requestBodyOrCallback === 'function') onSuccess = requestBodyOrCallback;
+    else requestBody = requestBodyOrCallback;
+
     try {
       const response = await fetch(baseURL+url, {
         method: method,
@@ -20,17 +25,20 @@ function useApi() {
         },
         body: JSON.stringify(requestBody)
       });
+      if (!response.ok) throw new Error(`HTTP error: ${response.status}`)
       const json = await response.json();
       console.log(json)
       setData(json);
+      if (onSuccess) onSuccess(json)
     } catch (error) {
       setError(error);
+      console.error(error)
     } finally {
       setIsLoading(false);
     }
   }
 
-  // [3]. api요청할 컴포넌트에서) 앞에 3개는 고정적으로 꺼내고, 추가로 필요한 메서드를 언팩해서 쓰면된다.
+  // [2]. api요청할 컴포넌트에서) 요청이 여러개이면, data:childData 이런식으로 꺼내면 된다.
   return { data, isLoading, error, fetchApi };
 }
 

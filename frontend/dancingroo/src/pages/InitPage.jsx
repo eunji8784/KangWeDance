@@ -63,7 +63,7 @@ function InitPage(props) {
     const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI
     // 배포 서버 용
     const REDIRECT_URI_SITE = process.env.REACT_APP_REDIRECT_URI_SITE
-    const KAUTH_KAKAO = `https://kauth.kakao.com/oauth/authorize?client_id=${API_KEY_KAKAO}&redirect_uri=${REDIRECT_URI_SITE}&response_type=code`
+    const KAUTH_KAKAO = `https://kauth.kakao.com/oauth/authorize?client_id=${API_KEY_KAKAO}&redirect_uri=${REDIRECT_URI}&response_type=code`
 
     return (
         <Wrapper>

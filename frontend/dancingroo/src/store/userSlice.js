@@ -8,7 +8,7 @@ const initialState = {
   level:1,
   exp:0,
   select:0,  // 아이프로필 몇번째 선택상태인지.
-  addChild:true,
+  addChild:false,
   children:[
     { 
       childIdx:null,
@@ -68,9 +68,12 @@ const userSlice = createSlice({
       if (state.children[selectedIdx].childIdx===null) state.addChild = true
       else state.addChild = false
       console.log(state.select,'번째 아이 플레이 중!', '아이등록중?', state.addChild)
+    },
+    editFamilyname(state, action){
+      state.familyname = action.payload
     }
   },
 })
 
-export const {login, logout, getChildState, patchChildState, childSelect} = userSlice.actions
+export const {login, logout, getChildState, patchChildState, childSelect, editFamilyname} = userSlice.actions
 export default userSlice.reducer
