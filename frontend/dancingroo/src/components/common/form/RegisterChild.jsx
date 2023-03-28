@@ -25,7 +25,6 @@ const ModWrapper = styled(Wrapper)`
         margin-bottom:-1rem;
     }
 `
-
 const ModMain = styled(Main)`
     flex-direction:row;
     min-width: 20rem;
@@ -60,7 +59,6 @@ export const FormLabel = styled.label`
     align-self:flex-start;
     margin-left:1.5rem;
 `;
-
 export const FormInput = styled.input`
     height: 2.1rem;
     min-width: 5rem;
@@ -70,7 +68,6 @@ export const FormInput = styled.input`
     border-radius: 6px;
     padding: 0 1em;
 `;
-
 const FormInputButton = styled.input`
     height: 2.1rem;
     width: 5rem;
@@ -84,13 +81,11 @@ const FormInputButton = styled.input`
     margin-right: 1rem;
     cursor: pointer;
 `;
-
 const ProfileImage = styled.img`
     height:5rem;
     width:5rem;
     border-radius:50%;
 `;
-
 const MyButton = styled(PinkButton)`
     width:6.2rem;
     height:2.5rem;
@@ -159,13 +154,13 @@ function RegisterChild({userPage}) {
             gender,
             weight,
             height,
-            ProfileImageUrl:profileImageUrl,
+            profileImageUrl:profileImageUrl,
         }
         const patchBody = {
             nickname,
             birthDate,
             gender,
-            ProfileImageUrl:profileImageUrl,
+            profileImageUrl:profileImageUrl,
             childIdx,
         }
         if (addChild) addNewChild.fetchApi('POST', '/children', body, onProfileUpdateSuccess)
