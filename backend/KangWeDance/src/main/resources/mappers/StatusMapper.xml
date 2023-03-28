@@ -50,6 +50,22 @@
 	</select>
 	
 	
+	<select id="selectMonthlyRecord" resultMap="playRecordList" >
+		SELECT tmp1.child_idx,tmp1.calorie_consumption, tmp1.title, tmp1.record_date, tmp2.score
+		FROM 
+		 (SELECT s.song_idx, s.calorie_consumption, s.title, p.record_date, p.play_record_idx, p.child_idx
+			FROM songList s join playRecord p ON s.song_idx=p.song_idx
+   			WHERE child_idx=#{childIdx} and month(record_date) = #{month}
+    	  )as tmp1
+		
+		LEFT JOIN
+	    ( SELECT sum(score) as score , play_record_idx
+		  FROM  scoreRecord
+	      GROUP BY play_record_idx
+		) as tmp2
+	    ON tmp1.play_record_idx= tmp2.play_record_idx;
+	</select>
+	
 	<!-- //일회성 코드 : 검색을 위해 영어 <->한국어 
 	
 	<select id="temps" parameterType="int" resultType="String">
