@@ -10,7 +10,7 @@ const useLogin = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [, removeCookie, setCookie] = useCookies('accessToken');
+  const [, setCookie, removeCookie] = useCookies('accessToken');
 
   const handleSocialLogin = async (Oauth, code) => {
     try {
