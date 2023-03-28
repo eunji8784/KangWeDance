@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 // import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import styled from "styled-components";
-import PlayCalendar from "../common/ui/PlayCalendar";
+import { useSelector } from "react-redux";
 import { ModalBtn } from "./HealthData";
+import PlayCalendar from "../common/ui/PlayCalendar";
+import useApi from "../../hooks/auth/useApi";
 
 const Wrapper = styled.div`
     display: flex;
@@ -78,10 +79,35 @@ const Table = styled.table`
 function PlayData({handleIsModalOpen, username}) {
   const selected = useSelector(state=>state.userState.select)
   const selectedChild = useSelector(state=>state.userState.children[selected||0]) 
-    const [selectedDay, setSelectedDay] = useState()
-    const handleSelectedDay = (date)=>{
+  const [selectedDay, setSelectedDay] = useState()
+  const [playRecord, setPlayRecord] = useState([]);
+  
+  const handleSelectedDay = (date)=>{
         setSelectedDay(date)
     }
+
+  const palyRecoApi = useApi()
+
+  //선택한 날짜에 따라 데이터 불러오가
+  useEffect(()=>{
+    palyRecoApi.fetchApi('GET', `/status/play-record/date=${selectedDay}`)
+  },[selectedDay])
+
+  //선택 날짜 데이터 중 현재 아이에 맞는 것만 넣기
+  useEffect(()=>{
+    if (palyRecoApi.data) {
+      var arr = [];
+      for (var i = 0; i < palyRecoApi.data.data; i++) {
+            if(selectedChild.childIdx != palyRecoApi.data.data[i].childIdx){
+                arr.push(palyRecoApi.data.data[i]);
+            }
+      }
+      setPlayRecord(arr) 
+    }
+    // console.log(playRecord)
+  }, [palyRecoApi.data, selectedChild.childIdx])
+
+
     return (
         <Wrapper>
             <section className="section header">
@@ -90,7 +116,7 @@ function PlayData({handleIsModalOpen, username}) {
             </section>
             <section className="section main">
                 <article className="status-box left">
-                    <h3>OO이 운동 달력</h3>
+                    <h3>{selectedChild.nickname} 운동 달력</h3>
                     <div className="calendar-box">
                         <PlayCalendar handleSelectedDay={handleSelectedDay}/>
                     </div>
@@ -107,19 +133,16 @@ function PlayData({handleIsModalOpen, username}) {
                             </tr>
                         </thead>
                         <tbody>
-                    {/* 여기서 tr을 map돌리면 될듯 */}
-                            <tr>
-                                <td>17:5</td>
-                                <td>상어송</td>
-                                <td>90</td>
-                                <td>1030kcal</td>
-                            </tr>
-                            <tr>
-                                <td>17:25</td>
-                                <td>균형잡기</td>
-                                <td>98</td>
-                                <td>800kcal</td>
-                            </tr>
+                          {
+                            playRecord.map((play, index) => {
+                            return  <tr key={index}>
+                                <td>{play.recordDate.substr(12,18)}</td>
+                                <td>{play.title}</td>
+                                <td>{play.score}</td>
+                                <td>{play.burnedCalories}</td>
+                              </tr>
+                            })
+                          }
                         </tbody>
                     </Table>
                 </article>
