@@ -13,7 +13,7 @@ const initialState = {
     { 
       childIdx:null,
       nickname:null,
-      profileImageUrl:"https://kangwedance.s3.ap-northeast-2.amazonaws.com/기본+프로필+이미지.png",
+      profileImageUrl:"https://d3qb4vbeyp8phu.cloudfront.net/기본+프로필+이미지.png",
       gender:false,
       birthDate:null,
       weight:null,
