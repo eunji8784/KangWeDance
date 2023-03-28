@@ -21,7 +21,8 @@ const ExpGaugeWrapper = styled.div`
   height: 3rem;
   border-radius: 8px;
   background-color: #ddd;
-  margin-top: 3rem; // 바꾸자
+  margin-top: 5rem;
+  margin-bottom: 5rem;
 `;
 
 const ExpBar = styled.div`
