@@ -14,12 +14,12 @@ public interface ChildrenMapper {
 	void insertChildren(ChildrenDto childrenDto) throws Exception;
 
 	void insertChildrenBody(ChildrenDto childrenDto) throws Exception;
+	
+	void insertChildrenBody(BodyRecordDto bodyRecordDto) throws Exception;
 
 	void deleteChildren(int childIdx) throws Exception;
 
 	void updateChildren(ChildrenDto childrenDto) throws Exception;
-
-	void insertChildrenBody(BodyRecordDto bodyRecordDto) throws Exception;
 
 	List<ChildrenDto> selectChildren(int parentIdx) throws Exception;
 
