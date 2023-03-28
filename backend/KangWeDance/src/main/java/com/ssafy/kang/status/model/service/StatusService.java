@@ -20,6 +20,8 @@ public interface StatusService {
 
 	public List<FoodsDto> findFoodList(String word) throws Exception;
 
+	public List<PlayRecordDto> findMonthlyRecord(int childIdx, int month) throws Exception;
+
 	// 일회성 코드 : 검색을 위해 영어 <->한국어
 	// public String temps(int i) throws Exception;
 	// public void tumpu(String k, String i) throws Exception;
