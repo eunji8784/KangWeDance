@@ -93,12 +93,11 @@ function AccountInfo(props) {
             <Title>
                 <Input
                 type="text"
-                value={newFamilyname}
+                value={newFamilyname||familyname||'닉네임 불러오는 중...'}
                 onChange={handleInputChange}
                 width={newFamilyname?.length+1 || 5}
                 maxLength={15}
                 onKeyPress={editFamilynameHandler}
-                placeholder={familyname}
                 />
             </Title>
             <div className="exp-wrapper">
