@@ -66,7 +66,7 @@ public class PlayServiceImpl implements PlayService {
 		String tag = sqlSession.getMapper(PlayMapper.class).selectTag(childIdx);
 		SongListDto songList = new SongListDto();
 		if (tag == null) {
-			int motionTypeIdx = (int) ((Math.random() * 5) + 4);
+			int motionTypeIdx = (int) ((Math.random() * 5) + 5);
 			songList = sqlSession.getMapper(PlayMapper.class).selectSongListByMotionTagIdx(motionTypeIdx);
 		} else {
 			String[] tagList = tag.substring(1).split("#");
