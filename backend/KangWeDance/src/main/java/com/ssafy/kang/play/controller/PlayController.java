@@ -88,10 +88,10 @@ public class PlayController {
 				// 점수 계산
 				int count = playRequestDto.getScoreRecordList().get(i).getCount();
 				int countStandard = playRequestDto.getScoreRecordList().get(i).getCountStandard();
-				
+
 				int score = Math.min(count, countStandard) / countStandard;
 				int experienceScore = score * playRequestDto.getScoreRecordList().get(i).getTime();
-				
+
 				// 동작별 점수를 계산해서 Dto에 세팅한다.
 				playRequestDto.getScoreRecordList().get(i).setScore(experienceScore);
 
@@ -103,7 +103,7 @@ public class PlayController {
 				// 경험치에 더할 총점을 구한다.
 				experienceScoreTotal += experienceScore;
 			}
-			
+
 			int childIdx = playRequestDto.getChildIdx();
 			// 현재 경험치 조회
 			int experienceScore = playService.findExperienceScore(childIdx);
