@@ -32,8 +32,9 @@
 	
 	<insert id="insertChildrenBody">
 		insert into bodyRecord(child_idx,weight,height,bmi,today_calrories,record_date)
-		value(#{childIdx},#{weight},#{height},#{bmi},#{todayCalrories},now());
+		values(#{childIdx},#{weight},#{height},#{bmi},#{todayCalrories},now());
 	</insert>
+	
 	<delete id="deleteChildren" parameterType="int">
 		delete from ch,br
 			using children as ch
