@@ -29,6 +29,11 @@ public class StatusServiceImpl implements StatusService {
 		return sqlSession.getMapper(StatusMapper.class).selectFoodList(word);
 	}
 
+	@Override
+	public List<PlayRecordDto> findMonthlyRecord(int childIdx, int month) throws Exception {
+		return sqlSession.getMapper(StatusMapper.class).selectMonthlyRecord(childIdx, month);
+	}
+
 	// 일회성 코드임
 	// 검색을 위한 한국어 -> 영어로 변환하는 코드
 	// @Override
