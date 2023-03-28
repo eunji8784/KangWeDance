@@ -7,6 +7,7 @@ import kangkang from "../../../assets/images/kangkang.png"
 import useApi from "../../../hooks/auth/useApi";
 import { login, getChildState,patchChildState,childSelect } from "../../../store/userSlice";
 import { useDispatch,useSelector } from "react-redux";
+import axios from "axios";
 
 const ModWrapper = styled(Wrapper)`
     width: 100vw;
@@ -85,7 +86,9 @@ const FormInputButton = styled.input`
 `;
 
 const ProfileImage = styled.img`
-    height:4.5rem;
+    height:5rem;
+    width:5rem;
+    border-radius:50%;
 `;
 
 const MyButton = styled(PinkButton)`
@@ -101,24 +104,35 @@ function RegisterChild({userPage}) {
     const addChild = useSelector(state=>state.userState.addChild)
     const dispatch = useDispatch()
     const navigate = useNavigate();
-    const getImgUrl = useApi()
     const addNewChild = useApi()
     const patchChild = useApi()
     const deleteChild = useApi()
     const [btnColor, setBtnColor] = useState(gender)
     const fileInput = useRef(null);
+    const defaultImg = "https://d3qb4vbeyp8phu.cloudfront.net/기본+프로필+이미지.png"
 
     const onProfileUpdateSuccess = (json)=>{
         alert('아이 프로필 등록이 완료되었습니다.')
         dispatch(childSelect(0))
         navigate('/play')
     }
-
-    const handleUploadImg=(e)=>{
+    const handleUploadImg=async(e)=>{
+        const url = "https://kangwedance.site/dev/children/profile";
         const file = e.target.files[0]
         const formData = new FormData();
         formData.append('file', file);
-        getImgUrl.fetchApi('POST', "/children/profile", formData)
+        try {
+            const response = await axios.post(url, formData);
+            console.log(response.data);
+            if (response.data.status!==200) throw new Error(`HTTP error: ${response.data.status}`)
+            dispatch(patchChildState({selectedIdx, name:"profileImageUrl", value:response.data.data}))
+          } catch (error) {
+            console.error(error);
+          }
+    }
+    const deleteProfileHandler =()=>{
+        fileInput.current.value = ''
+        dispatch(patchChildState({selectedIdx, name:"profileImageUrl", value: null}))
     }
     const uploadImg=()=>{
         fileInput.current.click()
@@ -145,13 +159,13 @@ function RegisterChild({userPage}) {
             gender,
             weight,
             height,
-            ProfileImageUrl:profileImageUrl||"https://d3qb4vbeyp8phu.cloudfront.net/기본+프로필+이미지.png",
+            ProfileImageUrl:profileImageUrl,
         }
         const patchBody = {
             nickname,
             birthDate,
             gender,
-            ProfileImageUrl:profileImageUrl||"https://d3qb4vbeyp8phu.cloudfront.net/기본+프로필+이미지.png",
+            ProfileImageUrl:profileImageUrl,
             childIdx,
         }
         if (addChild) addNewChild.fetchApi('POST', '/children', body, onProfileUpdateSuccess)
@@ -199,7 +213,7 @@ function RegisterChild({userPage}) {
                             <FormInputButton className="white-black-line-btn" color="white" type="button" value="수정" onClick={()=>uploadImg()}/>
                             <input ref={fileInput} type="file" style={{ display: "none" }} onChange={(e) => {handleUploadImg(e)}}
                             />
-                            <FormInputButton className="white-black-line-btn" color="white" type="button" value="삭제" />
+                            <FormInputButton className="white-black-line-btn" color="white" type="button" value="삭제" onClick={deleteProfileHandler}/>
                         </div>
                     </Article>
                     <Article>
