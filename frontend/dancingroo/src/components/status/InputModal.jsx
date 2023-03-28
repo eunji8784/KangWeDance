@@ -1,12 +1,16 @@
 import React,{
+    useRef,
     // useEffect, 
     useState} from "react";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { getChildState, patchChildState } from "../../store/userSlice";
 import styled from "styled-components";
 import {Wrapper, Header, Main, Article, Section, H1,
     //  H2, 
      P, Footer} from "../common/ui/Semantics";
 import musicNote from '../../assets/images/musicNote.png'
+import useApi from "../../hooks/auth/useApi";
 
 const ModWrapper = styled(Wrapper)`
     display:${({isModalOpen})=>isModalOpen? "flex":"none"};
@@ -70,9 +74,6 @@ const ModArticle = styled(Article)`
             align-items:baseline;
             &>div{
                 margin-right:3rem;
-                /* &>input{
-                    margin-top:0.1srem;
-                } */
             }
         }
     }
@@ -94,7 +95,6 @@ const ModArticle = styled(Article)`
             height:3rem;
             background-color:#F05475;
             top:-1px;
-            z-index:-1;
             box-sizing:border-box;
         }
         .main{
@@ -109,13 +109,15 @@ const ModArticle = styled(Article)`
                 color:white;
                 position:absolute;
                 top:-15px;
-                /* border:1px solid black; */
                 height:15%
             }
         }
     }
 `
 const ModFooter = styled(Footer)`
+    margin-top:1rem;
+    width:13rem;
+    justify-content:space-between;
     &>button{
         background-color:#F05475;
         outline:none;
@@ -132,6 +134,9 @@ const ModFooter = styled(Footer)`
         transition: box-shadow 0.3s ease-in-out;
         &:hover{
             box-shadow: 0px 3px 15px rgba(240, 84, 117, 0.6);
+        }
+        &:last-child{
+            background-color:grey;
         }
     }   
 `
@@ -151,22 +156,47 @@ const NoteImg = styled.img`
     position:absolute;
     width:100%;
 `
-
 function InputModal(props) {
     const {handleIsModalOpen, isOpen} = props
-    const [recentH, recentKg] = [181,78]
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const selectedIdx = useSelector(state=>state.userState.select)
+    const {nickname, height, weight, childIdx} = useSelector(state=>state.userState.children[selectedIdx||0])
     const [selected, setSelected] = useState('아침')
-    // const navigate = useNavigate();
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' });
-    
+    const bodyStateUpdate = useApi()
+    const weightRef = useRef(); 
+    const heightRef = useRef(); 
+    // const submitDietInfo = ()=>{
+
+    // }
+    const submitBodyUpdate = ()=>{
+        const onSuccess = ()=>{
+            alert('등록되었습니다!')
+        }
+        const body = {
+            weight, height, today_calrories:0, childIdx
+        }
+        if (window.confirm('등록할까요?')){
+            bodyStateUpdate.fetchApi('POST', `/children/body-update`, body, onSuccess)
+            handleIsModalOpen()
+            setSelected('아침')
+        }
+        weightRef.current.value=''
+        heightRef.current.value=''
+    }
+    const onChangeHandler = (e)=>{
+        const {name, value} = e.target
+        dispatch(patchChildState({selectedIdx, name, value:+value}))
+    }
     const handleSelected = (meal)=>{
         setSelected(meal)
     }
     return (
         <ModWrapper isModalOpen={isOpen}>
             <Header>
-                <H1>{formattedDate} OO이 기록하기</H1>
+                <H1>{formattedDate} {nickname}(이) 기록하기</H1>
             </Header>
             <ModMain>
                 <ModSection className="title-inputs">
@@ -182,11 +212,11 @@ function InputModal(props) {
                         <div className="row">
                             <div>
                                 <h4>키(cm)</h4>
-                                <input type="text" placeholder={recentH}/>
+                                <input type="text" placeholder={height} name={"height"} onChange={onChangeHandler} ref={heightRef}/>
                             </div>
                             <div>
                                 <h4>몸무게(kg)</h4>
-                                <input type="text" placeholder={recentKg}/>
+                                <input type="text" placeholder={weight} name={"weight"} onChange={onChangeHandler} ref={weightRef}/>
                             </div>
                         </div>
                         <div className="row">
@@ -218,9 +248,14 @@ function InputModal(props) {
             </ModMain>
             <ModFooter>
                 <button onClick={()=>{
+                    submitBodyUpdate()
+                }}>완  료</button>
+                <button onClick={()=>{
                     handleIsModalOpen()
                     setSelected('아침')
-                }}>완  료</button>
+                    weightRef.current.value=''
+                    heightRef.current.value=''
+                }}>닫 기</button>
             </ModFooter>
             <NoteImg src={musicNote}/>
         </ModWrapper>
