@@ -84,7 +84,7 @@ function CountMode() {
 
   const playTimeline = stageItem.songMotionList
 
-  const {data, isLoading, error, fetchApi:playRecordListApi} = useApi()
+  const playRecord = useApi()
 
   // 처음에 모델 불러오기
   useEffect(() => {
@@ -249,23 +249,23 @@ function CountMode() {
   )
 
   useEffect(() => {
-    if (scoreRecordList.length === playTimeline.length) {
+    if (scoreRecordList?.length === playTimeline?.length) {
       const playData = {
         childIdx: children[select].childIdx,
         songIdx: stageItem.songIdx,
         playMode: stageItem.playMode,
         scoreRecordList: scoreRecordList,
       }
-      playRecordListApi('POST', '/play', playData)
+      playRecord.fetchApi('POST', '/play', playData)
     }
   },[scoreRecordList])
 
   return (
     <Screen>
       <img className="background-img" src={bgImg} alt="background" />
-      {!isLoading ? 
+      {!playRecord.isLoading ? 
       <>
-        <PlayResult data={data.data} playMode={stageItem.playMode}/>
+        <PlayResult data={playRecord.data.data} playMode={stageItem.playMode}/>
       </>
       :
       <>
