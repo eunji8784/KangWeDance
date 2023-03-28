@@ -11,6 +11,15 @@ import { levelDesign } from "../../utils/levelDesign";
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
+    .exp-wrapper{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        width:13rem;
+        margin:-1rem;
+        color:#F05475;
+        font-weight:bold;
+    }
 `;
 const Title = styled.div`
     display: flex;
@@ -92,9 +101,12 @@ function AccountInfo(props) {
                 placeholder={familyname}
                 />
             </Title>
-            <Experience>
-                <ExperiencePercentage gauge={experiencePercentage}/>
-            </Experience>
+            <div className="exp-wrapper">
+                <p>교감Level</p>
+                <Experience>
+                    <ExperiencePercentage gauge={experiencePercentage}/>
+                </Experience>
+            </div>
         </Wrapper>
     );
 }
