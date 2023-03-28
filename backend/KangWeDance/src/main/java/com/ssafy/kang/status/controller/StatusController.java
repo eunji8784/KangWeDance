@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.kang.common.ErrorCode;
@@ -60,6 +61,20 @@ public class StatusController {
 			e.printStackTrace();
 			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
 		}
+	}
+
+	@GetMapping("/month-play-record")
+	public ApiResponse<?> searchMonthRecord(@RequestHeader("accesstoken") String accesstoken,
+			@RequestParam int childIdx, @RequestParam int month) {
+		try {
+			List<PlayRecordDto> monthly = statusService.findMonthlyRecord(childIdx, month);
+			return ApiResponse.success(SuccessCode.READ_MONTHLY_RECORD, monthly);
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
+		}
+
 	}
 
 	// 검색을 위해 korean ->english 변환 API
