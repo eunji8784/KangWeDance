@@ -1,6 +1,7 @@
 import React
 // , { useState } 
 from "react";
+import { useSelector } from "react-redux";
 // import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -25,6 +26,9 @@ const Wrapper = styled.div`
       //[1-1] section 중 header라는 class를 가진 태그선택자
       &.header{
         justify-content:flex-start;
+        span{
+          font-size:1.1rem;
+        }
       }
       // [1-2] section 중 main이라는 class를 가진 태그선택자
       &.main{
@@ -83,12 +87,14 @@ export const ModalBtn = styled.div`
 
 function HealthData(props) {
     const {handleIsModalOpen} = props;
+    const selected = useSelector(state=>state.userState.select)
+    const selectedChild = useSelector(state=>state.userState.children[selected||0]) 
     // const navigate = useNavigate();
     
     return (
         <Wrapper>
           <section className="section header">
-            <h3>{props.username}(이)는 {props.cm}cm {props.kg}kg이에요</h3>
+            <h3>{selectedChild.nickname}<span>(이)는</span> {selectedChild.height}cm {selectedChild.weight}kg<span>이에요</span></h3>
             <ModalBtn onClick={()=>handleIsModalOpen()}>오늘의 정보 입력</ModalBtn>
           </section>
           <section className="section main">
