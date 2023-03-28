@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { Wrapper } from "../components/common/ui/Semantics";
 
@@ -8,7 +9,6 @@ import PhotoList from "../components/photos/PhotoList";
 import StickerList from "../components/photos/StickerList";
 import RightArea from "../components/photos/RightArea";
 import useApi from "../hooks/auth/useApi"
-
 
 const PhotosSection = styled(Wrapper)`
     flex-direction: row;
@@ -44,18 +44,26 @@ function PhotosPage({handleWatchingPage}) {
     const photos = useApi()
     const framestickers = useApi()
 
+    const selected = useSelector(state=>state.photo.num)
 
     useEffect(()=>{
         handleWatchingPage('photos')
-        photos.fetchApi('GET', `/photos?pageNum=1`)
         framestickers.fetchApi('GET', `/photos/frames`)
     },[])
 
+        //포토 리스트
+    useEffect(()=>{
+        photos.fetchApi('GET', `/photos?pageNum=1`)
+    },[selected])
+    
     //포토 리스트
     useEffect(()=>{
         if (photos.data) {
             setPhotoList(photos.data?.data.photoList)
         }
+        console.log("삭제되서 다시 포토 리스트 뿌리기")
+        console.log(photos.data)
+        console.log(photoList)
     },[photos.data])
 
     //스티커랑 프레임 리스트
