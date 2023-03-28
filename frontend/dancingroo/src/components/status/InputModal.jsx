@@ -174,6 +174,8 @@ function InputModal(props) {
     const submitBodyUpdate = ()=>{
         const onSuccess = ()=>{
             alert('등록되었습니다!')
+            dispatch(patchChildState({selectedIdx, name:"height", value:height}))
+            dispatch(patchChildState({selectedIdx, name:"weight", value:weight}))
         }
         const body = {
             weight, height, today_calrories:0, childIdx
