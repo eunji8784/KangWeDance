@@ -4,7 +4,7 @@ import { Stage, Layer, Image } from "react-konva";
 import useImage from 'use-image';
 
 import { Wrapper, PinkButton } from "../common/ui/Semantics";
-import axios from "axios";
+import instance from "../../hooks/auth/Instance";
 
 import {MdCleaningServices} from 'react-icons/md';
 
@@ -141,21 +141,15 @@ function RightArea({image, frameImage, stickerImage, stickerNum}) {
       }
 
     //이미지 공유하기
-    const shareImage = () =>{
-        getUrl();
-        kakaoShare();
-    }
-
-    //이미지 MultipartFile로 변경
     const [shareImageUrl, setShareImageUrl] = useState();
-    const getUrl = async () => {
+    const shareImage = async () => {
         const base64 = stageRef.current.toDataURL();
         const url = "https://kangwedance.site/dev/children/profile";
         var arr = base64.split(','),
-            mime = arr[0].match(/:(.*?);/)[1],
-            bstr = atob(arr[1]),
-            n = bstr.length,
-            u8arr = new Uint8Array(n);
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
         
         while(n--){
             u8arr[n] = bstr.charCodeAt(n);
@@ -165,24 +159,21 @@ function RightArea({image, frameImage, stickerImage, stickerNum}) {
         const formData = new FormData();
         formData.append('file', file);
         try {
-            const response = await axios.post(url, formData);
-            if (response.data.status!==200) throw new Error(`HTTP error: ${response.data.status}`)
-            console.log(response.data.data)
+            const response = await instance.post(url, formData);
             setShareImageUrl(response.data.data);
-          } catch (error) {
+        } catch (error) {
             console.error(error);
-          }
-
+        }
+        console.log("geturl끝")
     }
     
-    //카카오톡 공유하기
-    const kakaoShare = () => {
-        if (window.Kakao) {
+    useEffect(() => {
+        if (shareImageUrl && window.Kakao) {
             const kakao = window.Kakao
             if (!kakao.isInitialized()) {
-                kakao.init(process.env.REACT_APP_API_KEY_KAKAO)
+                kakao.init('710e5b0067f96bfdfa687085d33b61a7')
             }
-
+            
             kakao.Share.sendDefault({
                 objectType: 'feed',
                 content: {
@@ -190,22 +181,22 @@ function RightArea({image, frameImage, stickerImage, stickerNum}) {
                   description: '캥위댄스에서 편지가 왔어요',
                   imageUrl: shareImageUrl,
                   link: {
-                    mobileWebUrl: shareImageUrl,
-                    webUrl: shareImageUrl,
-                  },
+                      mobileWebUrl: shareImageUrl,
+                      webUrl: shareImageUrl,
+                    }
                 },
                 buttons: [
                   {
                     title: '다운로드하기',
                     link: {
-                        mobileWebUrl: shareImageUrl,
-                        webUrl: shareImageUrl,
+                      mobileWebUrl: shareImageUrl,
+                      webUrl: shareImageUrl,
                     },
                   },
                 ],
             })
          }
-    }
+    }, [shareImageUrl]);
 
     return (
         <MainSection>
