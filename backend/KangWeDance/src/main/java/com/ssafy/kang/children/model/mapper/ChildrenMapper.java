@@ -24,4 +24,8 @@ public interface ChildrenMapper {
 	List<ChildrenDto> selectChildren(int parentIdx) throws Exception;
 
 	List<BodyRecordForHadoop> selectBodyRecordForHadoop() throws Exception;
+
+	String selectChildrenBodyRecord(BodyRecordDto bodyRecordDto) throws Exception;
+
+	void updateChildrenBody(BodyRecordDto bodyRecordDto) throws Exception;
 }

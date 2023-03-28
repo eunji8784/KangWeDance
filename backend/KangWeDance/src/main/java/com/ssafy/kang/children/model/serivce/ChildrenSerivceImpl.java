@@ -35,7 +35,6 @@ public class ChildrenSerivceImpl implements ChildrenSerivce {
 	@Override
 	public void modifyChildren(ChildrenDto childrenDto) throws Exception {
 		childrenMapper.updateChildren(childrenDto);
-		
 	}
 	@Override
 	public void addChildrenBody(BodyRecordDto bodyRecordDto) throws Exception {
@@ -50,7 +49,13 @@ public class ChildrenSerivceImpl implements ChildrenSerivce {
 		FileDto fileDto = FileDto.multipartOf(file);
 		return amazonS3ResourceStorage.getUrl(fileDto.getPath(), file);
 	}
-
-
+	@Override
+	public String findChildrenBodyRecord(BodyRecordDto bodyRecordDto) throws Exception {
+		return childrenMapper.selectChildrenBodyRecord(bodyRecordDto);
+	}
+	@Override
+	public void modifyChildrenBody(BodyRecordDto bodyRecordDto) throws Exception {
+		childrenMapper.updateChildrenBody(bodyRecordDto);
+	}
 
 }

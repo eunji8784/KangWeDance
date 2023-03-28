@@ -32,7 +32,7 @@
 	
 	<insert id="insertChildrenBody">
 		insert into bodyRecord(child_idx,weight,height,bmi,today_calrories,record_date)
-		values(#{childIdx},#{weight},#{height},#{bmi},#{todayCalrories},now());
+		values(#{childIdx},#{weight},#{height},#{bmi},#{todayCalrories},curdate());
 	</insert>
 	
 	<delete id="deleteChildren" parameterType="int">
@@ -72,4 +72,24 @@
 		from bodyRecord
 		where record_date=curdate()-1;
 	</select>
+	<select id="selectChildrenBodyRecord" parameterType="BodyRecordDto" resultType="String">
+		SELECT 
+		    body_record_idx
+		FROM
+		    bodyRecord
+		WHERE
+		    child_idx = #{childIdx}
+		        AND record_date = CURDATE()
+	</select>
+	<update id="updateChildrenBody" parameterType="BodyRecordDto">
+		UPDATE bodyRecord 
+		SET 
+		    weight = #{weight},
+		    height = #{height},
+		    bmi = #{bmi},
+		    today_calrories = #{todayCalrories}
+		WHERE
+		    child_idx = #{childIdx}
+				AND record_date = CURDATE()
+	</update>
 </mapper>
