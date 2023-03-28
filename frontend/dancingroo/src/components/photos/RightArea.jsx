@@ -140,7 +140,7 @@ function RightArea({image, frameImage, stickerImage, stickerNum}) {
         // delete link;
       }
 
-    //이미지 공유하기
+    //이미지 공유
     const [shareImageUrl, setShareImageUrl] = useState();
     const shareImage = async () => {
         const base64 = stageRef.current.toDataURL();
@@ -164,7 +164,6 @@ function RightArea({image, frameImage, stickerImage, stickerNum}) {
         } catch (error) {
             console.error(error);
         }
-        console.log("geturl끝")
     }
     
     useEffect(() => {
