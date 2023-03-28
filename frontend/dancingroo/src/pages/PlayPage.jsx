@@ -24,22 +24,22 @@ const Wrapper = styled.div`
 function PlayPage({handleWatchingPage}) {
     const navigate = useNavigate()
     
-    const {data:playData, isLoading, error, fetchApi:playListApi} = useApi()
-    const {data:recommendedData, recommendedIsLoading, recommendedError, fetchApi:recommendedApi} = useApi()
+    const playList = useApi()
+    const recommendation = useApi()
     
     useEffect(()=>{
         handleWatchingPage('play')
-        playListApi('GET', '/play')
-        recommendedApi('GET', '/play/recommendation')
+        playList.fetchApi('GET', '/play')
+        recommendation.fetchApi('GET', '/play/recommendation')
     },[])
 
     return (
         <Wrapper>
-            <RecommendSection recommendData={recommendedData?.data}/>
+            <RecommendSection recommendData={recommendation.data?.data}/>
             <hr />
-            <DanceSection danceData={playData?.data.filter((e)=>e.playMode===0)} />
+            <DanceSection danceData={playList.data?.data.filter((e)=>e.playMode===0)} />
             <hr />
-            <GameSection gameData={playData?.data.filter((e)=>e.playMode!==0)} />
+            <GameSection gameData={playList.data?.data.filter((e)=>e.playMode!==0)} />
         </Wrapper>
     );
 }
