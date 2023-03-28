@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
-
 import useApi from "../../hooks/auth/useApi";
 import {TiDelete} from "react-icons/ti";
+import { photoNum } from "../../store/photoSlice";
+import Swal from "sweetalert2";
 
 const Photo = styled.div`
     height: 7.2rem;
@@ -36,9 +38,25 @@ const DateText = styled.div`
 `;
 
 function PhotoItem({imgUrl, newDay, date, handleImge, photoIdx}) {
+    const dispatch = useDispatch()
     const deletephoto = useApi()
+
+    useEffect(() => {
+        dispatch(photoNum())
+    }, [deletephoto.data]);
+
     const deletePhoto = (photoIdx) => {
-        deletephoto.fetchApi('DELETE', `/photos/${photoIdx}`);
+        Swal.fire({
+            text: "사진을 삭제하시겠습니까?",
+            width: 300,
+            showCancelButton: true,
+            confirmButtonText: "삭제",
+            cancelButtonText: "취소"
+        }).then(function(e){
+            if(e.isConfirmed === true) {
+                deletephoto.fetchApi('DELETE', `/photos/${photoIdx}`);
+            }
+        })
     }
 
     return (
