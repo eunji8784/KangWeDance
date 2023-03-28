@@ -6,8 +6,6 @@ import InputModal from "../components/status/InputModal";
 import PlayData from "../components/status/PlayData";
 import StatusBar from "../components/status/StatusBar";
 
-import useApi from "../hooks/auth/useApi";
-
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
