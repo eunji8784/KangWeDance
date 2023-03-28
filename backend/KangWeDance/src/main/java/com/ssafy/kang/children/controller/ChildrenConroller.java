@@ -82,7 +82,8 @@ public class ChildrenConroller {
 			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
 		}
 	}
-	@PatchMapping("/body-update")
+	
+	@PostMapping("/body-update")
 	public ApiResponse<?> childrenBodyAdd(@RequestHeader("accesstoken") String accesstoken, @RequestBody BodyRecordDto bodyRecordDto ){
 		bodyRecordDto.setBmi(Math.round((bodyRecordDto.getWeight()/(Math.pow(bodyRecordDto.getHeight()/100,2)))*10.0)/10.0);
 		try {
