@@ -22,4 +22,8 @@ public interface ChildrenSerivce {
 
 	String findProfileUrl(MultipartFile file)throws Exception;
 
+	String findChildrenBodyRecord(BodyRecordDto bodyRecordDto) throws Exception;
+
+	void modifyChildrenBody(BodyRecordDto bodyRecordDto) throws Exception;
+
 }
