@@ -113,19 +113,12 @@ function RegisterChild({userPage}) {
         dispatch(childSelect(0))
         navigate('/play')
     }
-    // 확인 후 오류 없음 삭제
-    // useEffect(()=>{
-    //     if (data||addNewChild.data||deleteChild.data) {
-    //         alert('아이 프로필 업데이트 완료되었습니다.')
-    //         dispatch(childSelect(0))
-    //         navigate('/play')
-    //     }
-    // },[data,addNewChild.data,deleteChild.data])
+
     const handleUploadImg=(e)=>{
         const file = e.target.files[0]
         const formData = new FormData();
         formData.append('file', file);
-        // getImgUrl.fetchApi('POST', "/children/profile", {file:file})
+        getImgUrl.fetchApi('POST', "/children/profile", formData)
     }
     const uploadImg=()=>{
         fileInput.current.click()
@@ -152,13 +145,13 @@ function RegisterChild({userPage}) {
             gender,
             weight,
             height,
-            ProfileImageUrl:profileImageUrl||"https://kangwedance.s3.ap-northeast-2.amazonaws.com/기본+프로필+이미지.png",
+            ProfileImageUrl:profileImageUrl||"https://d3qb4vbeyp8phu.cloudfront.net/기본+프로필+이미지.png",
         }
         const patchBody = {
             nickname,
             birthDate,
             gender,
-            ProfileImageUrl:profileImageUrl||"https://kangwedance.s3.ap-northeast-2.amazonaws.com/기본+프로필+이미지.png",
+            ProfileImageUrl:profileImageUrl||"https://d3qb4vbeyp8phu.cloudfront.net/기본+프로필+이미지.png",
             childIdx,
         }
         if (addChild) addNewChild.fetchApi('POST', '/children', body, onProfileUpdateSuccess)
@@ -204,7 +197,7 @@ function RegisterChild({userPage}) {
                         <div className="profile-container">
                         <ProfileImage src={profileImageUrl||kangkang}/>
                             <FormInputButton className="white-black-line-btn" color="white" type="button" value="수정" onClick={()=>uploadImg()}/>
-                            <input ref={fileInput} type="file" style={{ display: "none" }}          onChange={(e) => {handleUploadImg(e)}}
+                            <input ref={fileInput} type="file" style={{ display: "none" }} onChange={(e) => {handleUploadImg(e)}}
                             />
                             <FormInputButton className="white-black-line-btn" color="white" type="button" value="삭제" />
                         </div>
