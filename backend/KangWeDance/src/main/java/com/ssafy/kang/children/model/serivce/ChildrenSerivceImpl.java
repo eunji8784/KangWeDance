@@ -40,7 +40,6 @@ public class ChildrenSerivceImpl implements ChildrenSerivce {
 	@Override
 	public void addChildrenBody(BodyRecordDto bodyRecordDto) throws Exception {
 		childrenMapper.insertChildrenBody(bodyRecordDto);
-		
 	}
 	@Override
 	public List<ChildrenDto> findChildren(int parentIdx) throws Exception {
