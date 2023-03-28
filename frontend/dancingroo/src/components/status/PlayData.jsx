@@ -83,28 +83,44 @@ function PlayData({handleIsModalOpen, username}) {
   const [playRecord, setPlayRecord] = useState([]);
   
   const handleSelectedDay = (date)=>{
-        setSelectedDay(date)
-    }
+    setSelectedDay(date)
+  }
 
   const palyRecoApi = useApi()
 
   //선택한 날짜에 따라 데이터 불러오가
   useEffect(()=>{
-    palyRecoApi.fetchApi('GET', `/status/play-record/date=${selectedDay}`)
+    var dateStr = ""
+    if(selectedDay){
+      var words = selectedDay.split(' ');
+      const year = words[0].slice(0, 4);
+      const month = ('0' + words[1].slice(0, -1)).slice(-2);
+      const day = ('0' + words[2].slice(0, -1)).slice(-2);
+      dateStr = `${year}-${month}-${day}`;
+    } else {
+      const date = new Date();
+      const year = date.getFullYear();
+      const month = ('0' + (date.getMonth() + 1)).slice(-2);
+      const day = ('0' + date.getDate()).slice(-2);
+      dateStr = `${year}-${month}-${day}`;
+    }
+
+    palyRecoApi.fetchApi('GET', `/status/play-record/${dateStr}`)
+
   },[selectedDay])
 
   //선택 날짜 데이터 중 현재 아이에 맞는 것만 넣기
   useEffect(()=>{
+    // console.log(palyRecoApi.data.data.length)
     if (palyRecoApi.data) {
       var arr = [];
-      for (var i = 0; i < palyRecoApi.data.data; i++) {
-            if(selectedChild.childIdx != palyRecoApi.data.data[i].childIdx){
+      for (var i = 0; i < palyRecoApi.data.data.length; i++) {
+            if(selectedChild.childIdx === palyRecoApi.data.data[i].childIdx){
                 arr.push(palyRecoApi.data.data[i]);
             }
       }
       setPlayRecord(arr) 
     }
-    // console.log(playRecord)
   }, [palyRecoApi.data, selectedChild.childIdx])
 
 
