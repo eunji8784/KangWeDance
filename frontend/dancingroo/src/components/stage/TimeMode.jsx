@@ -16,8 +16,7 @@ const MODELURL =
   "https://teachablemachine.withgoogle.com/models/7g9Z9_ogC/model.json"
 const METADATAURL =
   "https://teachablemachine.withgoogle.com/models/7g9Z9_ogC/metadata.json"
-let scoreRecordList = []
-
+  
 const Screen = styled.div`
   width: 100vw;
   height: 100vh;
@@ -70,6 +69,7 @@ function Timemode() {
   const [aimedPosture, setAimedPosture] = useState(null)
   const [prevPosture, setPrevPosture] = useState(10)
   const [count, setCount] = useState(0)
+  const [scoreRecordList, setScoreRecordList] = useState([])
   const [showGreat, setShowGreat] = useState(false)
   const [showGood, setShowGood] = useState(false)
   const [showCheerUp, setShowCheerUp] = useState(false)
@@ -222,7 +222,7 @@ function Timemode() {
             scoreRecord.count = count
             scoreRecord.time = aimedPosture.endTime - aimedPosture.startTime
             scoreRecord.countStandard = aimedPosture.countStandard
-            scoreRecordList = [...scoreRecordList, scoreRecord]
+            setScoreRecordList([...scoreRecordList, scoreRecord])
           }
           setAimedPosture(filteredTimeline)
           setCount(0)
@@ -250,7 +250,7 @@ function Timemode() {
   )
 
   useEffect(() => {
-    if (scoreRecordList?.length === playTimeline?.length) {
+    if (scoreRecordList.length === playTimeline?.length) {
       const playData = {
         childIdx: children[select].childIdx,
         songIdx: stageItem.songIdx,
@@ -260,7 +260,7 @@ function Timemode() {
       playRecord.fetchApi('POST', '/play', playData)
     }
   },[scoreRecordList])
-  console.log(!playRecord.isLoading)
+
   return (
     <Screen>
       <img className="background-img" src={bgImg} alt="background" />
