@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import styled from "styled-components"
 import Webcam from "react-webcam"
+import * as tmPose from '@teachablemachine/pose';
 import PauseModal from "./PauseModal"
 import PlayResult from "./PlayResult"
 import Feedback from "./Feedback"
@@ -11,7 +12,6 @@ import { useInterval } from "../../hooks/useInterval"
 import useApi from "../../hooks/auth/useApi"
 import bgImg from "../../assets/images/bgImg.png"
 
-const tmPose = window.tmPose
 const MODELURL =
   "https://teachablemachine.withgoogle.com/models/7g9Z9_ogC/model.json"
 const METADATAURL =
