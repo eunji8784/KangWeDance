@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import useSound from "use-sound";
+import HoverVideoPlayer from 'react-hover-video-player';
 import { setStageItem } from "../../store/stageSlice";
 import { Wrapper, H2, PinkButton } from "../common/ui/Semantics";
 import { TbStarFilled } from "react-icons/tb";
 import { GoMute, GoUnmute } from "react-icons/go";
-import testImg from "../../assets/images/fd2.png";
 
 const ItemWrapper = styled(Wrapper)`
   width: 100%;
@@ -31,6 +31,7 @@ const ThumbnailWrapper = styled(Wrapper)`
     position: absolute;
     top: 5%;
     right: 5%;
+    z-index: 1;
   }
 `
 
@@ -66,12 +67,13 @@ function PlayItem({item, tags}) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [previewPlay, setPreviewPlay] = useState(false);
+  const [focus, setFocus] = useState(false)
   const [ play, { stop, sound }] = useSound(item?.previewMusicUrl, { format: 'mp3' })
 
   const Preview = () => {
     return (
       item?.playMode === 0 && 
-      <div className="preview" onClick={togglePreview}>
+      <div className="preview" onClick={togglePreview} onMouseEnter={onFocus}>
         { !previewPlay ? <GoMute /> : <GoUnmute /> }
       </div>
     )
@@ -90,6 +92,15 @@ function PlayItem({item, tags}) {
     return tags.map(tag => <Tag key={tag}> { `#${tag}` } </Tag>)
   }
 
+  useEffect(() => {
+    if (previewPlay) {
+      play()
+      sound?.fade(0, 1, 2000)
+    } else {
+      stop()
+    }
+  },[previewPlay])
+  
   const startStage = () => {
     dispatch(setStageItem(item))
     navigate(`/play/${item.playMode}/${item.songIdx}`)
@@ -103,25 +114,35 @@ function PlayItem({item, tags}) {
     if (previewPlay) {
       setPreviewPlay(false)
     }
+    if (focus) {
+      setFocus(false)
+    }
   }
 
-  useEffect(() => {
-    if (previewPlay) {
-      play()
-      sound?.fade(0, 1, 2000)
-    } else {
-      stop()
-    }
-  },[previewPlay])
+  const onFocus = () => {
+    setFocus(true)  
+  }
 
   return (
     <ItemWrapper >
       <ThumbnailWrapper onMouseLeave={stopPreview}>
-        <img className="thumbnail"
-          src={item.thumbnailUrl === 'url' ? testImg : item.thumbnailUrl}
-          alt="thumbnail"
+        <HoverVideoPlayer
           onClick={startStage}
-          />
+          videoClassName="thumbnail"
+          videoSrc={item?.videoUrl}
+          pausedOverlay={
+            <img className="thumbnail"
+              src={item.thumbnailUrl}
+              alt="thumbnail"
+            />
+          }
+          overlayTransitionDuration={1500}
+          onHoverEnd={() => { stop() }}
+          sizingMode="overlay"
+          playbackRangeEnd={5}
+          restartOnPaused={true}
+          focused={focus}
+        />
         <Preview/>
       </ThumbnailWrapper>
       <InfoWrapper>
