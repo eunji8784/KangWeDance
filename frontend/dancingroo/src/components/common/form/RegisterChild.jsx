@@ -115,6 +115,7 @@ function RegisterChild({userPage}) {
     const selectedIdx = useSelector(state=>state.userState.select)
     const {nickname, weight, height, gender, profileImageUrl, childIdx, birthDate} = useSelector(state=>state.userState.children[selectedIdx||0]) // 디폴트는 첫째
     const firstChildIdx = useSelector(state=>state.userState.children[0].childIdx)
+    const secondChildIdx = useSelector(state=>state.userState.children[1]?.childIdx)
     const addChild = useSelector(state=>state.userState.addChild)
     const dispatch = useDispatch()
     const navigate = useNavigate();
@@ -161,7 +162,7 @@ function RegisterChild({userPage}) {
         if (window.confirm('아이 프로필 삭제하시겠습니까?')){
             const onSuccess = ()=>{
                 alert('아이 프로필이 삭제되었습니다.')
-                if (childIdx===firstChildIdx){ // 첫째아이 삭제했으면 store에 등록된 아이프로필 지우고, 다시 조인페이지로 보냄
+                if (childIdx===firstChildIdx&&!secondChildIdx){ // 아이가 0명일 때
                     dispatch(getChildState([{}]))
                     navigate('/users/join')
                 } else {
