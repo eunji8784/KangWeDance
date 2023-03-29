@@ -8,6 +8,7 @@ import useApi from "../../../hooks/auth/useApi";
 import { login, getChildState,patchChildState,childSelect } from "../../../store/userSlice";
 import { useDispatch,useSelector } from "react-redux";
 import axios from "axios";
+import useValidation from "../../../hooks/auth/useValidation";
 
 const ModWrapper = styled(Wrapper)`
     width: 100vw;
@@ -51,6 +52,24 @@ const ModSection = styled(Section)`
         width:100%;
        }
     }
+    span{
+        color:red;
+        font-weight:normal;
+        margin-top:0.2rem;
+        height:2rem;
+        /* box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1); */
+        cursor: pointer;
+        /* animation: blink 3s infinite;
+        transition: none; */
+    }
+    /* @keyframes blink {
+        0%{
+            color:red;
+        }
+        100% {
+            color: black;
+        }
+    } */
 `
 export const FormLabel = styled.label`
     font-size: 1rem;
@@ -99,12 +118,18 @@ function RegisterChild({userPage}) {
     const addChild = useSelector(state=>state.userState.addChild)
     const dispatch = useDispatch()
     const navigate = useNavigate();
+    const isValid = useValidation()
     const addNewChild = useApi()
     const patchChild = useApi()
     const deleteChild = useApi()
     const [btnColor, setBtnColor] = useState(gender)
     const fileInput = useRef(null);
     const defaultImg = "https://d3qb4vbeyp8phu.cloudfront.net/기본+프로필+이미지.png"
+    // 유효성검사 에러관리 state
+    const [nameValidError, setNameValidError] = useState(false)
+    const [weightValidError, setWeightValidError] = useState(false)
+    const [heightValidError, setHeightValidError] = useState(false)
+    const [dateValidError, setDateValidError] = useState(false)
 
     const onProfileUpdateSuccess = (json)=>{
         alert('아이 프로필 등록이 완료되었습니다.')
@@ -163,8 +188,25 @@ function RegisterChild({userPage}) {
             profileImageUrl:profileImageUrl,
             childIdx,
         }
-        if (addChild) addNewChild.fetchApi('POST', '/children', body, onProfileUpdateSuccess)
-        else patchChild.fetchApi('PATCH', '/children', patchBody, onProfileUpdateSuccess)
+        
+        const validCheck = isValid.validate({nickname, height, weight, birthDate});
+
+        if (addChild) {
+            if (validCheck.nicknameCheck && validCheck.heightCheck && validCheck.weightCheck && validCheck.birthDateCheck) {
+                addNewChild.fetchApi('POST', '/children', body, onProfileUpdateSuccess);
+            } else {
+                setNameValidError(!validCheck.nicknameCheck);
+                setHeightValidError(!validCheck.heightCheck);
+                setWeightValidError(!validCheck.weightCheck);
+                setDateValidError(!validCheck.birthDateCheck);
+            }
+        } else {
+            if (validCheck.nicknameCheck) {
+                patchChild.fetchApi('PATCH', '/children', patchBody, onProfileUpdateSuccess);
+            } else {
+                setNameValidError(!validCheck.nicknameCheck);
+            }
+        }
     }
     const handleInputChange = (e) => {
         let { name, value } = e.target;
@@ -186,7 +228,11 @@ function RegisterChild({userPage}) {
                 <ModSection>
                     <Article>
                         <FormLabel htmlFor="nickname"> 닉네임</FormLabel>
-                        <FormInput value={nickname||''} type="text" name="nickname" id="nickname" placeholder=" 닉네임" onChange={handleInputChange}/>
+                        {nameValidError?
+                            <span onClick={()=>setNameValidError(false)}>{isValid.errors.nickname}</span>
+                        :
+                            <FormInput value={nickname||''} type="text" name="nickname" id="nickname" placeholder=" 닉네임" onChange={handleInputChange}/>
+                        }
                     </Article>
                     <Article>
                         <FormLabel htmlFor="gender"> 성별</FormLabel>
@@ -197,7 +243,11 @@ function RegisterChild({userPage}) {
                     </Article>
                     <Article>
                         <FormLabel htmlFor="birthDate"> 생년월일</FormLabel>
-                        <FormInput value={birthDate||''} type="date" name="birthDate" id="birthDate" placeholder=" 닉네임" onChange={handleInputChange}/>
+                        {dateValidError?
+                            <span onClick={()=>setDateValidError(false)}>{isValid.errors.birthDate}</span>
+                            :
+                            <FormInput value={birthDate||''} type="date" name="birthDate" id="birthDate" placeholder=" 닉네임" onChange={handleInputChange}/>
+                        }
                     </Article>
                 </ModSection>
                 <ModSection>
@@ -214,13 +264,21 @@ function RegisterChild({userPage}) {
                     <Article>
                         <div className="kids-state">
                             <FormLabel htmlFor="height">키</FormLabel>
-                            <FormInput value={height||''} type="text" name="height" id="height" placeholder=" cm" onChange={handleInputChange} disabled={!addChild}/>
+                            {heightValidError?
+                                <span onClick={()=>setHeightValidError(false)}>{isValid.errors.height}</span>
+                            :
+                                <FormInput value={height||''} type="text" name="height" id="height" placeholder=" cm" onChange={handleInputChange} disabled={!addChild}/>
+                            }
                         </div>
                     </Article>
                     <Article>
                         <div className="kids-state">
                             <FormLabel htmlFor="weight"> 체중</FormLabel>
-                            <FormInput value={weight||''} type="text" name="weight" id="weight" placeholder=" kg" onChange={handleInputChange} disabled={!addChild}/>
+                            {weightValidError?
+                                <span onClick={()=>setWeightValidError(false)}>{isValid.errors.weight}</span>
+                            :
+                                <FormInput value={weight||''} type="text" name="weight" id="weight" placeholder=" kg" onChange={handleInputChange} disabled={!addChild}/>
+                            }
                         </div>
                     </Article>
                 </ModSection>
