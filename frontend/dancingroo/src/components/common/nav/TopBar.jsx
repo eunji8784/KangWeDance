@@ -6,7 +6,7 @@ import { childSelect } from "../../../store/userSlice";
 import useLogout from "../../../hooks/auth/useLogout";
 //logo
 import logo from "../../../assets/images/logo.png"
-import {RiUserFill} from "react-icons/ri";
+import {FaChild} from "react-icons/fa";
 
 const Wrapper = styled.div`
     /* background-color:gray; */
@@ -97,7 +97,9 @@ function HeaderBar(props) {
     },[data])
 
     const logoutHandler = ()=>{
-        handleLogout()
+        if (window.confirm('로그아웃 하시겠습니까?')){
+            handleLogout()
+        }
     }
     return (
         <Wrapper>
@@ -120,7 +122,7 @@ function HeaderBar(props) {
                     onClick={() => {
                         navigate(`/users`);
                     }}>   
-                        <RiUserFill color="#F05475" size="2rem"/>
+                        <FaChild color="#F05475" size="2rem"/>
                     </div>
                     </>
                     }
