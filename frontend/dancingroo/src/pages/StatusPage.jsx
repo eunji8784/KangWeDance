@@ -7,9 +7,6 @@ import InputModal from "../components/status/InputModal";
 import PlayData from "../components/status/PlayData";
 import StatusBar from "../components/status/StatusBar";
 
-import useApi from "../hooks/auth/useApi";
-import { getChildState } from "../store/userSlice";
-
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
@@ -23,15 +20,6 @@ function StatusPage(props) {
     const {handleWatchingPage} = props
     const [section, setSection] = useState('health')
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const getChild = useApi()
-
-    // 모달 열리고 닫힐 때마다 아이 조회요청하기
-    useEffect(()=>{
-        const onGetChildStateSuccess = (json)=>{
-            dispatch(getChildState(json.data))
-          }
-        getChild.fetchApi('GET', '/children', onGetChildStateSuccess)
-    },[isModalOpen])
     
     useEffect(()=>{
         handleWatchingPage('status')
