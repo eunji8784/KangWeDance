@@ -48,7 +48,7 @@ function Registration(props) {
                 <h1>아이 프로필 등록하기</h1>
                 <div className="house">
                     <FormLabel className="우리집" htmlFor="familyname">우리 집</FormLabel>
-                    <FormInput className="우리집인풋" defaultValue={familynameState} type="text" name="familyname" id="familyname" placeholder=" 캥거루합창단" onChange={handleInputChange}/>
+                    <FormInput className="우리집인풋" defaultValue={familyname} type="text" name="familyname" id="familyname" placeholder=" 캥거루합창단" onChange={handleInputChange}/>
                 </div>
             </ModHeader>
             <RegisterChild/>
