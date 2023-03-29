@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { childSelect } from "../../../store/userSlice";
 //logo
 import logo from "../../../assets/images/logo.png"
-import {RiUserFill} from "react-icons/ri";
+import {FaChild} from "react-icons/fa";
 import Dance from '../../../assets/images/Dance.png'
 import Gallery from '../../../assets/images/Gallery.png'
 import Status from '../../../assets/images/Status.png'
@@ -144,7 +144,9 @@ function HeaderBar(props) {
         }
     },[data])
     const logoutHandler = ()=>{
-        handleLogout()
+        if (window.confirm('로그아웃 하시겠습니까?')){
+            handleLogout()
+        }
     }
     return (
         <Wrapper>
@@ -168,7 +170,7 @@ function HeaderBar(props) {
                     onClick={() => {
                         navigate(`/users`);
                     }}>   
-                        <RiUserFill color="#F05475" size="2rem"/>
+                        <FaChild color="#F05475" size="2rem"/>
                     </div>
                     </>
                     }
