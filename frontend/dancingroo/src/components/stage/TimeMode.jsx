@@ -125,8 +125,8 @@ function Timemode() {
       } else {
         videoref.current.play()
       }
-      setIsModalOpen((prev)=>!prev)
     }
+    setIsModalOpen((prev)=>!prev)
   }
 
   // 예측 함수 - 캠에 따라 자세 상태(prevPosture)를 바꿈
@@ -260,7 +260,7 @@ function Timemode() {
       playRecord.fetchApi('POST', '/play', playData)
     }
   },[scoreRecordList])
-
+  console.log(!playRecord.isLoading)
   return (
     <Screen>
       <img className="background-img" src={bgImg} alt="background" />
