@@ -50,6 +50,8 @@ function PhotoItem({imgUrl, newDay, date, handleImge, photoIdx}) {
             text: "사진을 삭제하시겠습니까?",
             width: 300,
             showCancelButton: true,
+            iconColor: '#F05475 ',
+            confirmButtonColor: '#F05475 ',
             confirmButtonText: "삭제",
             cancelButtonText: "취소"
         }).then(function(e){
