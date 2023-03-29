@@ -6,6 +6,9 @@ import { ModalBtn } from "../status/HealthData";
 import {ModalWrapper} from "../common/ui/Modal"
 
 const PauseModalWrapper = styled(ModalWrapper)`
+  justify-content: space-evenly;
+  width: 35%;
+  height: 40%;
   .gray {
     background-color: #FFD732;
     box-shadow: 0px 3px 10px rgba(240, 235, 84, 0.3);
