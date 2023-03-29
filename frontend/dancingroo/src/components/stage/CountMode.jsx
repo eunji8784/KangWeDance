@@ -16,7 +16,6 @@ const MODELURL =
   "https://teachablemachine.withgoogle.com/models/7g9Z9_ogC/model.json"
 const METADATAURL =
   "https://teachablemachine.withgoogle.com/models/7g9Z9_ogC/metadata.json"
-let scoreRecordList = []
 
 const Screen = styled.div`
   width: 100vw;
@@ -70,6 +69,7 @@ function CountMode() {
   const [aimedPosture, setAimedPosture] = useState(null)
   const [prevPosture, setPrevPosture] = useState(10)
   const [count, setCount] = useState(0)
+  const [scoreRecordList, setScoreRecordList] = useState([])
   const [showGreat, setShowGreat] = useState(false)
   const [showGood, setShowGood] = useState(false)
   const [showCheerUp, setShowCheerUp] = useState(false)
@@ -124,8 +124,8 @@ function CountMode() {
       } else {
         videoref.current.play()
       }
-      setIsModalOpen((prev)=>!prev)
     }
+    setIsModalOpen((prev)=>!prev)
   }
 
   // 예측 함수 - 캠에 따라 자세 상태(prevPosture)를 바꿈
@@ -221,7 +221,7 @@ function CountMode() {
             scoreRecord.count = count
             scoreRecord.time = aimedPosture.endTime - aimedPosture.startTime
             scoreRecord.countStandard = aimedPosture.countStandard
-            scoreRecordList = [...scoreRecordList, scoreRecord]
+            setScoreRecordList([...scoreRecordList, scoreRecord])
           }
           setAimedPosture(filteredTimeline)
           setCount(0)
@@ -249,7 +249,7 @@ function CountMode() {
   )
 
   useEffect(() => {
-    if (scoreRecordList?.length === playTimeline?.length) {
+    if (scoreRecordList.length === playTimeline?.length) {
       const playData = {
         childIdx: children[select].childIdx,
         songIdx: stageItem.songIdx,
