@@ -4,12 +4,13 @@ import React, {useEffect, useState
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 //logo
-import addChild from "../../../assets/images/addChild.png"
+import plusprofile from "../../../assets/images/plusprofile.png"
 import kangkang from "../../../assets/images/kangkang.png"
 // 
 import { useDispatch, useSelector } from "react-redux";
 import { childSelect, getChildState } from "../../../store/userSlice";
 import useApi from "../../../hooks/auth/useApi";
+
 const Wrapper = styled.div`
     display: ${({display})=>display? 'none':'flex'};
     align-items: center;
@@ -18,7 +19,7 @@ const Wrapper = styled.div`
 `
 const ProfileImg = styled.img`
     margin:1rem 0.3rem;
-    background-color:#FFD732;
+    background-color:#FFB0B6;
     width:3.5rem;
     height:3.5rem;
     border-radius:100%;
@@ -50,14 +51,14 @@ function ChildProfile(props) {
     const selectedIdx = useSelector(state=>state.userState.select)
     const children = useSelector(state=>state.userState.children)
     const {data, isLoading, error, fetchApi} = useApi()
-    const [profileImg, setProfileImg] = useState([kangkang, addChild, addChild])
+    const [profileImg, setProfileImg] = useState([kangkang, plusprofile, plusprofile])
     const [active, setActive] = useState([true, false, false]); 
     
     // 데이터 있으면 프사 띄우고, 더미차일드면 플러스이미지 띄우기
     useEffect(()=>{
       const profileState = children.map((child)=>{
         if (child.childIdx===null){
-          return addChild
+          return plusprofile
         } else {
           return child.profileImageUrl?? kangkang
         }
@@ -79,7 +80,7 @@ function ChildProfile(props) {
     }
     const handleClick = (childIdx) => {
         dispatch(childSelect(childIdx))
-        if (profileImg[childIdx] === addChild) navigate('/users/')
+        if (profileImg[childIdx] === plusprofile) navigate('/users/')
     };
     return (
         <Wrapper>

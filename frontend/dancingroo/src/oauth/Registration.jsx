@@ -33,6 +33,7 @@ function Registration(props) {
     const navigate = useNavigate();
     const dispatch = useDispatch()
     const familyname = useSelector(state=>state.userState.familyname)
+    const addChild = useSelector(state=>state.userState.addChild)
     const [familynameState, setFamilynameState] = useState(familyname)
 
     useEffect(()=>{
