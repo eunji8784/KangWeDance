@@ -62,13 +62,25 @@ const Wrapper = styled.div`
         }
 
         .text-box{
-          display:flex;
           width: 100%;
           display:flex;
           flex-wrap: wrap;
           justify-content:center;
+          align-items: center;
           font-size: 1.1rem;
           margin-top: 0.2rem;
+        }
+
+        .text-box-bold{
+          width: 100%;
+          display:flex;
+          flex-wrap: wrap;
+          justify-content:center;
+          align-items: center;
+          font-size: 1.2rem;
+          margin-top: 0.2rem;
+          color: #F05475;
+          font-weight: 600;
         }
       }
     }
@@ -84,7 +96,7 @@ const Table = styled.table`
     padding: 0.5rem;
   }
   thead{
-    background-color: #f87171;
+    background-color:#F05475;
     color: white;
   }
   margin-bottom: 1rem;
@@ -197,8 +209,9 @@ function PlayData({handleIsModalOpen}) {
                     <div className="calendar-box">
                         <PlayCalendar palyDay={palyDay} handleSelectedDay={handleSelectedDay}/>
                     </div>
-                    <div className='text-box'> 올해 {selectedMonth}월의 총 플레이 횟수 {playMonthCnt}, </div>
-                    <div className='text-box'> 총 소모 칼로리 {playCalTotal}</div>
+                    <div className='text-box-bold'>올해 {selectedMonth}월</div>
+                    <div className='text-box'>총 플레이 횟수 {playMonthCnt},</div>
+                    <div className='text-box'>총 소모 칼로리 {playCalTotal} cal</div>
                 </article>
                 <article className="status-box right">
                     <h3>{selectedDay}</h3>
@@ -224,7 +237,7 @@ function PlayData({handleIsModalOpen}) {
                               })}
                           </tbody>
                       </Table>
-                      <span className='text-box'> 총 소모 칼로리 {selectedCalTotal}(kcal)</span>
+                      <span className='text-box'> 일일 소모 칼로리 {selectedCalTotal}(cal)</span>
                     </>
                     :
                     <NotReco> 기록이 없어요! </NotReco>
