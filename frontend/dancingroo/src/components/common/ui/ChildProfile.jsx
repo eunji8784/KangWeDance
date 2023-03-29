@@ -4,10 +4,8 @@ import React, {useEffect, useState
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 //logo
-import logo from "../../../assets/images/logo.png"
-import {RiUserFill} from "react-icons/ri";
+import addChild from "../../../assets/images/addChild.png"
 import kangkang from "../../../assets/images/kangkang.png"
-import plus from "../../../assets/images/plus.png"
 // 
 import { useDispatch, useSelector } from "react-redux";
 import { childSelect, getChildState } from "../../../store/userSlice";
@@ -52,14 +50,14 @@ function ChildProfile(props) {
     const selectedIdx = useSelector(state=>state.userState.select)
     const children = useSelector(state=>state.userState.children)
     const {data, isLoading, error, fetchApi} = useApi()
-    const [profileImg, setProfileImg] = useState([kangkang, plus, plus])
+    const [profileImg, setProfileImg] = useState([kangkang, addChild, addChild])
     const [active, setActive] = useState([true, false, false]); 
     
     // 데이터 있으면 프사 띄우고, 더미차일드면 플러스이미지 띄우기
     useEffect(()=>{
       const profileState = children.map((child)=>{
         if (child.childIdx===null){
-          return plus
+          return addChild
         } else {
           return child.profileImageUrl?? kangkang
         }
@@ -81,14 +79,16 @@ function ChildProfile(props) {
     }
     const handleClick = (childIdx) => {
         dispatch(childSelect(childIdx))
-        if (profileImg[childIdx] === plus) navigate('/users/')
+        if (profileImg[childIdx] === addChild) navigate('/users/')
     };
     return (
         <Wrapper>
           {/* bool값은 html에서 유효하지 않기 떄문에 string으로 바꿔서 보내줌 */}
           <ProfileImg active={active[0].toString()} onClick={()=>handleClick(0)} src={profileImg[0]}/>
           <ProfileImg active={active[1].toString()} onClick={()=>handleClick(1)} src={profileImg[1]}/>
+          {children[1]?.childIdx &&
           <ProfileImg active={active[2].toString()} onClick={()=>handleClick(2)} src={profileImg[2]}/>
+          }
         </Wrapper>
     );
 }
