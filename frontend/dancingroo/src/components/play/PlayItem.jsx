@@ -108,7 +108,7 @@ function PlayItem({item, tags}) {
   useEffect(() => {
     if (previewPlay) {
       play()
-      sound.fade(0, 1, 2000)
+      sound?.fade(0, 1, 2000)
     } else {
       stop()
     }
