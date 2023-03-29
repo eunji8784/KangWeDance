@@ -53,6 +53,7 @@ const Line = styled.div`
 function UserPage(props) {
     const navigate = useNavigate();
     const dispatch = useDispatch()
+    const addChild = useSelector(state=>state.userState.addChild)
     const [, , removeCookie] = useCookies('accessToken');
     const withdrawAccount = useApi()
 
@@ -68,7 +69,7 @@ function UserPage(props) {
     }
     return (
         <Wrapper>
-            <Title>회원 정보</Title>
+            <Title>{addChild? '프로필 추가하기' : "회원 정보"}</Title>
             <Wrapper2>
                 <AccountInfo/>
                 <div><ChildProfile/></div>
