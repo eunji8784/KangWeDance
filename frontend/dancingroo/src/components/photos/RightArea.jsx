@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { Stage, Layer, Image } from "react-konva";
 import useImage from 'use-image';
+import Swal from "sweetalert2";
 
 import { Wrapper, PinkButton } from "../common/ui/Semantics";
 import instance from "../../hooks/auth/Instance";
@@ -120,13 +121,23 @@ function RightArea({image, frameImage, stickerImage, stickerNum}) {
 
     //이미지 다운로드
    const downloadImage = () => {
+    if (image !== 'https://d3qb4vbeyp8phu.cloudfront.net/photoInit.png'){        
        const url = stageRef.current.toDataURL();
        const today = new Date();
        const year = today.getFullYear(); // 년도
        const month = today.getMonth() + 1;  // 월
        const date = today.getDate();  // 날짜
-   
        downloadURI(url, 'KangWeDance'+ year + month + date);   
+    } else {
+        Swal.fire({
+            icon: 'warning',               
+            width: 300,
+            iconColor: '#F05475 ',
+            text: '기본 이미지 입니다!', 
+            confirmButtonColor: '#F05475 ',
+            confirmButtonText: '확인',
+          });
+    }
    }
 
     //이미지 uri 다운로드 함수
@@ -143,26 +154,37 @@ function RightArea({image, frameImage, stickerImage, stickerNum}) {
     //이미지 공유
     const [shareImageUrl, setShareImageUrl] = useState();
     const shareImage = async () => {
-        const base64 = stageRef.current.toDataURL();
-        const url = "https://kangwedance.site/dev/children/profile";
-        var arr = base64.split(','),
-        mime = arr[0].match(/:(.*?);/)[1],
-        bstr = atob(arr[1]),
-        n = bstr.length,
-        u8arr = new Uint8Array(n);
-        
-        while(n--){
-            u8arr[n] = bstr.charCodeAt(n);
-        }
-        
-        const file = new File([u8arr], "카카오공유", {type:mime});
-        const formData = new FormData();
-        formData.append('file', file);
-        try {
-            const response = await instance.post(url, formData);
-            setShareImageUrl(response.data.data);
-        } catch (error) {
-            console.error(error);
+        if (image !== 'https://d3qb4vbeyp8phu.cloudfront.net/photoInit.png'){
+            const base64 = stageRef.current.toDataURL();
+            const url = "https://kangwedance.site/dev/children/profile";
+            var arr = base64.split(','),
+            mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]),
+            n = bstr.length,
+            u8arr = new Uint8Array(n);
+            
+            while(n--){
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+            
+            const file = new File([u8arr], "카카오공유", {type:mime});
+            const formData = new FormData();
+            formData.append('file', file);
+            try {
+                const response = await instance.post(url, formData);
+                setShareImageUrl(response.data.data);
+            } catch (error) {
+                console.error(error);
+            }
+        } else {
+            Swal.fire({
+                icon: 'warning',               
+                width: 300,
+                iconColor: '#F05475 ',
+                text: '기본 이미지 입니다!', 
+                confirmButtonColor: '#F05475 ',
+                confirmButtonText: '확인',
+              });
         }
     }
     
