@@ -1,12 +1,13 @@
 import React, {useState} from "react";
 // import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { useSelector,useDispatch } from "react-redux";
 import Modal from "../common/ui/Modal";
 import { editFamilyname } from "../../store/userSlice";
 import useApi from "../../hooks/auth/useApi";
 import { useEffect } from "react";
 import { levelDesign } from "../../utils/levelDesign";
+import useValidation from "../../hooks/auth/useValidation";
 
 const Wrapper = styled.div`
     display: flex;
@@ -30,7 +31,23 @@ const Title = styled.div`
     cursor: pointer;
     position:relative;
     justify-content:center;
+    span{
+        display: block;
+        margin-top: 0.5rem;
+        color: red;
+        font-size: 1.3rem;
+        font-weight: normal;
+        cursor: pointer;
+        height:2.2rem;
+    }
 `;
+const InputStyle = css`
+    outline:none;
+    border:1px solid transparent;
+    height:2rem;
+    margin-bottom:0.5rem;
+    left:0;
+`
 const Input = styled.input`
     outline:none;
     border:1px solid transparent;
@@ -57,12 +74,17 @@ function AccountInfo(props) {
     // const navigate = useNavigate();
     const dispatch = useDispatch()
     const familyname = useSelector(state=>state.userState.familyname)
-    const [newFamilyname, setNewFamilyname] = useState(familyname||'');
     const [experiencePercentage, setExperiencePercentage] = useState(0);
     const patchFamilyname = useApi()
     const getExp = useApi()
+    const isValid = useValidation()
+    const [ValidError, setValidError] = useState(false)
 
-
+    useEffect(()=>{
+        if (isValid.errors.familyname){
+            setValidError(true)
+        }
+    },[isValid.errors.familyname])
     // 경험치 조회 요청
     useEffect(()=>{
         const onSuccess = (json)=>{
@@ -73,32 +95,42 @@ function AccountInfo(props) {
         }
         getExp.fetchApi('GET', '/parents/experience-score', onSuccess) // [1]. 콜백을 3번째로 넣어도 body로 안가고 콜백함수로 판단함.
     },[])
-
     // 가족닉네임 변경 요청
     const editFamilynameHandler = (e)=>{
         if (e.key!=="Enter") return
 
         if (window.confirm('가족닉네임 변경할까요?')){
-            const onSuccess = ()=>{
-                dispatch(editFamilyname(newFamilyname))
+            if (isValid.validate({familyname}).familynameCheck) {
+                // const onSuccess = ()=>{
+                //     dispatch(editFamilyname(familyname))
+                // }
+                patchFamilyname.fetchApi('PATCH', '/parents/nickname', {familyname})
+            } else {
+                setValidError(true)
             }
-            patchFamilyname.fetchApi('PATCH', '/parents/nickname', {familyname:newFamilyname}, onSuccess) // [2]. 4개 인자 모두 사용한 경우
         }
     }
     const handleInputChange = (e) => {
-        setNewFamilyname(e.target.value); 
+        dispatch(editFamilyname(e.target.value)); 
     };
     return (
         <Wrapper>
             <Title>
+                {ValidError?
+                <span css={InputStyle} onClick={()=>setValidError(false)}>{isValid.errors.familyname}</span>
+                :
                 <Input
                 type="text"
-                value={newFamilyname||familyname||'닉네임 불러오는 중...'}
+                name="familyname"
+                id="familyname"
+                value={familyname||''}
                 onChange={handleInputChange}
-                width={newFamilyname?.length+1 || 5}
+                width={familyname?.length+1 || 5}
                 maxLength={15}
                 onKeyPress={editFamilynameHandler}
+                placeholder={'가족 닉네임'}
                 />
+                }
             </Title>
             <div className="exp-wrapper">
                 <p>교감Level</p>
