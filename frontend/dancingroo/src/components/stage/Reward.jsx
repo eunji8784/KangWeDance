@@ -73,7 +73,7 @@ const LockIcon = styled(MdLock)`
   font-size: 3rem;
   color: black;
   transition: all 1s;
-  animation: ${props => (props.levelUp ? shakeAnimation : null)} 0.5s ease-in-out forwards;
+  animation: ${props => (props.levelup === "true" ? shakeAnimation : null)} 0.5s ease-in-out forwards;
   animation-delay: 2.5s;
 `;
 
@@ -104,7 +104,7 @@ function Reward({levelUp, frame}) {
       <FrameItem imageUrl={nextFrame?.frameURL}>
         {!unlocked ?
         <GrayOverlay>
-          <LockIcon levelUp={levelUp}/>
+          <LockIcon levelup={levelUp ? "true" : "false"}/>
         </GrayOverlay>
         :
         <UnLockIcon/>}
