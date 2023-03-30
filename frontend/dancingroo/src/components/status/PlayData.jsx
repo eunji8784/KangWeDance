@@ -22,7 +22,8 @@ const Wrapper = styled.div`
     &>section{
       display:flex;
       align-items:center;
-      min-width:100%;
+      width:95%;
+      min-width:50rem;
       height: fit-content;
       //[1-1] section 중 header라는 class를 가진 태그선택자
       &.header{
@@ -43,7 +44,7 @@ const Wrapper = styled.div`
         background-color:#FEECF0;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
         height:100%;
-        padding-bottom:3%;
+        padding-bottom:1%;
         padding-left:1rem;
         padding-right:1rem;
         // [1-3-1] 그 내부의 left라는 클래스 선택자
@@ -78,7 +79,7 @@ const Wrapper = styled.div`
           justify-content:center;
           align-items: center;
           font-size: 1.2rem;
-          margin-top: 0.2rem;
+          margin-top: 0.1rem;
           color: #F05475;
           font-weight: 600;
         }
