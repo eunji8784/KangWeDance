@@ -38,16 +38,17 @@ const ThumbnailWrapper = styled(Wrapper)`
 const InfoWrapper = styled(Wrapper)`
   width: 100%;
   flex-direction: row;
-  margin-left: 5%;
+  margin: 0.5rem 1rem;
   .stars {
     margin-left: auto;
-    margin-right: 5%;
+    margin-right: 1rem;
   }
 `;
 
 const TagWrapper = styled(Wrapper)`
   width: 100%;
   flex-direction: row;
+  justify-content: normal;
 `;
 
 const Star = styled(TbStarFilled)`
@@ -60,6 +61,7 @@ const Tag = styled(PinkButton)`
   font-size: 0.8rem;
   font-weight: 500;
   cursor: default;
+  margin-right: 0;
 `;
 
 function PlayItem({item, tags}) {
@@ -89,7 +91,7 @@ function PlayItem({item, tags}) {
 
   const Tags = () => {
     const tags = item?.tag?.split('#').filter(tag => tag);
-    return tags.map(tag => <Tag key={tag}> { `#${tag}` } </Tag>)
+    return tags.map(tag => <Tag key={tag}> { `${tag}` } </Tag>)
   }
 
   useEffect(() => {
@@ -146,15 +148,17 @@ function PlayItem({item, tags}) {
         <Preview/>
       </ThumbnailWrapper>
       <InfoWrapper>
-        <H2>
-          {item?.title}
-        </H2>
+        { tags ?
+          <TagWrapper>
+            <Tags />
+          </TagWrapper>
+          :
+          <H2>
+            {item?.title}
+          </H2>
+        }
         <Stars />
       </InfoWrapper>
-      { tags &&
-      <TagWrapper>
-        <Tags />
-      </TagWrapper>}
     </ItemWrapper>
   );
 }

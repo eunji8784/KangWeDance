@@ -1,14 +1,14 @@
 import React from "react";
 import styled from "styled-components";
-import {Footer} from "../common/ui/Semantics";
+import { H1, Footer } from "../common/ui/Semantics";
 import { ModalBtn } from "../status/HealthData";
 import {ModalWrapper} from "../common/ui/Modal"
 
 const DirectionModalWrapper = styled(ModalWrapper)`
-  justify-content: space-around;
-  width: 35%;
-  height: 40%;
-  .gray {
+  justify-content: space-evenly;
+  width: 60%;
+  height: 60%;
+  .ok {
     background-color: #84F02A;
     box-shadow: 0px 3px 10px rgba(240, 235, 84, 0.3);
     &:hover{
@@ -19,7 +19,7 @@ const DirectionModalWrapper = styled(ModalWrapper)`
 
 const DirectionInfo = styled.div`
   width: 80%;
-  height: 100%;
+  height: 80%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,13 +30,16 @@ const DirectionInfo = styled.div`
 `
 
 function DirectionModal({handleIsModalOpen, isOpen, directionMessage}) {
+  
   return (
       <DirectionModalWrapper isModalOpen={isOpen}>
           <DirectionInfo>
-            {directionMessage || "양 팔을 좌우로 쭉 뻗어요~!"}
+            <H1>
+              {directionMessage || "양 팔을 좌우로 쭉 뻗어요~!"}
+            </H1>
           </DirectionInfo>
           <Footer>
-            <ModalBtn className="gray" onClick={()=>handleIsModalOpen()}>알겠습니다</ModalBtn>
+            <ModalBtn className="ok" onClick={()=>handleIsModalOpen()}>알겠습니다</ModalBtn>
           </Footer>
       </DirectionModalWrapper>
   );
