@@ -9,6 +9,7 @@ import useApi from "../../hooks/auth/useApi"
 import MotionChart from "./chart/MotionChart";
 import BodyChart from "./chart/BodyChart";
 import { PinkButton } from "../common/ui/Semantics";
+import { tagColors } from "../../utils/tagColors";
 
 const Wrapper = styled.div`
     display: flex;
@@ -153,7 +154,7 @@ function HealthData(props) {
     const [weightChanges, setWeightChanges] = useState([])
     const [bmiChanges, setBmiChanges] = useState([])
     const [tagData, setTagData] = useState([])
-    const [sortedTagList, setSortedTagList] = useState([[],[],[],[],[],[],[],[]])
+    const [sortedTagList, setSortedTagList] = useState()
 
     useEffect(()=>{
       const onBodyResSuccess= (response)=>{
@@ -225,15 +226,22 @@ function HealthData(props) {
               <div className="info-box">
                 <div className="info-content">
                   <h3>이런 동작을 제일 잘해요!</h3>
-                  <ModBtn>{sortedTagList[sortedTagList.length-1][0]}</ModBtn>
-                  <ModBtn color="#D954EB">{sortedTagList[sortedTagList.length-2][0]}</ModBtn>
-                  <ModBtn color="#49EBBE">{sortedTagList[sortedTagList.length-3][0]}</ModBtn>
+                  {sortedTagList &&
+                  <>
+                  <ModBtn color={tagColors[sortedTagList[sortedTagList.length-1][0]]}>{sortedTagList[sortedTagList.length-1][0]}</ModBtn>
+                  <ModBtn color={tagColors[sortedTagList[sortedTagList.length-2][0]]}>{sortedTagList[sortedTagList.length-2][0]}</ModBtn>
+                  <ModBtn color={tagColors[sortedTagList[sortedTagList.length-3][0]]}>{sortedTagList[sortedTagList.length-3][0]}</ModBtn>
+                  </>
+                  }
                 </div>
                 <div className="info-content">
                   <h3>이런 동작은 연습이 필요해요!</h3>
-                  <ModBtn color="#84eb78">{sortedTagList[0][0]}</ModBtn>
-                  <ModBtn color="#EB896C">{sortedTagList[1][0]}</ModBtn>
-                  {/* <ModBtn>{sortedTagList[2][0]}</ModBtn> */}
+                  {sortedTagList && 
+                  <>
+                  <ModBtn color={tagColors[sortedTagList[0][0]]}>{sortedTagList[0][0]}</ModBtn>
+                  <ModBtn color={tagColors[sortedTagList[1][0]]}>{sortedTagList[1][0]}</ModBtn>
+                  </>
+                  }
                 </div>
               </div>
               <h3>{selectedChild.nickname}(이) 동작 태그 분석</h3>
