@@ -50,7 +50,7 @@ public class HiveController {
 		int parentIdx = jwtService.getUserIdx(accesstoken);
 
 		row = jdbcTemplate.queryForList(
-				"select child_idx, sum(play_time) as play_time, sum(arm) as arm , sum(leg) as leg, sum(flexibility) as flexibility , sum(body) as body , sum(aerobic) as aerobic from statisticrecord where parent_idx="
+				"select child_idx, sum(play_time) `총시간` , sum(arm) `팔` , sum(leg) `다리` , sum(flexibility) `유연성` , sum(body) `몸통` , sum(aerobic) `유산소` , sum(height) `키크기` , sum(balance) `균형감각` from statisticrecord where parent_idx="
 						+ parentIdx + " group by child_idx");
 		System.out.println("하둡에서 아이 정보 제공 성공!");
 		return ApiResponse.success(SuccessCode.READ_BODY_TAG, row);
@@ -149,6 +149,14 @@ public class HiveController {
 				else if (s.equals("몸통")) {
 					statisticsDto.setBody(statisticsDto.getBody() + 1);
 				}
+
+				else if (s.equals("균형감각")) {
+					statisticsDto.setSenseOfBalance(statisticsDto.getSenseOfBalance() + 1);
+				}
+
+				else if (s.equals("키크기")) {
+					statisticsDto.setHeight(statisticsDto.getHeight() + 1);
+				}
 			}
 
 		}
@@ -159,7 +167,7 @@ public class HiveController {
 		jdbcTemplate.update("insert into table statisticRecord partition(child_idx=" + childIdx + ",parent_idx="
 				+ parentIdx + ") values (" + 80 + "," + statisticsDto.getArm() + "," + statisticsDto.getLeg() + ","
 				+ statisticsDto.getFlexibility() + "," + statisticsDto.getBody() + "," + statisticsDto.getAerobic()
-				+ ")");
+				+ "," + statisticsDto.getHeight() + "," + statisticsDto.getSenseOfBalance() + ")");
 		System.out.println("하둡에 저장 완료! ");
 	}
 

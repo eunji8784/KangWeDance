@@ -4,7 +4,9 @@ arm int,
 leg int, 
 flexibility int, 
 body int, 
-aerobic int
+aerobic int,
+height int,
+balance int 
 )
 PARTITIONED BY(child_idx int, parent_idx int);
 
