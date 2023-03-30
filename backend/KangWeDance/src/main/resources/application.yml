@@ -70,6 +70,6 @@ spring:
       matching-strategy: ant_path_matcher
 
 hive: 
-  connectionURL: jdbc:hive2://cluster.p.ssafy.io:10606/default
+  connectionURL: jdbc:hive2://52.55.191.26:10606/default
   username: APP
   password: mine

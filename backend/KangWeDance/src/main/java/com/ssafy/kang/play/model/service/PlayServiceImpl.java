@@ -78,4 +78,9 @@ public class PlayServiceImpl implements PlayService {
 		return songList;
 	}
 
+	@Override
+	public List<String> findMotionTag(int songIdx) throws Exception {
+		return sqlSession.getMapper(PlayMapper.class).selectMotionTag(songIdx);
+	}
+
 }
