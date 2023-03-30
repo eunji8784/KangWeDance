@@ -1,6 +1,5 @@
 package com.ssafy.kang.hive.Controller;
 
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -27,11 +26,6 @@ import com.ssafy.kang.util.JwtUtil;
 @RestController
 @RequestMapping("/hive")
 public class HiveController {
-	// 오늘 날짜를 구하기 위함 -> 파티션 처리를 위함
-	LocalDate now = LocalDate.now();
-	int year = now.getYear(); // 년
-	int month = now.getMonthValue(); // 월
-	int day = now.getDayOfMonth(); // 일
 
 	@Autowired
 	@Qualifier("jdbcHiveTemplate")
