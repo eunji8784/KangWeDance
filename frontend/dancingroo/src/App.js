@@ -34,6 +34,10 @@ function App() {
     if (existingToken) {
       dispatch(login(existingToken));
     }
+    // if (isLoggedIn && !existingToken){
+    //   navigate('/')
+    //   dispatch(logout())
+    // }
   },[dispatch, Cookie.accessToken])
 
 
