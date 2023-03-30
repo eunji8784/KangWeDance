@@ -15,8 +15,10 @@ import com.ssafy.kang.common.ErrorCode;
 import com.ssafy.kang.common.SuccessCode;
 import com.ssafy.kang.common.dto.ApiResponse;
 import com.ssafy.kang.play.model.PlayRecordDto;
+import com.ssafy.kang.status.model.BodyTagDto;
 import com.ssafy.kang.status.model.FoodsDto;
 import com.ssafy.kang.status.model.service.StatusService;
+import com.ssafy.kang.util.JwtUtil;
 import com.ssafy.kang.util.UnicodeKorean;
 
 import lombok.RequiredArgsConstructor;
@@ -34,6 +36,9 @@ public class StatusController {
 //	| orderRemove() | 삭제만 하는 유형의 controller 메서드 |
 	@Autowired
 	StatusService statusService;
+
+	private JwtUtil jwtService = new JwtUtil();
+
 	UnicodeKorean unicodeKorean = new UnicodeKorean();
 
 	@GetMapping("/play-record/{date}")
@@ -75,6 +80,20 @@ public class StatusController {
 			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
 		}
 
+	}
+
+	// 시연용 코드
+	@GetMapping("/tag-list")
+	public ApiResponse<?> showDatabases(@RequestHeader("accesstoken") String accesstoken) throws Exception {
+		try {
+			int parentIdx = jwtService.getUserIdx(accesstoken);
+			List<BodyTagDto> bodyTag = statusService.findBodyTagRecord(parentIdx);
+
+			return ApiResponse.success(SuccessCode.READ_BODY_TAG, bodyTag);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
+		}
 	}
 
 	// 검색을 위해 korean ->english 변환 API

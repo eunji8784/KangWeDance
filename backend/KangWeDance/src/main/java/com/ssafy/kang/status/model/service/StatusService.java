@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.kang.play.model.PlayRecordDto;
+import com.ssafy.kang.status.model.BodyTagDto;
 import com.ssafy.kang.status.model.FoodsDto;
 
 @Service
@@ -21,6 +22,8 @@ public interface StatusService {
 	public List<FoodsDto> findFoodList(String word) throws Exception;
 
 	public List<PlayRecordDto> findMonthlyRecord(int childIdx, int month) throws Exception;
+
+	public List<BodyTagDto> findBodyTagRecord(int parentIdx) throws Exception;
 
 	// 일회성 코드 : 검색을 위해 영어 <->한국어
 	// public String temps(int i) throws Exception;

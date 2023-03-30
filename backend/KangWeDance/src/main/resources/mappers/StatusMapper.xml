@@ -15,6 +15,20 @@
 		<result column="category" property="category" />
 	</resultMap>
 	
+	<resultMap id="bodyTagList" type="BodyTagDto">
+		<result column="child_idx" property="childIdx" />
+		<result column="arm" property="팔" />
+		<result column="leg" property="다리" />
+		<result column="body" property="몸통" />
+		<result column="flexibility" property="유연성" />
+		<result column="balance" property="균형감각" />
+		<result column="aerobic" property="유산소" />
+		<result column="height" property="키성장" />
+		<result column="play_time" property="총_플레이시간" />
+	</resultMap>
+	
+	
+	
 	<select id="selectPlayRecord" parameterType="String" resultMap="playRecordList" >
 		<!--
 			동작별 점수 총합 ->score
@@ -66,6 +80,15 @@
 	    ON tmp1.play_record_idx= tmp2.play_record_idx;
 	</select>
 	
+	<select id="selectBodyTagRecord" parameterType="int" resultMap="bodyTagList">
+		select child_idx, sum(arm) as arm, sum(leg)as leg, sum(flexibility)as flexibility, sum(body)as body, sum(aerobic) as aerobic, sum(height)as height, sum(balance)as balance, sum(play_time) as play_time
+		from statisticRecord
+		where parent_idx=#{parentIdx}
+		group by child_idx;
+	</select>
+	
+	
+</mapper>	
 	<!-- //일회성 코드 : 검색을 위해 영어 <->한국어 
 	
 	<select id="temps" parameterType="int" resultType="String">
@@ -79,5 +102,5 @@
 		where food_idx = #{i}
 	</update>
 	-->
-</mapper>
+
 	

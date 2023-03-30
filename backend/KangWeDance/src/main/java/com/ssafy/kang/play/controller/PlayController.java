@@ -90,6 +90,8 @@ public class PlayController {
 			int songIdx = playRequestDto.getSongIdx();
 			int childIdx = playRequestDto.getChildIdx();
 			int parentIdx = jwtService.getUserIdx(accesstoken);
+
+			// 실제 하둡에 저장하는 코드
 			hiveController.hashPashing(songIdx, childIdx, parentIdx);
 
 			// 동작별 점수 기록 등록
