@@ -153,7 +153,7 @@ function HealthData(props) {
     const [weightChanges, setWeightChanges] = useState([])
     const [bmiChanges, setBmiChanges] = useState([])
     const [tagData, setTagData] = useState([])
-    const [sortedTagList, setSortedTagList] = useState()
+    const [sortedTagList, setSortedTagList] = useState([[],[],[],[],[],[],[],[]])
 
     useEffect(()=>{
       const onBodyResSuccess= (response)=>{
