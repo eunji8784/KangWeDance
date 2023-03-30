@@ -32,7 +32,8 @@ public enum SuccessCode {
 	READ_BODY_RECORD_LIST(SUCCESS, "신체 변화 기록 조회 성공"),
 	// hadoop(hive)
 	CREATE_BODYRECORD(SUCCESS, "신체 기록 하둡에 업로드 성공"), READ_BODYRECORD(SUCCESS, "신체 기록 하둡에서 불러오기 성공"),
-	CREATE_PLAYRECORD(SUCCESS, "플레이 기록 하둡에 업로드 성공"), READ_MONTHLY_RECORD(SUCCESS, "월 단위 플레이 기록 불러오기 성공 ");
+	CREATE_PLAYRECORD(SUCCESS, "플레이 기록 하둡에 업로드 성공"), READ_MONTHLY_RECORD(SUCCESS, "월 단위 플레이 기록 불러오기 성공 "),
+	READ_BODY_TAG(SUCCESS, "하둡에서 아이 정보 반환 성공");
 
 	private final StatusCode statusCode;
 	private final String message;
