@@ -1,14 +1,15 @@
 import React
-// , { useState } 
+, { useState }// , { useState } 
 from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 // import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import useApi from "../../hooks/auth/useApi"
-import MotionChart from "./MotionChart";
-import BmiChart from "./BmiChart";
-import BodyChart from "./BodyChart";
+import MotionChart from "./chart/MotionChart";
+import BodyChart from "./chart/BodyChart";
+import { PinkButton } from "../common/ui/Semantics";
+import { tagColors } from "../../utils/tagColors";
 
 const Wrapper = styled.div`
     display: flex;
@@ -55,13 +56,49 @@ const Wrapper = styled.div`
         // [1-3-2] 그 내부의 right라는 클래스 선택자
         &.right{
           width:40%;
+          .info-box{
+            display:flex;
+            background-color:white;
+            border-radius:10px;
+            flex-direction:column;
+            justify-content:center;
+            height:18rem;
+            &>h2{
+              font-size:1.5rem;
+              letter-spacing:-0.1rem;
+            }
+            .info-content{
+              height:45%;
+              margin-left:1rem;
+              font-size:0.8rem;
+              /* border:1px solid black; */
+            }
+          }
         }
         // [1-3-3] 그 내부의 graph-box라는 클래스 선택자
         .graph-box{
           width:100%;
-          height:8rem;
+          height:10rem;
           background-color:white;
           border-radius:5px;
+        }
+        .graph-header{
+          &>h6{
+            font-size:0.7rem;
+            display:inline-block;
+            width:11rem;
+            text-align:end;
+            margin-right:0.8rem;
+            span{
+              color:red;
+              font-size:0.9rem;
+            }
+            letter-spacing:0.1rem;
+          }
+          display:flex;
+          flex-direction:row;
+          align-items:center;
+          justify-content:space-between;
         }
       }
       .status-box>h3,h5,h4{
@@ -102,6 +139,10 @@ export const ModalBtn = styled.div`
         box-shadow: 0px 3px 15px rgba(240, 84, 117, 0.6);
     }
 `
+const ModBtn = styled(PinkButton)`
+  cursor: default;
+  background-color:${props=>props.color};
+` 
 function HealthData(props) {
     const {handleIsModalOpen} = props;
     // const navigate = useNavigate();
@@ -109,22 +150,46 @@ function HealthData(props) {
     const selectedChild = useSelector(state=>state.userState.children[selected||0]) 
     const getTagData = useApi()
     const getBodyChanges = useApi()
-    const data = [
-      {
-        "flexibility": 10,
-        "together": 15,
-        "leg": 8,
-        "arm": 10,
-        "aerobic": 25,
-        "body": 35,
-        "senseOfBalance": 20,
-        "height": 13
-      }
-    ];
+    const [heightChanges, setHeightChanges] = useState([])
+    const [weightChanges, setWeightChanges] = useState([])
+    const [bmiChanges, setBmiChanges] = useState([])
+    const [tagData, setTagData] = useState([])
+    const [sortedTagList, setSortedTagList] = useState()
+
     useEffect(()=>{
-      // getBodyChanges.fetchApi('GET', '/status/body-changes')
-      // getTagData.fetchApi('GET', '/status/motion-tag')
-    },[])
+      const onBodyResSuccess= (response)=>{
+        const bodyRecords = response.data[selected].bodyRecord
+        const tempBmi = []
+        const tempHeight = []
+        const tempWeight = []
+        for (const record of bodyRecords) {
+          const { weight, height, bmi, recordDate } = record;
+          tempBmi.push({ x: recordDate, y: Number(bmi) });
+          tempHeight.push({ x: recordDate, y: Number(height) });
+          tempWeight.push({ x: recordDate, y: Number(weight) });
+        }
+        setBmiChanges([{ id: selectedChild.nickname||"첫째", data: tempBmi, hidden:true }]);
+        setHeightChanges([{ id: selectedChild.nickname||"첫째", data: tempHeight, hidden:true }]);
+        setWeightChanges([{ id: selectedChild.nickname||"첫째", data: tempWeight, hidden:true }]);
+      } 
+      getBodyChanges.fetchApi('GET', '/status/body-changes', onBodyResSuccess)
+      const onTagResSuccess = (response)=>{
+        const data = response.data[selected]
+        const sortedData = [...Object.entries(data)].filter(ele=>ele[0]!=='childIdx' && ele[0]!=='총_플레이시간').sort((a,b)=>a[1]-b[1])
+        setSortedTagList(sortedData)
+        const tempState = []
+        for (const ele in data){
+          if (ele==="childIdx" || ele==="총_플레이시간") continue;
+          const tempObj = {}
+          tempObj["tag"] = ele
+          tempObj["누적횟수"] = data[ele]
+          tempState.push(tempObj)
+
+        }
+        setTagData(tempState)
+      }
+      getTagData.fetchApi('GET', '/status/tag-list', onTagResSuccess)
+    },[selected])
     return (
         <Wrapper>
           <section className="section header">
@@ -134,28 +199,55 @@ function HealthData(props) {
           <section className="section main">
             <article className="status-box left">
               <h3>신체 변화 기록</h3>
-              <h5>키(cm)</h5>
-              <div className="graph-box">
+              <div className="graph-header">
+                <h4>BMI</h4>
+                <h6>현재 BMI는, <span>{"위험"}</span>수치에요</h6>
               </div>
-              <h5>체중(kg)</h5>
               <div className="graph-box">
+                <BodyChart data={bmiChanges} color={'set1'}/>
               </div>
-              <h5>BMI</h5>
+              <div className="graph-header">
+                <h4>체중(kg)</h4>
+                <h6>또래 기준,  상위 <span>{11}</span>%에요</h6>
+              </div>
               <div className="graph-box">
+                <BodyChart data={weightChanges} color={'category10'}/>
+              </div>
+              <div className="graph-header">
+                <h4>키(cm)</h4>
+                <h6>또래 기준, 상위 <span>{11}</span>%에요</h6>
+              </div>
+              <div className="graph-box">
+                <BodyChart data={heightChanges} color={'accent'}/>
               </div>
             </article>
             <article className="status-box right">
-              <h3>뾰롱</h3>
-              <h5>나이, 키 기반 체중 상위 {'OO'}%</h5>
-              <div className="graph-box"></div>
-              <h3>많이 한 동작 그래프<span>{''}</span></h3>
-              <div className="chart-container">
-                <MotionChart data={data}/>
+              <h3>플레이 리포트</h3>
+              <div className="info-box">
+                <div className="info-content">
+                  <h3>이런 동작을 제일 잘해요!</h3>
+                  {sortedTagList &&
+                  <>
+                  <ModBtn color={tagColors[sortedTagList[sortedTagList.length-1][0]]}>{sortedTagList[sortedTagList.length-1][0]}</ModBtn>
+                  <ModBtn color={tagColors[sortedTagList[sortedTagList.length-2][0]]}>{sortedTagList[sortedTagList.length-2][0]}</ModBtn>
+                  <ModBtn color={tagColors[sortedTagList[sortedTagList.length-3][0]]}>{sortedTagList[sortedTagList.length-3][0]}</ModBtn>
+                  </>
+                  }
+                </div>
+                <div className="info-content">
+                  <h3>이런 동작은 연습이 필요해요!</h3>
+                  {sortedTagList && 
+                  <>
+                  <ModBtn color={tagColors[sortedTagList[0][0]]}>{sortedTagList[0][0]}</ModBtn>
+                  <ModBtn color={tagColors[sortedTagList[1][0]]}>{sortedTagList[1][0]}</ModBtn>
+                  </>
+                  }
+                </div>
               </div>
-              {/* <div className="graph-box"></div>
-              <h5>식단 기반,</h5>
-              <h4>4주 뒤 예측 몸무게 <span>{'OO'}KG</span></h4>
-              <div className="graph-box"></div> */}
+              <h3>{selectedChild.nickname}(이) 동작 태그 분석</h3>
+              <div className="chart-container">
+                <MotionChart data={tagData}/>
+              </div>
             </article>
           </section>
         </Wrapper>

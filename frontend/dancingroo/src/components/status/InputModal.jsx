@@ -1,119 +1,39 @@
-import React,{
-    useRef,
-    // useEffect, 
-    useState} from "react";
-import { useNavigate } from "react-router-dom";
+import React,{useState, useRef} from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getChildState, patchChildState } from "../../store/userSlice";
+import { patchChildState } from "../../store/userSlice";
 import styled from "styled-components";
-import {Wrapper, Header, Main, Article, Section, H1,
-    //  H2, 
-     P, Footer} from "../common/ui/Semantics";
-import musicNote from '../../assets/images/musicNote.png'
+import {Wrapper, Footer} from "../common/ui/Semantics";
 import useApi from "../../hooks/auth/useApi";
+import Swal from "sweetalert2";
 
 const ModWrapper = styled(Wrapper)`
+    width: 25%;
+    height: 40%;
+    min-width: 20rem;
     display:${({isModalOpen})=>isModalOpen? "flex":"none"};
-    border:1px solid transparent;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    border-radius:10px;
     position: fixed;
-    top: 0; bottom: 0; left: 0; right: 0;
+    top: 0; bottom: 0; left: 0; right: 0; z-index: 2;
     margin:auto;
-    width: 70%;
-    height: 85%;
     background-color: white;
-    z-index: 2;
-    letter-spacing:0.2rem;
+    letter-spacing:0.1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    color: #323232;
+    &>h1{
+        margin: 0;
+    }
 `;
-const ModMain = styled(Main)`
-    flex-direction:column;
-    height:25rem;
-    width:90%;
-    border:none;  
-    justify-content:flex-start; 
+
+const InputMod = styled.input`
+    outline:none;
+    border: 0.15rem solid #F05475;
+    border-radius: 0.5rem;
+    width: 6rem;
+    margin-right:0.5rem;
+    height: 1.6rem;
+    cursor: pointer;
 `
-const ModSection = styled(Section)`
-    width:90%; 
-    border:none; 
-`
-const ModArticle = styled(Article)`
-    flex-direction:column;
-    border:none;  
-    height:100%;
-    width:90%;
-    .row{
-        height:50%;
-        &>div{
-            justify-content:flex-start;
-        }
-    }
-    &.title{ 
-        max-width:20%;
-        h3{
-            color:#F05475;
-        }
-    }
-    &.inputs{
-        input{
-            outline:none;
-            border: 3px solid #F05475;
-            border-radius:9px;
-            width:6rem;
-            margin-left:0.5rem;
-            height:1.5rem;
-            cursor: pointer;
-            &.menu-input{
-                width:25rem;
-                height:2rem;
-                margin-left:-5rem;
-            }
-        }
-        &>div:first-child{
-            justify-content:space-between;
-            align-items:baseline;
-            &>div{
-                margin-right:3rem;
-            }
-        }
-    }
-    &.table{
-        display:grid;
-        grid-template-columns: repeat(3, 1fr);
-        border:2px solid #F05475;
-        /* grid-gap:3px; */
-        border-radius:10px;
-        height:15rem;
-        position:relative;
-        box-sizing:border-box;
-        margin-top:0.8rem;
-        .header{
-            position:absolute;
-            border-top-left-radius:10px;
-            border-top-right-radius:10px;
-            width:100%;
-            height:3rem;
-            background-color:#F05475;
-            top:-1px;
-            box-sizing:border-box;
-        }
-        .main{
-            height:100%;
-            box-sizing:border-box;
-            align-items:flex-start;
-            position:relative;
-            &.점심{
-                border-left: 2px solid #F05475; border-right: 2px solid #F05475;
-            }
-            ${P}{
-                color:white;
-                position:absolute;
-                top:-15px;
-                height:15%
-            }
-        }
-    }
-`
+
 const ModFooter = styled(Footer)`
     margin-top:1rem;
     width:13rem;
@@ -140,126 +60,104 @@ const ModFooter = styled(Footer)`
         }
     }   
 `
-const Hightlight = styled.div`
-    ${({selected})=> selected && `
-        border:4px solid yellow;
-    `}
-    border-radius:15px;
-    position:absolute;
-    top: 0; bottom: 0; left: 0; right: 0;
-    width:96%;
-    height:96%;
-    cursor: pointer;
+
+const Line = styled.div`
+    width: 100%;
+    border-bottom: solid 0.1rem #979797;
 `
-const NoteImg = styled.img`
-    z-index:-1;
-    position:absolute;
-    width:100%;
+
+const LabelText  = styled.label`
+    width: 6rem;
+    height: 1.6rem;
+    display: flex;
+    justify-content: start;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 1.2rem;
 `
-function InputModal(props) {
-    const {handleIsModalOpen, isOpen} = props
-    const navigate = useNavigate()
+
+function InputModal({handleIsModalOpen, isOpen}) {
     const dispatch = useDispatch()
     const selectedIdx = useSelector(state=>state.userState.select)
     const {nickname, height, weight, childIdx} = useSelector(state=>state.userState.children[selectedIdx||0])
-    const [selected, setSelected] = useState('아침')
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' });
     const bodyStateUpdate = useApi()
     const weightRef = useRef(); 
     const heightRef = useRef(); 
-    // const submitDietInfo = ()=>{
+    const [w, setW] = useState()
+    const [h, setH] = useState()
 
-    // }
     const submitBodyUpdate = ()=>{
-        const onSuccess = ()=>{
-            alert('등록되었습니다!')
-            dispatch(patchChildState({selectedIdx, name:"height", value:height}))
-            dispatch(patchChildState({selectedIdx, name:"weight", value:weight}))
-        }
-        const body = {
-            weight, height, today_calrories:0, childIdx
-        }
-        if (window.confirm('등록할까요?')){
-            bodyStateUpdate.fetchApi('POST', `/children/body-update`, body, onSuccess)
-            handleIsModalOpen()
-            setSelected('아침')
-        }
-        weightRef.current.value=''
-        heightRef.current.value=''
+        Swal.fire({
+            text: "등록하시겠습니까?",
+            width: 300,
+            showCancelButton: true,
+            iconColor: '#F05475 ',
+            confirmButtonColor: '#F05475 ',
+            confirmButtonText: "등록",
+            cancelButtonText: "취소"
+        }).then(function(e){
+            if(e.isConfirmed === true) {
+                
+                const onSuccess = ()=>{
+                    Swal.fire({
+                        text:'등록되었습니다!',
+                        width: 300,
+                        confirmButtonColor: '#F05475'
+                    })
+                    dispatch(patchChildState({selectedIdx, name:"height", value:h}))
+                    dispatch(patchChildState({selectedIdx, name:"weight", value:w}))
+                }
+                
+                const body = {
+                    weight:w, height:h, today_calrories:0, childIdx
+                }
+
+                bodyStateUpdate.fetchApi('POST', `/children/body-update`, body, onSuccess)
+                weightRef.current.value=''
+                heightRef.current.value=''
+                handleIsModalOpen()
+            }
+        })
+
     }
-    const onChangeHandler = (e)=>{
-        const {name, value} = e.target
-        dispatch(patchChildState({selectedIdx, name, value:+value}))
+
+    const onChangeHeight= (e)=>{
+        setH(e.target.value)
     }
-    const handleSelected = (meal)=>{
-        setSelected(meal)
+
+    const onChangeWeight = (e)=>{
+        setW(e.target.value)
     }
+
     return (
         <ModWrapper isModalOpen={isOpen}>
-            <Header>
-                <H1>{formattedDate} {nickname}(이) 기록하기</H1>
-            </Header>
-            <ModMain>
-                <ModSection className="title-inputs">
-                    <ModArticle className="title">
-                        <div className="row">
-                            <h3>신체 정보</h3>
-                        </div>
-                        <div className="row">
-                            <h3>식단 정보</h3>
-                        </div>
-                    </ModArticle>
-                    <ModArticle className="inputs">
-                        <div className="row">
-                            <div>
-                                <h4>키(cm)</h4>
-                                <input type="text" placeholder={height} name={"height"} onChange={onChangeHandler} ref={heightRef}/>
-                            </div>
-                            <div>
-                                <h4>몸무게(kg)</h4>
-                                <input type="text" placeholder={weight} name={"weight"} onChange={onChangeHandler} ref={weightRef}/>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <input className="menu-input" type="text" placeholder="음식을 검색해보세요"/>
-                        </div>
-                    </ModArticle>
-                </ModSection>
-                <ModSection>
-                    <ModArticle className="table">
-                        <div className="header"/>
-                        <div className="main 아침">
-                            <P>아침</P>
-                            
-                            <Hightlight onClick={()=>handleSelected('아침')} selected={selected==='아침'}/>
-                        </div>
-                        <div className="main 점심">
-                            <P>점심</P>
-                            
-                            <Hightlight onClick={()=>handleSelected('점심')} selected={selected==='점심'}/>
-                        </div>
-                        <div className="main 저녁">
-                            <P>저녁</P>
-                            
-                            <Hightlight onClick={()=>handleSelected('저녁')} selected={selected==='저녁'}/>
-                        </div>
-
-                    </ModArticle>
-                </ModSection>
-            </ModMain>
+            <h1>{formattedDate}</h1>
+            <h3>{nickname}(이) 기록하기</h3>
+            <Line/>
+            <div>
+                <LabelText htmlFor="height" >키</LabelText>
+                <InputMod  id="height" type="text" placeholder={height} name={"height"}  ref={heightRef} onChange={onChangeHeight}/>
+                <h4>cm</h4>
+            </div>
+            <Line/>
+            <div>
+                <LabelText htmlFor="weight" >몸무게</LabelText>
+                <InputMod id="weight" type="text" placeholder={weight} name={"weight"}  ref={weightRef} onChange={onChangeWeight}/>
+                <h4>kg</h4>
+            </div>
+            <Line/>
             <ModFooter>
                 <button onClick={()=>{
                     submitBodyUpdate()
                 }}>완  료</button>
                 <button onClick={()=>{
                     handleIsModalOpen()
-                    setSelected('아침')
                     weightRef.current.value=''
                     heightRef.current.value=''
                 }}>닫 기</button>
             </ModFooter>
-            <NoteImg src={musicNote}/>
         </ModWrapper>
     );
 }
