@@ -83,6 +83,7 @@ function HeaderBar(props) {
     const {data, isLoading, error, handleLogout} = useLogout()
     const API_KEY_KAKAO = process.env.REACT_APP_API_KEY_KAKAO;
     const LOGOUT_REDIRECT_URI = process.env.REACT_APP_LOGOUT_REDIRECT_URI
+    const LOGOUT_REDIRECT_URI_SITE = process.env.REACT_APP_LOGOUT_REDIRECT_URI_SITE
 
     useEffect(()=>{
         if (data){
@@ -91,7 +92,7 @@ function HeaderBar(props) {
                 window.location.href = 'https://kangwedance.site'
             } 
             else if (social==="Kakao"){
-                window.location.href = `https://kauth.kakao.com/oauth/logout?client_id=${API_KEY_KAKAO}&logout_redirect_uri=${LOGOUT_REDIRECT_URI}&state=logout`
+                window.location.href = `https://kauth.kakao.com/oauth/logout?client_id=${API_KEY_KAKAO}&logout_redirect_uri=${LOGOUT_REDIRECT_URI_SITE}&state=logout`
             } 
         }
     },[data])
