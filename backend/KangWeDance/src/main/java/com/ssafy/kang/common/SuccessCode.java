@@ -29,7 +29,7 @@ public enum SuccessCode {
 	READ_PLAY_RECOMMENDATION(SUCCESS, "추천 플레이 조회 성공"),
 	// status
 	READ_PLAYRECORD_LIST(SUCCESS, "운동 기록 조회 성공"), READ_FOOD_LIST(SUCCESS, "음식 검색 성공"),
-
+	READ_BODY_RECORD_LIST(SUCCESS, "신체 변화 기록 조회 성공"),
 	// hadoop(hive)
 	CREATE_BODYRECORD(SUCCESS, "신체 기록 하둡에 업로드 성공"), READ_BODYRECORD(SUCCESS, "신체 기록 하둡에서 불러오기 성공"),
 	CREATE_PLAYRECORD(SUCCESS, "플레이 기록 하둡에 업로드 성공"), READ_MONTHLY_RECORD(SUCCESS, "월 단위 플레이 기록 불러오기 성공 "),
