@@ -12,6 +12,17 @@
 		<result column="name" property="name" />
 		<result column="category" property="category" />
 	</resultMap>
+	<resultMap id="bodyTagList" type="BodyTagDto">
+		<result column="child_idx" property="childIdx" />
+		<result column="arm" property="팔" />
+		<result column="leg" property="다리" />
+		<result column="body" property="몸통" />
+		<result column="flexibility" property="유연성" />
+		<result column="balance" property="균형감각" />
+		<result column="aerobic" property="유산소" />
+		<result column="height" property="키성장" />
+		<result column="play_time" property="총_플레이시간" />
+	</resultMap>
 	<resultMap type="BodyRecordDto" id="bodyRecord">
 		<result column="child_idx" property="childIdx" />
 		<result column="record_date" property="recordDate" />
@@ -39,11 +50,10 @@
 	    ON tmp1.play_record_idx= tmp2.play_record_idx;
 	</select>
 	<select id="selectFoodList" parameterType="String" resultMap="foodList">
-	SELECT name, category
-	FROM foodList
-	WHERE search_name like CONCAT (#{word}, '%')
-	limit 5
-	
+		SELECT name, category
+		FROM foodList
+		WHERE search_name like CONCAT (#{word}, '%')
+		limit 5
 	</select>
 	<select id="selectMonthlyRecord" resultMap="playRecordList">
 		SELECT tmp1.child_idx,tmp1.calorie_consumption, tmp1.title, tmp1.record_date, tmp2.score
@@ -59,6 +69,12 @@
 	      GROUP BY play_record_idx
 		) as tmp2
 	    ON tmp1.play_record_idx= tmp2.play_record_idx;
+	</select>
+	<select id="selectBodyTagRecord" parameterType="int" resultMap="bodyTagList">
+		select child_idx, sum(arm) as arm, sum(leg)as leg, sum(flexibility)as flexibility, sum(body)as body, sum(aerobic) as aerobic, sum(height)as height, sum(balance)as balance, sum(play_time) as play_time
+		from statisticRecord
+		where parent_idx=#{parentIdx}
+		group by child_idx;
 	</select>
 	<select id="selectBodyRecordList" parameterType="int" resultMap="bodyRecord">
 		SELECT 

@@ -10,6 +10,7 @@ import com.ssafy.kang.play.model.PlayRequestDto;
 import com.ssafy.kang.play.model.ScoreRequestDto;
 import com.ssafy.kang.play.model.SongListDto;
 import com.ssafy.kang.play.model.SongMotionDto;
+import com.ssafy.kang.play.model.StatisticsDto;
 
 @Mapper
 public interface PlayMapper {
@@ -42,5 +43,7 @@ public interface PlayMapper {
 	public SongListDto selectSongListByMotionTagIdx(int motionTypeIdx) throws SQLException;
 
 	public List<String> selectMotionTag(int songIdx) throws SQLException;
+
+	public void inserTagForHadoop(StatisticsDto statisticsDto) throws SQLException;
 
 }

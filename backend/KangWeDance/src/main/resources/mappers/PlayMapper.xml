@@ -163,6 +163,10 @@
 		where s.song_idx=#{songIdx};
 	</select>
 	
+	<insert id ="inserTagForHadoop" parameterType="StatisticsDto" >
+		insert into statisticRecord (child_idx, parent_idx, arm, leg, flexibility, body, aerobic, height, balance, play_time)
+		Values (#{childIdx}, #{parentIdx},#{arm},#{leg}, #{flexibility}, #{body}, #{aerobic}, #{height}, #{senseOfBalance},#{playTime} )
+	</insert>
 	
 	
 	

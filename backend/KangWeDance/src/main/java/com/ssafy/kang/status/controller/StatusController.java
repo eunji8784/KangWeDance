@@ -17,6 +17,7 @@ import com.ssafy.kang.common.ErrorCode;
 import com.ssafy.kang.common.SuccessCode;
 import com.ssafy.kang.common.dto.ApiResponse;
 import com.ssafy.kang.play.model.PlayRecordDto;
+import com.ssafy.kang.status.model.BodyTagDto;
 import com.ssafy.kang.play.model.service.PlayService;
 import com.ssafy.kang.status.model.ChildrenBodyRecordDto;
 import com.ssafy.kang.status.model.FoodsDto;
@@ -104,6 +105,20 @@ public class StatusController {
 				BodyRecordList.add(childrenBodyRecord);
 			}
 			return ApiResponse.success(SuccessCode.READ_BODY_RECORD_LIST, BodyRecordList);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
+		}
+	}
+
+	// 시연용 코드
+	@GetMapping("/tag-list")
+	public ApiResponse<?> showDatabases(@RequestHeader("accesstoken") String accesstoken) throws Exception {
+		try {
+			int parentIdx = jwtService.getUserIdx(accesstoken);
+			List<BodyTagDto> bodyTag = statusService.findBodyTagRecord(parentIdx);
+
+			return ApiResponse.success(SuccessCode.READ_BODY_TAG, bodyTag);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
