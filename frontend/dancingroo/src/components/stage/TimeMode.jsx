@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import styled from "styled-components"
 import Webcam from "react-webcam"
+import DirectionModal from "./DirectionModal"
 import PauseModal from "./PauseModal"
 import PlayResult from "./PlayResult"
 import Feedback from "./Feedback"
@@ -74,7 +75,8 @@ function Timemode() {
   const [showGood, setShowGood] = useState(false)
   const [showCheerUp, setShowCheerUp] = useState(false)
   const [showReadyGo, setShowReadyGo] = useState(false)
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isDirectionModalOpen, setIsDirectionModalOpen] = useState(false)
+  const [isPauseModalOpen, setIsPauseModalOpen] = useState(false)
   const camref = useRef(null)
   const videoref = useRef(null)
 
@@ -95,7 +97,7 @@ function Timemode() {
   // 자세 변경에 따라 카운트 올리기
   useInterval(
     () => {
-      if (!isModalOpen) {
+      if (!isPauseModalOpen) {
         setCount((count) => count + 1)
       }
     },
@@ -118,20 +120,20 @@ function Timemode() {
   }
 
   // 모달 열기/닫기 함수 -> time 따로 만들어서 저장후 다시 돌리기
-  const handleIsModalOpen = () => {
+  const handleIsPauseModalOpen = () => {
     if (!afterDirection) {
-      if (!isModalOpen) {
+      if (!isPauseModalOpen) {
         videoref.current.pause()
       } else {
         videoref.current.play()
       }
     }
-    setIsModalOpen((prev)=>!prev)
+    setIsPauseModalOpen((prev)=>!prev)
   }
 
   // 예측 함수 - 캠에 따라 자세 상태(prevPosture)를 바꿈
   const predict = async function () {
-    if (!model || !aimedPosture || isModalOpen) {
+    if (!model || !aimedPosture || isPauseModalOpen) {
       return
     }
     const { pose, posenetOutput } = await model.estimatePose(
@@ -201,6 +203,11 @@ function Timemode() {
   const handleAfterDirection = () => {
     setAfterDirection(true)
     setCamfocus(true)
+    setIsDirectionModalOpen(true)
+  }
+
+  const handleIsDirectionModalOpen = () => {
+    setIsDirectionModalOpen(false)
     setShowReadyGo(true)
     setTimeout(() => setShowReadyGo(false), 3000)
     setTimeout(() => setGameStart(true), 3000)
@@ -208,7 +215,7 @@ function Timemode() {
 
   useInterval(
     () => {
-      if (gameStart && !isModalOpen) {
+      if (gameStart && !isPauseModalOpen) {
         setPlayTime((prev)=> prev + 10)
         const filteredTimeline = playTimeline.find(
           (e) =>
@@ -279,7 +286,7 @@ function Timemode() {
           <Feedback showGreat={showGreat} showGood={showGood} showCheerUp={showCheerUp} showReadyGo={showReadyGo}/>
           <div className="button">
             {!afterDirection && <ModalBtn onClick={switchVideo}>화면 전환</ModalBtn>}
-            <ModalBtn onClick={handleIsModalOpen}>나가기</ModalBtn>
+            <ModalBtn onClick={handleIsPauseModalOpen}>나가기</ModalBtn>
           </div>
           {/* <div className="test">
             <ModalBtn onClick={handleShowResult}>플레이 시간 종료</ModalBtn>
@@ -311,7 +318,8 @@ function Timemode() {
           onCanPlayThrough={()=>videoref.current.play()}
           onEnded={handleAfterDirection}
         />}
-        <PauseModal handleIsModalOpen={handleIsModalOpen} isOpen={isModalOpen} />
+        <PauseModal handleIsModalOpen={handleIsPauseModalOpen} isOpen={isPauseModalOpen} />
+        <DirectionModal handleIsModalOpen={handleIsDirectionModalOpen} isOpen={isDirectionModalOpen} />
       </>
       }
     </Screen>
