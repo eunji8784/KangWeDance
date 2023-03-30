@@ -115,7 +115,7 @@ public class StatusController {
 	@GetMapping("/tag-list")
 	public ApiResponse<?> showDatabases(@RequestHeader("accesstoken") String accesstoken) throws Exception {
 		try {
-			int parentIdx = jwtService.getUserIdx(accesstoken);
+			int parentIdx = jwtUtil.getUserIdx(accesstoken);
 			List<BodyTagDto> bodyTag = statusService.findBodyTagRecord(parentIdx);
 
 			return ApiResponse.success(SuccessCode.READ_BODY_TAG, bodyTag);
