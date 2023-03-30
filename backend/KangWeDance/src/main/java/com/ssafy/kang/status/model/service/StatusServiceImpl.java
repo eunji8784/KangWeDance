@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ssafy.kang.children.model.BodyRecordDto;
 import com.ssafy.kang.play.model.PlayRecordDto;
 import com.ssafy.kang.status.model.FoodsDto;
 import com.ssafy.kang.status.model.mapper.StatusMapper;
@@ -32,6 +33,11 @@ public class StatusServiceImpl implements StatusService {
 	@Override
 	public List<PlayRecordDto> findMonthlyRecord(int childIdx, int month) throws Exception {
 		return sqlSession.getMapper(StatusMapper.class).selectMonthlyRecord(childIdx, month);
+	}
+	
+	@Override
+	public List<BodyRecordDto> findRecordList(int childIdx)  throws Exception {
+		return sqlSession.getMapper(StatusMapper.class).selectBodyRecordList(childIdx);
 	}
 
 	// 일회성 코드임

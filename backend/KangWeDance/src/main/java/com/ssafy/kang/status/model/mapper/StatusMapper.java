@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.ssafy.kang.children.model.BodyRecordDto;
 import com.ssafy.kang.play.model.PlayRecordDto;
 import com.ssafy.kang.status.model.FoodsDto;
 
@@ -22,6 +23,8 @@ public interface StatusMapper {
 	public List<FoodsDto> selectFoodList(@Param("word") String word) throws SQLException;
 
 	public List<PlayRecordDto> selectMonthlyRecord(@Param("childIdx") int childIdx, @Param("month") int month);
+
+	public List<BodyRecordDto> selectBodyRecordList(int childIdx) throws SQLException;
 
 // 일회성 코드 : 검색을 위해 영어 <->한국어
 //	public String temps(int i) throws Exception;

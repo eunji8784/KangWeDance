@@ -31,8 +31,8 @@
 	</insert>
 	
 	<insert id="insertChildrenBody">
-		insert into bodyRecord(child_idx,weight,height,bmi,today_calrories,record_date)
-		values(#{childIdx},#{weight},#{height},#{bmi},#{todayCalrories},curdate());
+		insert into bodyRecord(child_idx,weight,height,bmi,record_date)
+		values(#{childIdx},#{weight},#{height},#{bmi},curdate());
 	</insert>
 	
 	<delete id="deleteChildren" parameterType="int">
@@ -57,7 +57,7 @@
 		group by child_idx
 		),
 		body_record_details  as(
-		select body_record_idx, br.child_idx, weight,height,bmi,today_calrories,br.record_date
+		select body_record_idx, br.child_idx, weight,height,bmi,br.record_date
 		from bodyRecord br join latest_body_record latest
 		where br.child_idx =latest.child_idx and br.record_date = latest.record_date
 		)
@@ -86,8 +86,7 @@
 		SET 
 		    weight = #{weight},
 		    height = #{height},
-		    bmi = #{bmi},
-		    today_calrories = #{todayCalrories}
+		    bmi = #{bmi}
 		WHERE
 		    child_idx = #{childIdx}
 				AND record_date = CURDATE()
