@@ -1,5 +1,6 @@
 package com.ssafy.kang.status.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +12,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.kang.children.model.BodyRecordDto;
 import com.ssafy.kang.common.ErrorCode;
 import com.ssafy.kang.common.SuccessCode;
 import com.ssafy.kang.common.dto.ApiResponse;
 import com.ssafy.kang.play.model.PlayRecordDto;
+import com.ssafy.kang.play.model.service.PlayService;
+import com.ssafy.kang.status.model.ChildrenBodyRecordDto;
 import com.ssafy.kang.status.model.FoodsDto;
 import com.ssafy.kang.status.model.service.StatusService;
+import com.ssafy.kang.util.JwtUtil;
 import com.ssafy.kang.util.UnicodeKorean;
 
 import lombok.RequiredArgsConstructor;
@@ -34,7 +39,15 @@ public class StatusController {
 //	| orderRemove() | 삭제만 하는 유형의 controller 메서드 |
 	@Autowired
 	StatusService statusService;
+	@Autowired
+	PlayService playService;
 	UnicodeKorean unicodeKorean = new UnicodeKorean();
+
+	private final JwtUtil jwtUtil;
+
+	public StatusController() {
+		this.jwtUtil = new JwtUtil();
+	}
 
 	@GetMapping("/play-record/{date}")
 	public ApiResponse<?> playRecordDetails(@PathVariable("date") String date,
@@ -74,7 +87,27 @@ public class StatusController {
 			System.out.println(e.getMessage());
 			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
 		}
+	}
 
+	@GetMapping("/body-changes")
+	public ApiResponse<?> bodyRecordList(@RequestHeader("accesstoken") String accesstoken) {
+		try {
+			int parentIdx = jwtUtil.getUserIdx(accesstoken);
+			// 아이 리스트 가져오기
+			List<Integer> childList = playService.findChildren(parentIdx);
+			List<ChildrenBodyRecordDto> BodyRecordList = new ArrayList<>();
+			for (int i = 0; i < childList.size(); i++) {
+				ChildrenBodyRecordDto childrenBodyRecord = new ChildrenBodyRecordDto();
+				childrenBodyRecord.setChildIdx(childList.get(i));
+				List<BodyRecordDto> bodyRecord = statusService.findRecordList(childList.get(i));
+				childrenBodyRecord.setBodyRecord(bodyRecord);
+				BodyRecordList.add(childrenBodyRecord);
+			}
+			return ApiResponse.success(SuccessCode.READ_BODY_RECORD_LIST, BodyRecordList);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
+		}
 	}
 
 	// 검색을 위해 korean ->english 변환 API
