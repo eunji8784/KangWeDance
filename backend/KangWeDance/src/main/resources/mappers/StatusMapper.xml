@@ -74,7 +74,8 @@
 		select child_idx, sum(arm) as arm, sum(leg)as leg, sum(flexibility)as flexibility, sum(body)as body, sum(aerobic) as aerobic, sum(height)as height, sum(balance)as balance, sum(play_time) as play_time
 		from statisticRecord
 		where parent_idx=#{parentIdx}
-		group by child_idx;
+		group by child_idx
+        order by child_idx;
 	</select>
 	<select id="selectBodyRecordList" parameterType="int" resultMap="bodyRecord">
 		SELECT 
