@@ -6,6 +6,7 @@
     "@nivo/bullet": "^0.80.0",
     "@nivo/bump": "^0.80.0",
     "@nivo/core": "^0.80.0",
+    "@nivo/line": "^0.80.0",
     "@nivo/radar": "^0.80.0",
     "@reduxjs/toolkit": "^1.9.3",
     "@testing-library/jest-dom": "^5.16.5",
