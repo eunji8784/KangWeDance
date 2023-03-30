@@ -12,7 +12,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PlayResultResponseDto {
-	int experienceScore;
+	int experienceScoreBefore;
+	int experienceScoreAfter;
 	int score;
 	int level;
 }

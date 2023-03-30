@@ -95,7 +95,7 @@ public class PlayController {
 			hiveController.hashPashing(songIdx, childIdx, parentIdx);
 
 			// 동작별 점수 기록 등록
-			int scoreTotal = 0; // 총점
+			double scoreTotal = 0; // 총점
 			int experienceScoreTotal = 0; // 경험치에 더할 총점
 			int songMotionTotal = playRequestDto.getScoreRecordList().size(); // 모션 총 개수
 
@@ -104,8 +104,8 @@ public class PlayController {
 				int count = playRequestDto.getScoreRecordList().get(i).getCount();
 				int countStandard = playRequestDto.getScoreRecordList().get(i).getCountStandard();
 
-				int score = Math.min(count, countStandard) / countStandard;
-				int experienceScore = score * playRequestDto.getScoreRecordList().get(i).getTime();
+				double score = Math.min(count, countStandard) / (double) countStandard;
+				int experienceScore = (int) Math.ceil(score * playRequestDto.getScoreRecordList().get(i).getTime() * 2);
 
 				// 동작별 점수를 계산해서 Dto에 세팅한다.
 				playRequestDto.getScoreRecordList().get(i).setScore(experienceScore);
@@ -118,20 +118,21 @@ public class PlayController {
 				// 경험치에 더할 총점을 구한다.
 				experienceScoreTotal += experienceScore;
 			}
-
-			childIdx = playRequestDto.getChildIdx();
 			// 현재 경험치 조회
 			int experienceScore = playService.findExperienceScore(childIdx);
-			// 경험치에 총점을 더한다.
-			experienceScore += experienceScoreTotal;
+			// 총점에 현재 경험치를 더한다.
+			experienceScoreTotal += experienceScore;
 			// 경험치를 업데이트한다.
-			playService.modifyExperienceScore(experienceScore, childIdx);
+			playService.modifyExperienceScore(experienceScoreTotal, childIdx);
 
 			// 총점을 백점 만점으로 환산한다.
-			scoreTotal = Math.round(scoreTotal * (100 / songMotionTotal));
+			scoreTotal = Math.round(scoreTotal * (100 / (double) songMotionTotal));
+			// 총점을 5의 배수가 될 때까지 더한다.
+			while ((int) scoreTotal % 5 != 0)
+				scoreTotal++;
 
-			PlayResultResponseDto playResultResponseDto = new PlayResultResponseDto(experienceScore, scoreTotal,
-					levelUtil.getLevel(experienceScore));
+			PlayResultResponseDto playResultResponseDto = new PlayResultResponseDto(experienceScore,
+					experienceScoreTotal, (int) scoreTotal, levelUtil.getLevel(experienceScore));
 
 			return ApiResponse.success(SuccessCode.CREATE_PLAY_RESULT, playResultResponseDto);
 		} catch (Exception e) {
