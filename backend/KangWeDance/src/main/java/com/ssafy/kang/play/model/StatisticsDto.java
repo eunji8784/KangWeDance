@@ -17,5 +17,7 @@ public class StatisticsDto {
 	int flexibility;
 	int body;
 	int aerobic;
-	long playTime; // 초단위
+	int senseOfBalance; // 균형 감각
+	int height; // 키크기
+	int playTime; // 초단위
 }
