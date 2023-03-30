@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafy.kang.status.model.mapper.StatusMapper">
-	
 	<resultMap type="PlayRecordDto" id="playRecordList">
 		<result column="calorie_consumption" property="burnedCalories" />
 		<result column="score" property="score" />
@@ -9,12 +8,10 @@
 		<result column="title" property="title" />
 		<result column="record_date" property="recordDate" />
 	</resultMap>
-	
 	<resultMap type="FoodsDto" id="foodList">
 		<result column="name" property="name" />
 		<result column="category" property="category" />
 	</resultMap>
-	
 	<resultMap id="bodyTagList" type="BodyTagDto">
 		<result column="child_idx" property="childIdx" />
 		<result column="arm" property="팔" />
@@ -26,18 +23,18 @@
 		<result column="height" property="키성장" />
 		<result column="play_time" property="총_플레이시간" />
 	</resultMap>
-	
-	
-	
-	<select id="selectPlayRecord" parameterType="String" resultMap="playRecordList" >
+	<resultMap type="BodyRecordDto" id="bodyRecord">
+		<result column="child_idx" property="childIdx" />
+		<result column="record_date" property="recordDate" />
+	</resultMap>
+	<select id="selectPlayRecord" parameterType="String" resultMap="playRecordList">
 		<!--
 			동작별 점수 총합 ->score
 			칼로리 소모량
 			노래 제목
 			기록날짜
 		 -->
-		 
-	SELECT tmp1.child_idx,tmp1.calorie_consumption, tmp1.title, tmp1.record_date, tmp2.score
+		SELECT tmp1.child_idx,tmp1.calorie_consumption, tmp1.title, tmp1.record_date, tmp2.score
 		FROM 
 		 (SELECT s.song_idx, s.calorie_consumption, s.title, p.record_date, p.play_record_idx, p.child_idx
 			FROM songList s join playRecord p ON s.song_idx=p.song_idx
@@ -51,20 +48,14 @@
 		) as tmp2
 		
 	    ON tmp1.play_record_idx= tmp2.play_record_idx;
-
 	</select>
-	
-	
-	<select id="selectFoodList" parameterType="String" resultMap="foodList" >
-	SELECT name, category
-	FROM foodList
-	WHERE search_name like CONCAT (#{word}, '%')
-	limit 5
-	
+	<select id="selectFoodList" parameterType="String" resultMap="foodList">
+		SELECT name, category
+		FROM foodList
+		WHERE search_name like CONCAT (#{word}, '%')
+		limit 5
 	</select>
-	
-	
-	<select id="selectMonthlyRecord" resultMap="playRecordList" >
+	<select id="selectMonthlyRecord" resultMap="playRecordList">
 		SELECT tmp1.child_idx,tmp1.calorie_consumption, tmp1.title, tmp1.record_date, tmp2.score
 		FROM 
 		 (SELECT s.song_idx, s.calorie_consumption, s.title, p.record_date, p.play_record_idx, p.child_idx
@@ -79,16 +70,33 @@
 		) as tmp2
 	    ON tmp1.play_record_idx= tmp2.play_record_idx;
 	</select>
-	
 	<select id="selectBodyTagRecord" parameterType="int" resultMap="bodyTagList">
 		select child_idx, sum(arm) as arm, sum(leg)as leg, sum(flexibility)as flexibility, sum(body)as body, sum(aerobic) as aerobic, sum(height)as height, sum(balance)as balance, sum(play_time) as play_time
 		from statisticRecord
 		where parent_idx=#{parentIdx}
 		group by child_idx;
 	</select>
-	
-	
-</mapper>	
+	<select id="selectBodyRecordList" parameterType="int" resultMap="bodyRecord">
+		SELECT 
+		    b.child_idx,
+		    b.weight,
+		    b.height,
+		    b.bmi,
+		    DATE_FORMAT(b.record_date, '%y-%m') AS record_date
+		FROM
+		    bodyRecord b
+		        JOIN
+		    (SELECT 
+		        child_idx, MAX(record_date) AS record_date
+		    FROM
+		        bodyRecord
+		    WHERE
+		        child_idx = #{childIdx}
+		    GROUP BY DATE_FORMAT(record_date, '%y-%m')) AS t ON t.child_idx = b.child_idx
+		        AND t.record_date = b.record_date
+		ORDER BY b.record_date DESC
+		LIMIT 7;
+	</select>
 	<!-- //일회성 코드 : 검색을 위해 영어 <->한국어 
 	
 	<select id="temps" parameterType="int" resultType="String">
@@ -102,5 +110,4 @@
 		where food_idx = #{i}
 	</update>
 	-->
-
-	
+</mapper>
