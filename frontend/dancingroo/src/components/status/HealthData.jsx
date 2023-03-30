@@ -1,9 +1,14 @@
 import React
 // , { useState } 
 from "react";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 // import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import useApi from "../../hooks/auth/useApi"
+import MotionChart from "./MotionChart";
+import BmiChart from "./BmiChart";
+import BodyChart from "./BodyChart";
 
 const Wrapper = styled.div`
     display: flex;
@@ -59,6 +64,19 @@ const Wrapper = styled.div`
           border-radius:5px;
         }
       }
+      .status-box>h3,h5,h4{
+        padding-left:0.8rem;
+      }
+      .right{
+        .chart-container{
+          height:20rem;
+          background-color:white;
+          border-radius:5px;
+        }
+        /* justify-content:center;
+        align-items:center; */
+
+      }
     }
 `;
 // [2] 모달열기위한버튼은 따로 컴포로 제작후 export해서 PlayData페이지에도 활용
@@ -84,13 +102,29 @@ export const ModalBtn = styled.div`
         box-shadow: 0px 3px 15px rgba(240, 84, 117, 0.6);
     }
 `
-
 function HealthData(props) {
     const {handleIsModalOpen} = props;
+    // const navigate = useNavigate();
     const selected = useSelector(state=>state.userState.select)
     const selectedChild = useSelector(state=>state.userState.children[selected||0]) 
-    // const navigate = useNavigate();
-    
+    const getTagData = useApi()
+    const getBodyChanges = useApi()
+    const data = [
+      {
+        "flexibility": 10,
+        "together": 15,
+        "leg": 8,
+        "arm": 10,
+        "aerobic": 25,
+        "body": 35,
+        "senseOfBalance": 20,
+        "height": 13
+      }
+    ];
+    useEffect(()=>{
+      // getBodyChanges.fetchApi('GET', '/status/body-changes')
+      // getTagData.fetchApi('GET', '/status/motion-tag')
+    },[])
     return (
         <Wrapper>
           <section className="section header">
@@ -114,11 +148,14 @@ function HealthData(props) {
               <h3>뾰롱</h3>
               <h5>나이, 키 기반 체중 상위 {'OO'}%</h5>
               <div className="graph-box"></div>
-              <h5>오늘 먹은 칼로리 <span>{'OOOO'}kcal</span></h5>
-              <div className="graph-box"></div>
+              <h3>많이 한 동작 그래프<span>{''}</span></h3>
+              <div className="chart-container">
+                <MotionChart data={data}/>
+              </div>
+              {/* <div className="graph-box"></div>
               <h5>식단 기반,</h5>
               <h4>4주 뒤 예측 몸무게 <span>{'OO'}KG</span></h4>
-              <div className="graph-box"></div>
+              <div className="graph-box"></div> */}
             </article>
           </section>
         </Wrapper>
