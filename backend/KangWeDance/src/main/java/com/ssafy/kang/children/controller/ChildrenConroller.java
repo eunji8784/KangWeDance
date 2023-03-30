@@ -59,7 +59,6 @@ public class ChildrenConroller {
 	public ApiResponse<?> childrenAdd(@RequestHeader("accesstoken") String accesstoken,
 			@RequestBody ChildrenDto childrenDto) {
 		childrenDto.setParentIdx(jwtUtil.getUserIdx(accesstoken));
-		childrenDto.setTodayCalrories(0);
 		childrenDto.setBmi(
 				Math.round((childrenDto.getWeight() / (Math.pow(childrenDto.getHeight() / 100, 2))) * 10.0) / 10.0);
 		try {
