@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import {Header, Main, Article, Section, H1, Footer} from "../common/ui/Semantics";
+import {Header, H1, Footer} from "../common/ui/Semantics";
 import { ModalBtn } from "../status/HealthData";
 import {ModalWrapper} from "../common/ui/Modal"
 
@@ -18,8 +18,7 @@ const PauseModalWrapper = styled(ModalWrapper)`
   }
 `; 
 
-function PauseModal(props) {
-  const {handleIsModalOpen, isOpen} = props
+function PauseModal({handleIsModalOpen, isOpen}) {
   const navigate = useNavigate();
   return (
       <PauseModalWrapper isModalOpen={isOpen}>
