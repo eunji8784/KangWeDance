@@ -20,4 +20,6 @@ public class StatisticsDto {
 	int senseOfBalance; // 균형 감각
 	int height; // 키크기
 	int playTime; // 초단위
+	int childIdx;
+	int parentIdx;
 }

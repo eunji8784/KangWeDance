@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -20,12 +21,15 @@ import com.ssafy.kang.common.SuccessCode;
 import com.ssafy.kang.common.dto.ApiResponse;
 import com.ssafy.kang.play.model.PlayRecordForHadoop;
 import com.ssafy.kang.play.model.StatisticsDto;
+import com.ssafy.kang.play.model.mapper.PlayMapper;
 import com.ssafy.kang.play.model.service.PlayService;
 import com.ssafy.kang.util.JwtUtil;
 
 @RestController
 @RequestMapping("/hive")
 public class HiveController {
+	@Autowired
+	private SqlSession sqlSession;
 
 	@Autowired
 	@Qualifier("jdbcHiveTemplate")
@@ -126,6 +130,7 @@ public class HiveController {
 			List<String> tmp = Arrays.asList(list.split("#"));
 
 			for (String s : tmp) {
+				// System.out.println(s);
 				if (s.equals("팔")) {
 					statisticsDto.setArm(statisticsDto.getArm() + 1);
 				} else if (s.equals("다리")) {
@@ -157,12 +162,19 @@ public class HiveController {
 		statisticsDto.setPlayTime(80);
 		// System.out.println(statisticsDto);
 
-		// 하둡에 저장
-		jdbcTemplate.update("insert into table statisticRecord partition(child_idx=" + childIdx + ",parent_idx="
-				+ parentIdx + ") values (" + 80 + "," + statisticsDto.getArm() + "," + statisticsDto.getLeg() + ","
-				+ statisticsDto.getFlexibility() + "," + statisticsDto.getBody() + "," + statisticsDto.getAerobic()
-				+ "," + statisticsDto.getHeight() + "," + statisticsDto.getSenseOfBalance() + ")");
-		System.out.println("하둡에 저장 완료! ");
+		// 하둡에 저장 -> 시연때는 잠시 빠이빠이(주석처리)
+//		jdbcTemplate.update("insert into table statisticRecord partition(child_idx=" + childIdx + ",parent_idx="
+//				+ parentIdx + ") values (" + 80 + "," + statisticsDto.getArm() + "," + statisticsDto.getLeg() + ","
+//				+ statisticsDto.getFlexibility() + "," + statisticsDto.getBody() + "," + statisticsDto.getAerobic()
+//				+ "," + statisticsDto.getHeight() + "," + statisticsDto.getSenseOfBalance() + ")");
+//
+//		System.out.println("하둡에 저장 완료! ");
+
+		/////////////////////// 시연용 코드 /////////////////////////////
+		statisticsDto.setChildIdx(childIdx);
+		statisticsDto.setParentIdx(parentIdx);
+		sqlSession.getMapper(PlayMapper.class).inserTagForHadoop(statisticsDto);
+		System.out.println("시연용 저장 완료 ");
 	}
 
 }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.kang.children.model.BodyRecordDto;
 import com.ssafy.kang.play.model.PlayRecordDto;
+import com.ssafy.kang.status.model.BodyTagDto;
 import com.ssafy.kang.status.model.FoodsDto;
 
 @Service
@@ -22,6 +23,8 @@ public interface StatusService {
 	public List<FoodsDto> findFoodList(String word) throws Exception;
 
 	public List<PlayRecordDto> findMonthlyRecord(int childIdx, int month) throws Exception;
+
+	public List<BodyTagDto> findBodyTagRecord(int parentIdx) throws Exception;
 
 	public List<BodyRecordDto> findRecordList(int childIdx) throws Exception;
 
