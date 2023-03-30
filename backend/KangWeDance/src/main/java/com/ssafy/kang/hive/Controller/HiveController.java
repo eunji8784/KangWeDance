@@ -1,12 +1,16 @@
 package com.ssafy.kang.hive.Controller;
 
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,11 +20,18 @@ import com.ssafy.kang.common.ErrorCode;
 import com.ssafy.kang.common.SuccessCode;
 import com.ssafy.kang.common.dto.ApiResponse;
 import com.ssafy.kang.play.model.PlayRecordForHadoop;
+import com.ssafy.kang.play.model.StatisticsDto;
 import com.ssafy.kang.play.model.service.PlayService;
+import com.ssafy.kang.util.JwtUtil;
 
 @RestController
 @RequestMapping("/hive")
 public class HiveController {
+	// 오늘 날짜를 구하기 위함 -> 파티션 처리를 위함
+	LocalDate now = LocalDate.now();
+	int year = now.getYear(); // 년
+	int month = now.getMonthValue(); // 월
+	int day = now.getDayOfMonth(); // 일
 
 	@Autowired
 	@Qualifier("jdbcHiveTemplate")
@@ -28,16 +39,21 @@ public class HiveController {
 
 	@Autowired
 	private ChildrenMapper childrenMapper;
+	private JwtUtil jwtService = new JwtUtil();
 
 	@Autowired
 	PlayService playService;
 
-	@GetMapping("/tables")
-	public ApiResponse<?> showDatabases() {
+	@GetMapping("/tag-list")
+	public ApiResponse<?> showDatabases(@RequestHeader("accesstoken") String accesstoken) {
 		List<Map<String, Object>> row = null;
-		System.out.println(1);
-		row = jdbcTemplate.queryForList("show tables");
-		return ApiResponse.success(SuccessCode.CREATE_BODY_CHILDREN, row);
+		int parentIdx = jwtService.getUserIdx(accesstoken);
+
+		row = jdbcTemplate.queryForList(
+				"select child_idx, sum(play_time) as play_time, sum(arm) as arm , sum(leg) as leg, sum(flexibility) as flexibility , sum(body) as body , sum(aerobic) as aerobic from statisticrecord where parent_idx="
+						+ parentIdx + " group by child_idx");
+		System.out.println("하둡에서 아이 정보 제공 성공!");
+		return ApiResponse.success(SuccessCode.READ_BODY_TAG, row);
 	}
 
 	@GetMapping("/body_record")
@@ -101,6 +117,50 @@ public class HiveController {
 					+ songIdx + "," + playMode + ",'" + recordDate + "')");
 		}
 		return ApiResponse.success(SuccessCode.CREATE_PLAYRECORD);
+	}
+
+	@Async
+	public void hashPashing(int songIdx, int childIdx, int parentIdx) throws Exception {
+		List<String> hashTag = playService.findMotionTag(songIdx);
+
+		StatisticsDto statisticsDto = new StatisticsDto();
+
+		// System.out.println(month + "" + day);
+
+		for (int i = 0; i < hashTag.size(); i++) {
+			String list = hashTag.get(i).substring(1);
+			List<String> tmp = Arrays.asList(list.split("#"));
+
+			for (String s : tmp) {
+				if (s.equals("팔")) {
+					statisticsDto.setArm(statisticsDto.getArm() + 1);
+				} else if (s.equals("다리")) {
+					statisticsDto.setLeg(statisticsDto.getLeg() + 1);
+				}
+
+				else if (s.equals("유연성")) {
+					statisticsDto.setFlexibility(statisticsDto.getFlexibility() + 1);
+				}
+
+				else if (s.equals("유산소")) {
+					statisticsDto.setAerobic(statisticsDto.getAerobic() + 1);
+				}
+
+				else if (s.equals("몸통")) {
+					statisticsDto.setBody(statisticsDto.getBody() + 1);
+				}
+			}
+
+		}
+		statisticsDto.setPlayTime(80);
+		// System.out.println(statisticsDto);
+
+		// 하둡에 저장
+		jdbcTemplate.update("insert into table statisticRecord partition(child_idx=" + childIdx + ",parent_idx="
+				+ parentIdx + ") values (" + 80 + "," + statisticsDto.getArm() + "," + statisticsDto.getLeg() + ","
+				+ statisticsDto.getFlexibility() + "," + statisticsDto.getBody() + "," + statisticsDto.getAerobic()
+				+ ")");
+		System.out.println("하둡에 저장 완료! ");
 	}
 
 }
