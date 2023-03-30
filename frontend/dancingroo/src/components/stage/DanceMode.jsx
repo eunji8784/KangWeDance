@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react"
+import React, { useRef, useEffect, useState, useCallback } from "react"
 import { useSelector } from "react-redux"
 import styled from "styled-components"
 import Webcam from "react-webcam"
@@ -81,6 +81,7 @@ function DanceMode() {
   const danceTimeline = stageItem.songMotionList
 
   const playRecord = useApi()
+  const postPhoto = useApi()
 
   // 처음에 모델 불러오기
   useEffect(() => {
@@ -189,6 +190,12 @@ function DanceMode() {
   }
 
   // test
+  const captureScreenshot = useCallback(() => {
+    const screenshot = camref.current.getScreenshot()
+    postPhoto.fetchApi('POST', '/photos', screenshot)
+  },[camref])
+
+  // test
   // const replay = () => {
   //   videoref.current.currentTime = videoref.current.duration - 1
   //   videoref.current.play()
@@ -242,10 +249,12 @@ function DanceMode() {
           className={camfocus ? "big" : "small"}
           ref={camref}
           mirrored={true}
+          screenshotFormat="image/jpeg"
         />
         <MyOverlay>
           <Feedback showGreat={showGreat} showGood={showGood} showCheerUp={showCheerUp}/>
           <div className="button">
+            <ModalBtn onClick={captureScreenshot}>사진 캡쳐</ModalBtn>
             <ModalBtn onClick={switchVideo}>화면 전환</ModalBtn>
             <ModalBtn onClick={handleIsModalOpen}>나가기</ModalBtn>
           </div>

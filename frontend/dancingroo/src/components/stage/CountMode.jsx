@@ -69,6 +69,7 @@ function CountMode() {
   const [model, setModel] = useState(null)
   const [aimedPosture, setAimedPosture] = useState(null)
   const [prevPosture, setPrevPosture] = useState(10)
+  // const [motionCount, setMotionCount] = useState(0)
   const [count, setCount] = useState(0)
   const [scoreRecordList, setScoreRecordList] = useState([])
   const [showGreat, setShowGreat] = useState(false)
@@ -267,6 +268,16 @@ function CountMode() {
     }
   },[scoreRecordList])
 
+  // // test
+  // useInterval(
+  //   () => {
+  //     if (!isPauseModalOpen) {
+  //       setMotionCount((count) => count + 1)
+  //     }
+  //   },
+  //   (prevPosture !== 10 && aimedPosture) ? aimedPosture?.countDelay : null
+  // )
+
   return (
     <Screen>
       <img className="background-img" src={bgImg} alt="background" />
@@ -284,6 +295,7 @@ function CountMode() {
         <MyOverlay>
           <Feedback showGreat={showGreat} showGood={showGood} showCheerUp={showCheerUp} showReadyGo={showReadyGo}/>
           <div className="button">
+            {/* <ModalBtn>{motionCount}</ModalBtn> */}
             {!afterDirection && <ModalBtn onClick={switchVideo}>화면 전환</ModalBtn>}
             <ModalBtn onClick={handleIsPauseModalOpen}>나가기</ModalBtn>
           </div>
