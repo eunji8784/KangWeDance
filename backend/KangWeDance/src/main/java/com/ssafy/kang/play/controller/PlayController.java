@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.kang.common.ErrorCode;
 import com.ssafy.kang.common.SuccessCode;
 import com.ssafy.kang.common.dto.ApiResponse;
+import com.ssafy.kang.hive.Controller.HiveController;
 import com.ssafy.kang.play.model.PlayRecommendationDto;
 import com.ssafy.kang.play.model.PlayRequestDto;
 import com.ssafy.kang.play.model.PlayResultResponseDto;
@@ -30,10 +32,16 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/play")
 @RestController
 @RequiredArgsConstructor
+@EnableAsync
 public class PlayController {
 
 	@Autowired
 	PlayService playService;
+
+	@Autowired
+	HiveController hiveController;
+
+	private JwtUtil jwtService = new JwtUtil();
 
 	private final LevelUtil levelUtil;
 
@@ -78,8 +86,13 @@ public class PlayController {
 			// 게임 기록 등록
 			playService.addPlayRecord(playRequestDto);
 
-			// 동작별 점수 기록 등록
+			/////////// hadoop insert를 위한 코드 ////////////
+			int songIdx = playRequestDto.getSongIdx();
+			int childIdx = playRequestDto.getChildIdx();
+			int parentIdx = jwtService.getUserIdx(accesstoken);
+			hiveController.hashPashing(songIdx, childIdx, parentIdx);
 
+			// 동작별 점수 기록 등록
 			int scoreTotal = 0; // 총점
 			int experienceScoreTotal = 0; // 경험치에 더할 총점
 			int songMotionTotal = playRequestDto.getScoreRecordList().size(); // 모션 총 개수
@@ -104,7 +117,7 @@ public class PlayController {
 				experienceScoreTotal += experienceScore;
 			}
 
-			int childIdx = playRequestDto.getChildIdx();
+			childIdx = playRequestDto.getChildIdx();
 			// 현재 경험치 조회
 			int experienceScore = playService.findExperienceScore(childIdx);
 			// 경험치에 총점을 더한다.

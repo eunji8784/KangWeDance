@@ -150,4 +150,22 @@
 		ORDER BY RAND()
 		LIMIT 1
 	</select>
+	
+	
+	
+	
+	<!-- 하둡을 위한 파싱 코드  -->
+	<select id ="selectMotionTag"  parameterType="int"  resultType="String" >
+		SELECT motion_tag
+		FROM motionType m 
+			join songMotion  s 
+			on m.motion_type_idx=s.motion_type_idx
+		where s.song_idx=#{songIdx};
+	</select>
+	
+	
+	
+	
+	
+	
 </mapper>
