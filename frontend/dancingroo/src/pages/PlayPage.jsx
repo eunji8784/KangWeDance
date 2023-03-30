@@ -14,8 +14,8 @@ const Wrapper = styled.div`
     hr {
         width: 100%;
         height: 2px;
-        border: white;
-        box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+        box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3);
+        margin-top: 3rem;
     }
 
     padding-bottom: 5rem;

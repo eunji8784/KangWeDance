@@ -69,6 +69,7 @@ function Timemode() {
   const [model, setModel] = useState(null)
   const [aimedPosture, setAimedPosture] = useState(null)
   const [prevPosture, setPrevPosture] = useState(10)
+  // const [timeCount, setTimeCount] = useState(0)
   const [count, setCount] = useState(0)
   const [scoreRecordList, setScoreRecordList] = useState([])
   const [showGreat, setShowGreat] = useState(false)
@@ -268,6 +269,16 @@ function Timemode() {
     }
   },[scoreRecordList])
 
+  // test
+  // useInterval(
+  //   () => {
+  //     if (!isPauseModalOpen) {
+  //       setTimeCount((time) => time + 1)
+  //     }
+  //   },
+  //   (prevPosture !== 10 && aimedPosture) ? 10 : null
+  // )
+
   return (
     <Screen>
       <img className="background-img" src={bgImg} alt="background" />
@@ -285,6 +296,7 @@ function Timemode() {
         <MyOverlay>
           <Feedback showGreat={showGreat} showGood={showGood} showCheerUp={showCheerUp} showReadyGo={showReadyGo}/>
           <div className="button">
+            {/* <ModalBtn>{parseInt(timeCount / 100)}</ModalBtn> */}
             {!afterDirection && <ModalBtn onClick={switchVideo}>화면 전환</ModalBtn>}
             <ModalBtn onClick={handleIsPauseModalOpen}>나가기</ModalBtn>
           </div>
