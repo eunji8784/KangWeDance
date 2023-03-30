@@ -14,7 +14,7 @@ const Bodysuit = styled.div`
     height: 100vh;
     position: relative;
     // @ 양 옆 마진
-    margin:0 8% !important;
+    margin:0 12% !important;
     z-index:2;
     /* border: 1px solid blue; */
 `;

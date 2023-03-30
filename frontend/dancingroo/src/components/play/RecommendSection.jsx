@@ -42,7 +42,7 @@ function RecommendSection({recommendData}) {
     <>
       <RecommendWrapper numColumns={numColumns}>
         <ItemWrapper>
-          {item && <PlayItem item={item} />}
+          {item && <PlayItem item={item} tags={true} />}
         </ItemWrapper>
         <InfoWrapper>
           <H1>{children[select].nickname} 을/를 위한</H1>
