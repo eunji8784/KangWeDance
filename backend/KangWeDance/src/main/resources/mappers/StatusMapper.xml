@@ -62,17 +62,23 @@
 	</select>
 	<select id="selectBodyRecordList" parameterType="int" resultMap="bodyRecord">
 		SELECT 
-			child_idx,
-		    AVG(weight) AS weight,
-		    AVG(height) AS height,
-		    ROUND(AVG(bmi), 3) AS bmi,
-		    DATE_FORMAT(record_date, '%y-%m') AS record_date
+		    b.child_idx,
+		    b.weight,
+		    b.height,
+		    b.bmi,
+		    DATE_FORMAT(b.record_date, '%y-%m') AS record_date
 		FROM
-		    bodyRecord
-		WHERE
-		    child_idx = #{childIdx}
-		GROUP BY DATE_FORMAT(record_date, '%y-%m'), child_idx
-		ORDER BY record_date DESC
+		    bodyRecord b
+		        JOIN
+		    (SELECT 
+		        child_idx, MAX(record_date) AS record_date
+		    FROM
+		        bodyRecord
+		    WHERE
+		        child_idx = #{childIdx}
+		    GROUP BY DATE_FORMAT(record_date, '%y-%m')) AS t ON t.child_idx = b.child_idx
+		        AND t.record_date = b.record_date
+		ORDER BY b.record_date DESC
 		LIMIT 7;
 	</select>
 	<!-- //일회성 코드 : 검색을 위해 영어 <->한국어 
