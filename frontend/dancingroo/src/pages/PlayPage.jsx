@@ -13,8 +13,8 @@ const Wrapper = styled.div`
     justify-content: center;
     .hr {
         width: 100%;
-        border-bottom: solid 0.3rem #ffcfd3;
-        margin-top: 3rem;
+        border-bottom: solid 0.5rem #ffcfd3;
+        margin-top: 5rem;
     }
 `;
 

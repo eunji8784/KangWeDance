@@ -14,6 +14,7 @@ const DescribeWrapper = styled(Wrapper)`
   background-color: #ffcfd3;
   margin-top: 1rem;
   border-radius: 1rem;
+  /* margin-bottom: 2rem; */
 `
 
 const ModSection = styled(Wrapper)`
