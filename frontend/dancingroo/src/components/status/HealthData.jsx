@@ -226,21 +226,25 @@ function HealthData(props) {
               <div className="info-box">
                 <div className="info-content">
                   <h3>이런 동작을 제일 잘해요!</h3>
-                  {sortedTagList &&
+                  {sortedTagList ?
                   <>
                   <ModBtn color={tagColors[sortedTagList[sortedTagList.length-1][0]]}>{sortedTagList[sortedTagList.length-1][0]}</ModBtn>
                   <ModBtn color={tagColors[sortedTagList[sortedTagList.length-2][0]]}>{sortedTagList[sortedTagList.length-2][0]}</ModBtn>
                   <ModBtn color={tagColors[sortedTagList[sortedTagList.length-3][0]]}>{sortedTagList[sortedTagList.length-3][0]}</ModBtn>
                   </>
+                  :
+                  <h3>아직 기록된 동작이 없어요</h3>
                   }
                 </div>
                 <div className="info-content">
                   <h3>이런 동작은 연습이 필요해요!</h3>
-                  {sortedTagList && 
+                  {sortedTagList ?
                   <>
                   <ModBtn color={tagColors[sortedTagList[0][0]]}>{sortedTagList[0][0]}</ModBtn>
                   <ModBtn color={tagColors[sortedTagList[1][0]]}>{sortedTagList[1][0]}</ModBtn>
                   </>
+                  :
+                  <h3>아직 기록된 동작이 없어요</h3>
                   }
                 </div>
               </div>
