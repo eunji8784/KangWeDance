@@ -10,6 +10,8 @@ const Note = styled.img`
   width: 3rem;
   animation: float 5s infinite ease-in-out;
   margin: 10px;
+  display: inline-block;
+  z-index:-2;
 `;
 
 const NoteCompo = () => {
