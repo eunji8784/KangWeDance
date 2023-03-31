@@ -8,6 +8,9 @@ function ErrorPage(props) {
     return (
         <Wrapper>
             ErrorPage
+            <p onClick={()=>navigate('/')}>
+            홈으로 이동
+            </p>
         </Wrapper>
     );
 }
