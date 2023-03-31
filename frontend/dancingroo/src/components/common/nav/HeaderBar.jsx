@@ -172,7 +172,7 @@ function HeaderBar(props) {
                     {isLoggedIn &&
                     <>
                     <LogOut onClick={logoutHandler}>로그아웃</LogOut>
-                    <div className="user-icon"
+                                        <div className="user-icon"
                     onClick={() => {
                         navigate(`/users`);
                     }}>   
