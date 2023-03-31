@@ -11,6 +11,10 @@ import { useInterval } from "../../hooks/useInterval"
 import useApi from "../../hooks/auth/useApi"
 import bgImg from "../../assets/images/bgImg.png"
 
+
+import axios from "axios";
+
+
 const tmPose = window.tmPose
 const MODELURL =
 "https://teachablemachine.withgoogle.com/models/7g9Z9_ogC/model.json"
@@ -190,9 +194,31 @@ function DanceMode() {
   }
 
   // test
-  const captureScreenshot = useCallback(() => {
+  const captureScreenshot = useCallback( async () => {
     const screenshot = camref.current.getScreenshot()
-    postPhoto.fetchApi('POST', '/photos', screenshot)
+    var arr = screenshot.split(','),
+    mime = arr[0].match(/:(.*?);/)[1],
+    bstr = atob(arr[1]),
+    n = bstr.length,
+    u8arr = new Uint8Array(n);
+    
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    
+    const file = new File([u8arr], "file", {type:mime});
+    const formData = new FormData();
+    formData.append('file', file);
+
+    // try {
+    //   const response = await axios.post("https://kangwedance.site/dev/children/profile", formData);
+    //   console.log('axios');
+    //   console.log(response.data.data);
+    // } catch (error) {
+    //     console.error(error);
+    // }
+
+    postPhoto.fetchApi('POST', '/photos', formData)
   },[camref])
 
   // test

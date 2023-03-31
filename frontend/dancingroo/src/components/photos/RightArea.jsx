@@ -5,14 +5,14 @@ import useImage from 'use-image';
 import Swal from "sweetalert2";
 
 import { Wrapper, PinkButton } from "../common/ui/Semantics";
-import instance from "../../hooks/auth/Instance";
+import axios from "axios";
 
 import {MdCleaningServices} from 'react-icons/md';
 
 const MainSection = styled(Wrapper)`
-    width: 60%;
+    width: 65%;
     height: 100%;
-    min-width: 25rem;
+    min-width: 30rem;
     justify-content: start;
     border-right: solid 0.2rem #ffeef2;
 `
@@ -170,8 +170,9 @@ function RightArea({image, frameImage, stickerImage, stickerNum}) {
             const file = new File([u8arr], "카카오공유", {type:mime});
             const formData = new FormData();
             formData.append('file', file);
+
             try {
-                const response = await instance.post(url, formData);
+                const response = await axios.post(url, formData);
                 setShareImageUrl(response.data.data);
             } catch (error) {
                 console.error(error);
