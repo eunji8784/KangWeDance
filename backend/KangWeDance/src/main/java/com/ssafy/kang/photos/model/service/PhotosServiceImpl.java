@@ -25,14 +25,7 @@ public class PhotosServiceImpl implements PhotosService {
 	private SqlSession sqlSession;
 
 	@Override
-	public void addUpdate(MultipartFile multipartFile,int idx) throws Exception {
-		FileDto fileDto = FileDto.multipartOf(multipartFile);
-		String url = amazonS3ResourceStorage.getUrl(fileDto.getPath(), multipartFile);
-		System.out.println(url);
-		PhotosDto photosDto = new PhotosDto();
-		photosDto.setPhotoName(fileDto.getName());
-		photosDto.setPhotoImageUrl(url);
-		photosDto.setParentIdx(idx);
+	public void addUpdate(PhotosDto photosDto) throws Exception {
 		
 		sqlSession.getMapper(PhotosMapper.class).insertPhoto(photosDto);
 
