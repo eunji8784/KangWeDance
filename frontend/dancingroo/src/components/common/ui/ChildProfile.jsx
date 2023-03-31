@@ -86,7 +86,9 @@ function ChildProfile(props) {
         <Wrapper>
           {/* bool값은 html에서 유효하지 않기 떄문에 string으로 바꿔서 보내줌 */}
           <ProfileImg active={active[0].toString()} onClick={()=>handleClick(0)} src={profileImg[0]}/>
+          {children[0]?.childIdx &&
           <ProfileImg active={active[1].toString()} onClick={()=>handleClick(1)} src={profileImg[1]}/>
+          }
           {children[1]?.childIdx &&
           <ProfileImg active={active[2].toString()} onClick={()=>handleClick(2)} src={profileImg[2]}/>
           }
