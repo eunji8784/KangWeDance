@@ -4,7 +4,7 @@ import styled from "styled-components";
 import useApi from "../hooks/auth/useApi";
 import DanceSection from "../components/play/DanceSection";
 import GameSection from "../components/play/GameSection";
-import RecommendSection from "../components/play/RecommendSection";
+import DescribeSection from "../components/play/DescribeSection";
 import Rocket from "../components/common/effects/Rocket";
 
 const Wrapper = styled.div`
@@ -15,12 +15,9 @@ const Wrapper = styled.div`
     position:relative;
     hr {
         width: 100%;
-        height: 2px;
-        box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3);
-        margin-top: 3rem;
+        border-bottom: solid 0.5rem #ffcfd3;
+        margin-top: 5rem;
     }
-
-    padding-bottom: 5rem;
 `;
 
 function PlayPage({handleWatchingPage}) {
@@ -37,10 +34,10 @@ function PlayPage({handleWatchingPage}) {
 
     return (
         <Wrapper>
-            <RecommendSection recommendData={recommendation.data?.data}/>
-            <hr />
+            {/* <RecommendSection recommendData={recommendation.data?.data}/> */}
+            <DescribeSection/>
             <DanceSection danceData={playList.data?.data.filter((e)=>e.playMode===0)} />
-            <hr />
+            <div className="hr" />
             <GameSection gameData={playList.data?.data.filter((e)=>e.playMode!==0)} />
             <Rocket/>
         </Wrapper>

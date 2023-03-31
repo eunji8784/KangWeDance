@@ -1,19 +1,21 @@
 import React, { useRef, useEffect, useState, useCallback } from "react"
 import { useSelector } from "react-redux"
 import styled from "styled-components"
+import axios from "axios";
 import Webcam from "react-webcam"
 import PauseModal from "./PauseModal"
 import PlayResult from "./PlayResult"
 import Feedback from "./Feedback"
+import ProgressBar from "./ProgressBar";
 import { Overlay } from "../common/ui/Semantics"
 import { ModalBtn } from "../status/HealthData"
 import { useInterval } from "../../hooks/useInterval"
 import useApi from "../../hooks/auth/useApi"
 import bgImg from "../../assets/images/bgImg.png"
-
-
-import axios from "axios";
-
+import { AiFillCamera } from "react-icons/ai";
+import { HiSwitchHorizontal } from "react-icons/hi"
+import { HiVideoCamera, HiVideoCameraSlash } from "react-icons/hi2"
+import { RxExit } from "react-icons/rx";
 
 const tmPose = window.tmPose
 const MODELURL =
@@ -57,15 +59,21 @@ const MyOverlay = styled(Overlay)`
   justify-content: normal;
   .button {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     position: absolute;
     right: 1rem;
     top: 0;
   }
   `
 
+const MyBtn = styled(ModalBtn)`
+  justify-content: space-evenly;
+  margin: 0.5rem 1rem;
+`
+
 function DanceMode() {
   const stageItem = useSelector((state) => state.stage.stageItem)
+  const userId = useSelector((state) => state.userState.userId)
   const children = useSelector((state) => state.userState.children)
   const select = useSelector((state) => state.userState.select)
 
@@ -75,6 +83,7 @@ function DanceMode() {
   const [prevPosture, setPrevPosture] = useState(10)
   const [count, setCount] = useState(0)
   const [scoreRecordList, setScoreRecordList] = useState([])
+  const [autoScreenshot, setAutoScreenshot] = useState(true)
   const [showGreat, setShowGreat] = useState(false)
   const [showGood, setShowGood] = useState(false)
   const [showCheerUp, setShowCheerUp] = useState(false)
@@ -108,6 +117,16 @@ function DanceMode() {
       predict()
     },
     1000 / 60
+  )
+  
+// 15초에 한번 스크린샷 찍기
+  useInterval(
+    () => {
+      if (!isModalOpen && autoScreenshot) {
+        captureScreenshot()
+      }
+    },
+    1000 * 15
   )
 
   // 모달 열기/닫기 함수
@@ -193,7 +212,6 @@ function DanceMode() {
     setCamfocus(!camfocus)
   }
 
-  // test
   const captureScreenshot = useCallback( async () => {
     const screenshot = camref.current.getScreenshot()
     var arr = screenshot.split(','),
@@ -210,15 +228,18 @@ function DanceMode() {
     const formData = new FormData();
     formData.append('file', file);
 
-    // try {
-    //   const response = await axios.post("https://kangwedance.site/dev/children/profile", formData);
-    //   console.log('axios');
-    //   console.log(response.data.data);
-    // } catch (error) {
-    //     console.error(error);
-    // }
-
-    postPhoto.fetchApi('POST', '/photos', formData)
+    try {
+      const response = await axios.post("https://kangwedance.site/dev/children/profile", formData);
+      if (response.data.success) {
+        const body = {
+          photoImageUrl:response.data.data,
+          photoName:`${userId}-${children[select].childIdx}`
+        }
+        postPhoto.fetchApi('POST', '/photos', body)
+      }
+    } catch (error) {
+        console.error(error);
+    }
   },[camref])
 
   // test
@@ -262,6 +283,10 @@ function DanceMode() {
     }
   },[scoreRecordList])
 
+  const toggleAutoScreenshot = () => {
+    setAutoScreenshot((prev) => !prev)
+  }
+
   return (
     <Screen>
       <img className="background-img" src={bgImg} alt="background" />
@@ -280,10 +305,22 @@ function DanceMode() {
         <MyOverlay>
           <Feedback showGreat={showGreat} showGood={showGood} showCheerUp={showCheerUp}/>
           <div className="button">
-            <ModalBtn onClick={captureScreenshot}>사진 캡쳐</ModalBtn>
-            <ModalBtn onClick={switchVideo}>화면 전환</ModalBtn>
-            <ModalBtn onClick={handleIsModalOpen}>나가기</ModalBtn>
+            <MyBtn onClick={toggleAutoScreenshot} style={{fontSize:"0.7rem"}}>
+              {autoScreenshot? 
+                <>
+                  <HiVideoCamera style={{fontSize:"1.5rem"}}/>자동캡쳐 켜짐
+                </>
+                :
+                <>
+                  <HiVideoCameraSlash style={{fontSize:"1.5rem"}}/>자동캡쳐 꺼짐
+                </>
+              }
+            </MyBtn>
+            <MyBtn onClick={captureScreenshot}><AiFillCamera style={{fontSize:"1.5rem"}}/>사진 캡쳐</MyBtn>
+            <MyBtn onClick={switchVideo}><HiSwitchHorizontal style={{fontSize:"1.5rem"}}/>화면 전환</MyBtn>
+            <MyBtn onClick={handleIsModalOpen}><RxExit style={{fontSize:"1.5rem"}}/>그만하기</MyBtn>
           </div>
+          <ProgressBar nowProgress={videoref?.current?.currentTime} endProgress={videoref?.current?.duration}/>
           {/* <div className="test">
             <ModalBtn onClick={plusCount}>Count +1</ModalBtn>
             <ModalBtn onClick={openGreatFeedback}>Great</ModalBtn>

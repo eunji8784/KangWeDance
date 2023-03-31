@@ -45,10 +45,11 @@ const ThumbnailWrapper = styled(Wrapper)`
 const InfoWrapper = styled(Wrapper)`
   width: 100%;
   flex-direction: row;
-  margin: 0.5rem 1rem;
+  margin: 0.8rem 1rem;
+  margin-bottom: 1.5rem;
   .stars {
     margin-left: auto;
-    margin-right: 1rem;
+    margin-right: 0.5rem;
   }
 `;
 
@@ -59,16 +60,24 @@ const TagWrapper = styled(Wrapper)`
 `;
 
 const Star = styled(TbStarFilled)`
-  color: #FFD732;
+  color: #FFD731 ;
   font-size: 2rem;
 `;
 
 const Tag = styled(PinkButton)`
   border-radius: 18px;
   font-size: 0.8rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: default;
   margin-right: 0;
+  background-color: #ffa6a6;
+`;
+
+
+const TextInfo = styled.div`
+  font-size: 1.2rem;
+  font-weight: 500;
+  color:#333333;
 `;
 
 function PlayItem({item, tags}) {
@@ -153,9 +162,9 @@ function PlayItem({item, tags}) {
             <Tags />
           </TagWrapper>
           :
-          <H2>
+          <TextInfo>
             {item?.title}
-          </H2>
+          </TextInfo>
         }
         <Stars />
       </InfoWrapper>

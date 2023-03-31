@@ -5,6 +5,7 @@ import { Outlet } from "react-router-dom";
 // import { useSelector } from "react-redux";
 // import TopBar from "../components/common/nav/TopBar";
 import HeaderBar from "../components/common/nav/HeaderBar";
+import BottomBar from "../components/common/nav/BottomBar";
 import styled from "styled-components";
 import ChildProfile from "../components/common/ui/ChildProfile";
 import NoteCompo from "../components/common/effects/NoteCompo";
@@ -12,13 +13,19 @@ import NoteCompo from "../components/common/effects/NoteCompo";
 const Bodysuit = styled.div`
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    /* justify-items: center; */
     height: 100vh;
-    position: relative;
+    /* min-height: calc(100vh- 500px); */
+    /* position: relative; */
     // @ 양 옆 마진
-    margin:0 12% !important;
+    /* padding-top: 8rem; */
+    margin:0 15% !important;
     /* border: 1px solid blue; */
 `;
+
 const OutletWrapper = styled(Outlet)`
+    /* min-height: calc(100vh- 500px);s */
 `
 
 const HBLayout = (props) => {
@@ -40,6 +47,7 @@ const HBLayout = (props) => {
             <ChildProfile/>
             <OutletWrapper />
             <NoteCompo/>
+            {/* <BottomBar/> */}
         </Bodysuit>
     )
 
