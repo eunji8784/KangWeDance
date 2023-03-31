@@ -33,7 +33,10 @@ function App() {
     const existingToken = Cookie.accessToken;
     if (existingToken) {
       dispatch(login(existingToken));
-    }
+    } 
+    // else{
+    //   dispatch(logout());
+    // }
     // if (isLoggedIn && !existingToken){
     //   navigate('/')
     //   dispatch(logout())
@@ -56,7 +59,6 @@ function App() {
         <Route element={<PHBLayout watchingPage={watchingPage} isLoggedIn={isLoggedIn}/>}>
           <Route path={"/photos"} element={<PhotosPage handleWatchingPage={handleWatchingPage}/>} />
         </Route>
-
         {/* 맨 윗줄 헤더만 있음 */}
         <Route element={<NHBLayout isLoggedIn={isLoggedIn}/>}>
           <Route path={"/users"} element={<UserPage />} />
