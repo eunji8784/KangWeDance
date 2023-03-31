@@ -9,7 +9,8 @@ import useApi from "../../hooks/auth/useApi"
 import MotionChart from "./chart/MotionChart";
 import BodyChart from "./chart/BodyChart";
 import { PinkButton } from "../common/ui/Semantics";
-import { tagColors } from "../../utils/tagColors";
+import { tagColors } from "../../utils/commonInfo";
+import { bmiCheck } from "../../utils/commonInfo";
 
 const Wrapper = styled.div`
     display: flex;
@@ -86,7 +87,7 @@ const Wrapper = styled.div`
           &>h6{
             font-size:0.7rem;
             display:inline-block;
-            width:11rem;
+            width:15rem;
             text-align:end;
             margin-right:0.8rem;
             span{
@@ -155,10 +156,14 @@ function HealthData(props) {
     const [bmiChanges, setBmiChanges] = useState([])
     const [tagData, setTagData] = useState([])
     const [sortedTagList, setSortedTagList] = useState()
+    const [standardInfo, setStandardInfo] = useState()
 
     useEffect(()=>{
       const onBodyResSuccess= (response)=>{
         const bodyRecords = response.data[selected].bodyRecord
+        const standardHeight = response.data[selected].standardHeight
+        const standardWeight = response.data[selected].standardWeight
+        setStandardInfo([standardHeight, standardWeight])
         const tempBmi = []
         const tempHeight = []
         const tempWeight = []
@@ -190,6 +195,7 @@ function HealthData(props) {
       }
       getTagData.fetchApi('GET', '/status/tag-list', onTagResSuccess)
     },[selected])
+    console.log(bmiChanges)
     return (
         <Wrapper>
           <section className="section header">
@@ -201,21 +207,25 @@ function HealthData(props) {
               <h3>신체 변화 기록</h3>
               <div className="graph-header">
                 <h4>BMI</h4>
-                <h6>현재 BMI는, <span>{"위험"}</span>수치에요</h6>
+                <h6>현재 BMI는, <span>"{bmiChanges!==[] && bmiCheck(bmiChanges[0]?.data[0].y)}"</span>수치에요</h6>
               </div>
               <div className="graph-box">
                 <BodyChart data={bmiChanges} color={'set1'}/>
               </div>
               <div className="graph-header">
                 <h4>체중(kg)</h4>
-                <h6>또래 기준,  상위 <span>{11}</span>%에요</h6>
+                {standardInfo &&
+                <h6>또래 기준,  상위 <span>{standardInfo[0]}</span>%에요</h6>
+                }
               </div>
               <div className="graph-box">
                 <BodyChart data={weightChanges} color={'category10'}/>
               </div>
               <div className="graph-header">
                 <h4>키(cm)</h4>
-                <h6>또래 기준, 상위 <span>{11}</span>%에요</h6>
+                {standardInfo &&
+                <h6>또래 기준, 상위 <span>{standardInfo[1]}</span>%에요</h6>
+                }
               </div>
               <div className="graph-box">
                 <BodyChart data={heightChanges} color={'accent'}/>
