@@ -6,7 +6,7 @@ import { Wrapper, H1 } from "../common/ui/Semantics"
 import UserEXP from "../common/ui/UserEXP"
 import { ModalBtn } from "../status/HealthData"
 import useApi from "../../hooks/auth/useApi"
-import { levelDesign } from "../../utils/levelDesign"
+import { levelDesign } from "../../utils/commonInfo"
 
 const Screen = styled(Wrapper)`
   width: 100vw;
