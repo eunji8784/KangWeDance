@@ -66,6 +66,15 @@ const LevelUpAnimation = styled.div`
   opacity: 0;
 `;
 
+const GainExp = styled.div`
+  position: absolute;
+  top: -2.5rem;
+  left: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #F05475;
+`
+
 const UserLevel = styled.div`
   position: absolute;
   top: -3rem;
@@ -138,9 +147,10 @@ function UserEXP({userLevel, startEXP, endEXP, totalLevelEXP, nextLevelEXP}) {
       <UserLevel>Lv {level}</UserLevel>
     </>
     }
-    <ExpText>
-      {showLevelUp ? `${currentExp} / ${nextLevelEXP}` : `${currentExp} / ${totalLevelEXP}`}
-    </ExpText>
+      <ExpText>
+        {showLevelUp ? `${currentExp} / ${nextLevelEXP}` : `${currentExp} / ${totalLevelEXP}`}
+      </ExpText>
+      <GainExp>+ {endEXP-startEXP}</GainExp>
     </ExpGaugeWrapper>
   );
 }

@@ -1,6 +1,7 @@
-import React, { useRef, useEffect, useState } from "react"
+import React, { useRef, useEffect, useState, useCallback } from "react"
 import { useSelector } from "react-redux"
 import styled from "styled-components"
+import axios from "axios";
 import Webcam from "react-webcam"
 import DirectionModal from "./DirectionModal"
 import PauseModal from "./PauseModal"
@@ -11,6 +12,10 @@ import { ModalBtn } from "../status/HealthData"
 import { useInterval } from "../../hooks/useInterval"
 import useApi from "../../hooks/auth/useApi"
 import bgImg from "../../assets/images/bgImg.png"
+import { AiFillCamera } from "react-icons/ai";
+import { HiSwitchHorizontal } from "react-icons/hi"
+import { HiVideoCamera, HiVideoCameraSlash } from "react-icons/hi2"
+import { RxExit } from "react-icons/rx";
 
 const tmPose = window.tmPose
 const MODELURL =
@@ -53,15 +58,21 @@ const MyOverlay = styled(Overlay)`
   justify-content: normal;
   .button {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     position: absolute;
     right: 1rem;
     top: 0;
   }
 `
 
+const MyBtn = styled(ModalBtn)`
+  justify-content: space-evenly;
+  margin: 0.5rem 1rem;
+`
+
 function Timemode() {
   const stageItem = useSelector((state) => state.stage.stageItem)
+  const userId = useSelector((state) => state.userState.userId)
   const children = useSelector((state) => state.userState.children)
   const select = useSelector((state) => state.userState.select)
 
@@ -72,6 +83,7 @@ function Timemode() {
   // const [timeCount, setTimeCount] = useState(0)
   const [count, setCount] = useState(0)
   const [scoreRecordList, setScoreRecordList] = useState([])
+  const [autoScreenshot, setAutoScreenshot] = useState(true)
   const [showGreat, setShowGreat] = useState(false)
   const [showGood, setShowGood] = useState(false)
   const [showCheerUp, setShowCheerUp] = useState(false)
@@ -88,7 +100,7 @@ function Timemode() {
   const playTimeline = stageItem.songMotionList
 
   const playRecord = useApi()
-
+  const postPhoto = useApi()
 
   // 처음에 모델 불러오기
   useEffect(() => {
@@ -160,6 +172,36 @@ function Timemode() {
   const switchVideo = () => {
     setCamfocus(!camfocus)
   }
+
+  const captureScreenshot = useCallback( async () => {
+    const screenshot = camref.current.getScreenshot()
+    var arr = screenshot.split(','),
+    mime = arr[0].match(/:(.*?);/)[1],
+    bstr = atob(arr[1]),
+    n = bstr.length,
+    u8arr = new Uint8Array(n);
+    
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    
+    const file = new File([u8arr], "file", {type:mime});
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await axios.post("https://kangwedance.site/dev/children/profile", formData);
+      if (response.data.success) {
+        const body = {
+          photoImageUrl:response.data.data,
+          photoName:`${userId}-${children[select].childIdx}`
+        }
+        postPhoto.fetchApi('POST', '/photos', body)
+      }
+    } catch (error) {
+        console.error(error);
+    }
+  },[camref])
   
   // test
   // const handleShowResult = () => {
@@ -258,6 +300,9 @@ function Timemode() {
   )
 
   useEffect(() => {
+    if (scoreRecordList.length === playTimeline?.length-1  && autoScreenshot) {
+      captureScreenshot()
+    }
     if (scoreRecordList.length === playTimeline?.length) {
       const playData = {
         childIdx: children[select].childIdx,
@@ -279,6 +324,10 @@ function Timemode() {
   //   (prevPosture !== 10 && aimedPosture) ? 10 : null
   // )
 
+  const toggleAutoScreenshot = () => {
+    setAutoScreenshot((prev) => !prev)
+  }
+
   return (
     <Screen>
       <img className="background-img" src={bgImg} alt="background" />
@@ -292,13 +341,26 @@ function Timemode() {
           className={camfocus ? "big" : "small"}
           ref={camref}
           mirrored={true}
+          screenshotFormat="image/jpeg"
         />
         <MyOverlay>
           <Feedback showGreat={showGreat} showGood={showGood} showCheerUp={showCheerUp} showReadyGo={showReadyGo}/>
           <div className="button">
             {/* <ModalBtn>{parseInt(timeCount / 100)}</ModalBtn> */}
-            {!afterDirection && <ModalBtn onClick={switchVideo}>화면 전환</ModalBtn>}
-            <ModalBtn onClick={handleIsPauseModalOpen}>나가기</ModalBtn>
+            <MyBtn onClick={toggleAutoScreenshot} style={{fontSize:"0.7rem"}}>
+              {autoScreenshot? 
+                <>
+                  <HiVideoCamera style={{fontSize:"1.5rem"}}/>자동캡쳐 켜짐
+                </>
+                :
+                <>
+                  <HiVideoCameraSlash style={{fontSize:"1.5rem"}}/>자동캡쳐 꺼짐
+                </>
+              }
+            </MyBtn>
+            <MyBtn onClick={captureScreenshot}><AiFillCamera style={{fontSize:"1.5rem"}}/>사진 캡쳐</MyBtn>
+            {!afterDirection && <MyBtn onClick={switchVideo}><HiSwitchHorizontal style={{fontSize:"1.5rem"}}/>화면 전환</MyBtn>}
+            <MyBtn onClick={handleIsPauseModalOpen}><RxExit style={{fontSize:"1.5rem"}}/>그만하기</MyBtn>
           </div>
           {/* <div className="test">
             <ModalBtn onClick={handleShowResult}>플레이 시간 종료</ModalBtn>
