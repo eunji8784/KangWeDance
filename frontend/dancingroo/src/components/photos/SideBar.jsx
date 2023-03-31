@@ -7,7 +7,7 @@ import {IoShapesOutline} from 'react-icons/io5';
 import {RxFrame} from 'react-icons/rx';
 
 const SideBarSection = styled(Wrapper)`
-  width:4rem;
+  min-width: 3rem;
   height: 100%;
   justify-content: start;
   border-left:solid #ffeef2;

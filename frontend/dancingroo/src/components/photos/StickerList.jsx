@@ -17,7 +17,7 @@ const StickerItem = styled.div`
     cursor: pointer;
     margin: 0.5rem;
 `;
-//  console.log(imgUrl)
+
 function StickerList({handleSticker, stickerList}) {
     return (
         <Wrapper>

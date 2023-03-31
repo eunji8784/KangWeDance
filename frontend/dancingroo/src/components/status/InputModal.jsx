@@ -7,9 +7,11 @@ import useApi from "../../hooks/auth/useApi";
 import Swal from "sweetalert2";
 
 const ModWrapper = styled(Wrapper)`
-    width: 25%;
+    width: 20%;
     height: 40%;
     min-width: 20rem;
+    min-height: 22rem;
+    border: solid 0.15rem #F05475;
     display:${({isModalOpen})=>isModalOpen? "flex":"none"};
     position: fixed;
     top: 0; bottom: 0; left: 0; right: 0; z-index: 2;
@@ -17,7 +19,7 @@ const ModWrapper = styled(Wrapper)`
     background-color: white;
     letter-spacing:0.1rem;
     border-radius: 0.5rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 1rem 1rem rgba(0, 0, 0, 0.5);
     color: #323232;
     &>h1{
         margin: 0;
@@ -26,7 +28,7 @@ const ModWrapper = styled(Wrapper)`
 
 const InputMod = styled.input`
     outline:none;
-    border: 0.15rem solid #F05475;
+    border: 0.15rem solid  rgba(0, 0, 0, 0.5);
     border-radius: 0.5rem;
     width: 6rem;
     margin-right:0.5rem;
@@ -49,8 +51,8 @@ const ModFooter = styled(Footer)`
         letter-spacing:0.1rem;
         font-weight:500;
         font-size:1.2rem;
+        margin-top: 0.5rem;
         cursor: pointer;
-        box-shadow: 0px 3px 10px rgba(240, 84, 117, 0.3);
         transition: box-shadow 0.3s ease-in-out;
         &:hover{
             box-shadow: 0px 3px 15px rgba(240, 84, 117, 0.6);
@@ -63,7 +65,7 @@ const ModFooter = styled(Footer)`
 
 const Line = styled.div`
     width: 100%;
-    border-bottom: solid 0.1rem #979797;
+    border-bottom: solid 0.15rem #F05475;
 `
 
 const LabelText  = styled.label`
