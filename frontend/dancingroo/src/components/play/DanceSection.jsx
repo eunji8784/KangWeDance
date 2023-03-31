@@ -2,13 +2,16 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import PlayItem from "./PlayItem";
 import { Wrapper, H1 } from "../common/ui/Semantics";
+import backtitle from "../../assets/images/backtitle.png";
 
 const TitleWrapper = styled(Wrapper)`
-  width: 100%;
   flex-direction: row;
   align-items: baseline;
   justify-content: normal;
   margin-bottom: 2rem;
+  /* width: 160%;
+  height: 6rem;
+  background-color:  #ffcfd3; */
 `
 const DanceWrapper = styled(Wrapper)`
   width: 100%;
@@ -17,8 +20,13 @@ const DanceWrapper = styled(Wrapper)`
   gap: 5rem;
 `
 const Title = styled(H1)`
-  margin: 1.5rem 1rem;
-  font-size: 2.5rem;
+width: 100%;
+margin-right: 1rem;
+font-size: 2.5rem;
+background-image:url(${backtitle});
+background-size: 100%;
+color:#121212;
+font-family: 'Gosanja' !important;
 `
 
 function DanceSection({danceData}) {
@@ -43,7 +51,7 @@ function DanceSection({danceData}) {
     <>
       <TitleWrapper>
         <Title>들썩들썩 댄스</Title>
-        <span style={{fontSize: `1.2rem`}}>노래에 맞춰 춤을 춰봐요</span>
+        {/* <span style={{fontSize: `1.2rem`}}>노래에 맞춰 춤을 춰봐요</span> */}
       </TitleWrapper>
       <DanceWrapper numColumns={numColumns}>
         {danceData?.map((item) => <PlayItem key={item.songIdx} item={item} />)}

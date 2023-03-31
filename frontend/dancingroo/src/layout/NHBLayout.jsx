@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 // import { useNavigate,  } from "react-router-dom";
 // import { useSelector } from "react-redux";
 import TopBar from "../components/common/nav/TopBar";
-// import HeaderBar from "../components/common/nav/HeaderBar";
+import BottomBar from "../components/common/nav/BottomBar";
 import styled from "styled-components";
 // import ChildProfile from "../components/common/ui/ChildProfile";
 
@@ -14,7 +14,7 @@ const Bodysuit = styled.div`
     height: 100vh;
     position: relative;
     // @ 양 옆 마진
-    margin:0 12% !important;
+    margin:0 15% !important;
     z-index:2;
     /* border: 1px solid blue; */
 `;
@@ -36,6 +36,7 @@ const HBLayout = () => {
             {/* <HeaderBar/> */}
             {/* <ChildProfile/> */}
             <OutletWrapper/>
+            {/* <BottomBar/> */}
         </Bodysuit>
     )
 
