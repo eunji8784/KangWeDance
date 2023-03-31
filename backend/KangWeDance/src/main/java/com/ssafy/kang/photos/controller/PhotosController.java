@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,9 +49,10 @@ public class PhotosController {
 //	| orderModify() | 수정만 하는 유형의 controller 메서드 |
 //	| orderRemove() | 삭제만 하는 유형의 controller 메서드 |
 	@PostMapping
-	public ApiResponse<?> photosAdd(@RequestHeader("accesstoken") String accesstoken,@RequestPart("file") MultipartFile file) throws Exception {
+	public ApiResponse<?> photosAdd(@RequestHeader("accesstoken") String accesstoken,@RequestBody PhotosDto photosDto) throws Exception {
 		try {
-			photosService.addUpdate(file,jwtService.getUserIdx(accesstoken));
+			photosDto.setParentIdx(jwtService.getUserIdx(accesstoken));
+			photosService.addUpdate(photosDto);
 			return ApiResponse.success(SuccessCode.CREATE_PHOTO);
 		} catch (Exception e) {
 			e.printStackTrace();
