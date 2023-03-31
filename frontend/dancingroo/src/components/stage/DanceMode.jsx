@@ -6,6 +6,7 @@ import Webcam from "react-webcam"
 import PauseModal from "./PauseModal"
 import PlayResult from "./PlayResult"
 import Feedback from "./Feedback"
+import ProgressBar from "./ProgressBar";
 import { Overlay } from "../common/ui/Semantics"
 import { ModalBtn } from "../status/HealthData"
 import { useInterval } from "../../hooks/useInterval"
@@ -319,6 +320,7 @@ function DanceMode() {
             <MyBtn onClick={switchVideo}><HiSwitchHorizontal style={{fontSize:"1.5rem"}}/>화면 전환</MyBtn>
             <MyBtn onClick={handleIsModalOpen}><RxExit style={{fontSize:"1.5rem"}}/>그만하기</MyBtn>
           </div>
+          <ProgressBar nowProgress={videoref?.current?.currentTime} endProgress={videoref?.current?.duration}/>
           {/* <div className="test">
             <ModalBtn onClick={plusCount}>Count +1</ModalBtn>
             <ModalBtn onClick={openGreatFeedback}>Great</ModalBtn>
