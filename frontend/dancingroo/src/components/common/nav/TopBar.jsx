@@ -6,7 +6,7 @@ import { childSelect } from "../../../store/userSlice";
 import useLogout from "../../../hooks/auth/useLogout";
 //logo
 import logo from "../../../assets/images/logo.png"
-import {FaChild} from "react-icons/fa";
+import {RiUser3Fill} from "react-icons/ri";
 
 const Wrapper = styled.div`
     /* background-color:gray; */
@@ -43,10 +43,16 @@ const BarContainer = styled.div`
         justify-content:space-between;
         width:6rem;
         align-items:center;
-        /* margin-top:0.5rem; */
+        
         &>div{
             cursor: pointer;
         }
+    }
+
+    .user-icon{
+        display:flex;
+        align-items:center;
+        cursor: pointer;
     }
 `
 
@@ -119,11 +125,11 @@ function HeaderBar(props) {
                     {isLoggedIn &&
                     <>
                     <LogOut onClick={logoutHandler}>로그아웃</LogOut>
-                    <div
+                    <div className="user-icon"
                     onClick={() => {
                         navigate(`/users`);
                     }}>   
-                        <FaChild color="#F05475" size="2rem"/>
+                        <RiUser3Fill color="#F05475" size="1.9rem"/>
                     </div>
                     </>
                     }
