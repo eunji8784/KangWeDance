@@ -5,15 +5,37 @@ import PlayItem from "./PlayItem";
 import  { Wrapper, H1 } from "../common/ui/Semantics";
 
 const RecommendWrapper = styled(Wrapper)`
-  width: 100%;
+  width: 90%;
   display: grid;
+  background-color: #FFB0B6;
+  /* border: #FFB0B6 solid 1rem; */
+  border-radius: 1rem;
   grid-template-columns: repeat(${props => props.numColumns}, 1fr);
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  padding-right: 3rem;
+  padding-left: 3rem;
 `
 
 const ItemWrapper = styled(Wrapper)`
 `
 const InfoWrapper = styled(Wrapper)`
-  color: #F05475;
+  color: #ffffff;
+`
+
+const TextComment = styled.div`
+  color: #ffffff;
+  font-size: 1.8rem;
+  margin-top: 0.5rem;
+  letter-spacing: 0.1rem;
+  font-family: 'yg-jalnan';
+
+  @font-face {
+    font-family: 'yg-jalnan';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.2/JalnanOTF00.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
 `
 
 function RecommendSection({recommendData}) {
@@ -45,8 +67,9 @@ function RecommendSection({recommendData}) {
           {item && <PlayItem item={item} tags={true} />}
         </ItemWrapper>
         <InfoWrapper>
-          <H1>{children[select].nickname} 을/를 위한</H1>
-          <H1>추천 놀이!</H1>
+          <TextComment>데이터 분석을 통한</TextComment>
+          <TextComment>{children[select].nickname}(이) 맞춤</TextComment>
+          <TextComment>추천 놀이!</TextComment>
         </InfoWrapper>
       </RecommendWrapper>
     </>
