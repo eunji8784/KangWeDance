@@ -21,7 +21,7 @@
 		INSERT INTO photoAlbum
 		(parent_idx,photo_image_url, create_date, photo_name)
 		VALUES 
-		(0,#{photoImageUrl}, curdate(),#{photoName})
+		(#{parentIdx},#{photoImageUrl}, curdate(),#{photoName})
 	</insert>
 	
 	
