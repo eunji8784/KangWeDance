@@ -41,7 +41,7 @@ function PlayResult({ data, playMode }) {
         totalLevelEXP={levelDesign[data?.level + 1]}
         nextLevelEXP={levelDesign[data?.level + 2]}
       />
-      <Reward levelUp={data?.experienceScoreAfter >= levelDesign[data?.level + 1]} frame={framestickers.data?.data.frame}/>
+      <Reward levelUp={data?.experienceScoreAfter >= levelDesign[data?.level + 1]} frame={framestickers.data?.data?.frame}/>
       <ModalBtn className="exit" onClick={() => navigate("/play")}>
         나가기
       </ModalBtn>

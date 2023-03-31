@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 // import { useNavigate,  } from "react-router-dom";
 // import { useSelector } from "react-redux";
-import TopBar from "../components/common/nav/TopBar";
+import BottomBar from "../components/common/nav/BottomBar";
 import HeaderBar from "../components/common/nav/HeaderBar";
 import styled from "styled-components";
 
@@ -13,7 +13,7 @@ const Bodysuit = styled.div`
     height: 100vh;
     position: relative;
     // @ 양 옆 마진
-    margin:0 12% !important;
+    margin:0 15% !important;
     /* border: 1px solid blue; */
 `;
 const OutletWrapper = styled(Outlet)`
@@ -35,6 +35,7 @@ const PHBLayout = (props) => {
         <Bodysuit>
             <HeaderBar watchingPage={watchingPage}/>
             <OutletWrapper />
+            {/* <BottomBar/> */}
         </Bodysuit>
     )
 
