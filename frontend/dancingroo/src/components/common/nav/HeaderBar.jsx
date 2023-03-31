@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { childSelect } from "../../../store/userSlice";
 //logo
 import logo from "../../../assets/images/logo.png"
-import {FaChild} from "react-icons/fa";
+import {RiUser3Fill} from "react-icons/ri";
 import Dance from '../../../assets/images/Dance.png'
 import Gallery from '../../../assets/images/Gallery.png'
 import Status from '../../../assets/images/Status.png'
@@ -55,6 +55,12 @@ const BarContainer = styled.div`
         &>div{
             cursor: pointer;
         }
+    }
+
+    .user-icon{
+        display:flex;
+        align-items:center;
+        cursor: pointer;
     }
 `
 const LogoContainer = styled.div`
@@ -166,11 +172,11 @@ function HeaderBar(props) {
                     {isLoggedIn &&
                     <>
                     <LogOut onClick={logoutHandler}>로그아웃</LogOut>
-                    <div
+                                        <div className="user-icon"
                     onClick={() => {
                         navigate(`/users`);
                     }}>   
-                        <FaChild color="#F05475" size="2rem"/>
+                        <RiUser3Fill color="#F05475" size="1.9rem"/>
                     </div>
                     </>
                     }
