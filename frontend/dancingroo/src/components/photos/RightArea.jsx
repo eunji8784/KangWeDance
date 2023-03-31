@@ -10,9 +10,9 @@ import axios from "axios";
 import {MdCleaningServices} from 'react-icons/md';
 
 const MainSection = styled(Wrapper)`
-    width: 65%;
+    width: 70%;
     height: 100%;
-    min-width: 30rem;
+    min-width: 36rem;
     justify-content: start;
     border-right: solid 0.2rem #ffeef2;
 `
