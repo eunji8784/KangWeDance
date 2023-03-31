@@ -7,6 +7,7 @@ import { Outlet } from "react-router-dom";
 import HeaderBar from "../components/common/nav/HeaderBar";
 import styled from "styled-components";
 import ChildProfile from "../components/common/ui/ChildProfile";
+import NoteCompo from "../components/common/effects/NoteCompo";
 
 const Bodysuit = styled.div`
     display: flex;
@@ -38,6 +39,7 @@ const HBLayout = (props) => {
             <HeaderBar watchingPage={watchingPage}/>
             <ChildProfile/>
             <OutletWrapper />
+            <NoteCompo/>
         </Bodysuit>
     )
 

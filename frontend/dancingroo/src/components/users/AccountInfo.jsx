@@ -6,7 +6,7 @@ import Modal from "../common/ui/Modal";
 import { editFamilyname } from "../../store/userSlice";
 import useApi from "../../hooks/auth/useApi";
 import { useEffect } from "react";
-import { levelDesign } from "../../utils/levelDesign";
+import { levelDesign } from "../../utils/commonInfo";
 import useValidation from "../../hooks/auth/useValidation";
 
 const Wrapper = styled.div`

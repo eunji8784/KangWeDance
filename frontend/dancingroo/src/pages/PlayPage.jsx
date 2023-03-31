@@ -5,12 +5,14 @@ import useApi from "../hooks/auth/useApi";
 import DanceSection from "../components/play/DanceSection";
 import GameSection from "../components/play/GameSection";
 import RecommendSection from "../components/play/RecommendSection";
+import Rocket from "../components/common/effects/Rocket";
 
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    position:relative;
     hr {
         width: 100%;
         height: 2px;
@@ -40,6 +42,7 @@ function PlayPage({handleWatchingPage}) {
             <DanceSection danceData={playList.data?.data.filter((e)=>e.playMode===0)} />
             <hr />
             <GameSection gameData={playList.data?.data.filter((e)=>e.playMode!==0)} />
+            <Rocket/>
         </Wrapper>
     );
 }
