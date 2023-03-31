@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
+import { useNavigate } from 'react-router-dom';
 
 function useApi() {
+  const navigate = useNavigate()
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -35,6 +37,7 @@ function useApi() {
     } catch (error) {
       setError(error);
       console.error(error)
+      navigate('/error')
     } finally {
       setIsLoading(false);
     }
