@@ -23,10 +23,9 @@ const PhotosSection = styled(Wrapper)`
 const SideSection = styled(Wrapper)`
     width: 16%;
     height: 100%;
-    min-width: 14rem;
+    min-width: 15rem;
     justify-content: flex-start;
     border: solid 0.2rem #ffeef2;
-    /* overflow: scroll; */
 `
 
 function PhotosPage({handleWatchingPage}) {
@@ -61,9 +60,6 @@ function PhotosPage({handleWatchingPage}) {
         if (photos.data) {
             setPhotoList(photos.data?.data.photoList)
         }
-        console.log("삭제되서 다시 포토 리스트 뿌리기")
-        console.log(photos.data)
-        console.log(photoList)
     },[photos.data])
 
     //스티커랑 프레임 리스트
