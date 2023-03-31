@@ -48,9 +48,9 @@ public class PhotosController {
 //	| orderModify() | 수정만 하는 유형의 controller 메서드 |
 //	| orderRemove() | 삭제만 하는 유형의 controller 메서드 |
 	@PostMapping
-	public ApiResponse<?> photosAdd(@RequestPart("file") MultipartFile file) throws Exception {
+	public ApiResponse<?> photosAdd(@RequestHeader("accesstoken") String accesstoken,@RequestPart("file") MultipartFile file) throws Exception {
 		try {
-			photosService.addUpdate(file);
+			photosService.addUpdate(file,jwtService.getUserIdx(accesstoken));
 			return ApiResponse.success(SuccessCode.CREATE_PHOTO);
 		} catch (Exception e) {
 			e.printStackTrace();
