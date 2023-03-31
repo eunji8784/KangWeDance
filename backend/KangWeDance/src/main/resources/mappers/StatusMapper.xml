@@ -98,6 +98,84 @@
 		ORDER BY b.record_date DESC
 		LIMIT 7;
 	</select>
+	<select id="selectWeightPercentile" parameterType="int" resultType="PercentileDto">
+		WITH child_info AS (
+			SELECT 
+		    weight,
+		    TIMESTAMPDIFF(MONTH,
+		        birth_date,
+		        CURDATE()) AS age_month,
+		    IF(gender = 0, 2, 1) as gender
+			FROM
+				bodyRecord b
+					INNER JOIN
+				children c ON b.child_idx = c.child_idx
+			WHERE
+				b.child_idx = #{childIdx}
+			ORDER BY record_date DESC
+			LIMIT 1
+		)
+		
+		SELECT 
+		    weight,
+		    w.percentile_1th,
+		    w.percentile_3th,
+		    w.percentile_5th,
+		    w.percentile_10th,
+		    w.percentile_15th,
+		    w.percentile_25th,
+		    w.percentile_50th,
+		    w.percentile_75th,
+		    w.percentile_85th,
+		    w.percentile_90th,
+		    w.percentile_95th,
+		    w.percentile_97th,
+		    w.percentile_99th
+		FROM
+		    child_info c
+		        INNER JOIN
+		    weightByAge w ON c.age_month = w.age_month
+		        AND c.gender = w.gender;
+	</select>
+	<select id="selectHeightPercentile" parameterType="int" resultType="PercentileDto">
+		WITH child_info AS (
+			SELECT 
+		    height,
+		    TIMESTAMPDIFF(MONTH,
+		        birth_date,
+		        CURDATE()) AS age_month,
+		    IF(gender = 0, 2, 1) as gender
+			FROM
+				bodyRecord b
+					INNER JOIN
+				children c ON b.child_idx = c.child_idx
+			WHERE
+				b.child_idx = #{childIdx}
+			ORDER BY record_date DESC
+			LIMIT 1
+		)
+		
+		SELECT 
+		    height,
+		    h.percentile_1th,
+		    h.percentile_3th,
+		    h.percentile_5th,
+		    h.percentile_10th,
+		    h.percentile_15th,
+		    h.percentile_25th,
+		    h.percentile_50th,
+		    h.percentile_75th,
+		    h.percentile_85th,
+		    h.percentile_90th,
+		    h.percentile_95th,
+		    h.percentile_97th,
+		    h.percentile_99th
+		FROM
+		    child_info c
+		        INNER JOIN
+		    heightByAge h ON c.age_month = h.age_month
+		        AND c.gender = h.gender;
+	</select>
 	<!-- //일회성 코드 : 검색을 위해 영어 <->한국어 
 	
 	<select id="temps" parameterType="int" resultType="String">
