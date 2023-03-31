@@ -10,7 +10,7 @@ import { TbStarFilled } from "react-icons/tb";
 import { GoMute, GoUnmute } from "react-icons/go";
 
 const ItemWrapper = styled(Wrapper)`
-  width: 100%;
+  min-width: 100%;
   height: 100%;
   justify-content: normal;
 `;
@@ -31,7 +31,14 @@ const ThumbnailWrapper = styled(Wrapper)`
     position: absolute;
     top: 5%;
     right: 5%;
-    z-index: 1;
+    border-radius: 0.5rem;
+    width: 2rem;
+    height: 2rem;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+    :hover {
+      transform: scale(1.1);
+    }
   }
 `
 
@@ -69,13 +76,12 @@ function PlayItem({item, tags}) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [previewPlay, setPreviewPlay] = useState(false);
-  const [focus, setFocus] = useState(false)
   const [ play, { stop, sound }] = useSound(item?.previewMusicUrl, { format: 'mp3' })
 
   const Preview = () => {
     return (
       item?.playMode === 0 && 
-      <div className="preview" onClick={togglePreview} onMouseEnter={onFocus}>
+      <div className="preview" onClick={togglePreview}>
         { !previewPlay ? <GoMute /> : <GoUnmute /> }
       </div>
     )
@@ -103,7 +109,11 @@ function PlayItem({item, tags}) {
     }
   },[previewPlay])
   
-  const startStage = () => {
+  const startStage = (event) => {
+    if (event.target.closest('.preview')) {
+      event.preventDefault();
+      return;
+    }
     dispatch(setStageItem(item))
     navigate(`/play/${item.playMode}/${item.songIdx}`)
   }
@@ -116,20 +126,12 @@ function PlayItem({item, tags}) {
     if (previewPlay) {
       setPreviewPlay(false)
     }
-    if (focus) {
-      setFocus(false)
-    }
-  }
-
-  const onFocus = () => {
-    setFocus(true)  
   }
 
   return (
     <ItemWrapper >
-      <ThumbnailWrapper onMouseLeave={stopPreview}>
+      <ThumbnailWrapper onClick={startStage} onMouseLeave={stopPreview}>
         <HoverVideoPlayer
-          onClick={startStage}
           videoClassName="thumbnail"
           videoSrc={item?.videoUrl}
           pausedOverlay={
@@ -141,11 +143,9 @@ function PlayItem({item, tags}) {
           overlayTransitionDuration={1500}
           onHoverEnd={() => { stop() }}
           sizingMode="overlay"
-          playbackRangeEnd={5}
           restartOnPaused={true}
-          focused={focus}
+          hoverOverlay={<Preview/>}
         />
-        <Preview/>
       </ThumbnailWrapper>
       <InfoWrapper>
         { tags ?
