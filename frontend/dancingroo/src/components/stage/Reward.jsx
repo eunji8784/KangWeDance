@@ -98,18 +98,22 @@ function Reward({levelUp, frame}) {
       }, 3500);
     }
   }, [levelUp]);
-
+  
   return (
     <FrameWrapper>
-      <div className='next'>다음 보상</div>
-      <FrameItem imageUrl={nextFrame?.frameURL}>
-        {!unlocked ?
-        <GrayOverlay>
-          <LockIcon levelup={levelUp ? "true" : "false"}/>
-        </GrayOverlay>
-        :
-        <UnLockIcon/>}
-      </FrameItem>
+      {nextFrame &&
+      <>
+        <div className='next'>다음 보상</div>
+        <FrameItem imageUrl={nextFrame?.frameURL}>
+          {!unlocked ?
+          <GrayOverlay>
+            <LockIcon levelup={levelUp ? "true" : "false"}/>
+          </GrayOverlay>
+          :
+          <UnLockIcon/>}
+        </FrameItem>
+      </>
+      }
     </FrameWrapper>
   );  
 }

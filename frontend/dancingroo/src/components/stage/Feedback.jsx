@@ -12,8 +12,8 @@ const Wrapper = styled.div`
   position: relative;
   justify-content: center;
   .popup {
-    width: 25%;
-    margin-top: 1rem;
+    width: 35%;
+    margin-top: 3rem;
     height: auto;
     animation: pop-up 1s;
     @keyframes pop-up {
@@ -43,7 +43,7 @@ const Wrapper = styled.div`
   .ready {
     position: absolute;
     margin-top: 4rem;
-    width: 30%;
+    width: 35%;
     animation: ready-animation 2s ease-in-out forwards;
   }
 
@@ -68,7 +68,7 @@ const Wrapper = styled.div`
   .go {
     position: absolute;
     margin-top: 3.5rem;
-    width: 35%;
+    width: 40%;
     animation: go-animation 1s ease-in-out both;
     animation-delay: 2s;
   }
