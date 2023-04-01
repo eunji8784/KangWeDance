@@ -199,7 +199,6 @@ function HealthData(props) {
       }
       getTagData.fetchApi('GET', '/status/tag-list', onTagResSuccess)
     },[selected])
-    console.log(bmiChanges)
     return (
         <Wrapper>
           <section className="section header">
