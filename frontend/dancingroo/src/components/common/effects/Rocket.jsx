@@ -75,8 +75,8 @@ const ascendAnimation = keyframes`
 `;
 
 const KangRocket = styled.img`
-  width: 6rem;
-  height: 6rem;
+  width: 7rem;
+  height: 7rem;
   z-index: 5 !important;
   box-sizing:border-box;
   animation: ${({ isAscending }) => (isAscending ? ascendAnimation : '')} 1.5s
