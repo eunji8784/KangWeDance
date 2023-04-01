@@ -4,23 +4,49 @@ import note1 from '../../../assets/images/musical-note-yellow .png';
 import note2 from '../../../assets/images/musical-note-green.png';
 import note3 from '../../../assets/images/musical-note-green-couple.png';
 import note4 from '../../../assets/images/musical-note-blue-couple.png';
+import note5 from '../../../assets/images/musical-note-red.png';
 
 const Note = styled.img`
   position: fixed;
-  width: 3rem;
+  width: 2.5rem;
   animation: float 5s infinite ease-in-out;
   margin: 10px;
   display: inline-block;
-  z-index:-2;
+  z-index:-1;
+  @keyframes float {
+    0% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+    100% {
+      transform: translateY(0px);
+    }
+  }
+
+  &:hover {
+    /* animation: rotate 1s linear forwards; */
+    filter: brightness(150%);
+    cursor: pointer;
+  }
+  @keyframes rotate {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
 `;
 
 const NoteCompo = () => {
   const [positions, setPositions] = useState([]);
 
   const notes = [
-    { min: 20, max: 40 },
-    { min: 40, max: 60 },
-    { min: 70, max: 100 },
+    { min: 20, max: 45 },
+    { min: 45, max: 65 },
+    { min: 65, max: 95 },
   ].flatMap(({ min, max }) => {
     const count = positions.filter(
       ({ prevTop }) => prevTop >= min && prevTop < max
@@ -28,7 +54,7 @@ const NoteCompo = () => {
     return Array(1 + (count < 1 ? 1 : 0))
       .fill()
       .map((_, index) => {
-        const srcOptions = [note1, note2, note3, note4];
+        const srcOptions = [note1, note2, note3, note4, note5];
         const src = srcOptions[Math.floor(Math.random() * srcOptions.length)];
 
         let top, left, right;
