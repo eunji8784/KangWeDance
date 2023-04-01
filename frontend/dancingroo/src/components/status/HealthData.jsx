@@ -173,6 +173,9 @@ function HealthData(props) {
           tempHeight.push({ x: recordDate, y: Number(height) });
           tempWeight.push({ x: recordDate, y: Number(weight) });
         }
+        tempBmi.sort((a,b)=> a["x"].localeCompare(b["x"]))
+        tempHeight.sort((a,b)=> a["x"].localeCompare(b["x"]))
+        tempWeight.sort((a,b)=> a["x"].localeCompare(b["x"]))
         setBmiChanges([{ id: selectedChild.nickname||"첫째", data: tempBmi, hidden:true }]);
         setHeightChanges([{ id: selectedChild.nickname||"첫째", data: tempHeight, hidden:true }]);
         setWeightChanges([{ id: selectedChild.nickname||"첫째", data: tempWeight, hidden:true }]);
