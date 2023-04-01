@@ -179,8 +179,8 @@ function HealthData(props) {
       } 
       getBodyChanges.fetchApi('GET', '/status/body-changes', onBodyResSuccess)
       const onTagResSuccess = (response)=>{
+        if (response.data===[]) return
         const data = response.data[selected]
-        if (!data || data===[]) return
         const sortedData = [...Object.entries(data)].filter(ele=>ele[0]!=='childIdx' && ele[0]!=='총_플레이시간').sort((a,b)=>a[1]-b[1])
         setSortedTagList(sortedData)
         const tempState = []
