@@ -72,7 +72,9 @@ const Wrapper = styled.div`
               height:45%;
               margin-left:1rem;
               font-size:0.8rem;
-              /* border:1px solid black; */
+              h4{
+                color:grey;
+              }
             }
           }
         }
@@ -246,7 +248,7 @@ function HealthData(props) {
                   <ModBtn color={tagColors[sortedTagList[sortedTagList.length-3][0]]}>{sortedTagList[sortedTagList.length-3][0]}</ModBtn>
                   </>
                   :
-                  <h3>아직 기록된 동작이 없어요</h3>
+                  <h4>아직 플레이 기록이 없어요...</h4>
                   }
                 </div>
                 <div className="info-content">
@@ -257,7 +259,7 @@ function HealthData(props) {
                   <ModBtn color={tagColors[sortedTagList[1][0]]}>{sortedTagList[1][0]}</ModBtn>
                   </>
                   :
-                  <h3>아직 기록된 동작이 없어요</h3>
+                  <h4>아직 플레이 기록이 없어요...</h4>
                   }
                 </div>
               </div>
