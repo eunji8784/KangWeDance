@@ -119,14 +119,14 @@ function DanceMode() {
     1000 / 60
   )
   
-// 15초에 한번 스크린샷 찍기
+// 30초에 한번 스크린샷 찍기
   useInterval(
     () => {
       if (!isModalOpen && autoScreenshot) {
         captureScreenshot()
       }
     },
-    1000 * 15
+    1000 * 30
   )
 
   // 모달 열기/닫기 함수
@@ -193,10 +193,10 @@ function DanceMode() {
     }
     if (filteredTimeline && currentTime >= filteredTimeline.endTime-1 && currentTime < filteredTimeline.endTime) {
       if (!showGreat && !showGood && !showCheerUp) {
-        if (count > filteredTimeline.countStandard) {
+        if (count >= filteredTimeline.countStandard) {
           setShowGreat(true)
           setTimeout(() => setShowGreat(false), 3000)
-        } else if (count > filteredTimeline.countStandard / 2) {
+        } else if (count >= filteredTimeline.countStandard / 2) {
           setShowGood(true)
           setTimeout(() => setShowGood(false), 3000)
         } else {
