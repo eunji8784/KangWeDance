@@ -17,7 +17,11 @@ public interface PhotosService {
 //	| removeOrder() | 삭제 유형의 service 메서드 |
 //	| saveOrder() | 등록/수정/삭제 가 동시에 일어나는 유형의 service 메서드 |
 
+<<<<<<< HEAD
+	public void addUpdate(MultipartFile multipartFile, int parentIdx) throws Exception;
+=======
 	public void addUpdate(PhotosDto photosDto) throws Exception;
+>>>>>>> 5075e589e380032501d2ab91cbc24c790af1afe8
 
 	public List<PhotosDto> findPhotos(int parentIdx, int pageNum) throws Exception;
 
