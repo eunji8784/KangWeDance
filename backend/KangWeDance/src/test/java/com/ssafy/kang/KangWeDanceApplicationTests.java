@@ -6,8 +6,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
 import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,7 @@ import com.ssafy.kang.util.JwtUtil;
 @TestMethodOrder(value = MethodOrderer.OrderAnnotation.class)
 class KangWeDanceApplicationTests {
 
-	String accessToken = "eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgwNDk4MjA1Nzc4LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODA1ODQ2MDUsInN1YiI6ImFjY2Vzcy10b2tlbiIsInVzZXJpZHgiOjI0fQ.PlfL6bsT5CMgMUbQPqdRplcqyOaOaIuW6vPVFXVBLdQ";
+	String accessToken = "eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgwNTA2NzE2NjAwLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODE4MDI3MTYsInN1YiI6ImFjY2Vzcy10b2tlbiIsInVzZXJpZHgiOjV9.TrnlToz2suBuY9swg-FI5KYYlj2e2psKxtBgccakIKY";
 
 	@Autowired
 	ParentsConroller parentsConroller;
@@ -34,6 +36,7 @@ class KangWeDanceApplicationTests {
 	ChildrenConroller childrenConroller;
 
 	@Test
+	@Order(1)
 	void Join() throws Exception {
 		JwtUtil jwtUtil = new JwtUtil();
 		ParentsDto pd = new ParentsDto();
@@ -45,24 +48,50 @@ class KangWeDanceApplicationTests {
 				SuccessCode.READ_EXPERIENCE.getMessage());
 		System.out.println(SuccessCode.READ_EXPERIENCE.getMessage());
 
+		// MockMultipartFile의 gradleTest Build 오류로 인해 고정값 삽입
 //		String path = this.getClass().getResource("/ss.png").getPath();
 //		MockMultipartFile file = new MockMultipartFile("ss", "ss.png", "image/png",
 //				new FileInputStream(path));
-		
-		//MultipartUtil의 getLocalHomeDirectory에서 return겂 변경 업로드시 리눅스로 되어있음 로컬은 user.home으로 설정
+
+		// MultipartUtil의 getLocalHomeDirectory에서 return겂 변경 업로드시 리눅스로 되어있음 로컬은
+		// user.home으로 설정
+
 //		ApiResponse temp = childrenConroller.profileUrlDetails(file);
 //		assertEquals(temp.getMessage(),SuccessCode.READ_PROFILEURL.getMessage());
 //		System.out.println(SuccessCode.READ_PROFILEURL.getMessage());
-//		ChildrenDto childrenDto = new ChildrenDto();
-//		childrenDto.setBirthDate("1997-10-07");
-//		childrenDto.setNickname("아기");
-//		childrenDto.setGender(false);
-//		childrenDto.setHeight(111);
-//		childrenDto.setWeight(11);
-//		//childrenDto.setProfileImageUrl(temp.getData().toString());
-//		assertEquals(childrenConroller.childrenAdd(accessToken, childrenDto).getMessage(), SuccessCode.CREATE_CHILDREN.getMessage());
-//		System.out.println(SuccessCode.CREATE_CHILDREN.getMessage());
+		ChildrenDto childrenDto = new ChildrenDto();
+		childrenDto.setBirthDate("1997-10-07");
+		childrenDto.setNickname("아기");
+		childrenDto.setGender(false);
+		childrenDto.setHeight(111);
+		childrenDto.setWeight(11);
+		childrenDto.setProfileImageUrl("https://d3qb4vbeyp8phu.cloudfront.net/기본+프로필+이미지.png");
+		assertEquals(childrenConroller.childrenAdd(accessToken, childrenDto).getMessage(),
+				SuccessCode.CREATE_CHILDREN.getMessage());
+		System.out.println(SuccessCode.CREATE_CHILDREN.getMessage());
+	}
+
+	@Test
+	@Order(2)
+	void childrenProfile() throws Exception {
+		ApiResponse api = childrenConroller.childrenList(accessToken);
+		assertEquals(api.getMessage(), SuccessCode.READ_CHILDREN.getMessage());
+		System.out.println(SuccessCode.READ_CHILDREN.getMessage());
 		
+		List<ChildrenDto> temp = (List<ChildrenDto>) api.getData();
+		for (int i = 0; i < temp.size(); i++) {
+			ChildrenDto cd = temp.get(i);
+			cd.setNickname("기기");
+			ApiResponse childrenApi = childrenConroller.childrenModify(accessToken,cd);
+			
+			assertEquals(childrenApi.getMessage(), SuccessCode.UPDATE_CHILDREN.getMessage());
+			System.out.println(SuccessCode.UPDATE_CHILDREN.getMessage()+" 아이 정보 "+cd);
+		}
+		
+		for (int i = 0; i < temp.size(); i++) {
+			assertEquals(childrenConroller.childrenRemove(accessToken, temp.get(i).getChildIdx()).getMessage(), SuccessCode.DELETE_CHILDREN.getMessage());
+			System.out.println(SuccessCode.DELETE_CHILDREN.getMessage());
+		}
 	}
 
 }
