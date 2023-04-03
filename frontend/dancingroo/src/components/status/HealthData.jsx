@@ -202,7 +202,7 @@ function HealthData(props) {
       }
       getTagData.fetchApi('GET', '/status/tag-list', onTagResSuccess)
     },[selected])
-
+    // console.log(bmiChanges[0]?.data.length-1)
     return (
         <Wrapper>
           <section className="section header">
@@ -214,7 +214,7 @@ function HealthData(props) {
               <h3>신체 변화 기록</h3>
               <div className="graph-header">
                 <h4>BMI</h4>
-                <h6>현재 BMI는, <span>"{bmiChanges!==[] && bmiCheck(bmiChanges[0]?.data[5].y)}"</span>수치에요</h6>
+                <h6>현재 BMI는, <span>"{bmiChanges!==[] && bmiCheck(bmiChanges[0]?.data[bmiChanges[0]?.data.length-1]?.y)}"</span>수치에요</h6>
               </div>
               <div className="graph-box">
                 <BodyChart data={bmiChanges} color={'set1'}/>
