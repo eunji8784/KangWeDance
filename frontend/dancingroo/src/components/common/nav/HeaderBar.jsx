@@ -56,11 +56,15 @@ const BarContainer = styled.div`
             cursor: pointer;
         }
     }
-
     .user-icon{
         display:flex;
         align-items:center;
         cursor: pointer;
+    }
+    .username{
+        position:absolute;
+        left: 50%;
+        transform: translateX(-50%);
     }
 `
 const LogoContainer = styled.div`

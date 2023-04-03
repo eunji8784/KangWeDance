@@ -54,6 +54,11 @@ const BarContainer = styled.div`
         align-items:center;
         cursor: pointer;
     }
+    .username{
+        position:absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
 `
 
 const LogOut = styled.div`

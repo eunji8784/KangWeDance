@@ -21,7 +21,6 @@ export const tagColors = {
   다리:"#EA5A24",
 }
 
-// 18.5,23,25,30 저체중 정상 과체중 비만 고도비만
 export const bmiCheck = (num)=>{
   let state = '정상'
   if (num < 13.63) state='저체중'
@@ -29,4 +28,17 @@ export const bmiCheck = (num)=>{
   else if (num < 20.05) state='과체중'
   else state ='비만'
   return state
+}
+
+export const poseTable = {
+  1: '뒤돌아손벽치기',
+  2: '발차기자세',
+  3: '악어자세',
+  4: '시계추자세',
+  5: '나무자세',
+  6:'스케이트자세',
+  7: '기대서팔굽혀펴기',
+  8: '기지개자세',
+  9: '날개자세',
+  10: '기본자세'
 }
