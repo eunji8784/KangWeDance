@@ -393,7 +393,7 @@ function RaceMode() {
           onEnded={handleAfterDirection}
         />}
         <PauseModal handleIsModalOpen={handleIsPauseModalOpen} isOpen={isPauseModalOpen} />
-        <DirectionModal handleIsModalOpen={handleIsDirectionModalOpen} isOpen={isDirectionModalOpen} directionMessage={stageItem?.guideMent}/>
+        <DirectionModal handleIsModalOpen={handleIsDirectionModalOpen} isOpen={isDirectionModalOpen} directionMessage={stageItem?.explain}/>
       </>
       }
     </Screen>
