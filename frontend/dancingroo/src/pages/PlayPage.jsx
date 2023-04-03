@@ -1,11 +1,12 @@
 import React, {useEffect} from "react";
-import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import useApi from "../hooks/auth/useApi";
 import DanceSection from "../components/play/DanceSection";
 import GameSection from "../components/play/GameSection";
 import DescribeSection from "../components/play/DescribeSection";
 import Rocket from "../components/common/effects/Rocket";
+import { setRecommendation } from "../store/stageSlice";
 
 const Wrapper = styled.div`
     display: flex;
@@ -21,15 +22,18 @@ const Wrapper = styled.div`
 `;
 
 function PlayPage({handleWatchingPage}) {
-    const navigate = useNavigate()
+    const dispatch = useDispatch();
     
     const playList = useApi()
     const recommendation = useApi()
     
     useEffect(()=>{
+        const onSuccess = (json) => {
+            dispatch(setRecommendation(json.data))
+        }
         handleWatchingPage('play')
         playList.fetchApi('GET', '/play')
-        recommendation.fetchApi('GET', '/play/recommendation')
+        recommendation.fetchApi('GET', '/play/recommendation', onSuccess)
     },[])
 
     return (
