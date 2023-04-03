@@ -16,6 +16,7 @@ import { AiFillCamera } from "react-icons/ai";
 import { HiSwitchHorizontal } from "react-icons/hi"
 import { HiVideoCamera, HiVideoCameraSlash } from "react-icons/hi2"
 import { RxExit } from "react-icons/rx";
+import { poseTable } from "../../utils/commonInfo";
 
 const tmPose = window.tmPose
 const MODELURL =
@@ -69,6 +70,17 @@ const MyOverlay = styled(Overlay)`
 const MyBtn = styled(ModalBtn)`
   justify-content: space-evenly;
   margin: 0.5rem 1rem;
+`
+
+const DirectionDiv = styled.div`
+  width:10rem;
+  height:10rem;
+  border:2px solid blue;
+  position:absolute;
+  top:0;
+  left:0;
+  z-index:2;
+  font-size:2rem;
 `
 
 function DanceMode() {
@@ -328,15 +340,16 @@ function DanceMode() {
             <ModalBtn onClick={openCheerupFeedback}>Cheer Up</ModalBtn>
             <ModalBtn onClick={replay}>종료 전으로 가기</ModalBtn> */}
             <h1>
-              평가자세 : {aimedPosture?.danceIndex || "X"}
+              평가자세 : {poseTable[aimedPosture?.danceIndex] || "X"}
             </h1>          
             <h1>
-              현재자세 : {prevPosture}
+              현재자세 : {poseTable[prevPosture]}
             </h1>
             <h1>
               자세점수 : {aimedPosture?.countStandard ? `${count} / ${aimedPosture?.countStandard}` : "X"} 
             </h1>          
           </div>
+          {/* <DirectionDiv>{poseTable[aimedPosture?.danceIndex]}</DirectionDiv> */}
         </MyOverlay>
         <video
           className={camfocus ? "small" : "big"}
