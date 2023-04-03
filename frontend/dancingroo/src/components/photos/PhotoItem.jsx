@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { photoNum, setPhotos } from "../../store/photoSlice";
+import { photoNum } from "../../store/photoSlice";
 import styled from "styled-components";
 import useApi from "../../hooks/auth/useApi";
 import {TiDelete} from "react-icons/ti";
