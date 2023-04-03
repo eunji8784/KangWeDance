@@ -143,7 +143,7 @@ function PlayItem({item, tags}) {
   }
 
   const Recommendation = () => {
-    const check = recommendation && recommendation[selected].recommendationSong?.songIdx === item?.songIdx
+    const check = recommendation && recommendation[selected]?.recommendationSong?.songIdx === item?.songIdx
     return check && <RecommandedOverlay />
   }
 
