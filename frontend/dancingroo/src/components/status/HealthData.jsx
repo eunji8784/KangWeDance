@@ -57,13 +57,20 @@ const Wrapper = styled.div`
         // [1-3-2] 그 내부의 right라는 클래스 선택자
         &.right{
           width:40%;
+          position:relative;
+          .chart-wrapper{
+            margin-top:3rem;
+          }
           .info-box{
             display:flex;
             background-color:white;
             border-radius:10px;
             flex-direction:column;
             justify-content:center;
-            height:18rem;
+            height:16rem;
+            position:absolute;
+            bottom:2rem;
+            width:100%;
             &>h2{
               font-size:1.5rem;
               letter-spacing:-0.1rem;
@@ -202,7 +209,7 @@ function HealthData(props) {
       }
       getTagData.fetchApi('GET', '/status/tag-list', onTagResSuccess)
     },[selected])
-    // console.log(bmiChanges[0]?.data.length-1)
+    console.log(bmiChanges[0]?.data.length-1)
     return (
         <Wrapper>
           <section className="section header">
@@ -240,6 +247,13 @@ function HealthData(props) {
             </article>
             <article className="status-box right">
               <h3>플레이 리포트</h3>
+              <div className="chart-wrapper">
+                <h4>{selectedChild.nickname}(이) 동작 태그 분석</h4>
+                <div className="chart-container">
+                  <MotionChart data={tagData}/>
+                </div>
+              </div>
+
               <div className="info-box">
                 <div className="info-content">
                   <h3>이런 동작을 제일 잘해요!</h3>
@@ -264,10 +278,6 @@ function HealthData(props) {
                   <h4>아직 플레이 기록이 없어요...</h4>
                   }
                 </div>
-              </div>
-              <h3>{selectedChild.nickname}(이) 동작 태그 분석</h3>
-              <div className="chart-container">
-                <MotionChart data={tagData}/>
               </div>
             </article>
           </section>
