@@ -24,10 +24,9 @@ export const tagColors = {
 // 18.5,23,25,30 저체중 정상 과체중 비만 고도비만
 export const bmiCheck = (num)=>{
   let state = '정상'
-  if (num < 18.5) state='저체중'
-  else if (num < 23) state = '정상'
-  else if (num <25) state='과체중'
-  else if (num< 30) state='비만'
-  else state ='고도비만'
+  if (num < 13.63) state='저체중'
+  else if (num < 18.27) state = '정상'
+  else if (num < 20.05) state='과체중'
+  else state ='비만'
   return state
 }
