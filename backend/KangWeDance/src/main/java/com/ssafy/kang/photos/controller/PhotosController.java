@@ -118,7 +118,7 @@ public class PhotosController {
 			List<FramesDto> frameDto = photosService.findFrames(level);
 			List<FramesDto> stickerDto = photosService.findStickers();
 
-			for (int i = 0; i < level; i++) {
+			for (int i = 0; i < level&& i<5; i++) {
 				frameDto.get(i).setUnLock(true);
 			}
 
