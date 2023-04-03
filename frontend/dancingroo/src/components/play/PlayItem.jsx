@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import useSound from "use-sound";
 import HoverVideoPlayer from 'react-hover-video-player';
 import { setStageItem } from "../../store/stageSlice";
-import { Wrapper, H2, PinkButton } from "../common/ui/Semantics";
+import { Wrapper, PinkButton } from "../common/ui/Semantics";
+import recommendationPng from "../../assets/images/Recommendation.png"
 import { TbStarFilled } from "react-icons/tb";
 import { GoMute, GoUnmute } from "react-icons/go";
 
 const ItemWrapper = styled(Wrapper)`
+  position: relative;
   min-width: 100%;
   height: 100%;
   justify-content: normal;
@@ -62,6 +64,20 @@ const TagWrapper = styled(Wrapper)`
 const Star = styled(TbStarFilled)`
   color: #FFD731 ;
   font-size: 1.6rem;
+  @-webkit-keyframes rotateY {
+  to { -webkit-transform: rotateY(360deg); }
+  }
+  @keyframes rotateY {
+  to { transform: rotateY(360deg); }
+}
+`;
+
+const StarWrapper = styled.div`
+  display: inline-block;
+  :hover ${Star} {
+    -webkit-animation: rotateY 2s infinite linear;
+    animation: rotateY 2s infinite linear;
+  }
 `;
 
 const Tag = styled(PinkButton)`
@@ -73,17 +89,34 @@ const Tag = styled(PinkButton)`
   background-color: #ffa6a6;
 `;
 
-
 const TextInfo = styled.div`
   font-size: 1.2rem;
   font-weight: 500;
   color:#333333;
 `;
 
+const RecommandedOverlay = styled.div`
+  position: absolute;
+  top: -1.5rem;
+  left: -1.5rem;
+  width: 6rem;
+  height: 6rem;
+  background-image:url(${recommendationPng});
+  background-size:cover;
+  z-index: 2;
+  transform: rotateZ(-20deg);
+  transition: all 0.5s ease-in-out;
+  :hover {
+    transform: rotateZ(-20deg) scale(1.1);
+  }
+`
+
 function PlayItem({item, tags}) {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const selected = useSelector(state=>state.userState.select)
+  const recommendation = useSelector(state=>state.stage.recommendation)
   const [previewPlay, setPreviewPlay] = useState(false);
   const [ play, { stop, sound }] = useSound(item?.previewMusicUrl, { format: 'mp3' })
 
@@ -99,7 +132,7 @@ function PlayItem({item, tags}) {
   const Stars = () => {
     return (
       <div className="stars">
-        {Array(item.difficulty).fill(null).map((_, idx) => <Star key={idx} />)}
+        {Array(item.difficulty).fill(null).map((_, idx) => <StarWrapper><Star key={idx} /></StarWrapper>)}
       </div>
     )
   }
@@ -107,6 +140,11 @@ function PlayItem({item, tags}) {
   const Tags = () => {
     const tags = item?.tag?.split('#').filter(tag => tag);
     return tags.map(tag => <Tag key={tag}> { `${tag}` } </Tag>)
+  }
+
+  const Recommendation = () => {
+    const check = recommendation[selected].recommendationSong.songIdx === item.songIdx
+    return check && <RecommandedOverlay />
   }
 
   useEffect(() => {
@@ -139,6 +177,7 @@ function PlayItem({item, tags}) {
 
   return (
     <ItemWrapper >
+      <Recommendation />
       <ThumbnailWrapper onClick={startStage} onMouseLeave={stopPreview}>
         <HoverVideoPlayer
           videoClassName="thumbnail"
