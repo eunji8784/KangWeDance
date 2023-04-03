@@ -18,13 +18,13 @@ const Wrapper = styled.div`
     .bottom-line {
     width: 100vw;
     height: 2px;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   }
 `;
 const Logo = styled.div`
     /* background-color:gold; */
     width: 12rem;
-    height: 3rem;
+    height: 2.4rem;
     background-image:url(${logo});
     background-size:cover;
     cursor: pointer;
@@ -53,6 +53,11 @@ const BarContainer = styled.div`
         display:flex;
         align-items:center;
         cursor: pointer;
+    }
+    .username{
+        position:absolute;
+        left: 50%;
+        transform: translateX(-50%);
     }
 `
 
