@@ -39,7 +39,7 @@ function GameSection({gameData}) {
   return (
     <>
       <DescribeSection imgUrl={dance} color="#ECF9FF" title="놀이 모드" 
-    context="자세를 유지해요"/>
+    context="정확한 자세를 유지해요!"/>
       <GameWrapper numColumns={numColumns}>
           {gameData?.map((item) => <PlayItem key={item.songIdx} item={item} tags={true}/>)}
       </GameWrapper>

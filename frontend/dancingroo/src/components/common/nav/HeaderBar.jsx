@@ -10,6 +10,7 @@ import {RiUser3Fill} from "react-icons/ri";
 import Dance from '../../../assets/images/Dance.png'
 import Gallery from '../../../assets/images/Gallery.png'
 import Status from '../../../assets/images/Status.png'
+import  { Line } from "../ui/Semantics";
 
 const Wrapper = styled.div`
     display: flex;
@@ -20,7 +21,7 @@ const Wrapper = styled.div`
     .bottom-line {
     width: 100vw;
     height: 2px;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   }
 `;
 const Menu = styled.img`
@@ -32,7 +33,7 @@ const Menu = styled.img`
 const Logo = styled.div`
     /* background-color:gold; */
     width: 12rem;
-    height: 3rem;
+    height: 2.4rem;
     background-image:url(${logo});
     background-size:cover;
     cursor: pointer;
@@ -186,6 +187,7 @@ function HeaderBar(props) {
                     }
                 </div>
             </BarContainer>
+            <Line/>
             <BarContainer height={70} justify={"center"} width={80}>
                 <LogoContainer
                     active={activeMenu === "play"}
