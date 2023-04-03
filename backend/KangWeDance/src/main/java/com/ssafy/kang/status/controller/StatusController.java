@@ -94,14 +94,20 @@ public class StatusController {
 	public ApiResponse<?> bodyRecordList(@RequestHeader("accesstoken") String accesstoken) {
 		try {
 			int parentIdx = jwtUtil.getUserIdx(accesstoken);
+			
 			// 아이 리스트 가져오기
 			List<Integer> childList = playService.findChildren(parentIdx);
 			List<ChildrenBodyRecordDto> BodyRecordList = new ArrayList<>();
 			for (int i = 0; i < childList.size(); i++) {
+				int childIdx = childList.get(i);
 				ChildrenBodyRecordDto childrenBodyRecord = new ChildrenBodyRecordDto();
-				childrenBodyRecord.setChildIdx(childList.get(i));
-				List<BodyRecordDto> bodyRecord = statusService.findRecordList(childList.get(i));
+				childrenBodyRecord.setChildIdx(childIdx);
+				List<BodyRecordDto> bodyRecord = statusService.findRecordList(childIdx);
 				childrenBodyRecord.setBodyRecord(bodyRecord);
+				// 체중 백분율 계산
+				childrenBodyRecord.setStandardWeight(statusService.findWeightPercentile(childIdx));
+				// 신장 백분율 계산
+				childrenBodyRecord.setStandardHeight(statusService.findHeightPercentile(childIdx));
 				BodyRecordList.add(childrenBodyRecord);
 			}
 			return ApiResponse.success(SuccessCode.READ_BODY_RECORD_LIST, BodyRecordList);

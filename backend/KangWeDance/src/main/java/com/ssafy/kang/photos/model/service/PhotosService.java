@@ -3,7 +3,6 @@ package com.ssafy.kang.photos.model.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.ssafy.kang.photos.model.FramesDto;
 import com.ssafy.kang.photos.model.PhotosDto;
@@ -17,7 +16,7 @@ public interface PhotosService {
 //	| removeOrder() | 삭제 유형의 service 메서드 |
 //	| saveOrder() | 등록/수정/삭제 가 동시에 일어나는 유형의 service 메서드 |
 
-	public void addUpdate(MultipartFile multipartFile, int parentIdx) throws Exception;
+	public void addUpdate(PhotosDto photosDto) throws Exception;
 
 	public List<PhotosDto> findPhotos(int parentIdx, int pageNum) throws Exception;
 
