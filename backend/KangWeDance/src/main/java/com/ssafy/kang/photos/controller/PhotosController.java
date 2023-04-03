@@ -48,7 +48,6 @@ public class PhotosController {
 //	| orderModify() | 수정만 하는 유형의 controller 메서드 |
 //	| orderRemove() | 삭제만 하는 유형의 controller 메서드 |
 	@PostMapping
-<<<<<<< HEAD
 	public ApiResponse<?> photosAdd(@RequestPart("file") MultipartFile file,
 			@RequestHeader("accesstoken") String accesstoken) throws Exception {
 		try {
@@ -56,12 +55,11 @@ public class PhotosController {
 			int parentIdx = jwtService.getUserIdx(accesstoken);
 			photosService.addUpdate(file, parentIdx);
 
-=======
+
 	public ApiResponse<?> photosAdd(@RequestHeader("accesstoken") String accesstoken,@RequestBody PhotosDto photosDto) throws Exception {
 		try {
 			photosDto.setParentIdx(jwtService.getUserIdx(accesstoken));
 			photosService.addUpdate(photosDto);
->>>>>>> 5075e589e380032501d2ab91cbc24c790af1afe8
 			return ApiResponse.success(SuccessCode.CREATE_PHOTO);
 		} catch (Exception e) {
 			e.printStackTrace();
