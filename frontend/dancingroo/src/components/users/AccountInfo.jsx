@@ -59,13 +59,23 @@ const Input = styled.input`
 `;
 const Experience = styled.div`
     width: 12rem;
-    height: 1.5rem;
+    height: 1.3rem;
+    top:0.2rem;
     border: 0.1rem solid #F05475;
     border-radius: 1rem;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+    span{
+        position:absolute;
+        top:-1.2rem;
+        left:0.3rem;
+        font-size:0.8rem;
+    }
 `;
 const ExperiencePercentage = styled.div`
     width:${props=>props.gauge}%;
-    height: 1.5rem;
+    height: 1.3rem;
     background-color: #F05475;
     border-radius: 0.5rem;
 `;
@@ -79,6 +89,7 @@ function AccountInfo(props) {
     const getExp = useApi()
     const isValid = useValidation()
     const [ValidError, setValidError] = useState(false)
+    const [expForDisplay, setExpForDisplay] = useState()
 
     useEffect(()=>{
         if (isValid.errors.familyname){
@@ -91,6 +102,7 @@ function AccountInfo(props) {
             const {level, experience} = json.data
             const neededExp = levelDesign[level+1]
             let percentExp = (experience/neededExp).toFixed(2)*100
+            setExpForDisplay([experience, neededExp, level])
             setExperiencePercentage(percentExp)
         }
         getExp.fetchApi('GET', '/parents/experience-score', onSuccess) // [1]. 콜백을 3번째로 넣어도 body로 안가고 콜백함수로 판단함.
@@ -134,9 +146,11 @@ function AccountInfo(props) {
                 }
             </Title>
             <div className="exp-wrapper">
-                <p>교감Level</p>
+                <p>교감Level {expForDisplay && expForDisplay[2]}</p>
                 <Experience>
                     <ExperiencePercentage gauge={experiencePercentage < 10? 10 : experiencePercentage}/>
+                    <span>{expForDisplay && `${expForDisplay[0]} / ${expForDisplay[1]}`}</span>
+                    {/* <span>Exp</span> */}
                 </Experience>
             </div>
         </Wrapper>
