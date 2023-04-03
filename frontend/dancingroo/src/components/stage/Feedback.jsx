@@ -11,6 +11,7 @@ const Wrapper = styled.div`
   display: flex;
   position: relative;
   justify-content: center;
+  z-index:99;
   .popup {
     width: 40%;
     margin-top: -6rem;

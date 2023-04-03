@@ -1,44 +1,97 @@
 import React, { useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import styled, { keyframes } from "styled-components";
+import kangkang from "../../assets/images/kangkang.png"
 
 const ProgressBarWrapper = styled.div`
   position: absolute;
-  height: 75%;
-  width: 1rem;
+  height: 1rem;
+  width: 40%;
   border-radius: 1rem;
   background-color: #FFFFFF;
-  top: 12.5%;
-  left: 5rem;
+  top: 5%;
+  left: 35%;
+  /* right:50%; */
   border: 1px solid black;
+  flex-direction: column;
+  justify-content: flex-end;
 `;
 
+
 const ProgressGauge = styled.div`
-  position: absolute;
   bottom: 0;
   left: 0;
-  width: 100%;
+  height: 100%;
+  border-radius: 1rem;
   background-color: #F05475;
-  transition: width 2.5s cubic-bezier(0.65, 0, 0.35, 1);
+  transition: width 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+  position:absolute;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content: center;
+  div:last-child{
+    width:8rem;
+    position:absolute;
+    right:-9rem;
+  }
 `;
+
+const ProgressImg = styled.img`
+  width:2.5rem;
+  height:2.5rem;
+  position:absolute;
+  right:0;
+  animation: walk 1s linear infinite alternate;
+  
+  @keyframes walk {
+    0% {
+      transform: translateX(0) rotate(0deg);
+    }
+    50% {
+      transform: translateX(15px) rotate(10deg);
+    }
+    100% {
+      transform: translateX(0) rotate(0deg);
+    }
+  }
+`
 
 function ProgressBar({nowProgress, endProgress}) {
   const [progressPercent, setProgressPercent] = useState(0);
 
+  const message = ()=>{
+    switch (true) {
+      case progressPercent < 15:
+        return <span>시작!</span> 
+      case progressPercent < 40:
+        return <span>신나게!</span> 
+      case progressPercent < 75:
+        return <span>춤춰요!</span>
+      case progressPercent <= 96:
+        return <span>거의 다 왔어요!</span> 
+      case progressPercent > 96:
+        return <span>Finish!</span>
+    }
+  }
+
+  const calculateProgress = useCallback(() => {
+    setProgressPercent((nowProgress / endProgress).toFixed(2) * 100);
+  }, [nowProgress, endProgress]);
+
   useEffect(() => {
-    const calculateProgress = () => {
-      setProgressPercent(nowProgress / endProgress * 100);
-    };
+    calculateProgress()
 
-    const intervalId = setInterval(() => {
-      calculateProgress();
-    }, 500);
-
-    return () => clearInterval(intervalId);
-  }, [nowProgress]);
-
+  }, [nowProgress, endProgress]);
+  
   return (
     <ProgressBarWrapper>
-      <ProgressGauge style={{ height: `${progressPercent}%`}} />
+      <ProgressGauge style={{ width:  `${progressPercent}%`}}>
+        <ProgressImg src={kangkang}/>
+        <div>
+          {message()}
+        </div>
+      </ProgressGauge>
     </ProgressBarWrapper>
   );
 }
