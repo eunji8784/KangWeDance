@@ -12,7 +12,9 @@ public final class MultipartUtil {
      */
     public static String getLocalHomeDirectory() {
     	//System.out.println(System.getProperty("user.home"));
-        //return System.getProperty("user.home");
+        //윈도우
+    	//return System.getProperty("user.home");
+    	//리눅스
     	return "/";
     }
 
