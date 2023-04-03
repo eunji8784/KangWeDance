@@ -18,7 +18,9 @@ configurations {
 repositories {
 	mavenCentral()
 }
-
+test {
+    useJUnitPlatform()
+}
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
@@ -32,8 +34,6 @@ dependencies {
     implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
     implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.10.5'
     // https://mvnrepository.com/artifact/org.apache.commons/commons-dbcp2
-	
-    
     //compile group: 'org.apache.parquet', name: 'parquet-hadoop', version: '1.11.1'
     //compile group: 'org.apache.hadoop', 'name': 'hadoop-common', version: '3.3.1'
     //compile group: 'org.apache.hadoop', 'name': 'hadoop-hdfs', version: '3.3.1'
