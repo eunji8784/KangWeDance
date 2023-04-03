@@ -74,7 +74,7 @@ function AccountInfo(props) {
     // const navigate = useNavigate();
     const dispatch = useDispatch()
     const familyname = useSelector(state=>state.userState.familyname)
-    const [experiencePercentage, setExperiencePercentage] = useState(0);
+    const [experiencePercentage, setExperiencePercentage] = useState(10);
     const patchFamilyname = useApi()
     const getExp = useApi()
     const isValid = useValidation()
@@ -90,7 +90,7 @@ function AccountInfo(props) {
         const onSuccess = (json)=>{
             const {level, experience} = json.data
             const neededExp = levelDesign[level+1]
-            let percentExp = Math.round(experience/neededExp)
+            let percentExp = (experience/neededExp).toFixed(2)*100
             setExperiencePercentage(percentExp)
         }
         getExp.fetchApi('GET', '/parents/experience-score', onSuccess) // [1]. 콜백을 3번째로 넣어도 body로 안가고 콜백함수로 판단함.
@@ -113,6 +113,7 @@ function AccountInfo(props) {
     const handleInputChange = (e) => {
         dispatch(editFamilyname(e.target.value)); 
     };
+    // console.log(experiencePercentage)
     return (
         <Wrapper>
             <Title>
@@ -135,7 +136,7 @@ function AccountInfo(props) {
             <div className="exp-wrapper">
                 <p>교감Level</p>
                 <Experience>
-                    <ExperiencePercentage gauge={experiencePercentage}/>
+                    <ExperiencePercentage gauge={experiencePercentage < 10? 10 : experiencePercentage}/>
                 </Experience>
             </div>
         </Wrapper>
