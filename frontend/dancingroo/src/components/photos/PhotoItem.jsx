@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { photoNum, setPhotos } from "../../store/photoSlice";
 import styled from "styled-components";
 import useApi from "../../hooks/auth/useApi";
 import {TiDelete} from "react-icons/ti";
-import { photoNum } from "../../store/photoSlice";
 import Swal from "sweetalert2";
 
 const Photo = styled.div`
