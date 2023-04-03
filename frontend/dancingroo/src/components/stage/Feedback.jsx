@@ -1,10 +1,10 @@
 import React from "react"
 import styled from "styled-components"
-import greatImg from "../../assets/images/great.png"
-import goodImg from "../../assets/images/good.png"
-import cheerupImg from "../../assets/images/cheerup.png"
 import readyImg from "../../assets/images/ready.png"
 import goImg from "../../assets/images/go.png"
+import greatGif from "../../assets/images/Great.gif"
+import goodGif from "../../assets/images/Good.gif"
+import cheerupGif from "../../assets/images/CheerUp.gif"
 
 const Wrapper = styled.div`
   width: 100%;
@@ -12,10 +12,10 @@ const Wrapper = styled.div`
   position: relative;
   justify-content: center;
   .popup {
-    width: 35%;
-    margin-top: 3rem;
+    width: 40%;
+    margin-top: -6rem;
     height: auto;
-    animation: pop-up 1s;
+    /* animation: pop-up 1s;
     @keyframes pop-up {
       0% {
         transform: scale(1);
@@ -38,7 +38,7 @@ const Wrapper = styled.div`
       100% {
         transform: scale(1);
       }
-    }
+    } */
   }
   .ready {
     position: absolute;
@@ -95,9 +95,9 @@ const Wrapper = styled.div`
 function Feedback({showGreat, showGood, showCheerUp, showReadyGo}) {
   return (
     <Wrapper>
-      {showGreat && <img className="popup" src={greatImg} alt="great"/>}
-      {showGood && <img className="popup" src={goodImg} alt="good"/>}
-      {showCheerUp && <img className="popup" src={cheerupImg} alt="cheerup"/>}
+      {showGreat && <img className="popup" src={greatGif} alt="great"/>}
+      {showGood && <img className="popup" src={goodGif} alt="good"/>}
+      {showCheerUp && <img className="popup" src={cheerupGif} alt="cheerup"/>}
       {showReadyGo && 
         <>
           <img className="ready" src={readyImg} alt="ready"/>
