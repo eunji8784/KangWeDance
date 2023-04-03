@@ -2,31 +2,15 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import PlayItem from "./PlayItem";
 import { Wrapper, H1 } from "../common/ui/Semantics";
-import backtitle from "../../assets/images/backtitle.png";
+import dance from "../../assets/images/017.png"
+import DescribeSection from "./DescribeSection"
 
-const TitleWrapper = styled(Wrapper)`
-  flex-direction: row;
-  align-items: baseline;
-  justify-content: normal;
-  margin-bottom: 2rem;
-  /* width: 160%;
-  height: 6rem;
-  background-color:  #ffcfd3; */
-`
 const DanceWrapper = styled(Wrapper)`
   width: 100%;
   display: grid;
   grid-template-columns: repeat(${props => props.numColumns}, 1fr);
   gap: 5rem;
-`
-const Title = styled(H1)`
-width: 100%;
-margin-right: 1rem;
-font-size: 2.5rem;
-background-image:url(${backtitle});
-background-size: 100%;
-color:#121212;
-font-family: 'Gosanja' !important;
+  margin-bottom: 8rem;
 `
 
 function DanceSection({danceData}) {
@@ -49,10 +33,8 @@ function DanceSection({danceData}) {
 
   return (
     <>
-      <TitleWrapper>
-        <Title>들썩들썩 댄스</Title>
-        {/* <span style={{fontSize: `1.2rem`}}>노래에 맞춰 춤을 춰봐요</span> */}
-      </TitleWrapper>
+    <DescribeSection imgUrl={dance} color="#FFFBEB" title="댄스 모드" 
+    context="신나는 노래에 맞춰 율동 체조!"/>
       <DanceWrapper numColumns={numColumns}>
         {danceData?.map((item) => <PlayItem key={item.songIdx} item={item} />)}
       </DanceWrapper>
