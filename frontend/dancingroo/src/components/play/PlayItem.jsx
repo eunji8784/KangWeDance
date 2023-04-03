@@ -61,7 +61,7 @@ const TagWrapper = styled(Wrapper)`
 
 const Star = styled(TbStarFilled)`
   color: #FFD731 ;
-  font-size: 2rem;
+  font-size: 1.6rem;
 `;
 
 const Tag = styled(PinkButton)`
