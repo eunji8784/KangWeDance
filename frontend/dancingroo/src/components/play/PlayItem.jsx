@@ -202,7 +202,7 @@ function PlayItem({item, tags}) {
           </TagWrapper>
           :
           <TextInfo>
-            {item?.title}
+            {item?.explain}
           </TextInfo>
         }
         <Stars />
