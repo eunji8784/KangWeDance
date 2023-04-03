@@ -12,7 +12,7 @@ export const levelDesign = {
 }
 
 export const tagColors = {
-  유산소:"#F5EF34",
+  유산소:"#FBCA3C",
   유연성:"#49EBBE",
   몸통:"#84eb78",
   균형감각:"#EB896C",
