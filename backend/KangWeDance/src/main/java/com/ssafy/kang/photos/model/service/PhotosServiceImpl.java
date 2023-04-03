@@ -25,16 +25,19 @@ public class PhotosServiceImpl implements PhotosService {
 	private SqlSession sqlSession;
 
 	@Override
-	public void addUpdate(MultipartFile multipartFile) throws Exception {
+	public void addUpdate(MultipartFile multipartFile, int parentIdx) throws Exception {
+		
 		FileDto fileDto = FileDto.multipartOf(multipartFile);
-		System.out.println(fileDto.getPath());
 		String url = amazonS3ResourceStorage.getUrl(fileDto.getPath(), multipartFile);
-
+		System.out.println(fileDto.getPath());
+		
 		PhotosDto photosDto = new PhotosDto();
 		photosDto.setPhotoName(fileDto.getName());
 		photosDto.setPhotoImageUrl(url);
 
-		sqlSession.getMapper(PhotosMapper.class).insertPhoto(photosDto);
+		System.out.println(photosDto);
+
+		sqlSession.getMapper(PhotosMapper.class).insertPhoto(photosDto, parentIdx);
 
 		// FileDto(id=45b870da-f5b2-487f-8bb9-f917082e2e07, name=아이피주소.png, format=png,
 		// path=images/45b870da-f5b2-487f-8bb9-f917082e2e07.png, width=null,

@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.amazonaws.services.s3.AmazonS3Client;
 import com.ssafy.kang.common.ErrorCode;
 import com.ssafy.kang.common.SuccessCode;
 import com.ssafy.kang.common.dto.ApiResponse;
@@ -40,7 +39,7 @@ public class PhotosController {
 	private JwtUtil jwtService = new JwtUtil();
 	@Value("${cloud.aws.s3.bucket}")
 	private String bucket;
-	
+
 //	| orderList() | 목록 조회 유형의 서비스 |
 //	| orderDetails() | 단 건 상세 조회 유형의 controller 메서드 |
 //	| orderSave() | 등록/수정/삭제 가 동시에 일어나는 유형의 controller 메서드 |
@@ -48,9 +47,13 @@ public class PhotosController {
 //	| orderModify() | 수정만 하는 유형의 controller 메서드 |
 //	| orderRemove() | 삭제만 하는 유형의 controller 메서드 |
 	@PostMapping
-	public ApiResponse<?> photosAdd(@RequestPart("file") MultipartFile file) throws Exception {
+	public ApiResponse<?> photosAdd(@RequestPart("file") MultipartFile file,
+			@RequestHeader("accesstoken") String accesstoken) throws Exception {
 		try {
-			photosService.addUpdate(file);
+
+			int parentIdx = jwtService.getUserIdx(accesstoken);
+			photosService.addUpdate(file, parentIdx);
+
 			return ApiResponse.success(SuccessCode.CREATE_PHOTO);
 		} catch (Exception e) {
 			e.printStackTrace();
