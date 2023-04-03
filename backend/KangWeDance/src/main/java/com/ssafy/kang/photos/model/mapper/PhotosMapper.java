@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import com.ssafy.kang.photos.model.FramesDto;
 import com.ssafy.kang.photos.model.PhotosDto;
@@ -17,7 +16,7 @@ public interface PhotosMapper {
 //	| updateOrder() | 변경 유형의 mapper 메서드 |
 //	| deleteOrder() | 삭제 유형의 mapper 메서드 |
 
-	public void insertPhoto(PhotosDto photosDto, @Param("parentIdx") int parentIdx);
+	public void insertPhoto(PhotosDto photosDto);
 
 	public List<PhotosDto> selectPhotos(int parentIdx, int pageNum) throws SQLException;
 

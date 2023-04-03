@@ -36,7 +36,11 @@
 						WHERE parent_idx=#{parentIdx}
 						order by photo_idx desc
 			        ) as a
+<<<<<<< HEAD
 			    WHERE rnum > 0 and rnum <=(#{pageNum}*10);
+=======
+			    WHERE rnum >0  and rnum <=(#{pageNum}*10);
+>>>>>>> 9a7585cae63a950a2ad337222c640bedffade651
     		 ]]>
 	</select>
 	

@@ -28,6 +28,10 @@ public interface StatusService {
 
 	public List<BodyRecordDto> findRecordList(int childIdx) throws Exception;
 
+	public int findWeightPercentile(int childIdx) throws Exception;
+
+	public int findHeightPercentile(int childIdx) throws Exception;
+
 	// 일회성 코드 : 검색을 위해 영어 <->한국어
 	// public String temps(int i) throws Exception;
 	// public void tumpu(String k, String i) throws Exception;

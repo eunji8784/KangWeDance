@@ -5,13 +5,11 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.ssafy.kang.photos.model.FramesDto;
 import com.ssafy.kang.photos.model.PhotosDto;
 import com.ssafy.kang.photos.model.mapper.PhotosMapper;
 import com.ssafy.kang.util.AmazonS3ResourceStorage;
-import com.ssafy.kang.util.FileDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,19 +23,9 @@ public class PhotosServiceImpl implements PhotosService {
 	private SqlSession sqlSession;
 
 	@Override
-	public void addUpdate(MultipartFile multipartFile, int parentIdx) throws Exception {
-		
-		FileDto fileDto = FileDto.multipartOf(multipartFile);
-		String url = amazonS3ResourceStorage.getUrl(fileDto.getPath(), multipartFile);
-		System.out.println(fileDto.getPath());
-		
-		PhotosDto photosDto = new PhotosDto();
-		photosDto.setPhotoName(fileDto.getName());
-		photosDto.setPhotoImageUrl(url);
+	public void addUpdate(PhotosDto photosDto) throws Exception {
 
-		System.out.println(photosDto);
-
-		sqlSession.getMapper(PhotosMapper.class).insertPhoto(photosDto, parentIdx);
+		sqlSession.getMapper(PhotosMapper.class).insertPhoto(photosDto);
 
 		// FileDto(id=45b870da-f5b2-487f-8bb9-f917082e2e07, name=아이피주소.png, format=png,
 		// path=images/45b870da-f5b2-487f-8bb9-f917082e2e07.png, width=null,
