@@ -23,7 +23,7 @@ public class JwtUtil  {
 	private static final int REFRESH_TOKEN_EXPIRE_MINUTES = 2; // 주단위
 
 	public <T> String createAccessToken(String key, T data) {
-		return create(key, data, "access-token", 1000 * 60 * 60 * 24*30);
+		return create(key, data, "access-token", 1000 * 60 * 60 * 24);
 		//return create(key, data, "access-token", 1000 * 30);
 	}
 
