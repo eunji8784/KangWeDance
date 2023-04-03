@@ -34,6 +34,7 @@ function PhotosPage({handleWatchingPage}) {
     const [frameImage, setFrameImage] = useState('')
     const [stickerImage, setStickerImage] = useState('')
     const [stickerNum, setStickerNum] = useState(0)
+    const [plus, setPlus] = useState(true);
 
     const [photoList, setPhotoList] = useState([])
     const [frameList, setFrameList] = useState([])
@@ -44,6 +45,7 @@ function PhotosPage({handleWatchingPage}) {
     const framestickers = useApi()
 
     const selected = useSelector(state=>state.photo.num)
+    const photoPageNum = useSelector(state=>state.photo.pageNum)
 
     useEffect(()=>{
         handleWatchingPage('photos')
@@ -52,13 +54,14 @@ function PhotosPage({handleWatchingPage}) {
 
         //포토 리스트
     useEffect(()=>{
-        photos.fetchApi('GET', `/photos?pageNum=1`)
-    },[selected])
+        photos.fetchApi('GET', `/photos?pageNum=${photoPageNum}`)
+    },[selected, photoPageNum])
     
     //포토 리스트
     useEffect(()=>{
         if (photos.data) {
             setPhotoList(photos.data?.data.photoList)
+            setPlus(photos.data?.data.pageNum.next);
         }
     },[photos.data])
 
@@ -91,7 +94,7 @@ function PhotosPage({handleWatchingPage}) {
         <PhotosSection>
             <SideBar handleSection={handleSection}/>
             <SideSection>
-                {section==='gallery' && <PhotoList photoList={photoList} handleImge={handleImge}/>}
+                {section==='gallery' && <PhotoList plus={plus} photoList={photoList} handleImge={handleImge}/>}
                 {section==='frame' && <FrameList frameList={frameList} handleFrame={handleFrame}/>}
                 {section==='sticker' && <StickerList stickerList={stickerList} handleSticker={handleSticker}/>}
             </SideSection>

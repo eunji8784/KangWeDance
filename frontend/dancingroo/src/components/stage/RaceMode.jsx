@@ -39,11 +39,11 @@ const Screen = styled.div`
     right: 0;
     width: 400px;
   }
-  /* .test {
+  .test {
     position: absolute;
     bottom: 0;
     left: 0;
-  } */
+  }
   .background-img {
     position: absolute;
     z-index: -1;
@@ -209,10 +209,10 @@ function RaceMode() {
   // }
 
   // test
-  // const replay = () => {
-  //   videoref.current.currentTime = videoref.current.duration - 1
-  //   videoref.current.play()
-  // }
+  const replay = () => {
+    videoref.current.currentTime = videoref.current.duration - 1
+    videoref.current.play()
+  }
 
   // //test
   // const openGreatFeedback = () => {
@@ -362,14 +362,14 @@ function RaceMode() {
             {!afterDirection && <MyBtn onClick={switchVideo}><HiSwitchHorizontal style={{fontSize:"1.5rem"}}/>화면 전환</MyBtn>}
             <MyBtn onClick={handleIsPauseModalOpen}><RxExit style={{fontSize:"1.5rem"}}/>그만하기</MyBtn>
           </div>
-          {/* <div className="test">
-            <ModalBtn onClick={handleShowResult}>플레이 시간 종료</ModalBtn>
-            <ModalBtn onClick={replay}>종료 전으로 가기</ModalBtn>
+          <div className="test">
+            {/* <ModalBtn onClick={handleShowResult}>플레이 시간 종료</ModalBtn>
             <ModalBtn onClick={plusCount}>Count +1</ModalBtn>
             <ModalBtn onClick={openReadyGoFeedback}>ReadyGo</ModalBtn>
             <ModalBtn onClick={openGreatFeedback}>Great</ModalBtn>
             <ModalBtn onClick={openGoodFeedback}>Good</ModalBtn>
-            <ModalBtn onClick={openCheerupFeedback}>Cheer Up</ModalBtn>
+            <ModalBtn onClick={openCheerupFeedback}>Cheer Up</ModalBtn> */}
+            <ModalBtn onClick={replay}>종료 전으로 가기</ModalBtn>
             <h1>
               평가자세 : {aimedPosture?.danceIndex || "X"}
             </h1>          
@@ -377,12 +377,12 @@ function RaceMode() {
               현재자세 : {prevPosture}
             </h1>
             <h1>
-              자세점수 : {count}
-            </h1>
+              자세점수 : {aimedPosture?.countStandard ? `${count} / ${aimedPosture?.countStandard}` : "X"} 
+            </h1>        
             <h1>
               시간 : {playTime}
             </h1>             
-          </div> */}
+          </div>
         </MyOverlay>
         {!afterDirection && 
         <video

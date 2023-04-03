@@ -9,7 +9,8 @@ import useApi from "../../hooks/auth/useApi"
 import MotionChart from "./chart/MotionChart";
 import BodyChart from "./chart/BodyChart";
 import { PinkButton } from "../common/ui/Semantics";
-import { tagColors } from "../../utils/tagColors";
+import { tagColors } from "../../utils/commonInfo";
+import { bmiCheck } from "../../utils/commonInfo";
 
 const Wrapper = styled.div`
     display: flex;
@@ -56,13 +57,20 @@ const Wrapper = styled.div`
         // [1-3-2] 그 내부의 right라는 클래스 선택자
         &.right{
           width:40%;
+          position:relative;
+          .chart-wrapper{
+            margin-top:3rem;
+          }
           .info-box{
             display:flex;
             background-color:white;
             border-radius:10px;
             flex-direction:column;
             justify-content:center;
-            height:18rem;
+            height:16rem;
+            position:absolute;
+            bottom:2rem;
+            width:100%;
             &>h2{
               font-size:1.5rem;
               letter-spacing:-0.1rem;
@@ -71,7 +79,9 @@ const Wrapper = styled.div`
               height:45%;
               margin-left:1rem;
               font-size:0.8rem;
-              /* border:1px solid black; */
+              h4{
+                color:grey;
+              }
             }
           }
         }
@@ -86,7 +96,7 @@ const Wrapper = styled.div`
           &>h6{
             font-size:0.7rem;
             display:inline-block;
-            width:11rem;
+            width:15rem;
             text-align:end;
             margin-right:0.8rem;
             span{
@@ -155,10 +165,14 @@ function HealthData(props) {
     const [bmiChanges, setBmiChanges] = useState([])
     const [tagData, setTagData] = useState([])
     const [sortedTagList, setSortedTagList] = useState()
+    const [standardInfo, setStandardInfo] = useState()
 
     useEffect(()=>{
       const onBodyResSuccess= (response)=>{
         const bodyRecords = response.data[selected].bodyRecord
+        const standardHeight = response.data[selected].standardHeight
+        const standardWeight = response.data[selected].standardWeight
+        setStandardInfo([standardHeight, standardWeight])
         const tempBmi = []
         const tempHeight = []
         const tempWeight = []
@@ -168,12 +182,17 @@ function HealthData(props) {
           tempHeight.push({ x: recordDate, y: Number(height) });
           tempWeight.push({ x: recordDate, y: Number(weight) });
         }
+        tempBmi.sort((a,b)=> a["x"].localeCompare(b["x"]))
+        tempHeight.sort((a,b)=> a["x"].localeCompare(b["x"]))
+        tempWeight.sort((a,b)=> a["x"].localeCompare(b["x"]))
         setBmiChanges([{ id: selectedChild.nickname||"첫째", data: tempBmi, hidden:true }]);
         setHeightChanges([{ id: selectedChild.nickname||"첫째", data: tempHeight, hidden:true }]);
         setWeightChanges([{ id: selectedChild.nickname||"첫째", data: tempWeight, hidden:true }]);
       } 
+
       getBodyChanges.fetchApi('GET', '/status/body-changes', onBodyResSuccess)
       const onTagResSuccess = (response)=>{
+        if (response.data===[] || response.data[selected]===[] || !response.data[selected]) return
         const data = response.data[selected]
         const sortedData = [...Object.entries(data)].filter(ele=>ele[0]!=='childIdx' && ele[0]!=='총_플레이시간').sort((a,b)=>a[1]-b[1])
         setSortedTagList(sortedData)
@@ -190,6 +209,7 @@ function HealthData(props) {
       }
       getTagData.fetchApi('GET', '/status/tag-list', onTagResSuccess)
     },[selected])
+    console.log(bmiChanges[0]?.data.length-1)
     return (
         <Wrapper>
           <section className="section header">
@@ -201,21 +221,25 @@ function HealthData(props) {
               <h3>신체 변화 기록</h3>
               <div className="graph-header">
                 <h4>BMI</h4>
-                <h6>현재 BMI는, <span>{"위험"}</span>수치에요</h6>
+                <h6>현재 BMI는, <span>"{bmiChanges!==[] && bmiCheck(bmiChanges[0]?.data[bmiChanges[0]?.data.length-1]?.y)}"</span>수치에요</h6>
               </div>
               <div className="graph-box">
                 <BodyChart data={bmiChanges} color={'set1'}/>
               </div>
               <div className="graph-header">
                 <h4>체중(kg)</h4>
-                <h6>또래 기준,  상위 <span>{11}</span>%에요</h6>
+                {standardInfo &&
+                <h6>또래 기준,  상위 <span>{standardInfo[0]}</span>%에요</h6>
+                }
               </div>
               <div className="graph-box">
                 <BodyChart data={weightChanges} color={'category10'}/>
               </div>
               <div className="graph-header">
                 <h4>키(cm)</h4>
-                <h6>또래 기준, 상위 <span>{11}</span>%에요</h6>
+                {standardInfo &&
+                <h6>또래 기준, 상위 <span>{standardInfo[1]}</span>%에요</h6>
+                }
               </div>
               <div className="graph-box">
                 <BodyChart data={heightChanges} color={'accent'}/>
@@ -223,6 +247,13 @@ function HealthData(props) {
             </article>
             <article className="status-box right">
               <h3>플레이 리포트</h3>
+              <div className="chart-wrapper">
+                <h4>{selectedChild.nickname}(이) 동작 태그 분석</h4>
+                <div className="chart-container">
+                  <MotionChart data={tagData}/>
+                </div>
+              </div>
+
               <div className="info-box">
                 <div className="info-content">
                   <h3>이런 동작을 제일 잘해요!</h3>
@@ -233,7 +264,7 @@ function HealthData(props) {
                   <ModBtn color={tagColors[sortedTagList[sortedTagList.length-3][0]]}>{sortedTagList[sortedTagList.length-3][0]}</ModBtn>
                   </>
                   :
-                  <h3>아직 기록된 동작이 없어요</h3>
+                  <h4>아직 플레이 기록이 없어요...</h4>
                   }
                 </div>
                 <div className="info-content">
@@ -244,13 +275,9 @@ function HealthData(props) {
                   <ModBtn color={tagColors[sortedTagList[1][0]]}>{sortedTagList[1][0]}</ModBtn>
                   </>
                   :
-                  <h3>아직 기록된 동작이 없어요</h3>
+                  <h4>아직 플레이 기록이 없어요...</h4>
                   }
                 </div>
-              </div>
-              <h3>{selectedChild.nickname}(이) 동작 태그 분석</h3>
-              <div className="chart-container">
-                <MotionChart data={tagData}/>
               </div>
             </article>
           </section>

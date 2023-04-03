@@ -30,7 +30,7 @@ const StyledDiv = styled.div`
       & > ${Highlight} {
         opacity: ${active ? 1 : 0};
       }
-      color:${active ? "#F05475;" : '#black'};
+      color:${active ? "#F05475" : '#black'};
       background-color:${active ? "#ffeef2" : '#ffffff'};
     `}
 `
