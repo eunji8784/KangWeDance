@@ -6,6 +6,10 @@ import {AiFillPlusCircle} from 'react-icons/ai';
 import { useDispatch } from "react-redux";
 import { photoPageNum } from "../../store/photoSlice";
 
+const PhotoWrapper = styled(Wrapper)`
+    padding-bottom: 5rem;
+`;
+
 const Empty = styled.div`
     height: 7.2rem;
     width: 12.8rem;
@@ -45,7 +49,7 @@ function PhotoList({handleImge, photoList, plus}) {
     }
 
     return (
-        <Wrapper>
+        <PhotoWrapper>
             {photoList.length?
                 <>
                 {
@@ -67,7 +71,7 @@ function PhotoList({handleImge, photoList, plus}) {
                     아직 사진이 없어요!
                 </Empty>
             }
-        </Wrapper>
+        </PhotoWrapper>
     );
 }
 
