@@ -6,7 +6,7 @@ import Webcam from "react-webcam"
 import PauseModal from "./PauseModal"
 import PlayResult from "./PlayResult"
 import Feedback from "./Feedback"
-// import ProgressBar from "./ProgressBar";
+import ProgressBar from "./ProgressBar";
 import { Overlay } from "../common/ui/Semantics"
 import { ModalBtn } from "../status/HealthData"
 import { useInterval } from "../../hooks/useInterval"
@@ -15,7 +15,9 @@ import bgImg from "../../assets/images/bgImg.png"
 import { AiFillCamera } from "react-icons/ai";
 import { HiSwitchHorizontal } from "react-icons/hi"
 import { HiVideoCamera, HiVideoCameraSlash } from "react-icons/hi2"
+import {MdKeyboardDoubleArrowRight} from "react-icons/md"
 import { RxExit } from "react-icons/rx";
+import {TbSettingsFilled} from "react-icons/tb";
 import { poseTable } from "../../utils/commonInfo";
 
 const tmPose = window.tmPose
@@ -59,13 +61,20 @@ const MyOverlay = styled(Overlay)`
   left: 0;
   justify-content: normal;
   .button {
-    display: flex;
+    display:flex;
     flex-direction: column;
     position: absolute;
     right: 1rem;
     top: 0;
+    /* opacity: 0; */
+    transform: translateY(-50%);
+    transition: all 0.5s ease;
   }
-  `
+  .button.show {
+    transform: translateY(20%);
+    opacity: 1;
+  }
+`
 
 const MyBtn = styled(ModalBtn)`
   justify-content: space-evenly;
@@ -73,14 +82,56 @@ const MyBtn = styled(ModalBtn)`
 `
 
 const DirectionDiv = styled.div`
-  width:10rem;
-  height:10rem;
-  border:2px solid blue;
+  width:30rem;
+  height:8rem;
+  /* border:2px solid blue; */
   position:absolute;
   top:0;
-  left:0;
+  left:0rem;
   z-index:2;
   font-size:2rem;
+  display:flex;
+  flex-direction:row;
+  justify-content:space-between;
+  /* background-color:white; */
+  div{
+    /* border:1px solid red; */
+    width:35%;
+    display:flex;
+    flex-direction:row;
+    justify-content:center;
+    align-items:center;
+    position:relative;
+    h4{
+      position:absolute;
+      top:-1.5rem;
+    }
+  }
+`
+
+const GameMenu = styled.div`
+  width: 100%;
+  height: 6rem;
+  position: absolute;
+  top: 0;
+  background-color: orange;
+  border-radius: 50% / 100% 100% 0 0;
+  transform: scaleY(2);
+  transform: rotate(180deg);
+  display:flex;
+  align-items:center;
+  justify-content:space-around;
+  z-index:1;
+`;
+
+const Settings = styled(TbSettingsFilled)`
+  width:3rem;
+  height:3rem;
+  position:absolute;
+  top:2%;
+  right:15%;
+  z-index:2;
+  cursor:pointer;
 `
 
 function DanceMode() {
@@ -95,16 +146,26 @@ function DanceMode() {
   const [prevPosture, setPrevPosture] = useState(10)
   const [count, setCount] = useState(0)
   const [scoreRecordList, setScoreRecordList] = useState([])
-  const [autoScreenshot, setAutoScreenshot] = useState(true)
+  const [autoScreenshot, setAutoScreenshot] = useState(false)
   const [showGreat, setShowGreat] = useState(false)
   const [showGood, setShowGood] = useState(false)
   const [showCheerUp, setShowCheerUp] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isBtnOpen, setIsBtnOpen] = useState(false);
+  const toggleButton = (trigger) => {
+    if (trigger==="enter"){
+      setIsBtnOpen(true);
+    } else {
+      setIsBtnOpen(false)
+    }
+    
+  };
+
   const camref = useRef(null)
   const videoref = useRef(null)
   
   const danceTimeline = stageItem.songMotionList
-
+  console.log(danceTimeline)
   const playRecord = useApi()
   const postPhoto = useApi()
 
@@ -298,9 +359,12 @@ function DanceMode() {
   const toggleAutoScreenshot = () => {
     setAutoScreenshot((prev) => !prev)
   }
-
+  console.log(isBtnOpen)
   return (
     <Screen>
+      <GameMenu/>
+      <Settings onMouseEnter={()=>toggleButton('enter')} onClick={()=>toggleButton('click')} color={isBtnOpen? '#3050d1' : 'black'}
+      />
       <img className="background-img" src={bgImg} alt="background" />
       {!playRecord.isLoading ? 
       <>
@@ -316,7 +380,8 @@ function DanceMode() {
         />
         <MyOverlay>
           <Feedback showGreat={showGreat} showGood={showGood} showCheerUp={showCheerUp}/>
-          <div className="button">
+          {isBtnOpen &&       
+          <div open={isBtnOpen} className={isBtnOpen ? 'show button' : 'button'}>
             <MyBtn onClick={toggleAutoScreenshot} style={{fontSize:"0.7rem"}}>
               {autoScreenshot? 
                 <>
@@ -332,14 +397,15 @@ function DanceMode() {
             <MyBtn onClick={switchVideo}><HiSwitchHorizontal style={{fontSize:"1.5rem"}}/>화면 전환</MyBtn>
             <MyBtn onClick={handleIsModalOpen}><RxExit style={{fontSize:"1.5rem"}}/>그만하기</MyBtn>
           </div>
-          {/* <ProgressBar nowProgress={videoref?.current?.currentTime} endProgress={videoref?.current?.duration}/> */}
-          <div className="test">
+          }
+          <ProgressBar nowProgress={videoref?.current?.currentTime} endProgress={videoref?.current?.duration}/>
+          <div className="test" onClick={()=>videoref.current.pause()}>
             {/* <ModalBtn onClick={plusCount}>Count +1</ModalBtn>
             <ModalBtn onClick={openGreatFeedback}>Great</ModalBtn>
             <ModalBtn onClick={openGoodFeedback}>Good</ModalBtn>
             <ModalBtn onClick={openCheerupFeedback}>Cheer Up</ModalBtn>
             <ModalBtn onClick={replay}>종료 전으로 가기</ModalBtn> */}
-            <h1>
+            {/* <h1>
               평가자세 : {poseTable[aimedPosture?.danceIndex] || "X"}
             </h1>          
             <h1>
@@ -347,9 +413,21 @@ function DanceMode() {
             </h1>
             <h1>
               자세점수 : {aimedPosture?.countStandard ? `${count} / ${aimedPosture?.countStandard}` : "X"} 
-            </h1>          
+            </h1>           */}
           </div>
-          {/* <DirectionDiv>{poseTable[aimedPosture?.danceIndex]}</DirectionDiv> */}
+          <DirectionDiv onClick={()=>videoref.current.pause()}>
+            <div>
+              <h4>NEXT</h4>
+              {poseTable[aimedPosture?.danceIndex+1]||'따라춰요!'}
+            </div>
+            <div>
+              <MdKeyboardDoubleArrowRight size={120}/>
+            </div>
+            <div>
+              <h4>NOW</h4>
+              {poseTable[aimedPosture?.danceIndex]|| ''}
+            </div>
+          </DirectionDiv>
         </MyOverlay>
         <video
           className={camfocus ? "small" : "big"}

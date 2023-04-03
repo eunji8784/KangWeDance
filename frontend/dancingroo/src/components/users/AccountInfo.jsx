@@ -149,7 +149,7 @@ function AccountInfo(props) {
                 <p>교감Level {expForDisplay && expForDisplay[2]}</p>
                 <Experience>
                     <ExperiencePercentage gauge={experiencePercentage < 10? 10 : experiencePercentage}/>
-                    <span>{expForDisplay && `${expForDisplay[0]} / ${expForDisplay[1]}`}</span>
+                    <span>{expForDisplay && `${expForDisplay[0]} / ${expForDisplay[1] || 'Max'}`}</span>
                     {/* <span>Exp</span> */}
                 </Experience>
             </div>
