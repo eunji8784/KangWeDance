@@ -79,8 +79,20 @@ const KangRocket = styled.img`
   height: 7rem;
   z-index: 5 !important;
   box-sizing:border-box;
-  animation: ${({ isAscending }) => (isAscending ? ascendAnimation : '')} 1.5s
-    linear;
+  animation: ${({ isAscending }) => (isAscending ? ascendAnimation : '')} 1.5s linear,
+            up-animation 1s ease-in-out forwards;
+  @keyframes up-animation {
+    0% {
+      opacity: 0.5;
+      transform: translateY(40%);
+    }
+    30% {
+      opacity: 1;
+      transform: translateY(0%)
+    }
+    100% {
+      opacity: 1;
+    }
 `;
 
 export default Rocket;
