@@ -34,10 +34,7 @@ function PlayPage({handleWatchingPage}) {
 
     return (
         <Wrapper>
-            {/* <RecommendSection recommendData={recommendation.data?.data}/> */}
-            <DescribeSection/>
             <DanceSection danceData={playList.data?.data.filter((e)=>e.playMode===0)} />
-            <div className="hr" />
             <GameSection gameData={playList.data?.data.filter((e)=>e.playMode!==0)} />
             <Rocket/>
         </Wrapper>
