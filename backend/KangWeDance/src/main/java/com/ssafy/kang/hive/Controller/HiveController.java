@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,6 +55,7 @@ public class HiveController {
 		return ApiResponse.success(SuccessCode.READ_BODY_TAG, row);
 	}
 
+	@Scheduled(cron = "0 1 0 * * *") 
 	@GetMapping("/body_record")
 	public ApiResponse<?> bodyRecord() {
 		// RDB에서 바디 레코드 가져오는 코드
