@@ -36,7 +36,7 @@
 						WHERE parent_idx=#{parentIdx}
 						order by photo_idx desc
 			        ) as a
-			    WHERE rnum >0  and rnum <=(#{pageNum}*10);
+			    WHERE rnum > 0 and rnum <=(#{pageNum}*10);
     		 ]]>
 	</select>
 	

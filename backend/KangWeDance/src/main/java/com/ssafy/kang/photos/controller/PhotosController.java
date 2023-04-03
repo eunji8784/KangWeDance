@@ -15,11 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.amazonaws.services.s3.AmazonS3Client;
 import com.ssafy.kang.common.ErrorCode;
 import com.ssafy.kang.common.SuccessCode;
 import com.ssafy.kang.common.dto.ApiResponse;
@@ -41,7 +38,7 @@ public class PhotosController {
 	private JwtUtil jwtService = new JwtUtil();
 	@Value("${cloud.aws.s3.bucket}")
 	private String bucket;
-	
+
 //	| orderList() | 목록 조회 유형의 서비스 |
 //	| orderDetails() | 단 건 상세 조회 유형의 controller 메서드 |
 //	| orderSave() | 등록/수정/삭제 가 동시에 일어나는 유형의 controller 메서드 |
@@ -49,7 +46,8 @@ public class PhotosController {
 //	| orderModify() | 수정만 하는 유형의 controller 메서드 |
 //	| orderRemove() | 삭제만 하는 유형의 controller 메서드 |
 	@PostMapping
-	public ApiResponse<?> photosAdd(@RequestHeader("accesstoken") String accesstoken,@RequestBody PhotosDto photosDto) throws Exception {
+	public ApiResponse<?> photosAdd(@RequestHeader("accesstoken") String accesstoken, @RequestBody PhotosDto photosDto)
+			throws Exception {
 		try {
 			photosDto.setParentIdx(jwtService.getUserIdx(accesstoken));
 			photosService.addUpdate(photosDto);
@@ -118,7 +116,7 @@ public class PhotosController {
 			List<FramesDto> frameDto = photosService.findFrames(level);
 			List<FramesDto> stickerDto = photosService.findStickers();
 
-			for (int i = 0; i < level&& i<5; i++) {
+			for (int i = 0; i < level && i < 5; i++) {
 				frameDto.get(i).setUnLock(true);
 			}
 
