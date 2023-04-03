@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-// import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { ModalBtn } from "./HealthData";
 import PlayCalendar from "./PlayCalendar";
 import useApi from "../../hooks/auth/useApi";
+
 
 const Wrapper = styled.div`
     display: flex;
@@ -58,8 +58,16 @@ const Wrapper = styled.div`
         // [1-3-3] 그 내부의 graph-box라는 클래스 선택자
         .calendar-box{
           display:flex;
-          flex-wrap: wrap;
+          flex-direction: column;
           justify-content:center;
+          align-items: center;
+          margin: 0;
+          &>span{
+            display:flex;
+            font-size:0.8rem;
+            margin-bottom:1rem;
+            margin-top:0.3rem;
+          }
         }
 
         .text-box{
@@ -120,6 +128,9 @@ function PlayData({handleIsModalOpen}) {
   const [playMonthCnt, setPlayMonthCnt] = useState(0)
   const [playCalTotal, setPlayCalTotal] = useState(0)
   const [palyDay, setPalyDay] = useState([]);
+  const [newYear, setNewYear] = useState(false)
+
+
   const handleSelectedDay = (date)=>{
     setSelectedDay(date)
   }
@@ -166,17 +177,28 @@ function PlayData({handleIsModalOpen}) {
   const palyTotalRecoApi = useApi()
   useEffect(()=>{
       var month = ""
+      const date = new Date();
+      const year = date.getFullYear();
+
       if(selectedDay){
         var words = selectedDay.split(' ');
+        const year2 = words[0].slice(0, 4);
         month = words[1].slice(0, -1).slice(-2);
+        if(year == year2){
+          setNewYear(false);
+        }else {
+          setNewYear(true);
+        }
       } else {
-        const date = new Date();
         month = date.getMonth() + 1;
+        setNewYear(false);
       }
+
       setSelecteMonth(month)
+
       palyTotalRecoApi.fetchApi('GET', `/status/month-play-record?childIdx=${selectedChild.childIdx}&month=${month}`)
 
-  }, [selectedDay, selectedChild.childIdx])
+  }, [ selectedDay, selectedChild.childIdx])
 
   //달 플레이 기록 활용하기
   useEffect(()=>{
@@ -209,10 +231,16 @@ function PlayData({handleIsModalOpen}) {
                 <article className="status-box left">
                     <div className="calendar-box">
                         <PlayCalendar palyDay={palyDay} handleSelectedDay={handleSelectedDay}/>
+                        <span> 월 통계를 보고 싶다면, 날짜를 클릭해주세요!</span>
                     </div>
-                    <div className='text-box-bold'>올해 {selectedMonth}월</div>
-                    <div className='text-box'>총 플레이 횟수 {playMonthCnt},</div>
-                    <div className='text-box'>총 소모 칼로리 {playCalTotal} cal</div>
+                    {newYear ?
+                    null :
+                    <>
+                      <div className='text-box-bold'>올해 {selectedMonth}월</div>
+                      <div className='text-box'>총 플레이 횟수 {playMonthCnt},</div>
+                      <div className='text-box'>총 소모 칼로리 {playCalTotal} cal</div>
+                    </>
+                    }
                 </article>
                 <article className="status-box right">
                     <h3>{selectedDay}</h3>
@@ -221,7 +249,6 @@ function PlayData({handleIsModalOpen}) {
                       <Table>
                           <thead>
                               <tr>
-                                  <th>플레이 시간</th>
                                   <th>타이틀</th>
                                   <th>점수</th>
                                   <th>소모 칼로리</th>
@@ -230,7 +257,6 @@ function PlayData({handleIsModalOpen}) {
                           <tbody>
                               {playRecord.map((play, index) => {
                               return  <tr key={index}>
-                                  <td>{play.recordDate.substr(12,18)}</td>
                                   <td>{play.title}</td>
                                   <td>{play.score}</td>
                                   <td>{play.burnedCalories}</td>
