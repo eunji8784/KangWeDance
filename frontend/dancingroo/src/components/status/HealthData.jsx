@@ -72,7 +72,9 @@ const Wrapper = styled.div`
               height:45%;
               margin-left:1rem;
               font-size:0.8rem;
-              /* border:1px solid black; */
+              h4{
+                color:grey;
+              }
             }
           }
         }
@@ -173,12 +175,16 @@ function HealthData(props) {
           tempHeight.push({ x: recordDate, y: Number(height) });
           tempWeight.push({ x: recordDate, y: Number(weight) });
         }
+        tempBmi.sort((a,b)=> a["x"].localeCompare(b["x"]))
+        tempHeight.sort((a,b)=> a["x"].localeCompare(b["x"]))
+        tempWeight.sort((a,b)=> a["x"].localeCompare(b["x"]))
         setBmiChanges([{ id: selectedChild.nickname||"첫째", data: tempBmi, hidden:true }]);
         setHeightChanges([{ id: selectedChild.nickname||"첫째", data: tempHeight, hidden:true }]);
         setWeightChanges([{ id: selectedChild.nickname||"첫째", data: tempWeight, hidden:true }]);
       } 
       getBodyChanges.fetchApi('GET', '/status/body-changes', onBodyResSuccess)
       const onTagResSuccess = (response)=>{
+        if (response.data===[] || response.data[selected]===[] || !response.data[selected]) return
         const data = response.data[selected]
         const sortedData = [...Object.entries(data)].filter(ele=>ele[0]!=='childIdx' && ele[0]!=='총_플레이시간').sort((a,b)=>a[1]-b[1])
         setSortedTagList(sortedData)
@@ -195,7 +201,6 @@ function HealthData(props) {
       }
       getTagData.fetchApi('GET', '/status/tag-list', onTagResSuccess)
     },[selected])
-    console.log(bmiChanges)
     return (
         <Wrapper>
           <section className="section header">
@@ -243,7 +248,7 @@ function HealthData(props) {
                   <ModBtn color={tagColors[sortedTagList[sortedTagList.length-3][0]]}>{sortedTagList[sortedTagList.length-3][0]}</ModBtn>
                   </>
                   :
-                  <h3>아직 기록된 동작이 없어요</h3>
+                  <h4>아직 플레이 기록이 없어요...</h4>
                   }
                 </div>
                 <div className="info-content">
@@ -254,7 +259,7 @@ function HealthData(props) {
                   <ModBtn color={tagColors[sortedTagList[1][0]]}>{sortedTagList[1][0]}</ModBtn>
                   </>
                   :
-                  <h3>아직 기록된 동작이 없어요</h3>
+                  <h4>아직 플레이 기록이 없어요...</h4>
                   }
                 </div>
               </div>
