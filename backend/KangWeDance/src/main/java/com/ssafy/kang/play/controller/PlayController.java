@@ -23,6 +23,7 @@ import com.ssafy.kang.play.model.PlayResultResponseDto;
 import com.ssafy.kang.play.model.SongListDto;
 import com.ssafy.kang.play.model.SongMotionDto;
 import com.ssafy.kang.play.model.service.PlayService;
+import com.ssafy.kang.util.GuideMentUtil;
 import com.ssafy.kang.util.JwtUtil;
 import com.ssafy.kang.util.LevelUtil;
 
@@ -45,11 +46,14 @@ public class PlayController {
 
 	private final LevelUtil levelUtil;
 
+	private final GuideMentUtil guideMentUtil;
+
 	private final JwtUtil jwtUtil;
 
 	public PlayController() {
 		this.jwtUtil = new JwtUtil();
 		this.levelUtil = new LevelUtil();
+		this.guideMentUtil = new GuideMentUtil();
 	}
 
 //	| orderList() | 목록 조회 유형의 서비스 |
@@ -68,6 +72,7 @@ public class PlayController {
 
 			for (int i = 0; i < songList.size(); i++) {
 				int songIdx = songList.get(i).getSongIdx();
+				songList.get(i).setGuideMent(guideMentUtil.getGuideMent(songIdx));
 				SongMotionList = playService.findSongMotionList(songIdx);
 				songList.get(i).setSongMotionList(SongMotionList);
 			}
@@ -155,6 +160,8 @@ public class PlayController {
 				PlayRecommendationDto playRecommendationDto = new PlayRecommendationDto();
 				playRecommendationDto.setChildIdx(childList.get(i));
 				SongListDto songList = playService.findPlayRecommendation(childList.get(i));
+				int songIdx = songList.getSongIdx();
+				songList.setGuideMent(guideMentUtil.getGuideMent(songIdx));
 				playRecommendationDto.setRecommendationSong(songList);
 				recommendationList.add(playRecommendationDto);
 			}
