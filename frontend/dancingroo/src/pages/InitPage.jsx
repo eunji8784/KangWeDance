@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
 import styled from "styled-components";
 // 로고
 import bigLogo from "../assets/images/bigLogo.png"
@@ -34,7 +33,6 @@ const Wrapper = styled.div`
       display:flex;
       flex-direction:column;
       position: absolute;
-      /* background-color:blue; */
       z-index:1;
       width:20rem;
       top: 25rem;
@@ -56,8 +54,7 @@ const Wrapper = styled.div`
     }
 `;
 
-function InitPage(props) {
-    const navigate = useNavigate();
+function InitPage() {
     const API_KEY_KAKAO = process.env.REACT_APP_API_KEY_KAKAO;
     // 로컬 테스트 용
     const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI
@@ -68,6 +65,7 @@ function InitPage(props) {
     const API_KEY_NAVER = process.env.REACT_APP_API_KEY_NAVER
     const STATE_TOKEN = process.env.REACT_APP_STATE_TOKEN 
     const OAUTH_NAVER = `https://nid.naver.com/oauth2.0/authorize?client_id=${API_KEY_NAVER}&response_type=code&redirect_uri=${REDIRECT_URI_SITE+'naver'}&state=${STATE_TOKEN}`
+
     return (
         <Wrapper>
           <img src={bigLogo} alt=""/>
