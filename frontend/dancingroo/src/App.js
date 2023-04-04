@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react"
 import "./App.css"
-import { Routes, Route, Navigate } from "react-router-dom"
+import { Routes, Route } from "react-router-dom"
 import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
-import { login, logout } from "./store/userSlice";
-import { useNavigate } from "react-router-dom";
+import { login } from "./store/userSlice";
 // Layout
 import HBLayout from "./layout/HBLayout"
-import NHBLayout from "./layout/NHBLayout"
 import PHBLayout from "./layout/PHBLayout"
 // Pages
 import PlayPage from "./pages/PlayPage"
@@ -24,23 +22,15 @@ import ErrorPage from "./pages/ErrorPage"
 
 function App() {
   const dispatch = useDispatch()
-  const navigate = useNavigate()
   const isLoggedIn = useSelector(state=>state.userState.isLoggedIn)
   const [watchingPage, setWatchingPage] = useState('')
-  const [Cookie, setCookie, removeCookie] = useCookies('accessToken')
+  const [Cookie, , ] = useCookies('accessToken')
 
   useEffect(()=>{
     const existingToken = Cookie.accessToken;
     if (existingToken) {
       dispatch(login(existingToken));
     } 
-    // else{
-    //   dispatch(logout());
-    // }
-    // if (isLoggedIn && !existingToken){
-    //   navigate('/')
-    //   dispatch(logout())
-    // }
   },[dispatch, Cookie.accessToken])
 
 
@@ -58,9 +48,6 @@ function App() {
         {/* 헤더+탑바 있음 */}
         <Route element={<PHBLayout watchingPage={watchingPage} isLoggedIn={isLoggedIn}/>}>
           <Route path={"/photos"} element={<PhotosPage handleWatchingPage={handleWatchingPage}/>} />
-        </Route>
-        {/* 맨 윗줄 헤더만 있음 */}
-        <Route element={<NHBLayout isLoggedIn={isLoggedIn}/>}>
           <Route path={"/users"} element={<UserPage />} />
           <Route path={"/users/join"} element={<Registration />}/>
           <Route path={"/users/oauth2-kakao"} element={<OauthKakao />}/>

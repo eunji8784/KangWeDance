@@ -1,14 +1,6 @@
-// install (please make sure versions match peerDependencies)
-// yarn add @nivo/core @nivo/bump
 import { ResponsiveLine } from '@nivo/line'
 
-// make sure parent container have a defined height when using
-// responsive component, otherwise height will be 0 and
-// no chart will be rendered.
-// website examples showcase many properties,
-// you'll often use just a few of them.
-
-  const BodyChart = ({ data, color /* see data tab */ }) => (
+  const BodyChart = ({ data, color }) => (
     <ResponsiveLine
         data={data}
         margin={{ top: 30, right: 110, bottom: 50, left: 60 }}
@@ -43,32 +35,7 @@ import { ResponsiveLine } from '@nivo/line'
         pointBorderColor={{ from: 'serieColor' }}
         pointLabelYOffset={-12}
         useMesh={true}
-        // legends={[
-        //     {
-        //         anchor: 'bottom-right',
-        //         direction: 'column',
-        //         justify: false,
-        //         translateX: 100,
-        //         translateY: 0,
-        //         itemsSpacing: 0,
-        //         itemDirection: 'left-to-right',
-        //         itemWidth: 80,
-        //         itemHeight: 20,
-        //         itemOpacity: 0.75,
-        //         symbolSize: 12,
-        //         symbolShape: 'circle',
-        //         symbolBorderColor: 'rgba(0, 0, 0, .5)',
-        //         effects: [
-        //             {
-        //                 on: 'hover',
-        //                 style: {
-        //                     itemBackground: 'rgba(0, 0, 0, .03)',
-        //                     itemOpacity: 1
-        //                 }
-        //             }
-        //         ]
-        //     }
-        // ]}
+
     />
 )
 

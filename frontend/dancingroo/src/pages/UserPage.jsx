@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 //componment
@@ -10,11 +10,13 @@ import useApi from "../hooks/auth/useApi";
 import { useSelector, useDispatch } from "react-redux";
 import { useCookies } from 'react-cookie';
 import { logout } from "../store/userSlice";
+
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center; 
 `;
+
 export const Wrapper2 = styled.div`
     width: 45rem;
     display: flex;
@@ -24,6 +26,7 @@ export const Wrapper2 = styled.div`
         width:40%;
     }
 `;
+
 const Title = styled.div`
     display: flex;
     font-size: 2rem;
@@ -31,6 +34,7 @@ const Title = styled.div`
     margin-top: 1.5rem;
     margin-bottom: 0.5rem;
 `;
+
 const Deleted = styled.div`
     /* width: 50rem; */
     display: flex;
@@ -44,6 +48,7 @@ const Deleted = styled.div`
     right:1rem;
     cursor: pointer;
 `;
+
 const Line = styled.div`
     width: 80vw;
     border: solid 1px #F05475;

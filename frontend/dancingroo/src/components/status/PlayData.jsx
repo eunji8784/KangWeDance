@@ -119,6 +119,7 @@ const NotReco = styled.div`
 `;
 
 function PlayData({handleIsModalOpen}) {
+  /* eslint-disable */
   const selected = useSelector(state=>state.userState.select)
   const selectedChild = useSelector(state=>state.userState.children[selected||0]) 
   const [selectedDay, setSelectedDay] = useState()
@@ -212,8 +213,7 @@ function PlayData({handleIsModalOpen}) {
               arr.push(palyTotalRecoApi.data.data[i].recordDate.substr(0, 10));
               date = palyTotalRecoApi.data.data[i].recordDate.substr(0, 10);
             } 
-            cal = cal +  palyTotalRecoApi.data.data[i].burnedCalories
-          // console.log(arr)    
+            cal = cal +  palyTotalRecoApi.data.data[i].burnedCalories  
         }
       setPlayCalTotal(cal)
       setPalyDay(arr) 
