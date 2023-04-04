@@ -11,7 +11,7 @@ import { Overlay } from "../common/ui/Semantics"
 import { ModalBtn } from "../status/HealthData"
 import { useInterval } from "../../hooks/useInterval"
 import useApi from "../../hooks/auth/useApi"
-import bgImg from "../../assets/images/bgImg.png"
+import dance_bg from "../../assets/images/dance_bg.png"
 import { AiFillCamera } from "react-icons/ai";
 import { HiSwitchHorizontal } from "react-icons/hi"
 import { HiVideoCamera, HiVideoCameraSlash } from "react-icons/hi2"
@@ -84,25 +84,52 @@ const MyBtn = styled(ModalBtn)`
 
 const DirectionDiv = styled.div`
   width:15rem;
-  height:8rem;
+  height:6rem;
   /* border:2px solid blue; */
+  background-color: #c9f7f9;
   position:absolute;
   top:0;
-  left:7rem;
+  left:8rem;
   z-index:2;
   font-size:2rem;
   display:flex;
   flex-direction:row;
   justify-content:space-around;
-  /* background-color:blue; */
   .arrow{
-    /* border:1px solid red; */
+    margin-top:0.7rem;
     height:5rem;
+  }
+  div{
+    width:40%;
+    display:flex;
+    flex-direction:row;
+    justify-content:center;
+    align-items:center;
+    position:relative;
+    h5{
+      font-size:1rem;
+    }
+  }
+`
+const DirectionDiv_FocusOut = styled.div`
+  width:15rem;
+  height:6rem;
+  /* border:2px solid blue; */
+  position:absolute;
+  bottom:0;
+  left:18rem;
+  z-index:2;
+  font-size:2rem;
+  display:flex;
+  flex-direction:row;
+  justify-content:space-around;
+  .arrow{
+    height:5rem;
+    margin-top:0.7rem;
   }
   .pose-images{
     width:10rem;
     height:5rem;
-    background-color:green;
   }
   div{
     width:40%;
@@ -119,22 +146,6 @@ const DirectionDiv = styled.div`
     }
   }
 `
-
-const GameMenu = styled.div`
-  width: 15%;
-  height: 5rem;
-  left:8rem;
-  position: absolute;
-  top: 0;
-  background-color: #c9f7f9;
-  /* border-radius: 50% / 100% 100% 0 0;
-  transform: scaleY(2);
-  transform: rotate(180deg); */
-  display:flex;
-  align-items:center;
-  justify-content:space-around;
-  /* z-index:1; */
-`;
 
 const Settings = styled(TbSettingsFilled)`
   width:3rem;
@@ -382,7 +393,7 @@ function DanceMode() {
   console.log(isBtnOpen)
   return (
     <Screen>
-      <img className="background-img" src={bgImg} alt="background" />
+      <img className="background-img" src={dance_bg} alt="background" />
       {!playRecord.isLoading ? 
       <>
         <PlayResult data={playRecord.data.data} playMode={stageItem.playMode}/>
@@ -416,39 +427,34 @@ function DanceMode() {
           </div>
           }
           <ProgressBar nowProgress={videoref?.current?.currentTime} endProgress={videoref?.current?.duration}/>
-          <div className="test" onClick={()=>videoref.current.pause()}>
-            {/* <ModalBtn onClick={plusCount}>Count +1</ModalBtn>
-            <ModalBtn onClick={openGreatFeedback}>Great</ModalBtn>
-            <ModalBtn onClick={openGoodFeedback}>Good</ModalBtn>
-            <ModalBtn onClick={openCheerupFeedback}>Cheer Up</ModalBtn>
-            <ModalBtn onClick={replay}>종료 전으로 가기</ModalBtn> */}
-            {/* <h1>
-              평가자세 : {poseTable[aimedPosture?.danceIndex] || "X"}
-            </h1>          
-            <h1>
-              현재자세 : {poseTable[prevPosture]}
-            </h1>
-            <h1>
-              자세점수 : {aimedPosture?.countStandard ? `${count} / ${aimedPosture?.countStandard}` : "X"} 
-            </h1>           */}
-          </div>
-          <DirectionDiv onClick={()=>videoref.current.pause()}>
-            <div className="arrow">
-              {arrowState?
-              <MdKeyboardDoubleArrowRight color="yellow" size={90}/>
-              :
-              <MdKeyboardDoubleArrowRight color="white" size={90}/>
-              }
-            </div>
-            {/* <div>
-              <h5>NOW</h5>
-                {PoseImages(poseTable[aimedPosture?.danceIndex])}
-            </div> */}
-            <div>
-              {/* <h5>NEXT</h5> */}
-                {PoseImages(poseTable[aimedPosture?.danceIndex])}
-            </div>
-          </DirectionDiv>
+          {!camfocus?
+            <DirectionDiv onClick={()=>videoref.current.pause()}
+            >
+              <div className="arrow">
+                {arrowState?
+                <MdKeyboardDoubleArrowRight color="yellow" size={90}/>
+                :
+                <MdKeyboardDoubleArrowRight color="white" size={90}/>
+                }
+              </div>
+              <div className="pose-images">
+                  {PoseImages(poseTable[aimedPosture?.danceIndex])}
+              </div>
+            </DirectionDiv>
+          :
+            <DirectionDiv_FocusOut>
+              <div className="arrow">
+                {arrowState?
+                <MdKeyboardDoubleArrowRight color="yellow" size={90}/>
+                :
+                <MdKeyboardDoubleArrowRight color="white" size={90}/>
+                }
+              </div>
+              <div>
+                  {PoseImages(poseTable[aimedPosture?.danceIndex])}
+              </div>
+            </DirectionDiv_FocusOut>
+          }
         </MyOverlay>
         <video
           className={camfocus ? "small" : "big"}
@@ -460,7 +466,7 @@ function DanceMode() {
         <PauseModal handleIsModalOpen={handleIsModalOpen} isOpen={isModalOpen} />
         <Settings onMouseEnter={()=>toggleButton('enter')} onClick={()=>toggleButton('click')} color={isBtnOpen? '#3050d1' : 'black'}
         />
-        <GameMenu/>
+        {/* <GameMenu/> */}
       </>
       }
     </Screen>
