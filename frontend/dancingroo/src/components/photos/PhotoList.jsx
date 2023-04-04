@@ -24,6 +24,7 @@ const PlusWrapper = styled(Wrapper)`
 `;
 
 function PhotoList({handleImge, photoList, plus}) {
+    /* eslint-disable */
     const dispatch = useDispatch()
     const [newDay, setNewDay] = useState([]);
 

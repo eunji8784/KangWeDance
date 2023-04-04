@@ -1,12 +1,9 @@
-import React, {useEffect, useState
-  // , useRef
-} from "react";
+import React, {useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 //logo
 import plusprofile from "../../../assets/images/plusprofile.png"
 import kangkang from "../../../assets/images/kangkang.png"
-// 
 import { useDispatch, useSelector } from "react-redux";
 import { childSelect, getChildState } from "../../../store/userSlice";
 import useApi from "../../../hooks/auth/useApi";
@@ -28,7 +25,7 @@ const ProfileImg = styled.img`
     box-sizing: border-box;
     :hover{
       ${({ active }) =>
-      active=="false" &&
+      active === "false" &&
       ` 
       transform: scale(1.2);
       transition: all 0.3s ease-in-out;
@@ -45,7 +42,8 @@ const ProfileImg = styled.img`
       `}
 `
 
-function ChildProfile(props) {
+function ChildProfile() {
+    /* eslint-disable */
     const navigate = useNavigate();
     const dispatch = useDispatch()
     const selectedIdx = useSelector(state=>state.userState.select)

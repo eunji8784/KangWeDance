@@ -1,7 +1,6 @@
 import React,{useEffect, useState} from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { Wrapper, Main, Header, Footer, Section, Article } from "../components/common/ui/Semantics";
+import { Wrapper, Header } from "../components/common/ui/Semantics";
 import { useSelector, useDispatch } from "react-redux";
 import { FormLabel,FormInput } from "../components/common/form/RegisterChild";
 import RegisterChild from "../components/common/form/RegisterChild";
@@ -11,8 +10,6 @@ const ModHeader = styled(Header)`
     padding-bottom:0.5rem;
     flex-direction:column;
     .우리집{
-        /* border:1px solid red; */
-        /* margin-left:14.9rem; */
         align-self:flex-start;
     }
     .우리집인풋{
@@ -29,12 +26,11 @@ const ModHeader = styled(Header)`
     border-bottom: 2px solid #F05475;
 `
 
-function Registration(props) {
-    const navigate = useNavigate();
+function Registration() {
+    /* eslint-disable */
     const dispatch = useDispatch()
     const familyname = useSelector(state=>state.userState.familyname)
-    const addChild = useSelector(state=>state.userState.addChild)
-    const [familynameState, setFamilynameState] = useState(familyname)
+    const [, setFamilynameState] = useState(familyname)
 
     useEffect(()=>{
         dispatch(intoJoinPage(true))

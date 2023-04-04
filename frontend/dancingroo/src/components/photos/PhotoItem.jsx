@@ -41,6 +41,7 @@ const DateText = styled.div`
 `;
 
 function PhotoItem({imgUrl, newDay, date, handleImge, photoIdx}) {
+    /* eslint-disable */
     const dispatch = useDispatch()
     const deletephoto = useApi()
 
