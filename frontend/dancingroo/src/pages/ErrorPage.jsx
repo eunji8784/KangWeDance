@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 // import styled from "styled-components";
 import {Wrapper} from "../components/common/ui/Semantics";
 
-function ErrorPage(props) {
+function ErrorPage() {
     const navigate = useNavigate();
     return (
         <Wrapper>
