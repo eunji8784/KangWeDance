@@ -29,25 +29,37 @@
 	</resultMap>
 	<select id="selectPlayRecord" parameterType="String" resultMap="playRecordList">
 		<!--
-			동작별 점수 총합 ->score
+			동작별 점수 총합 -> score
 			칼로리 소모량
 			노래 제목
 			기록날짜
 		 -->
-		SELECT tmp1.child_idx,tmp1.calorie_consumption, tmp1.title, tmp1.record_date, tmp2.score
-		FROM 
-		 (SELECT s.song_idx, s.calorie_consumption, s.title, p.record_date, p.play_record_idx, p.child_idx
-			FROM songList s join playRecord p ON s.song_idx=p.song_idx
-   			WHERE p.record_date LIKE CONCAT(#{date}, '%')
-    	  )as tmp1
-		
-		LEFT JOIN
-	    ( SELECT sum(score) as score , play_record_idx
-		  FROM  scoreRecord
-	      GROUP BY play_record_idx
-		) as tmp2
-		
-	    ON tmp1.play_record_idx= tmp2.play_record_idx;
+		SELECT 
+		    tmp1.child_idx,
+		    tmp1.calorie_consumption,
+		    tmp1.title,
+		    tmp1.record_date,
+		    tmp1.score
+		FROM
+		    (SELECT 
+		        s.song_idx,
+		            s.calorie_consumption,
+		            s.title,
+		            p.record_date,
+		            p.play_record_idx,
+		            p.child_idx,
+		            p.score_total AS score
+		    FROM
+		        songList s
+		    JOIN playRecord p ON s.song_idx = p.song_idx
+		    WHERE
+		        p.record_date LIKE CONCAT(#{date}, '%')) AS tmp1
+		        LEFT JOIN
+		    (SELECT 
+		        play_record_idx
+		    FROM
+		        scoreRecord
+		    GROUP BY play_record_idx) AS tmp2 ON tmp1.play_record_idx = tmp2.play_record_idx
 	</select>
 	<select id="selectFoodList" parameterType="String" resultMap="foodList">
 		SELECT name, category
@@ -56,7 +68,7 @@
 		limit 5
 	</select>
 	<select id="selectMonthlyRecord" resultMap="playRecordList">
-		SELECT tmp1.child_idx,tmp1.calorie_consumption, tmp1.title, tmp1.record_date, tmp2.score
+		SELECT tmp1.child_idx,tmp1.calorie_consumption, tmp1.title, tmp1.record_date
 		FROM 
 		 (SELECT s.song_idx, s.calorie_consumption, s.title, p.record_date, p.play_record_idx, p.child_idx
 			FROM songList s join playRecord p ON s.song_idx=p.song_idx
@@ -64,7 +76,7 @@
     	  )as tmp1
 		
 		LEFT JOIN
-	    ( SELECT sum(score) as score , play_record_idx
+	    ( SELECT play_record_idx
 		  FROM  scoreRecord
 	      GROUP BY play_record_idx
 		) as tmp2
