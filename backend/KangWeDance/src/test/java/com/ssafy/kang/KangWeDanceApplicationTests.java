@@ -22,19 +22,27 @@ import com.ssafy.kang.common.SuccessCode;
 import com.ssafy.kang.common.dto.ApiResponse;
 import com.ssafy.kang.parents.controller.ParentsConroller;
 import com.ssafy.kang.parents.model.ParentsDto;
+import com.ssafy.kang.photos.controller.PhotosController;
+import com.ssafy.kang.photos.model.PhotosDto;
+import com.ssafy.kang.status.controller.StatusController;
 import com.ssafy.kang.util.JwtUtil;
 
 @SpringBootTest
 @TestMethodOrder(value = MethodOrderer.OrderAnnotation.class)
 class KangWeDanceApplicationTests {
 
-	String accessToken = "eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgwNTA2NzE2NjAwLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODE4MDI3MTYsInN1YiI6ImFjY2Vzcy10b2tlbiIsInVzZXJpZHgiOjV9.TrnlToz2suBuY9swg-FI5KYYlj2e2psKxtBgccakIKY";
+	String accessToken = "eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgwNTExMzg4MDMxLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODE4MDczODgsInN1YiI6ImFjY2Vzcy10b2tlbiIsInVzZXJpZHgiOjI0fQ.6n3ClQEzjrD8P0NvOyKkre7vHSKkdShYOpPLQ36OcNg";
 
 	@Autowired
 	ParentsConroller parentsConroller;
 	@Autowired
 	ChildrenConroller childrenConroller;
 
+	@Autowired
+	PhotosController photosController;
+	
+	@Autowired
+	StatusController statusController;
 	@Test
 	@Order(1)
 	void Join() throws Exception {
@@ -73,7 +81,7 @@ class KangWeDanceApplicationTests {
 
 	@Test
 	@Order(2)
-	void childrenProfile() throws Exception {
+	void childrenProfileApi() throws Exception {
 		ApiResponse api = childrenConroller.childrenList(accessToken);
 		assertEquals(api.getMessage(), SuccessCode.READ_CHILDREN.getMessage());
 		System.out.println(SuccessCode.READ_CHILDREN.getMessage());
@@ -93,5 +101,24 @@ class KangWeDanceApplicationTests {
 			System.out.println(SuccessCode.DELETE_CHILDREN.getMessage());
 		}
 	}
-
+	@Test
+	@Order(3)
+	void PhotoApi() throws Exception{
+		assertEquals(photosController.framesDetails(accessToken).getMessage(), SuccessCode.READ_PRAME_LIST.getMessage());
+		System.out.println(SuccessCode.READ_PRAME_LIST.getMessage());
+		System.out.println(111);
+		ApiResponse api = photosController.photosDetails(accessToken,1);
+		assertEquals(api.getMessage(),SuccessCode.READ_PHOTO_LIST.getMessage());
+	}
+	
+	@Test
+	@Order(4)
+	void play()throws Exception{
+		assertEquals(statusController.playRecordDetails("2023-03-28", accessToken).getMessage(),SuccessCode.READ_PLAYRECORD_LIST.getMessage());
+		System.out.println(SuccessCode.READ_PLAYRECORD_LIST.getMessage());
+		assertEquals(statusController.searchMonthRecord(accessToken,89,3).getMessage(),SuccessCode.READ_MONTHLY_RECORD.getMessage());
+		System.out.println(SuccessCode.READ_MONTHLY_RECORD.getMessage());
+		assertEquals(statusController.bodyRecordList(accessToken).getMessage(),SuccessCode.READ_BODY_RECORD_LIST.getMessage());
+		System.out.println(SuccessCode.READ_BODY_RECORD_LIST.getMessage());
+	}
 }
