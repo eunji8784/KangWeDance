@@ -7,7 +7,7 @@ import useApi from "../../hooks/auth/useApi";
 import Swal from "sweetalert2";
 
 const ModWrapper = styled(Wrapper)`
-    width: 20%;
+    width: 25%;
     height: 40%;
     min-width: 20rem;
     min-height: 22rem;
@@ -142,19 +142,19 @@ function InputModal({handleIsModalOpen, isOpen}) {
         <ModWrapper isModalOpen={isOpen}>
             <h1>{formattedDate}</h1>
             <h3>{nickname}(이) 기록하기</h3>
-            <Line/>
+            {/* <Line/> */}
             <div>
                 <LabelText htmlFor="height" >키</LabelText>
                 <InputMod  id="height" type="text" placeholder={height} name={"height"}  ref={heightRef} onChange={onChangeHeight}/>
                 <h4>cm</h4>
             </div>
-            <Line/>
+            {/* <Line/> */}
             <div>
                 <LabelText htmlFor="weight" >몸무게</LabelText>
                 <InputMod id="weight" type="text" placeholder={weight} name={"weight"}  ref={weightRef} onChange={onChangeWeight}/>
                 <h4>kg</h4>
             </div>
-            <Line/>
+            {/* <Line/> */}
             <ModFooter>
                 <button onClick={()=>{
                     submitBodyUpdate()
