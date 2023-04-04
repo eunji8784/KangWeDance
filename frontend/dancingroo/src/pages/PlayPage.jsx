@@ -4,7 +4,7 @@ import styled from "styled-components";
 import useApi from "../hooks/auth/useApi";
 import DanceSection from "../components/play/DanceSection";
 import GameSection from "../components/play/GameSection";
-// import DescribeSection from "../components/play/DescribeSection";
+import FooterBar from "../components/common/nav/FooterBar";
 import Rocket from "../components/common/effects/Rocket";
 import { setRecommendation } from "../store/stageSlice";
 
@@ -41,6 +41,7 @@ function PlayPage({handleWatchingPage}) {
         <Wrapper>
             <DanceSection danceData={playList.data?.data.filter((e)=>e.playMode===0)} />
             <GameSection gameData={playList.data?.data.filter((e)=>e.playMode!==0)} />
+            <FooterBar />
             <Rocket/>
         </Wrapper>
     );
