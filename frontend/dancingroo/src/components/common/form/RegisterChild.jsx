@@ -1,11 +1,11 @@
 // 회원가입-정보 등록
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import {Wrapper, Header, Main, Article, Section, H1, H2, P, Footer, PinkButton} from "../../common/ui/Semantics";
+import {Wrapper, Main, Article, Section, Footer, PinkButton} from "../../common/ui/Semantics";
 import kangkang from "../../../assets/images/kangkang.png"
 import useApi from "../../../hooks/auth/useApi";
-import { login, getChildState,patchChildState,childSelect } from "../../../store/userSlice";
+import { getChildState, patchChildState, childSelect } from "../../../store/userSlice";
 import { useDispatch,useSelector } from "react-redux";
 import axios from "axios";
 import useValidation from "../../../hooks/auth/useValidation";
@@ -26,6 +26,7 @@ const ModWrapper = styled(Wrapper)`
         margin-bottom:-1rem;
     }
 `
+
 const ModMain = styled(Main)`
     flex-direction:row;
     min-width: 20rem;
@@ -35,12 +36,11 @@ const ModMain = styled(Main)`
     }
     padding-bottom:-10rem;
 `;
+
 const ModSection = styled(Section)`
     border:none;
     flex-direction:column;
-    /* align-items:center; */
     justify-content:space-around;
-    /* height:100%; */
     &>${Article}{
        height:6.5rem;
        text-align:start;
@@ -57,19 +57,8 @@ const ModSection = styled(Section)`
         font-weight:normal;
         margin-top:0.2rem;
         height:2rem;
-        /* box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1); */
         cursor: pointer;
-        /* animation: blink 3s infinite;
-        transition: none; */
     }
-    /* @keyframes blink {
-        0%{
-            color:red;
-        }
-        100% {
-            color: black;
-        }
-    } */
 `
 export const FormLabel = styled.label`
     font-size: 1rem;
@@ -78,6 +67,7 @@ export const FormLabel = styled.label`
     align-self:flex-start;
     margin-left:1.5rem;
 `;
+
 export const FormInput = styled.input`
     height: 2.1rem;
     min-width: 5rem;
@@ -87,6 +77,7 @@ export const FormInput = styled.input`
     border-radius: 6px;
     padding: 0 1em;
 `;
+
 const FormInputButton = styled.input`
     height: 2.1rem;
     width: 5rem;
@@ -112,6 +103,7 @@ const MyButton = styled(PinkButton)`
     font-size:0.9rem;
 `
 function RegisterChild({userPage}) {
+    /* eslint-disable */
     const selectedIdx = useSelector(state=>state.userState.select)
     const {nickname, weight, height, gender, profileImageUrl, childIdx, birthDate} = useSelector(state=>state.userState.children[selectedIdx||0]) // 디폴트는 첫째
     const firstChildIdx = useSelector(state=>state.userState.children[0].childIdx)
@@ -125,7 +117,6 @@ function RegisterChild({userPage}) {
     const deleteChild = useApi()
     const [btnColor, setBtnColor] = useState(gender)
     const fileInput = useRef(null);
-    const defaultImg = "https://d3qb4vbeyp8phu.cloudfront.net/기본+프로필+이미지.png"
     // 유효성검사 에러관리 state
     const [nameValidError, setNameValidError] = useState(false)
     const [weightValidError, setWeightValidError] = useState(false)

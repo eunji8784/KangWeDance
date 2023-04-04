@@ -1,10 +1,7 @@
-import React, { useState } from "react";
-// {useEffect} from "react";
+import React from "react";
 import { Outlet } from "react-router-dom";
-// import { useNavigate,  } from "react-router-dom";
-// import { useSelector } from "react-redux";
-// import FooterBar from "../components/common/nav/FooterBar";
 import HeaderBar from "../components/common/nav/HeaderBar";
+// import FooterBar from "../components/common/nav/FooterBar";
 import styled from "styled-components";
 
 const Bodysuit = styled.div`
@@ -14,28 +11,17 @@ const Bodysuit = styled.div`
     position: relative;
     // @ 양 옆 마진
     margin:0 15% !important;
-    /* border: 1px solid blue; */
 `;
 const OutletWrapper = styled(Outlet)`
 `
 
-const PHBLayout = (props) => {
-    const {watchingPage} = props;
-    // const [watching, setWatching] = useState(watchingPage)
-    // const navigate = useNavigate();
-    // const isLoggedIn = useSelector((state)=>state.TOKEN.authenticated);
-    
-    // useEffect(()=>{
-    //     if(isLoggedIn){
-    //         navigate("/");
-    //     }
-    // }, [isLoggedIn])
+const PHBLayout = ({watchingPage}) => {
 
     return(
         <Bodysuit>
             <HeaderBar watchingPage={watchingPage}/>
             <OutletWrapper />
-            {/* <BottomBar/> */}
+            {/* <FooterBar/> */}
         </Bodysuit>
     )
 

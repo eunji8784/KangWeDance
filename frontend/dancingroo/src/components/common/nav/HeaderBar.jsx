@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import useLogout from "../../../hooks/auth/useLogout";
@@ -17,42 +17,39 @@ const Wrapper = styled.div`
     flex-direction:column;
     align-items: center;
     justify-content: space-between;
-    min-height:10rem;
+    min-height:${props=>props.onlyTopBar ? 3 : 10}rem;
     .bottom-line {
     width: 100vw;
     height: 2px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   }
 `;
+
 const Menu = styled.img`
-    /* border: 1px solid black; */
     width:4rem;
     cursor: pointer;
     transition: transform 0.3s ease-in-out;
 `;
+
 const Logo = styled.div`
-    /* background-color:gold; */
     width: 12rem;
     height: 2.4rem;
     background-image:url(${logo});
     background-size:cover;
     cursor: pointer;
 `
+
 const BarContainer = styled.div`
-    /* border: 1px solid black; */
     width:${props=>props.width}%;
     height: ${props=>props.height}%;
     display:flex;
     align-items:center;
     justify-content:${props=>props.justify};
-    /* border:1px solid red; */
     .user-menu{
-        /* border:1px solid blue; */
         display:flex;
         justify-content:space-between;
         width:6rem;
         align-items:center;
-        /* margin-top:0.5rem; */
         &>div{
             cursor: pointer;
         }
@@ -68,8 +65,8 @@ const BarContainer = styled.div`
         transform: translateX(-50%);
     }
 `
+
 const LogoContainer = styled.div`
-    /* border: 1px solid red; */
     position:relative;
     display:flex;
     flex-direction:column;
@@ -86,9 +83,6 @@ const LogoContainer = styled.div`
     &>img:hover{
         transform: scale(1.1);
         // img와 형제요소인 span선택자.
-        &~span{
-            /* font-weight:bold;  */
-        }
     }
 `
 const Highlight = styled.div`
@@ -101,6 +95,7 @@ const Highlight = styled.div`
     opacity: ${({ active }) => active ? 1 : 0};
     transition: opacity 0.3s ease-in-out;
 `;
+
 const LogOut = styled.div`
     display: flex;
     justify-content: center;
@@ -126,15 +121,14 @@ const LogOut = styled.div`
   }
 `
 
-function HeaderBar(props) {
-    const {watchingPage} = props;
+function HeaderBar({watchingPage, onlyTopBar}) {
+    /* eslint-disable */
     const dispatch = useDispatch()
     const isLoggedIn = useSelector(state=>state.userState.isLoggedIn);
     const familyname = useSelector(state=>state.userState.familyname)
     const {data, isLoading, error, handleLogout} = useLogout()
     const [activeMenu, setActiveMenu] = useState(watchingPage);
     const API_KEY_KAKAO = process.env.REACT_APP_API_KEY_KAKAO;
-    const LOGOUT_REDIRECT_URI = process.env.REACT_APP_LOGOUT_REDIRECT_URI
     const LOGOUT_REDIRECT_URI_SITE = process.env.REACT_APP_LOGOUT_REDIRECT_URI_SITE
     const navigate = useNavigate();
     
@@ -159,9 +153,10 @@ function HeaderBar(props) {
             handleLogout()
         }
     }
+    
     return (
-        <Wrapper>
-            <BarContainer height={30} justify={"space-between"} width={100}>
+        <Wrapper onlyTopBar={onlyTopBar}>
+            <BarContainer height={onlyTopBar ? 100 : 30} justify={"space-between"} width={100}>
                 <Logo onClick={() => {
                     dispatch(childSelect(0))
                     navigate("/play");
@@ -170,7 +165,7 @@ function HeaderBar(props) {
                     />
                 <div className="username">
                     {isLoggedIn &&
-                        `${familyname || '캥거루합창단'} 환영합니다!`
+                        `${familyname || '캥거루합창단'} 님 환영합니다!`
                     }
                 </div>
                 <div className="user-menu">
@@ -188,42 +183,47 @@ function HeaderBar(props) {
                 </div>
             </BarContainer>
             <Line/>
-            <BarContainer height={70} justify={"center"} width={80}>
-                <LogoContainer
-                    active={activeMenu === "play"}
-                >
-                    <Menu src={Dance} 
-                    onClick={() => {
-                        navigate("/play");
-                        setActiveMenu('play')
-                    }}/>
-                    <span>둠칫둠칫</span>
-                    <Highlight active={activeMenu === "play"}/>
-                </LogoContainer>
-                <LogoContainer
-                    active={activeMenu === "status"}
-                >
-                    <Menu src={Status}                    
-                    onClick={() => {
-                        navigate("/status");
-                        setActiveMenu('status')
-                    }}/>  
-                    <span>건강일지</span>
-                    <Highlight active={activeMenu === "status"}/>
-                </LogoContainer>
-                <LogoContainer
-                    active={activeMenu === "photos"}
-                >
-                    <Menu src={Gallery}                    
-                    onClick={() => {
-                        navigate("/photos");
-                        setActiveMenu('photos')
-                    }}/>
-                    <span>사진첩</span>
-                    <Highlight active={activeMenu === "photos"}/>
-                </LogoContainer>
-            </BarContainer>
-            <div className="bottom-line" />
+            {!onlyTopBar &&
+            <>
+                <BarContainer height={70} justify={"center"} width={80}>
+                    <LogoContainer
+                        active={activeMenu === "play"}
+                    >
+                        <Menu src={Dance} 
+                        onClick={() => {
+                            navigate("/play");
+                            setActiveMenu('play')
+                        }}/>
+                        <span>둠칫둠칫</span>
+                        <Highlight active={activeMenu === "play"}/>
+                    </LogoContainer>
+                    <LogoContainer
+                        active={activeMenu === "status"}
+                    >
+                        <Menu src={Status}                    
+                        onClick={() => {
+                            navigate("/status");
+                            setActiveMenu('status')
+                        }}/>  
+                        <span>건강일지</span>
+                        <Highlight active={activeMenu === "status"}/>
+                    </LogoContainer>
+                    <LogoContainer
+                        active={activeMenu === "photos"}
+                    >
+                        <Menu src={Gallery}                    
+                        onClick={() => {
+                            navigate("/photos");
+                            setActiveMenu('photos')
+                        }}/>
+                        <span>사진첩</span>
+                        <Highlight active={activeMenu === "photos"}/>
+                    </LogoContainer>
+                </BarContainer>
+                <div className="bottom-line" /> 
+            </>
+
+            }
         </Wrapper>
     );
 }

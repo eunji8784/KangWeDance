@@ -25,7 +25,6 @@ const Note = styled.img`
   }
 
   &:hover {
-    /* animation: rotate 1s linear forwards; */
     filter: brightness(150%);
     cursor: pointer;
   }
@@ -40,6 +39,7 @@ const Note = styled.img`
 `;
 
 const NoteCompo = () => {
+    /* eslint-disable */
   const [positions, setPositions] = useState([]);
 
   const notes = [
