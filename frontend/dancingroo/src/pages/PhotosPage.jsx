@@ -12,7 +12,7 @@ import useApi from "../hooks/auth/useApi"
 
 const PhotosSection = styled(Wrapper)`
     flex-direction: row;
-    height: 100%;
+    height: 90%;
     width: 100%;
     min-width: 35rem;
     margin-top: 0.2rem;
@@ -21,11 +21,13 @@ const PhotosSection = styled(Wrapper)`
 `
 
 const SideSection = styled(Wrapper)`
-    width: 16%;
+    width: 20%;
     height: 100%;
-    min-width: 15rem;
+    min-width: 16rem;
     justify-content: flex-start;
     border: solid 0.2rem #ffeef2;
+    overflow-y: scroll;
+    overflow-X: hidden;
 `
 
 function PhotosPage({handleWatchingPage}) {
