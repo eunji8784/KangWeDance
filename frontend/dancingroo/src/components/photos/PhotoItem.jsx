@@ -17,7 +17,7 @@ const Photo = styled.div`
     border: 0.1rem solid rgba(0, 0, 0, 0.1);
     border-radius: 4px;
     cursor: pointer;
-    margin-top: 0.2rem;
+    margin-top: 0.3rem;
 `;
 
 const Back = styled.div`
@@ -33,8 +33,11 @@ const DateText = styled.div`
     width: 12rem;
     justify-content: flex-start;
     font-size: 0.9rem;
-    color: #2d2d2d;
+    font-weight: 600;
+    color: #303030;
     margin-top: 1rem;
+    margin-bottom:0.5rem;
+    font-family: 'GmarketSansMedium' !important;
 `;
 
 function PhotoItem({imgUrl, newDay, date, handleImge, photoIdx}) {

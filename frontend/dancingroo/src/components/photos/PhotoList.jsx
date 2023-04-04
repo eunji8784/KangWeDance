@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { photoPageNum } from "../../store/photoSlice";
 
 const PhotoWrapper = styled(Wrapper)`
-    padding-bottom: 5rem;
+    padding-bottom: 1rem;
 `;
 
 const Empty = styled.div`
@@ -20,7 +20,7 @@ const Empty = styled.div`
 `;
 
 const PlusWrapper = styled(Wrapper)`
-    margin: 1rem;
+    margin-top: 0.5rem;
 `;
 
 function PhotoList({handleImge, photoList, plus}) {
