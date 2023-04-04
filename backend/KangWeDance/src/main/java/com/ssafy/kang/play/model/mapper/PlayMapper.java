@@ -46,4 +46,6 @@ public interface PlayMapper {
 
 	public void inserTagForHadoop(StatisticsDto statisticsDto) throws SQLException;
 
+	public void updatePlayRecordScore(int param1, int param2) throws SQLException;
+
 }
