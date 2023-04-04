@@ -17,7 +17,7 @@ const Wrapper = styled.div`
     flex-direction:column;
     align-items: center;
     justify-content: space-between;
-    min-height:10rem;
+    min-height:${props=>props.onlyTopBar ? 3 : 10}rem;
     .bottom-line {
     width: 100vw;
     height: 2px;
@@ -121,7 +121,7 @@ const LogOut = styled.div`
   }
 `
 
-function HeaderBar({watchingPage}) {
+function HeaderBar({watchingPage, onlyTopBar}) {
     /* eslint-disable */
     const dispatch = useDispatch()
     const isLoggedIn = useSelector(state=>state.userState.isLoggedIn);
@@ -153,9 +153,10 @@ function HeaderBar({watchingPage}) {
             handleLogout()
         }
     }
+    
     return (
-        <Wrapper>
-            <BarContainer height={30} justify={"space-between"} width={100}>
+        <Wrapper onlyTopBar={onlyTopBar}>
+            <BarContainer height={onlyTopBar ? 100 : 30} justify={"space-between"} width={100}>
                 <Logo onClick={() => {
                     dispatch(childSelect(0))
                     navigate("/play");
@@ -182,42 +183,47 @@ function HeaderBar({watchingPage}) {
                 </div>
             </BarContainer>
             <Line/>
-            <BarContainer height={70} justify={"center"} width={80}>
-                <LogoContainer
-                    active={activeMenu === "play"}
-                >
-                    <Menu src={Dance} 
-                    onClick={() => {
-                        navigate("/play");
-                        setActiveMenu('play')
-                    }}/>
-                    <span>둠칫둠칫</span>
-                    <Highlight active={activeMenu === "play"}/>
-                </LogoContainer>
-                <LogoContainer
-                    active={activeMenu === "status"}
-                >
-                    <Menu src={Status}                    
-                    onClick={() => {
-                        navigate("/status");
-                        setActiveMenu('status')
-                    }}/>  
-                    <span>건강일지</span>
-                    <Highlight active={activeMenu === "status"}/>
-                </LogoContainer>
-                <LogoContainer
-                    active={activeMenu === "photos"}
-                >
-                    <Menu src={Gallery}                    
-                    onClick={() => {
-                        navigate("/photos");
-                        setActiveMenu('photos')
-                    }}/>
-                    <span>사진첩</span>
-                    <Highlight active={activeMenu === "photos"}/>
-                </LogoContainer>
-            </BarContainer>
-            <div className="bottom-line" />
+            {!onlyTopBar &&
+            <>
+                <BarContainer height={70} justify={"center"} width={80}>
+                    <LogoContainer
+                        active={activeMenu === "play"}
+                    >
+                        <Menu src={Dance} 
+                        onClick={() => {
+                            navigate("/play");
+                            setActiveMenu('play')
+                        }}/>
+                        <span>둠칫둠칫</span>
+                        <Highlight active={activeMenu === "play"}/>
+                    </LogoContainer>
+                    <LogoContainer
+                        active={activeMenu === "status"}
+                    >
+                        <Menu src={Status}                    
+                        onClick={() => {
+                            navigate("/status");
+                            setActiveMenu('status')
+                        }}/>  
+                        <span>건강일지</span>
+                        <Highlight active={activeMenu === "status"}/>
+                    </LogoContainer>
+                    <LogoContainer
+                        active={activeMenu === "photos"}
+                    >
+                        <Menu src={Gallery}                    
+                        onClick={() => {
+                            navigate("/photos");
+                            setActiveMenu('photos')
+                        }}/>
+                        <span>사진첩</span>
+                        <Highlight active={activeMenu === "photos"}/>
+                    </LogoContainer>
+                </BarContainer>
+                <div className="bottom-line" /> 
+            </>
+
+            }
         </Wrapper>
     );
 }
