@@ -1,4 +1,4 @@
-import React,{useState, useRef} from "react";
+import React,{useState, useRef, useEffect} from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { patchChildState } from "../../store/userSlice";
 import styled from "styled-components";
@@ -87,8 +87,13 @@ function InputModal({handleIsModalOpen, isOpen}) {
     const bodyStateUpdate = useApi()
     const weightRef = useRef(); 
     const heightRef = useRef(); 
-    const [w, setW] = useState()
-    const [h, setH] = useState()
+    const [w, setW] = useState(weight)
+    const [h, setH] = useState(height)
+
+    useEffect(()=>{
+        setW(weight)
+        setH(height)
+    }, [height, weight])
 
     const submitBodyUpdate = ()=>{
         Swal.fire({
