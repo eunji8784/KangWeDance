@@ -37,6 +37,7 @@ const Wrapper = styled.div`
       justify-content:space-between;
       height:auto;
       margin-bottom:3rem;
+      max-height: 28rem;
       }
       // [1-3] section 자식의 모든 article태그선택자
       &>article{
@@ -54,6 +55,7 @@ const Wrapper = styled.div`
         // [1-3-2] 그 내부의 right라는 클래스 선택자
         &.right{
           width:48%;
+          overflow-y:scroll;
         }
         // [1-3-3] 그 내부의 graph-box라는 클래스 선택자
         .calendar-box{

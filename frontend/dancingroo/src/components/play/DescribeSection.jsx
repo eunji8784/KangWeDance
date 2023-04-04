@@ -42,7 +42,7 @@ const Photo = styled.div`
     background-size: cover;
 `;
 
-function DescribeSection({imgUrl, title, context, color}) {
+function DescribeSection({imgUrl, title, context,context2, color}) {
   return (
     <TitleWrapper color={color}>
       <CenterWrapper>
@@ -50,6 +50,7 @@ function DescribeSection({imgUrl, title, context, color}) {
         <Wrapper>
             <Title>{title}</Title>
             <Text>{context}</Text>
+            <Text>{context2}</Text>
         </Wrapper>
       </CenterWrapper>
     </TitleWrapper>
