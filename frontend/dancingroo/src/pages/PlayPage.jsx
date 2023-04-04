@@ -4,7 +4,7 @@ import styled from "styled-components";
 import useApi from "../hooks/auth/useApi";
 import DanceSection from "../components/play/DanceSection";
 import GameSection from "../components/play/GameSection";
-import DescribeSection from "../components/play/DescribeSection";
+// import DescribeSection from "../components/play/DescribeSection";
 import Rocket from "../components/common/effects/Rocket";
 import { setRecommendation } from "../store/stageSlice";
 
@@ -22,6 +22,7 @@ const Wrapper = styled.div`
 `;
 
 function PlayPage({handleWatchingPage}) {
+    /* eslint-disable */
     const dispatch = useDispatch();
     
     const playList = useApi()

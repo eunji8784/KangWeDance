@@ -20,7 +20,6 @@ export const Line = styled.div`
 
 export const PinkButton = styled.button`
   height: 2rem;
-  /* width: 4rem; */
   color: white;
   font-size: 0.8rem;
   font-weight: 600;
