@@ -6,20 +6,23 @@ import {Wrapper, Footer} from "../common/ui/Semantics";
 import useApi from "../../hooks/auth/useApi";
 import Swal from "sweetalert2";
 
+import modalImage from "../../assets/images/modal.png"
+
 const ModWrapper = styled(Wrapper)`
     width: 25%;
     height: 40%;
     min-width: 20rem;
     min-height: 22rem;
-    border: solid 0.15rem #F05475;
+    border: solid 0.05rem #595959;
     display:${({isModalOpen})=>isModalOpen? "flex":"none"};
     position: fixed;
     top: 0; bottom: 0; left: 0; right: 0; z-index: 2;
     margin:auto;
-    background-color: white;
+    background-image:url(${modalImage});
+    background-size: cover;
     letter-spacing:0.1rem;
     border-radius: 0.5rem;
-    box-shadow: 0 1rem 1rem rgba(0, 0, 0, 0.5);
+    box-shadow: 0 1rem 1rem rgba(0, 0, 0, 0.2);
     color: #323232;
     &>h1{
         margin: 0;
@@ -41,7 +44,7 @@ const ModFooter = styled(Footer)`
     width:13rem;
     justify-content:space-between;
     &>button{
-        background-color:#F05475;
+        background-color:#ff3e68;
         outline:none;
         border:none;
         border-radius:10px;
@@ -55,7 +58,7 @@ const ModFooter = styled(Footer)`
         cursor: pointer;
         transition: box-shadow 0.3s ease-in-out;
         &:hover{
-            box-shadow: 0px 3px 15px rgba(240, 84, 117, 0.6);
+            box-shadow: 0px 1px 15px rgba(255, 98, 132, 0.6);
         }
         &:last-child{
             background-color:grey;
