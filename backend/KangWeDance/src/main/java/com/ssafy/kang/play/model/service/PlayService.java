@@ -38,4 +38,6 @@ public interface PlayService {
 
 	public List<String> findMotionTag(int songIdx) throws Exception;
 
+	public void modifyPlayRecordScore(int scoreTotal, int playRecordIdx) throws Exception;
+
 }
