@@ -49,10 +49,10 @@ function StatusBar(props) {
     
     return (
         <Wrapper >
-          <StyledDiv active={activeState === 'health'} onClick={()=>handleClick('health')}>건강 기록
+          <StyledDiv active={activeState === 'health'} onClick={()=>handleClick('health')}>건강 통계
             <Highlight/>
           </StyledDiv>
-          <StyledDiv active={activeState === 'play'} onClick={()=>handleClick('play')}>운동 기록
+          <StyledDiv active={activeState === 'play'} onClick={()=>handleClick('play')}>건강 달력
             <Highlight/>
           </StyledDiv>            
         </Wrapper>

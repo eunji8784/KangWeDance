@@ -163,11 +163,6 @@ function HeaderBar({watchingPage, onlyTopBar}) {
                     setActiveMenu("play");
                 }}
                     />
-                <div className="username">
-                    {isLoggedIn &&
-                        `${familyname || '캥거루합창단'} 님 환영합니다!`
-                    }
-                </div>
                 <div className="user-menu">
                     {isLoggedIn &&
                     <>
@@ -194,7 +189,7 @@ function HeaderBar({watchingPage, onlyTopBar}) {
                             navigate("/play");
                             setActiveMenu('play')
                         }}/>
-                        <span>둠칫둠칫</span>
+                        <span>율동체조</span>
                         <Highlight active={activeMenu === "play"}/>
                     </LogoContainer>
                     <LogoContainer
