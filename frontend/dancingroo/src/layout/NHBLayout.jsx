@@ -1,7 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import HeaderBar from "../components/common/nav/HeaderBar";
-// import FooterBar from "../components/common/nav/FooterBar";
 import styled from "styled-components";
 
 const Bodysuit = styled.div`
@@ -22,7 +21,6 @@ const NHBLayout = () => {
         <Bodysuit>
             <HeaderBar onlyTopBar={true}/>
             <OutletWrapper/>
-            {/* <FooterBar/> */}
         </Bodysuit>
     )
 
