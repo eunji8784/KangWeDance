@@ -71,6 +71,7 @@ const MyBtn = styled(ModalBtn)`
 `
 
 function Timemode() {
+  /* eslint-disable */
   const stageItem = useSelector((state) => state.stage.stageItem)
   const userId = useSelector((state) => state.userState.userId)
   const children = useSelector((state) => state.userState.children)
@@ -252,8 +253,8 @@ function Timemode() {
   const handleIsDirectionModalOpen = () => {
     setIsDirectionModalOpen(false)
     setShowReadyGo(true)
-    setTimeout(() => setShowReadyGo(false), 3000)
-    setTimeout(() => setGameStart(true), 3000)
+    setTimeout(() => setShowReadyGo(false), 3750)
+    setTimeout(() => setGameStart(true), 3750)
   }
 
   useInterval(
