@@ -81,6 +81,7 @@ const KangRocket = styled.img`
   box-sizing:border-box;
   animation: ${({ isAscending }) => (isAscending ? ascendAnimation : '')} 1.5s linear,
             up-animation 1s ease-in-out forwards;
+            
   @keyframes up-animation {
     0% {
       opacity: 0.5;

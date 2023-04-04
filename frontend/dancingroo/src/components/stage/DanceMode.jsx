@@ -19,6 +19,7 @@ import {MdKeyboardDoubleArrowRight} from "react-icons/md"
 import { RxExit } from "react-icons/rx";
 import {TbSettingsFilled} from "react-icons/tb";
 import { poseTable } from "../../utils/commonInfo";
+import { PoseImages } from "./PoseImages";
 
 const tmPose = window.tmPose
 const MODELURL =
@@ -64,8 +65,8 @@ const MyOverlay = styled(Overlay)`
     display:flex;
     flex-direction: column;
     position: absolute;
-    right: 1rem;
-    top: 0;
+    right: -0.5rem;
+    top: 1.5rem;
     /* opacity: 0; */
     transform: translateY(-50%);
     transition: all 0.5s ease;
@@ -82,55 +83,66 @@ const MyBtn = styled(ModalBtn)`
 `
 
 const DirectionDiv = styled.div`
-  width:30rem;
+  width:15rem;
   height:8rem;
   /* border:2px solid blue; */
   position:absolute;
   top:0;
-  left:0rem;
+  left:7rem;
   z-index:2;
   font-size:2rem;
   display:flex;
   flex-direction:row;
-  justify-content:space-between;
-  /* background-color:white; */
-  div{
+  justify-content:space-around;
+  /* background-color:blue; */
+  .arrow{
     /* border:1px solid red; */
-    width:35%;
+    height:5rem;
+  }
+  .pose-images{
+    width:10rem;
+    height:5rem;
+    background-color:green;
+  }
+  div{
+    width:40%;
     display:flex;
     flex-direction:row;
     justify-content:center;
     align-items:center;
     position:relative;
-    h4{
+    h5{
       position:absolute;
-      top:-1.5rem;
+      top:-1.3rem;
+      
+      font-size:1rem;
     }
   }
 `
 
 const GameMenu = styled.div`
-  width: 100%;
-  height: 6rem;
+  width: 15%;
+  height: 5rem;
+  left:8rem;
   position: absolute;
   top: 0;
-  background-color: orange;
-  border-radius: 50% / 100% 100% 0 0;
+  background-color: #c9f7f9;
+  /* border-radius: 50% / 100% 100% 0 0;
   transform: scaleY(2);
-  transform: rotate(180deg);
+  transform: rotate(180deg); */
   display:flex;
   align-items:center;
   justify-content:space-around;
-  z-index:1;
+  /* z-index:1; */
 `;
 
 const Settings = styled(TbSettingsFilled)`
   width:3rem;
   height:3rem;
   position:absolute;
-  top:2%;
-  right:15%;
-  z-index:2;
+  top:2.5%;
+  right:3%;
+  z-index:1;
   cursor:pointer;
 `
 
@@ -152,6 +164,15 @@ function DanceMode() {
   const [showCheerUp, setShowCheerUp] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isBtnOpen, setIsBtnOpen] = useState(false);
+  const [arrowState, setArrowState] = useState(false)
+
+  useInterval(
+    () => {
+      setArrowState(!arrowState)
+    },
+    500
+  )
+
   const toggleButton = (trigger) => {
     if (trigger==="enter"){
       setIsBtnOpen(true);
@@ -165,7 +186,6 @@ function DanceMode() {
   const videoref = useRef(null)
   
   const danceTimeline = stageItem.songMotionList
-  console.log(danceTimeline)
   const playRecord = useApi()
   const postPhoto = useApi()
 
@@ -362,9 +382,6 @@ function DanceMode() {
   console.log(isBtnOpen)
   return (
     <Screen>
-      <GameMenu/>
-      <Settings onMouseEnter={()=>toggleButton('enter')} onClick={()=>toggleButton('click')} color={isBtnOpen? '#3050d1' : 'black'}
-      />
       <img className="background-img" src={bgImg} alt="background" />
       {!playRecord.isLoading ? 
       <>
@@ -416,16 +433,20 @@ function DanceMode() {
             </h1>           */}
           </div>
           <DirectionDiv onClick={()=>videoref.current.pause()}>
-            <div>
-              <h4>NEXT</h4>
-              {poseTable[aimedPosture?.danceIndex+1]||'따라춰요!'}
+            <div className="arrow">
+              {arrowState?
+              <MdKeyboardDoubleArrowRight color="yellow" size={90}/>
+              :
+              <MdKeyboardDoubleArrowRight color="white" size={90}/>
+              }
             </div>
+            {/* <div>
+              <h5>NOW</h5>
+                {PoseImages(poseTable[aimedPosture?.danceIndex])}
+            </div> */}
             <div>
-              <MdKeyboardDoubleArrowRight size={120}/>
-            </div>
-            <div>
-              <h4>NOW</h4>
-              {poseTable[aimedPosture?.danceIndex]|| ''}
+              {/* <h5>NEXT</h5> */}
+                {PoseImages(poseTable[aimedPosture?.danceIndex])}
             </div>
           </DirectionDiv>
         </MyOverlay>
@@ -437,6 +458,9 @@ function DanceMode() {
           onTimeUpdate={handleTimeUpdate}
         />
         <PauseModal handleIsModalOpen={handleIsModalOpen} isOpen={isModalOpen} />
+        <Settings onMouseEnter={()=>toggleButton('enter')} onClick={()=>toggleButton('click')} color={isBtnOpen? '#3050d1' : 'black'}
+        />
+        <GameMenu/>
       </>
       }
     </Screen>
