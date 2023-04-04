@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-// import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -10,6 +9,7 @@ const Wrapper = styled.div`
     height:3.5rem;
     width:100%;
 `;
+
 const StyledDiv = styled.div`
     position:relative;
     display:flex;
@@ -18,9 +18,6 @@ const StyledDiv = styled.div`
     width:50%;
     height:100%;
     cursor: pointer;
-    :hover{
-      /* color:#F05475; */
-    }
     ${({active}) => `
       & > ${Highlight} {
         opacity: ${active ? 1 : 0};

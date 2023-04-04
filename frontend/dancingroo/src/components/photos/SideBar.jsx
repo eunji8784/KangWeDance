@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Wrapper } from "../common/ui/Semantics";
-
 import {MdOutlineInsertPhoto}  from 'react-icons/md';
 import {IoShapesOutline} from 'react-icons/io5';
 import {RxFrame} from 'react-icons/rx';

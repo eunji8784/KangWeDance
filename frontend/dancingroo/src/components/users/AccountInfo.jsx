@@ -1,8 +1,6 @@
 import React, {useState} from "react";
-// import { useNavigate } from "react-router-dom";
 import styled, { css } from "styled-components";
 import { useSelector,useDispatch } from "react-redux";
-import Modal from "../common/ui/Modal";
 import { editFamilyname } from "../../store/userSlice";
 import useApi from "../../hooks/auth/useApi";
 import { useEffect } from "react";
@@ -22,6 +20,7 @@ const Wrapper = styled.div`
         font-weight:bold;
     }
 `;
+
 const Title = styled.div`
     display: flex;
     align-items: center;
@@ -41,6 +40,7 @@ const Title = styled.div`
         height:2.2rem;
     }
 `;
+
 const InputStyle = css`
     outline:none;
     border:1px solid transparent;
@@ -48,6 +48,7 @@ const InputStyle = css`
     margin-bottom:0.5rem;
     left:0;
 `
+
 const Input = styled.input`
     outline:none;
     border:1px solid transparent;
@@ -57,6 +58,7 @@ const Input = styled.input`
     margin-bottom:0.5rem;
     left:0;
 `;
+
 const Experience = styled.div`
     width: 12rem;
     height: 1.3rem;
@@ -73,6 +75,7 @@ const Experience = styled.div`
         font-size:0.8rem;
     }
 `;
+
 const ExperiencePercentage = styled.div`
     width:${props=>props.gauge}%;
     height: 1.3rem;
@@ -80,8 +83,8 @@ const ExperiencePercentage = styled.div`
     border-radius: 0.5rem;
 `;
 
-function AccountInfo(props) {
-    // const navigate = useNavigate();
+function AccountInfo() {
+    /* eslint-disable */
     const dispatch = useDispatch()
     const familyname = useSelector(state=>state.userState.familyname)
     const [experiencePercentage, setExperiencePercentage] = useState(10);
@@ -89,13 +92,14 @@ function AccountInfo(props) {
     const getExp = useApi()
     const isValid = useValidation()
     const [ValidError, setValidError] = useState(false)
-    const [expForDisplay, setExpForDisplay] = useState()
+    const [expForDisplay, setExpForDisplay] = useState(null)
 
     useEffect(()=>{
         if (isValid.errors.familyname){
             setValidError(true)
         }
     },[isValid.errors.familyname])
+
     // 경험치 조회 요청
     useEffect(()=>{
         const onSuccess = (json)=>{
@@ -107,25 +111,25 @@ function AccountInfo(props) {
         }
         getExp.fetchApi('GET', '/parents/experience-score', onSuccess) // [1]. 콜백을 3번째로 넣어도 body로 안가고 콜백함수로 판단함.
     },[])
+
     // 가족닉네임 변경 요청
     const editFamilynameHandler = (e)=>{
         if (e.key!=="Enter") return
 
         if (window.confirm('가족닉네임 변경할까요?')){
             if (isValid.validate({familyname}).familynameCheck) {
-                // const onSuccess = ()=>{
-                //     dispatch(editFamilyname(familyname))
-                // }
+
                 patchFamilyname.fetchApi('PATCH', '/parents/nickname', {familyname})
             } else {
                 setValidError(true)
             }
         }
     }
+
     const handleInputChange = (e) => {
         dispatch(editFamilyname(e.target.value)); 
     };
-    // console.log(experiencePercentage)
+
     return (
         <Wrapper>
             <Title>
@@ -150,7 +154,6 @@ function AccountInfo(props) {
                 <Experience>
                     <ExperiencePercentage gauge={experiencePercentage < 10? 10 : experiencePercentage}/>
                     <span>{expForDisplay && `${expForDisplay[0]} / ${expForDisplay[1] || 'Max'}`}</span>
-                    {/* <span>Exp</span> */}
                 </Experience>
             </div>
         </Wrapper>
