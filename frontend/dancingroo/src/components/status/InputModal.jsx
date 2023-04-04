@@ -66,11 +66,6 @@ const ModFooter = styled(Footer)`
     }   
 `
 
-const Line = styled.div`
-    width: 100%;
-    border-bottom: solid 0.15rem #F05475;
-`
-
 const LabelText  = styled.label`
     width: 6rem;
     height: 1.6rem;
