@@ -36,19 +36,18 @@
 		 -->
 		SELECT 
 		    tmp1.child_idx,
-		    tmp1.calorie_consumption,
+		    (2400 + tmp1.score) AS calorie_consumption,
 		    tmp1.title,
 		    tmp1.record_date,
 		    tmp1.score
 		FROM
 		    (SELECT 
 		        s.song_idx,
-		            s.calorie_consumption,
-		            s.title,
-		            p.record_date,
-		            p.play_record_idx,
-		            p.child_idx,
-		            p.score_total AS score
+		        s.title,
+		        p.record_date,
+		        p.play_record_idx,
+		        p.child_idx,
+		        p.score_total AS score
 		    FROM
 		        songList s
 		    JOIN playRecord p ON s.song_idx = p.song_idx
