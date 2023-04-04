@@ -9,7 +9,7 @@ const Section = styled.footer`
     background-color: #ffcfd3;
 `;
 
-function FooterBar(props) {
+function FooterBar() {
     return (
         <Section>
             BottomBar

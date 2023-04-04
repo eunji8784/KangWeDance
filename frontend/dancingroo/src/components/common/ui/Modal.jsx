@@ -20,14 +20,13 @@ export const ModalWrapper = styled(Wrapper)`
 
 // ModalParent.jsx 확인
 
-function Modal(props) {
+// [2]. props로 handleIsModalOpen함수와, isModalOpen이라고 작성한 state를 넘겨준 뒤 언팩해서 사용합니다.
+function Modal({handleIsModalOpen, isOpen}) {
   // [1]. <<모달을 관리할 상위 컴포넌트에서 갖고 있을 state와 함수 (복붙해서 쓰시면 됩니다.)>>
   // const [isModalOpen, setIsModalOpen] = useState(false);
   // const handleIsModalOpen = ()=>{
   //     setIsModalOpen((prev)=>!prev)
   // }
-  // [2]. props로 handleIsModalOpen함수와, isModalOpen이라고 작성한 state를 넘겨준 뒤 언팩해서 사용합니다.
-  const {handleIsModalOpen, isOpen} = props
 
   // 아래는 시맨틱 태그를 활용해 컴포넌트를 작성하는 예시입니다.
   return (
