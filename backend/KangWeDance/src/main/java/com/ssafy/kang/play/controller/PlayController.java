@@ -85,6 +85,7 @@ public class PlayController {
 		try {
 			// 게임 기록 등록
 			playService.addPlayRecord(playRequestDto);
+			int playRecordIdx = playRequestDto.getPlayRecordIdx();
 
 			/////////// hadoop insert를 위한 코드 ////////////
 			int songIdx = playRequestDto.getSongIdx();
@@ -109,6 +110,8 @@ public class PlayController {
 
 				// 동작별 점수를 계산해서 Dto에 세팅한다.
 				playRequestDto.getScoreRecordList().get(i).setScore(experienceScore);
+				// playRecordIdx를 세팅한다.
+				playRequestDto.getScoreRecordList().get(i).setPlayRecordIdx(playRecordIdx);
 
 				// 동작별 점수 기록을 등록한다.
 				playService.addScoreRecord(playRequestDto.getScoreRecordList().get(i));
@@ -130,6 +133,9 @@ public class PlayController {
 			// 총점을 5의 배수가 될 때까지 더한다.
 			while ((int) scoreTotal % 5 != 0)
 				scoreTotal++;
+
+			// playRecord에 최종 점수를 등록한다.
+			playService.modifyPlayRecordScore((int) scoreTotal, playRecordIdx);
 
 			PlayResultResponseDto playResultResponseDto = new PlayResultResponseDto(experienceScore,
 					experienceScoreTotal, (int) scoreTotal, levelUtil.getLevel(experienceScore));

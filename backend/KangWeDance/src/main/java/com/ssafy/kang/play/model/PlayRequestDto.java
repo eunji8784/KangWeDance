@@ -18,4 +18,5 @@ public class PlayRequestDto {
 	int songIdx;
 	int playMode;
 	List<ScoreRequestDto> scoreRecordList;
+	int playRecordIdx;
 }
