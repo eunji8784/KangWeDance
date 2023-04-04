@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-// import {Wrapper, Header, Main, Article, Section, H1, H2, P, Footer} from "../components/common/ui/Semantics";
+
 const Section = styled.footer`
     position: absolute;
     bottom: 0;

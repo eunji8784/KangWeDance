@@ -1,12 +1,8 @@
 import React from "react";
-// {useEffect} from "react";
 import { Outlet } from "react-router-dom";
-// import { useNavigate,  } from "react-router-dom";
-// import { useSelector } from "react-redux";
 import TopBar from "../components/common/nav/TopBar";
 // import FooterBar from "../components/common/nav/FooterBar";
 import styled from "styled-components";
-// import ChildProfile from "../components/common/ui/ChildProfile";
 
 const Bodysuit = styled.div`
     display: flex;
@@ -16,7 +12,6 @@ const Bodysuit = styled.div`
     // @ 양 옆 마진
     margin:0 15% !important;
     z-index:2;
-    /* border: 1px solid blue; */
 `;
 const OutletWrapper = styled(Outlet)`
 `

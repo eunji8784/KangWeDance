@@ -33,7 +33,7 @@ const Rocket = () => {
     }, 100);
     setTimeout(() => {
       setIsAscending(false);
-    }, 1500); // 3초 뒤 원복
+    }, 1500);
   };
 
   return (

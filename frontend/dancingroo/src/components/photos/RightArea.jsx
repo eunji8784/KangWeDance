@@ -3,10 +3,8 @@ import styled from "styled-components";
 import { Stage, Layer, Image } from "react-konva";
 import useImage from 'use-image';
 import Swal from "sweetalert2";
-
 import { Wrapper, PinkButton } from "../common/ui/Semantics";
 import axios from "axios";
-
 import {MdCleaningServices} from 'react-icons/md';
 
 const MainSection = styled(Wrapper)`
@@ -74,6 +72,7 @@ const Rectangle = ({ url, onSelect, onChange }) => {
   };
 
 function RightArea({image, frameImage, stickerImage, stickerNum}) {
+    /* eslint-disable */
     const stageRef = useRef();
     const [resize, setResize] = useState();
     const [rectangles, setRectangles] = useState([]);
@@ -89,10 +88,6 @@ function RightArea({image, frameImage, stickerImage, stickerNum}) {
 
     //화면 크기 변화시키기
     const handleResize = () => {
-        // rectangles.map((rect) => {
-        //     rect.x = rect.x + window.innerWidth/10;
-        //     rect.y = rect.y + window.innerWidth/10;
-        // })
       setResize(window.innerWidth);
     };
     

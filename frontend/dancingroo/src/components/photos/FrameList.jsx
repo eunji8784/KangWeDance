@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { Wrapper } from "../common/ui/Semantics";
-
 import {MdDoNotDisturb} from "react-icons/md";
 import {MdLock} from 'react-icons/md'
 
