@@ -1,9 +1,6 @@
-import React
-, { useState }// , { useState } 
-from "react";
+import React, { useState } from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-// import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import useApi from "../../hooks/auth/useApi"
 import MotionChart from "./chart/MotionChart";
@@ -120,9 +117,6 @@ const Wrapper = styled.div`
           background-color:white;
           border-radius:5px;
         }
-        /* justify-content:center;
-        align-items:center; */
-
       }
     }
 `;
@@ -153,9 +147,8 @@ const ModBtn = styled(PinkButton)`
   cursor: default;
   background-color:${props=>props.color};
 ` 
-function HealthData(props) {
-    const {handleIsModalOpen} = props;
-    // const navigate = useNavigate();
+function HealthData({handleIsModalOpen}) {
+    /* eslint-disable */
     const selected = useSelector(state=>state.userState.select)
     const selectedChild = useSelector(state=>state.userState.children[selected||0]) 
     const getTagData = useApi()
@@ -209,7 +202,7 @@ function HealthData(props) {
       }
       getTagData.fetchApi('GET', '/status/tag-list', onTagResSuccess)
     },[selected])
-    console.log(bmiChanges[0]?.data.length-1)
+
     return (
         <Wrapper>
           <section className="section header">

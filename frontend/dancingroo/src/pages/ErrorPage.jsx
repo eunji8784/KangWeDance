@@ -1,7 +1,7 @@
-import React,{useEffect} from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import {Wrapper, Header, Main, Article, Section, H1, H2, P, Footer} from "../components/common/ui/Semantics";
+// import styled from "styled-components";
+import {Wrapper} from "../components/common/ui/Semantics";
 
 function ErrorPage(props) {
     const navigate = useNavigate();

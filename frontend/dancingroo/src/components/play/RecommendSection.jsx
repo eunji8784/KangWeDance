@@ -2,13 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import PlayItem from "./PlayItem";
-import  { Wrapper, H1 } from "../common/ui/Semantics";
+import  { Wrapper } from "../common/ui/Semantics";
 
 const RecommendWrapper = styled(Wrapper)`
   width: 90%;
   display: grid;
   background-color: #FFB0B6;
-  /* border: #FFB0B6 solid 1rem; */
   border-radius: 1rem;
   grid-template-columns: repeat(${props => props.numColumns}, 1fr);
   padding-top: 2rem;

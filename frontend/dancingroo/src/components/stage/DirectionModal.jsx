@@ -25,18 +25,20 @@ const DirectionInfo = styled.div`
   align-items: center;
   font-size: 1.5rem;
   text-align: center;
+  flex-direction: column;
   word-break: keep-all;
   font-weight: 400;
 `
 
 function DirectionModal({handleIsModalOpen, isOpen, directionMessage}) {
-  
+  const DirectionMessage = () => {
+    const messages = directionMessage.split(':').filter(message=>message)
+    return messages.map(message=> <H1 key={message}>{ `${message}` }</H1>)
+  }
   return (
       <DirectionModalWrapper isModalOpen={isOpen}>
           <DirectionInfo>
-            <H1>
-              {directionMessage || "양 팔을 좌우로 쭉 뻗어요~!"}
-            </H1>
+            <DirectionMessage/>
           </DirectionInfo>
           <Footer>
             <ModalBtn className="ok" onClick={()=>handleIsModalOpen()}>알겠습니다</ModalBtn>
