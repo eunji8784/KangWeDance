@@ -13,7 +13,6 @@ import { GoMute, GoUnmute } from "react-icons/go";
 const ItemWrapper = styled(Wrapper)`
   position: relative;
   min-width: 100%;
-  height: 100%;
   justify-content: normal;
 `;
 
@@ -46,19 +45,26 @@ const ThumbnailWrapper = styled(Wrapper)`
 
 const InfoWrapper = styled(Wrapper)`
   width: 100%;
+  height: 2rem;
   flex-direction: row;
   margin: 0.8rem 1rem;
   margin-bottom: 1.5rem;
   .stars {
     margin-left: auto;
     margin-right: 0.5rem;
+    align-items:normal;
+    height: 100%;
+    margin-top: 0.5rem;
   }
 `;
 
 const TagWrapper = styled(Wrapper)`
   width: 100%;
+  height: 100%;
   flex-direction: row;
   justify-content: normal;
+  align-items:normal;
+  flex-wrap: wrap;
 `;
 
 const Star = styled(TbStarFilled)`
@@ -86,6 +92,7 @@ const Tag = styled(PinkButton)`
   font-weight: 600;
   cursor: default;
   margin-right: 0;
+  margin-top: 0.2rem;
   background-color: #ffa6a6;
   transition: all 0.2s ease-in-out;
   :hover {
