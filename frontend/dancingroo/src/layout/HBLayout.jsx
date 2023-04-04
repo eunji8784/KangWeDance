@@ -1,7 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import HeaderBar from "../components/common/nav/HeaderBar";
-// import FooterBar from "../components/common/nav/FooterBar";
 import styled from "styled-components";
 import ChildProfile from "../components/common/ui/ChildProfile";
 import NoteCompo from "../components/common/effects/NoteCompo";
@@ -31,7 +30,6 @@ const HBLayout = ({watchingPage}) => {
                 <NoteCompo/>
                 <OutletWrapper />
             </Bodysuit>
-            {/* <FooterBar/>      */}
         </>
     )
 
