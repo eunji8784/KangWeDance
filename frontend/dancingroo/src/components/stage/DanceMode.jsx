@@ -466,7 +466,6 @@ function DanceMode() {
         <PauseModal handleIsModalOpen={handleIsModalOpen} isOpen={isModalOpen} />
         <Settings onMouseEnter={()=>toggleButton('enter')} onClick={()=>toggleButton('click')} color={isBtnOpen? '#3050d1' : 'black'}
         />
-        {/* <GameMenu/> */}
       </>
       }
     </Screen>
