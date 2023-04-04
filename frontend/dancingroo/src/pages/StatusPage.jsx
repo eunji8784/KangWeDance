@@ -1,6 +1,4 @@
 import React,{useState, useEffect} from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import HealthData from "../components/status/HealthData";
 import InputModal from "../components/status/InputModal";
@@ -14,10 +12,7 @@ const Wrapper = styled.div`
     justify-content: center;
 `;
 
-function StatusPage(props) {
-    const dispatch = useDispatch()
-    const navigate = useNavigate();
-    const {handleWatchingPage} = props
+function StatusPage({handleWatchingPage}) {
     const [section, setSection] = useState('health')
     const [isModalOpen, setIsModalOpen] = useState(false);
     
