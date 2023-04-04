@@ -18,7 +18,6 @@ const CenterWrapper = styled(Wrapper)`
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-
 `
 
 const Title = styled(H1)`
