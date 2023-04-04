@@ -4,6 +4,8 @@ import HealthData from "../components/status/HealthData";
 import InputModal from "../components/status/InputModal";
 import PlayData from "../components/status/PlayData";
 import StatusBar from "../components/status/StatusBar";
+import { useDispatch, useSelector } from "react-redux";
+import { patchChildState } from "../store/userSlice";
 
 const Wrapper = styled.div`
     display: flex;
@@ -13,9 +15,19 @@ const Wrapper = styled.div`
 `;
 
 function StatusPage({handleWatchingPage}) {
+    const select = useSelector(state=>state.userState.select)
+    const dispatch = useDispatch()
+    const bodyUpdateCheck = useSelector(state=>state.userState.children[select||0].bodyRecordFlag)
     const [section, setSection] = useState('health')
     const [isModalOpen, setIsModalOpen] = useState(false);
     
+    useEffect(()=>{
+        if (!bodyUpdateCheck){
+            setIsModalOpen(true)
+            dispatch(patchChildState({selectedIdx:select, name:"bodyRecordFlag", value:true}))
+        }
+    },[bodyUpdateCheck])
+
     useEffect(()=>{
         handleWatchingPage('status')
     })
@@ -26,6 +38,8 @@ function StatusPage({handleWatchingPage}) {
     const handleIsModalOpen = ()=>{
         setIsModalOpen((prev)=>!prev)
     }
+    console.log(select)
+    console.log(bodyUpdateCheck)
     return (
         <Wrapper>
             <StatusBar handleSection={handleSection}/>
