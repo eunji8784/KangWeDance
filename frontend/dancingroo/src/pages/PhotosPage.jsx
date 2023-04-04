@@ -31,6 +31,7 @@ const SideSection = styled(Wrapper)`
 `
 
 function PhotosPage({handleWatchingPage}) {
+    /* eslint-disable */
     const [section, setSection] = useState('gallery')
     const [image, setImage] = useState('https://d3qb4vbeyp8phu.cloudfront.net/photoInit.png')
     const [frameImage, setFrameImage] = useState('')

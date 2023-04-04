@@ -87,6 +87,10 @@ const Tag = styled(PinkButton)`
   cursor: default;
   margin-right: 0;
   background-color: #ffa6a6;
+  transition: all 0.2s ease-in-out;
+  :hover {
+    background-color: #F05475;
+  }
 `;
 
 const TextInfo = styled.div`
@@ -112,7 +116,7 @@ const RecommandedOverlay = styled.div`
 `
 
 function PlayItem({item, tags}) {
-
+    /* eslint-disable */
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const selected = useSelector(state=>state.userState.select)
@@ -132,7 +136,7 @@ function PlayItem({item, tags}) {
   const Stars = () => {
     return (
       <div className="stars">
-        {Array(item.difficulty).fill(null).map((_, idx) => <StarWrapper><Star key={idx} /></StarWrapper>)}
+        {Array(item.difficulty).fill(null).map((_, idx) => <StarWrapper key={idx}><Star /></StarWrapper>)}
       </div>
     )
   }
