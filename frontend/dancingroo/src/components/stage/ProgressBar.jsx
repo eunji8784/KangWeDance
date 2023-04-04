@@ -5,14 +5,14 @@ import kangkang from "../../assets/images/kangkang.png"
 
 const ProgressBarWrapper = styled.div`
   position: absolute;
-  height: 1rem;
+  height: 1.3rem;
   width: 40%;
   border-radius: 1rem;
   background-color: #FFFFFF;
   top: 5%;
-  left: 35%;
+  left: 30%;
   /* right:50%; */
-  border: 1px solid black;
+  border: 1px solid #c9f7f9;
   flex-direction: column;
   justify-content: flex-end;
 `;

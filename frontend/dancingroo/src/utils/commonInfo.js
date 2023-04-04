@@ -31,7 +31,7 @@ export const bmiCheck = (num)=>{
 }
 
 export const poseTable = {
-  1: '뒤돌아손벽치기',
+  1: '뒤돌아손뼉치기',
   2: '발차기자세',
   3: '악어자세',
   4: '시계추자세',

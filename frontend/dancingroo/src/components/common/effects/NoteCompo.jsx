@@ -12,7 +12,6 @@ const Note = styled.img`
   animation: float 5s infinite ease-in-out;
   margin: 10px;
   display: inline-block;
-  z-index:-1;
   @keyframes float {
     0% {
       transform: translateY(0px);
