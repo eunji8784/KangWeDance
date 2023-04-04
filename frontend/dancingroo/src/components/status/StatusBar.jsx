@@ -38,8 +38,7 @@ const Highlight = styled.div`
   transition: opacity 0.3 s ease-in-out;
 `;
 
-function StatusBar(props) {
-    const {handleSection} = props;
+function StatusBar({handleSection}) {
     const [activeState, setActiveState] = useState('health')
 
     const handleClick = (mode)=>{

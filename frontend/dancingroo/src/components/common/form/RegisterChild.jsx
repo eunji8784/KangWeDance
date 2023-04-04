@@ -135,7 +135,6 @@ function RegisterChild({userPage}) {
         formData.append('file', file);
         try {
             const response = await axios.post(url, formData);
-            console.log(response.data);
             if (response.data.status!==200) throw new Error(`HTTP error: ${response.data.status}`)
             dispatch(patchChildState({selectedIdx, name:"profileImageUrl", value:response.data.data}))
           } catch (error) {
