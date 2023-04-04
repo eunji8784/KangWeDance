@@ -151,6 +151,8 @@ function HealthData({handleIsModalOpen}) {
     /* eslint-disable */
     const selected = useSelector(state=>state.userState.select)
     const selectedChild = useSelector(state=>state.userState.children[selected||0]) 
+    const {nickname, height, weight, childIdx} = useSelector(state=>state.userState.children[selected||0])
+
     const getTagData = useApi()
     const getBodyChanges = useApi()
     const [heightChanges, setHeightChanges] = useState([])
@@ -201,7 +203,7 @@ function HealthData({handleIsModalOpen}) {
         setTagData(tempState)
       }
       getTagData.fetchApi('GET', '/status/tag-list', onTagResSuccess)
-    },[selected])
+    },[selected, height, weight])
 
     return (
         <Wrapper>
