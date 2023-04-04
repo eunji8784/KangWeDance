@@ -55,7 +55,7 @@ const Line = styled.div`
     margin-bottom: 2rem;
 `;
 
-function UserPage(props) {
+function UserPage() {
     const navigate = useNavigate();
     const dispatch = useDispatch()
     const addChild = useSelector(state=>state.userState.addChild)

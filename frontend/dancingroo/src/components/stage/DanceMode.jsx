@@ -67,7 +67,6 @@ const MyOverlay = styled(Overlay)`
     position: absolute;
     right: -0.5rem;
     top: 1.5rem;
-    /* opacity: 0; */
     transform: translateY(-50%);
     transition: all 0.5s ease;
   }
@@ -85,7 +84,6 @@ const MyBtn = styled(ModalBtn)`
 const DirectionDiv = styled.div`
   width:15rem;
   height:8rem;
-  /* border:2px solid blue; */
   position:absolute;
   top:0;
   left:7rem;
@@ -94,9 +92,7 @@ const DirectionDiv = styled.div`
   display:flex;
   flex-direction:row;
   justify-content:space-around;
-  /* background-color:blue; */
   .arrow{
-    /* border:1px solid red; */
     height:5rem;
   }
   .pose-images{
@@ -127,13 +123,9 @@ const GameMenu = styled.div`
   position: absolute;
   top: 0;
   background-color: #c9f7f9;
-  /* border-radius: 50% / 100% 100% 0 0;
-  transform: scaleY(2);
-  transform: rotate(180deg); */
   display:flex;
   align-items:center;
   justify-content:space-around;
-  /* z-index:1; */
 `;
 
 const Settings = styled(TbSettingsFilled)`
@@ -147,6 +139,7 @@ const Settings = styled(TbSettingsFilled)`
 `
 
 function DanceMode() {
+  /* eslint-disable */
   const stageItem = useSelector((state) => state.stage.stageItem)
   const userId = useSelector((state) => state.userState.userId)
   const children = useSelector((state) => state.userState.children)
@@ -379,7 +372,7 @@ function DanceMode() {
   const toggleAutoScreenshot = () => {
     setAutoScreenshot((prev) => !prev)
   }
-  console.log(isBtnOpen)
+  
   return (
     <Screen>
       <img className="background-img" src={bgImg} alt="background" />

@@ -71,6 +71,7 @@ const MyBtn = styled(ModalBtn)`
 `
 
 function CountMode() {
+  /* eslint-disable */
   const stageItem = useSelector((state) => state.stage.stageItem)
   const userId = useSelector((state) => state.userState.userId)
   const children = useSelector((state) => state.userState.children)
@@ -252,8 +253,8 @@ function CountMode() {
   const handleIsDirectionModalOpen = () => {
     setIsDirectionModalOpen(false)
     setShowReadyGo(true)
-    setTimeout(() => setShowReadyGo(false), 3000)
-    setTimeout(() => setGameStart(true), 3000)
+    setTimeout(() => setShowReadyGo(false), 3750)
+    setTimeout(() => setGameStart(true), 3750)
   }
 
   useInterval(
@@ -368,7 +369,7 @@ function CountMode() {
             <ModalBtn onClick={openReadyGoFeedback}>ReadyGo</ModalBtn>
             <ModalBtn onClick={openGreatFeedback}>Great</ModalBtn>
             <ModalBtn onClick={openGoodFeedback}>Good</ModalBtn>
-            <ModalBtn onClick={openCheerupFeedback}>Cheer Up</ModalBtn> */}
+          <ModalBtn onClick={openCheerupFeedback}>Cheer Up</ModalBtn> */}
             <ModalBtn onClick={replay}>종료 전으로 가기</ModalBtn>
              <h1>
               평가자세 : {aimedPosture?.danceIndex || "X"}
