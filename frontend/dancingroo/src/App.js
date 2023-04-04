@@ -7,6 +7,7 @@ import { login } from "./store/userSlice";
 // Layout
 import HBLayout from "./layout/HBLayout"
 import PHBLayout from "./layout/PHBLayout"
+import NHBLayout from "./layout/NHBLayout";
 // Pages
 import PlayPage from "./pages/PlayPage"
 import StatusPage from "./pages/StatusPage"
@@ -48,6 +49,9 @@ function App() {
         {/* 헤더+탑바 있음 */}
         <Route element={<PHBLayout watchingPage={watchingPage} isLoggedIn={isLoggedIn}/>}>
           <Route path={"/photos"} element={<PhotosPage handleWatchingPage={handleWatchingPage}/>} />
+        </Route>
+        {/* 맨 윗줄 헤더만 있음 */}
+        <Route element={<NHBLayout isLoggedIn={isLoggedIn}/>}>
           <Route path={"/users"} element={<UserPage />} />
           <Route path={"/users/join"} element={<Registration />}/>
           <Route path={"/users/oauth2-kakao"} element={<OauthKakao />}/>

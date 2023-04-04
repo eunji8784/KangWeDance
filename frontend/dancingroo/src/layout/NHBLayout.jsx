@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import TopBar from "../components/common/nav/TopBar";
+import HeaderBar from "../components/common/nav/HeaderBar";
 // import FooterBar from "../components/common/nav/FooterBar";
 import styled from "styled-components";
 
@@ -16,25 +16,16 @@ const Bodysuit = styled.div`
 const OutletWrapper = styled(Outlet)`
 `
 
-const HBLayout = () => {
-    // const navigate = useNavigate();
-
-    // useEffect(()=>{
-    //     if(isLoggedIn){
-    //         navigate("/");
-    //     }
-    // }, [isLoggedIn])
+const NHBLayout = () => {
 
     return(
         <Bodysuit>
-            <TopBar/>
-            {/* <HeaderBar/> */}
-            {/* <ChildProfile/> */}
+            <HeaderBar onlyTopBar={true}/>
             <OutletWrapper/>
-            {/* <BottomBar/> */}
+            {/* <FooterBar/> */}
         </Bodysuit>
     )
 
 }
 
-export default HBLayout;
+export default NHBLayout;
