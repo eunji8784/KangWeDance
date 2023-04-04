@@ -19,14 +19,12 @@ const Div = styled.div`
   /* background-color:green; */
   width:6rem !important;
   margin-left:-1rem;
-  margin-top:-2rem;
+  margin-top:0.5rem;
   img{
     width:4rem !important;
     height:5rem;
-    /* border:1px solid blue; */
   }
   span{
-    margin-top:-0.8rem;
     margin-left:-1.5rem;
     font-size:1.3rem !important;
   }
@@ -50,8 +48,8 @@ export const PoseImages = (posename)=>{
     case "발차기자세":
       return(
         <Div>
-          <img src={발차기1} alt="" />
           <img src={발차기2} alt="" />
+          <img src={발차기1} alt="" />
         </Div>
       )
     case "시계추자세":
