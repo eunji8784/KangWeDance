@@ -16,7 +16,6 @@ const ProgressBarWrapper = styled.div`
   justify-content: flex-end;
 `;
 
-
 const ProgressGauge = styled.div`
   bottom: 0;
   left: 0;
@@ -29,6 +28,17 @@ const ProgressGauge = styled.div`
   flex-direction:column;
   align-items:center;
   justify-content: center;
+  
+  background-image: linear-gradient(
+  to bottom,
+  rgba(255, 255, 255, 0.4) 0%,
+  rgba(255, 255, 255, 0.2) 10%,
+  rgba(255, 255, 255, 0) 30%,
+  rgba(0, 0, 0, 0) 70%,
+  rgba(0, 0, 0, 0.2) 90%,
+  rgba(0, 0, 0, 0.4) 100%
+  );
+  
   div:last-child{
     width:8rem;
     position:absolute;

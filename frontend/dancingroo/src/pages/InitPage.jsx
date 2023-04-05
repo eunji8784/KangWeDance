@@ -5,6 +5,8 @@ import bigLogo from "../assets/images/bigLogo.png"
 import bgImg from "../assets/images/bgImg.png"
 import naver_login from "../assets/images/naver_login.png"
 import kakao_login from "../assets/images/kakao_login.png"
+import { Canvas } from '@react-three/fiber';
+import SimpleModel from '../utils/SimpleModel';
 
 const Wrapper = styled.div`
     width: 100vw;
@@ -15,12 +17,12 @@ const Wrapper = styled.div`
     position:relative;
     align-items:center;
     justify-content:center;
-    & > img:first-child {
-    position: absolute;
+    & > img.bigLogo {
+    position:fixed;
     width:60%;
     min-width:35rem;
     top: 12rem;
-    z-index: 2;
+    z-index:1;
     }
     & > img:last-child {
       position: absolute;
@@ -54,6 +56,15 @@ const Wrapper = styled.div`
     }
 `;
 
+const ThreeWrapper = styled.div`
+  position:absolute;
+  width:20rem;
+  height:20rem;
+  top:0; left:0;
+  border:1px solid red;
+  z-index:1;
+`
+
 function InitPage() {
     const API_KEY_KAKAO = process.env.REACT_APP_API_KEY_KAKAO;
     // 로컬 테스트 용
@@ -68,7 +79,14 @@ function InitPage() {
 
     return (
         <Wrapper>
-          <img src={bigLogo} alt=""/>
+          <ThreeWrapper>
+            <Canvas>
+              <ambientLight />
+              <pointLight position={[10, 10, 10]} />
+              <SimpleModel />
+            </Canvas>
+          </ThreeWrapper>
+          <img src={bigLogo} alt="" className="bigLogo"/>
           <div className="socialLogin">
             <a href={OAUTH_KAKAO}>
               <img src={kakao_login} alt="" className='login-btn'/>

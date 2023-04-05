@@ -124,10 +124,6 @@ const FocusOffDirectionDiv = styled.div`
     height:5rem;
     margin-top:0.7rem;
   }
-  .pose-images{
-    width:10rem;
-    height:5rem;
-  }
   div{
     width:40%;
     display:flex;
@@ -402,9 +398,7 @@ function DanceMode() {
                 <MdKeyboardDoubleArrowRight color="white" size={90}/>
                 }
               </div>
-              <div className="pose-images">
                   {PoseImages(poseTable[aimedPosture?.danceIndex])}
-              </div>
             </DirectionDiv>
           :
             <FocusOffDirectionDiv>
@@ -415,9 +409,7 @@ function DanceMode() {
                 <MdKeyboardDoubleArrowRight color="white" size={90}/>
                 }
               </div>
-              <div>
                   {PoseImages(poseTable[aimedPosture?.danceIndex])}
-              </div>
             </FocusOffDirectionDiv>
           }
         </MyOverlay>
