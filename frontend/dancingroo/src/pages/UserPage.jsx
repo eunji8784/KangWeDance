@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import Swal from "sweetalert2";
 //componment
 import RegisterChild from "../components/common/form/RegisterChild";
 import AccountInfo from "../components/users/AccountInfo";
@@ -63,14 +64,24 @@ function UserPage() {
     const withdrawAccount = useApi()
 
     const withdrawAccountHandler = ()=>{
-        if (window.confirm('정말로 계정탈퇴하시겠습니까?')){
-            const onSuccess = ()=>{
-                removeCookie('accessToken', { path: '/' })
-                dispatch(logout())
-                navigate('/')
+        Swal.fire({
+            text: "정말로 계정탈퇴하시겠습니까?",
+            width: 320,
+            showCancelButton: true,
+            iconColor: '#F05475 ',
+            confirmButtonColor: '#F05475 ',
+            confirmButtonText: "확인",
+            cancelButtonText: "취소"
+        }).then(function(e){
+            if(e.isConfirmed === true) {
+                const onSuccess = ()=>{
+                    removeCookie('accessToken', { path: '/' })
+                    dispatch(logout())
+                    navigate('/')
+                }
+                withdrawAccount.fetchApi('DELETE', '/parents', onSuccess)
             }
-            withdrawAccount.fetchApi('DELETE', '/parents', onSuccess)
-        }
+        })
     }
     return (
         <Wrapper>

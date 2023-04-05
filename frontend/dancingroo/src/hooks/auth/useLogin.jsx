@@ -3,6 +3,7 @@ import { useCookies } from 'react-cookie';
 import { useDispatch } from 'react-redux';
 import { login,logout } from '../../store/userSlice';
 import { useNavigate } from 'react-router-dom';
+import Swal from "sweetalert2";
 
 const useLogin = () => {
   const dispatch = useDispatch()
@@ -36,7 +37,14 @@ const useLogin = () => {
       setTimeout(()=>{
         removeCookie('accessToken', { path: '/' });
         dispatch(logout());
-        alert('토큰이 만료되었습니다. 로그아웃됩니다.')
+        Swal.fire({
+          icon: 'warning',               
+          width: 300,
+          iconColor: '#F05475 ',
+          text: '로그아웃! 다시 로그인 해주세요.', 
+          confirmButtonColor: '#F05475 ',
+          confirmButtonText: '확인',
+        });
         navigate('/')
       }, expiryTime)
 
