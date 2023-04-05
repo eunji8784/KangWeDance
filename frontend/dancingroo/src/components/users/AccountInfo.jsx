@@ -6,6 +6,7 @@ import useApi from "../../hooks/auth/useApi";
 import { useEffect } from "react";
 import { levelDesign } from "../../utils/commonInfo";
 import useValidation from "../../hooks/auth/useValidation";
+import Swal from "sweetalert2";
 
 const Wrapper = styled.div`
     display: flex;
@@ -116,14 +117,23 @@ function AccountInfo() {
     const editFamilynameHandler = (e)=>{
         if (e.key!=="Enter") return
 
-        if (window.confirm('가족닉네임 변경할까요?')){
-            if (isValid.validate({familyname}).familynameCheck) {
+        Swal.fire({
+            text: "가족 닉네임을 변경하시겠습니까?",
+            width: 360,
+            showCancelButton: true,
+            confirmButtonColor: '#F05475 ',
+            confirmButtonText: "확인",
+            cancelButtonText: "취소"
+        }).then(function(e){
+            if(e.isConfirmed === true) {
+                if (isValid.validate({familyname}).familynameCheck) {
 
-                patchFamilyname.fetchApi('PATCH', '/parents/nickname', {familyname})
-            } else {
-                setValidError(true)
+                    patchFamilyname.fetchApi('PATCH', '/parents/nickname', {familyname})
+                } else {
+                    setValidError(true)
+                }
             }
-        }
+        })
     }
 
     const handleInputChange = (e) => {
