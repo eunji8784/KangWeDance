@@ -12,7 +12,7 @@ import { ModalBtn } from "../status/HealthData"
 import { useInterval } from "../../hooks/useInterval"
 import useApi from "../../hooks/auth/useApi"
 import bgImg from "../../assets/images/bgImg.png"
-import { AiFillCamera } from "react-icons/ai";
+import { AiFillSetting, AiFillCamera } from "react-icons/ai";
 import { HiSwitchHorizontal } from "react-icons/hi"
 import { HiVideoCamera, HiVideoCameraSlash } from "react-icons/hi2"
 import { RxExit } from "react-icons/rx";
@@ -39,11 +39,6 @@ const Screen = styled.div`
     right: 0;
     width: 400px;
   }
-  .test {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-  }
   .background-img {
     position: absolute;
     z-index: -1;
@@ -60,14 +55,30 @@ const MyOverlay = styled(Overlay)`
     display: flex;
     flex-direction: column;
     position: absolute;
-    right: 1rem;
-    top: 0;
+    right: -0.5rem;
+    top: 1.5rem;
+    transform: translateY(-60%);
+    transition: all 0.5s ease;
+  }
+  .button.show {
+    transform: translateY(20%);
+    opacity: 1;
   }
 `
 
 const MyBtn = styled(ModalBtn)`
   justify-content: space-evenly;
   margin: 0.5rem 1rem;
+`
+
+const Settings = styled(AiFillSetting)`
+  width:3rem;
+  height:3rem;
+  position:absolute;
+  top:2.5%;
+  right:3%;
+  z-index:1;
+  cursor:pointer;
 `
 
 function CountMode() {
@@ -84,7 +95,7 @@ function CountMode() {
   // const [motionCount, setMotionCount] = useState(0)
   const [count, setCount] = useState(0)
   const [scoreRecordList, setScoreRecordList] = useState([])
-  const [autoScreenshot, setAutoScreenshot] = useState(true)
+  const [autoScreenshot, setAutoScreenshot] = useState(false)
   const [showGreat, setShowGreat] = useState(false)
   const [showGood, setShowGood] = useState(false)
   const [showCheerUp, setShowCheerUp] = useState(false)
@@ -286,6 +297,16 @@ function CountMode() {
     setAutoScreenshot((prev) => !prev)
   }
 
+  const [isBtnOpen, setIsBtnOpen] = useState(false);
+  
+  const toggleButton = (trigger) => {
+    if (trigger==="enter"){
+      setIsBtnOpen(true);
+    } else {
+      setIsBtnOpen(false)
+    }
+  };
+
   return (
     <Screen>
       <img className="background-img" src={bgImg} alt="background" />
@@ -303,8 +324,8 @@ function CountMode() {
         />
         <MyOverlay>
           <Feedback showGreat={showGreat} showGood={showGood} showCheerUp={showCheerUp} showReadyGo={showReadyGo}/>
-          <div className="button">
-            {/* <ModalBtn>{motionCount}</ModalBtn> */}
+          {isBtnOpen &&       
+          <div open={isBtnOpen} className={isBtnOpen ? 'show button' : 'button'}>
             <MyBtn onClick={toggleAutoScreenshot} style={{fontSize:"0.7rem"}}>
               {autoScreenshot? 
                 <>
@@ -320,6 +341,7 @@ function CountMode() {
             {!afterDirection && <MyBtn onClick={switchVideo}><HiSwitchHorizontal style={{fontSize:"1.5rem"}}/>화면 전환</MyBtn>}
             <MyBtn onClick={handleIsPauseModalOpen}><RxExit style={{fontSize:"1.5rem"}}/>그만하기</MyBtn>
           </div>
+          }
         </MyOverlay>
         {!afterDirection && 
         <video
@@ -331,6 +353,7 @@ function CountMode() {
         />}
         <PauseModal handleIsModalOpen={handleIsPauseModalOpen} isOpen={isPauseModalOpen} />
         <DirectionModal handleIsModalOpen={handleIsDirectionModalOpen} isOpen={isDirectionModalOpen} directionMessage={stageItem?.explain}/>
+        <Settings onMouseEnter={()=>toggleButton('enter')} onClick={()=>toggleButton('click')} color={isBtnOpen? '#F05475' : 'black'} />
       </>
       }
     </Screen>

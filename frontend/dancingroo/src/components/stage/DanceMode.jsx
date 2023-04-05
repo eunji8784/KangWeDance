@@ -12,12 +12,11 @@ import { ModalBtn } from "../status/HealthData"
 import { useInterval } from "../../hooks/useInterval"
 import useApi from "../../hooks/auth/useApi"
 import dance_bg from "../../assets/images/dance_bg.png"
-import { AiFillCamera } from "react-icons/ai";
+import { AiFillSetting, AiFillCamera } from "react-icons/ai";
 import { HiSwitchHorizontal } from "react-icons/hi"
 import { HiVideoCamera, HiVideoCameraSlash } from "react-icons/hi2"
-import {MdKeyboardDoubleArrowRight} from "react-icons/md"
+import { MdKeyboardDoubleArrowRight } from "react-icons/md"
 import { RxExit } from "react-icons/rx";
-import {TbSettingsFilled} from "react-icons/tb";
 import { poseTable } from "../../utils/commonInfo";
 import { PoseImages } from "./PoseImages";
 
@@ -44,11 +43,6 @@ const Screen = styled.div`
     right: 0;
     width: 400px;
   }
-  .test {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-  }
   .background-img {
     position: absolute;
     z-index: -1;
@@ -67,7 +61,7 @@ const MyOverlay = styled(Overlay)`
     position: absolute;
     right: -0.5rem;
     top: 1.5rem;
-    transform: translateY(-50%);
+    transform: translateY(-60%);
     transition: all 0.5s ease;
   }
   .button.show {
@@ -87,7 +81,7 @@ const DirectionDiv = styled.div`
   background-color: #c9f7f9;
   position:absolute;
   top:0;
-  left:8rem;
+  left:10%;
   z-index:2;
   font-size:2rem;
   display:flex;
@@ -109,12 +103,13 @@ const DirectionDiv = styled.div`
     }
   }
 `
+
 const FocusOffDirectionDiv = styled.div`
   width:15rem;
   height:6rem;
   position:absolute;
   bottom:0;
-  left:18rem;
+  left:12%;
   z-index:2;
   font-size:2rem;
   display:flex;
@@ -123,10 +118,6 @@ const FocusOffDirectionDiv = styled.div`
   .arrow{
     height:5rem;
     margin-top:0.7rem;
-  }
-  .pose-images{
-    width:10rem;
-    height:5rem;
   }
   div{
     width:40%;
@@ -143,7 +134,7 @@ const FocusOffDirectionDiv = styled.div`
   }
 `
 
-const Settings = styled(TbSettingsFilled)`
+const Settings = styled(AiFillSetting)`
   width:3rem;
   height:3rem;
   position:absolute;
@@ -187,7 +178,6 @@ function DanceMode() {
     } else {
       setIsBtnOpen(false)
     }
-    
   };
 
   const camref = useRef(null)
@@ -402,9 +392,7 @@ function DanceMode() {
                 <MdKeyboardDoubleArrowRight color="white" size={90}/>
                 }
               </div>
-              <div className="pose-images">
-                  {PoseImages(poseTable[aimedPosture?.danceIndex])}
-              </div>
+              {PoseImages(poseTable[aimedPosture?.danceIndex])}
             </DirectionDiv>
           :
             <FocusOffDirectionDiv>
@@ -415,9 +403,7 @@ function DanceMode() {
                 <MdKeyboardDoubleArrowRight color="white" size={90}/>
                 }
               </div>
-              <div>
-                  {PoseImages(poseTable[aimedPosture?.danceIndex])}
-              </div>
+              {PoseImages(poseTable[aimedPosture?.danceIndex])}
             </FocusOffDirectionDiv>
           }
         </MyOverlay>
@@ -429,8 +415,7 @@ function DanceMode() {
           onTimeUpdate={handleTimeUpdate}
         />
         <PauseModal handleIsModalOpen={handleIsModalOpen} isOpen={isModalOpen} />
-        <Settings onMouseEnter={()=>toggleButton('enter')} onClick={()=>toggleButton('click')} color={isBtnOpen? '#3050d1' : 'black'}
-        />
+        <Settings onMouseEnter={()=>toggleButton('enter')} onClick={()=>toggleButton('click')} color={isBtnOpen? '#F05475' : 'black'} />
       </>
       }
     </Screen>
