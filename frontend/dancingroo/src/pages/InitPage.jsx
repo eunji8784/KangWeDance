@@ -32,10 +32,12 @@ const Wrapper = styled.div`
     .socialLogin{
       display:flex;
       flex-direction:column;
+      justify-content:space-around;
       position: absolute;
       z-index:1;
       width:20rem;
-      top: 25rem;
+      top: 28rem;
+      height: 10rem;
       left: auto; right:auto;
       font-size:30px;
       text-align:center;
