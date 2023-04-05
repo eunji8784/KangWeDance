@@ -12,7 +12,7 @@ import { ModalBtn } from "../status/HealthData"
 import { useInterval } from "../../hooks/useInterval"
 import useApi from "../../hooks/auth/useApi"
 import bgImg from "../../assets/images/bgImg.png"
-import { AiFillCamera } from "react-icons/ai";
+import { AiFillSetting, AiFillCamera } from "react-icons/ai";
 import { HiSwitchHorizontal } from "react-icons/hi"
 import { HiVideoCamera, HiVideoCameraSlash } from "react-icons/hi2"
 import { RxExit } from "react-icons/rx";
@@ -39,11 +39,6 @@ const Screen = styled.div`
     right: 0;
     width: 400px;
   }
-  .test {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-  }
   .background-img {
     position: absolute;
     z-index: -1;
@@ -60,14 +55,32 @@ const MyOverlay = styled(Overlay)`
     display: flex;
     flex-direction: column;
     position: absolute;
-    right: 1rem;
-    top: 0;
+    right: -0.5rem;
+    top: 1.5rem;
+    transform: translateY(-70%);
+    transition: all 0.5s ease;
+    z-index: 2;
+  }
+  .button.show {
+    transform: translateY(20%);
+    opacity: 1;
+    z-index: 2;
   }
 `
 
 const MyBtn = styled(ModalBtn)`
   justify-content: space-evenly;
   margin: 0.5rem 1rem;
+`
+
+const Settings = styled(AiFillSetting)`
+  width:3rem;
+  height:3rem;
+  position:absolute;
+  top:2.5%;
+  right:3%;
+  z-index:1;
+  cursor:pointer;
 `
 
 function RaceMode() {
@@ -84,7 +97,7 @@ function RaceMode() {
   // const [motionCount, setMotionCount] = useState(0)
   const [count, setCount] = useState(0)
   const [scoreRecordList, setScoreRecordList] = useState([])
-  const [autoScreenshot, setAutoScreenshot] = useState(true)
+  const [autoScreenshot, setAutoScreenshot] = useState(false)
   const [showGreat, setShowGreat] = useState(false)
   const [showGood, setShowGood] = useState(false)
   const [showCheerUp, setShowCheerUp] = useState(false)
@@ -287,6 +300,17 @@ function RaceMode() {
     setAutoScreenshot((prev) => !prev)
   }
 
+  const [isBtnOpen, setIsBtnOpen] = useState(false);
+  
+  const toggleButton = (trigger) => {
+    if (trigger==="enter"){
+      setIsBtnOpen(true);
+    } else {
+      setIsBtnOpen(false)
+    }
+  };
+
+
   return (
     <Screen>
       <img className="background-img" src={bgImg} alt="background" />
@@ -304,8 +328,8 @@ function RaceMode() {
         />
         <MyOverlay>
           <Feedback showGreat={showGreat} showGood={showGood} showCheerUp={showCheerUp} showReadyGo={showReadyGo}/>
-          <div className="button">
-            {/* <ModalBtn>{motionCount}</ModalBtn> */}
+          {isBtnOpen &&       
+          <div open={isBtnOpen} className={isBtnOpen ? 'show button' : 'button'}>
             <MyBtn onClick={toggleAutoScreenshot} style={{fontSize:"0.7rem"}}>
               {autoScreenshot? 
                 <>
@@ -321,27 +345,7 @@ function RaceMode() {
             {!afterDirection && <MyBtn onClick={switchVideo}><HiSwitchHorizontal style={{fontSize:"1.5rem"}}/>화면 전환</MyBtn>}
             <MyBtn onClick={handleIsPauseModalOpen}><RxExit style={{fontSize:"1.5rem"}}/>그만하기</MyBtn>
           </div>
-          <div className="test">
-            {/* <ModalBtn onClick={handleShowResult}>플레이 시간 종료</ModalBtn>
-            <ModalBtn onClick={plusCount}>Count +1</ModalBtn>
-            <ModalBtn onClick={openReadyGoFeedback}>ReadyGo</ModalBtn>
-            <ModalBtn onClick={openGreatFeedback}>Great</ModalBtn>
-            <ModalBtn onClick={openGoodFeedback}>Good</ModalBtn>
-            <ModalBtn onClick={openCheerupFeedback}>Cheer Up</ModalBtn> */}
-            <ModalBtn onClick={replay}>종료 전으로 가기</ModalBtn>
-            <h1>
-              평가자세 : {aimedPosture?.danceIndex || "X"}
-            </h1>          
-            <h1>
-              현재자세 : {prevPosture}
-            </h1>
-            <h1>
-              자세점수 : {aimedPosture?.countStandard ? `${count} / ${aimedPosture?.countStandard}` : "X"} 
-            </h1>        
-            <h1>
-              시간 : {playTime}
-            </h1>             
-          </div>
+          }
         </MyOverlay>
         {!afterDirection && 
         <video
@@ -353,6 +357,7 @@ function RaceMode() {
         />}
         <PauseModal handleIsModalOpen={handleIsPauseModalOpen} isOpen={isPauseModalOpen} />
         <DirectionModal handleIsModalOpen={handleIsDirectionModalOpen} isOpen={isDirectionModalOpen} directionMessage={stageItem?.explain}/>
+        <Settings onMouseEnter={()=>toggleButton('enter')} onClick={()=>toggleButton('click')} color={isBtnOpen? '#F05475' : 'black'} />
       </>
       }
     </Screen>
