@@ -44,8 +44,8 @@ const Text = styled.div`
 
 function DirectionModal({handleIsModalOpen, isOpen, directionMessage}) {
   const DirectionMessage = () => {
-    const messages = directionMessage.split(':').filter(message=>message)
-    return messages.map(message=> <Text key={message}>{ `${message}` }</Text>)
+    const messages = directionMessage?.split(':').filter(message=>message)
+    return messages?.map(message=> <Text key={message}>{ `${message}` }</Text>)
   }
   return (
       <DirectionModalWrapper isModalOpen={isOpen}>

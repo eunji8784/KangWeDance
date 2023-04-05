@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState, useCallback } from "react"
 import { useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components"
 import axios from "axios";
 import Webcam from "react-webcam"
@@ -146,6 +147,8 @@ const Settings = styled(AiFillSetting)`
 
 function DanceMode() {
   /* eslint-disable */
+  const navigate = useNavigate()
+
   const stageItem = useSelector((state) => state.stage.stageItem)
   const userId = useSelector((state) => state.userState.userId)
   const children = useSelector((state) => state.userState.children)
@@ -164,6 +167,12 @@ function DanceMode() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isBtnOpen, setIsBtnOpen] = useState(false);
   const [arrowState, setArrowState] = useState(false)
+  
+  useEffect(()=>{
+    if (stageItem==='init'){
+      navigate('/play')
+    }
+  }, [stageItem])
 
   useInterval(
     () => {

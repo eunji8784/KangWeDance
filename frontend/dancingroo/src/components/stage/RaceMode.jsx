@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState, useCallback } from "react"
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux"
 import styled from "styled-components"
 import axios from "axios";
@@ -85,6 +86,8 @@ const Settings = styled(AiFillSetting)`
 
 function RaceMode() {
   /* eslint-disable */
+  const navigate = useNavigate()
+
   const stageItem = useSelector((state) => state.stage.stageItem)
   const userId = useSelector((state) => state.userState.userId)
   const children = useSelector((state) => state.userState.children)
@@ -115,6 +118,13 @@ function RaceMode() {
 
   const playRecord = useApi()
   const postPhoto = useApi()
+
+    
+  useEffect(()=>{
+    if (stageItem==='init'){
+      navigate('/play')
+    }
+  }, [stageItem])
 
   // 처음에 모델 불러오기
   useEffect(() => {
