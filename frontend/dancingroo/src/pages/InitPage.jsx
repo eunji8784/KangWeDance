@@ -5,8 +5,6 @@ import bigLogo from "../assets/images/bigLogo.png"
 import bgImg from "../assets/images/bgImg.png"
 import naver_login from "../assets/images/naver_login.png"
 import kakao_login from "../assets/images/kakao_login.png"
-import { Canvas } from '@react-three/fiber';
-import SimpleModel from '../utils/SimpleModel';
 
 const Wrapper = styled.div`
     width: 100vw;
@@ -56,14 +54,6 @@ const Wrapper = styled.div`
     }
 `;
 
-const ThreeWrapper = styled.div`
-  position:absolute;
-  width:20rem;
-  height:20rem;
-  top:0; left:0;
-  border:1px solid red;
-  z-index:1;
-`
 
 function InitPage() {
     const API_KEY_KAKAO = process.env.REACT_APP_API_KEY_KAKAO;
@@ -79,13 +69,6 @@ function InitPage() {
 
     return (
         <Wrapper>
-          <ThreeWrapper>
-            <Canvas>
-              <ambientLight />
-              <pointLight position={[10, 10, 10]} />
-              <SimpleModel />
-            </Canvas>
-          </ThreeWrapper>
           <img src={bigLogo} alt="" className="bigLogo"/>
           <div className="socialLogin">
             <a href={OAUTH_KAKAO}>
