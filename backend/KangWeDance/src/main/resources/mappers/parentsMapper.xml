@@ -25,10 +25,11 @@
 		set familyname = #{familyname}
 		where parent_idx =#{parentIdx}
 	</update>
-	<delete id="deleteUser" parameterType="int">
-		delete from parent
+	<update id="deleteUser"  parameterType="int">
+		update parent
+		set deleted_flag = 1
 		where parent_idx = #{idx}
-	</delete>
+	</update>
 	<select id="selectSocial" parameterType="String" resultMap="parent">
 		select * 
 		from parent 
