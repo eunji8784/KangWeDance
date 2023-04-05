@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useCallback } from 'react';
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import kangkang from "../../assets/images/kangkang.png"
 
 const ProgressBarWrapper = styled.div`
@@ -11,7 +11,6 @@ const ProgressBarWrapper = styled.div`
   background-color: #FFFFFF;
   top: 5%;
   left: 30%;
-  /* right:50%; */
   border: 1px solid #c9f7f9;
   flex-direction: column;
   justify-content: flex-end;
@@ -58,7 +57,8 @@ const ProgressImg = styled.img`
 `
 
 function ProgressBar({nowProgress, endProgress}) {
-  const [progressPercent, setProgressPercent] = useState(0);
+  /* eslint-disable */
+  const [progressPercent, setProgressPercent] = useState(0.1);
 
   const message = ()=>{
     switch (true) {
@@ -81,7 +81,6 @@ function ProgressBar({nowProgress, endProgress}) {
 
   useEffect(() => {
     calculateProgress()
-
   }, [nowProgress, endProgress]);
   
   return (
