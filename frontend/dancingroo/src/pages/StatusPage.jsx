@@ -22,7 +22,7 @@ function StatusPage({handleWatchingPage}) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     
     useEffect(()=>{
-        if (!bodyUpdateCheck){
+        if (bodyUpdateCheck===false){
             setIsModalOpen(true)
             dispatch(patchChildState({selectedIdx:select, name:"bodyRecordFlag", value:true}))
         }
