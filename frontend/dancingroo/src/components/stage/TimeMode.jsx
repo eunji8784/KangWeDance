@@ -57,13 +57,14 @@ const MyOverlay = styled(Overlay)`
     position: absolute;
     right: -0.5rem;
     top: 1.5rem;
-    transform: translateY(-60%);
+    transform: translateY(-70%);
     transition: all 0.5s ease;
+    z-index: 2;
   }
   .button.show {
     transform: translateY(20%);
     opacity: 1;
-  }
+    z-index: 2;
   }
 `
 
