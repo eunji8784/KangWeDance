@@ -13,6 +13,7 @@ import { ModalBtn } from "../status/HealthData"
 import { useInterval } from "../../hooks/useInterval"
 import useApi from "../../hooks/auth/useApi"
 import dance_bg from "../../assets/images/dance_bg.png"
+import result_bg from "../../assets/images/result_bg.png"
 import { AiFillSetting, AiFillCamera } from "react-icons/ai";
 import { HiSwitchHorizontal } from "react-icons/hi"
 import { HiVideoCamera, HiVideoCameraSlash } from "react-icons/hi2"
@@ -367,13 +368,14 @@ function DanceMode() {
   console.log(playIdState)
   return (
     <Screen>
-      <img className="background-img" src={dance_bg} alt="background" />
       {!playRecord.isLoading ? 
       <>
+        <img className="background-img" src={result_bg} alt="background" />
         <PlayResult data={playRecord.data.data} playMode={stageItem.playMode}/>
       </>
       :
       <>
+        <img className="background-img" src={dance_bg} alt="background" />
         <Webcam
           className={camfocus ? "big" : "small"}
           ref={camref}
