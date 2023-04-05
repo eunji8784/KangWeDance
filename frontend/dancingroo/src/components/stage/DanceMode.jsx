@@ -64,10 +64,12 @@ const MyOverlay = styled(Overlay)`
     top: 1.5rem;
     transform: translateY(-60%);
     transition: all 0.5s ease;
+    z-index: 2;
   }
   .button.show {
     transform: translateY(20%);
     opacity: 1;
+    z-index: 2;
   }
 `
 
@@ -167,7 +169,7 @@ function DanceMode() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isBtnOpen, setIsBtnOpen] = useState(false);
   const [arrowState, setArrowState] = useState(false)
-  
+
   useEffect(()=>{
     if (stageItem==='init'){
       navigate('/play')
@@ -354,7 +356,7 @@ function DanceMode() {
   const toggleAutoScreenshot = () => {
     setAutoScreenshot((prev) => !prev)
   }
-  console.log(isBtnOpen)
+  
   return (
     <Screen>
       <img className="background-img" src={dance_bg} alt="background" />
