@@ -181,15 +181,12 @@ function Timemode() {
     bstr = atob(arr[1]),
     n = bstr.length,
     u8arr = new Uint8Array(n);
-    
     while(n--){
         u8arr[n] = bstr.charCodeAt(n);
     }
-    
     const file = new File([u8arr], "file", {type:mime});
     const formData = new FormData();
     formData.append('file', file);
-
     try {
       const response = await axios.post("https://kangwedance.site/dev/children/profile", formData);
       if (response.data.success) {
@@ -203,46 +200,6 @@ function Timemode() {
         console.error(error);
     }
   },[camref])
-  
-  // test
-  // const handleShowResult = () => {
-  //   setPlayTime(playTimeline[playTimeline.length-1]?.endTime * 1000)
-  // }
-
-  // test
-  const replay = () => {
-    videoref.current.currentTime = videoref.current.duration - 1
-    videoref.current.play()
-  }
-
-  // //test
-  // const openGreatFeedback = () => {
-  //   setShowGreat(true)
-  //   setTimeout(() => setShowGreat(false), 3000)
-  // }
-
-  // //test
-  // const openGoodFeedback = () => {
-  //   setShowGood(true)
-  //   setTimeout(() => setShowGood(false), 3000)
-  // }
-
-  // //test
-  // const openCheerupFeedback = () => {
-  //   setShowCheerUp(true)
-  //   setTimeout(() => setShowCheerUp(false), 3000)
-  // }
-
-  // //test
-  // const openReadyGoFeedback = () => {
-  //   setShowReadyGo(true)
-  //   setTimeout(() => setShowReadyGo(false), 3000)
-  // }
-
-  // //test
-  // const plusCount = () => {
-  //   setCount((prev)=>prev+1)
-  // }
 
   const handleAfterDirection = () => {
     setAfterDirection(true)
@@ -260,7 +217,7 @@ function Timemode() {
   useInterval(
     () => {
       if (gameStart && !isPauseModalOpen) {
-        setPlayTime((prev)=> prev + 10)
+        setPlayTime((prev)=> prev + 14)
         const filteredTimeline = playTimeline.find(
           (e) =>
             e.startTime * 1000 < playTime &&
@@ -362,27 +319,6 @@ function Timemode() {
             <MyBtn onClick={captureScreenshot}><AiFillCamera style={{fontSize:"1.5rem"}}/>사진 캡쳐</MyBtn>
             {!afterDirection && <MyBtn onClick={switchVideo}><HiSwitchHorizontal style={{fontSize:"1.5rem"}}/>화면 전환</MyBtn>}
             <MyBtn onClick={handleIsPauseModalOpen}><RxExit style={{fontSize:"1.5rem"}}/>그만하기</MyBtn>
-          </div>
-          <div className="test">
-            {/* <ModalBtn onClick={handleShowResult}>플레이 시간 종료</ModalBtn>
-            <ModalBtn onClick={plusCount}>Count +1</ModalBtn>
-            <ModalBtn onClick={openReadyGoFeedback}>ReadyGo</ModalBtn>
-            <ModalBtn onClick={openGreatFeedback}>Great</ModalBtn>
-            <ModalBtn onClick={openGoodFeedback}>Good</ModalBtn>
-            <ModalBtn onClick={openCheerupFeedback}>Cheer Up</ModalBtn> */}
-            <ModalBtn onClick={replay}>종료 전으로 가기</ModalBtn>
-            <h1>
-              평가자세 : {aimedPosture?.danceIndex || "X"}
-            </h1>          
-            <h1>
-              현재자세 : {prevPosture}
-            </h1>
-            <h1>
-              자세점수 : {aimedPosture?.countStandard ? `${count} / ${aimedPosture?.countStandard}` : "X"} 
-            </h1>  
-            <h1>
-              시간 : {playTime}
-            </h1>             
           </div>
         </MyOverlay>
         {!afterDirection && 

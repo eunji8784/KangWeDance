@@ -25,7 +25,7 @@ const tmPose = window.tmPose
 const MODELURL =
 "https://teachablemachine.withgoogle.com/models/7g9Z9_ogC/model.json"
 const METADATAURL =
-  "https://teachablemachine.withgoogle.com/models/7g9Z9_ogC/metadata.json"
+"https://teachablemachine.withgoogle.com/models/7g9Z9_ogC/metadata.json"
 
   
 const Screen = styled.div`
@@ -67,7 +67,6 @@ const MyOverlay = styled(Overlay)`
     position: absolute;
     right: -0.5rem;
     top: 1.5rem;
-    /* opacity: 0; */
     transform: translateY(-50%);
     transition: all 0.5s ease;
   }
@@ -85,7 +84,6 @@ const MyBtn = styled(ModalBtn)`
 const DirectionDiv = styled.div`
   width:15rem;
   height:6rem;
-  /* border:2px solid blue; */
   background-color: #c9f7f9;
   position:absolute;
   top:0;
@@ -111,10 +109,9 @@ const DirectionDiv = styled.div`
     }
   }
 `
-const DirectionDiv_FocusOut = styled.div`
+const FocusOffDirectionDiv = styled.div`
   width:15rem;
   height:6rem;
-  /* border:2px solid blue; */
   position:absolute;
   bottom:0;
   left:18rem;
@@ -141,7 +138,6 @@ const DirectionDiv_FocusOut = styled.div`
     h5{
       position:absolute;
       top:-1.3rem;
-      
       font-size:1rem;
     }
   }
@@ -158,6 +154,7 @@ const Settings = styled(TbSettingsFilled)`
 `
 
 function DanceMode() {
+  /* eslint-disable */
   const stageItem = useSelector((state) => state.stage.stageItem)
   const userId = useSelector((state) => state.userState.userId)
   const children = useSelector((state) => state.userState.children)
@@ -322,16 +319,13 @@ function DanceMode() {
     mime = arr[0].match(/:(.*?);/)[1],
     bstr = atob(arr[1]),
     n = bstr.length,
-    u8arr = new Uint8Array(n);
-    
+    u8arr = new Uint8Array(n); 
     while(n--){
         u8arr[n] = bstr.charCodeAt(n);
-    }
-    
+    }   
     const file = new File([u8arr], "file", {type:mime});
     const formData = new FormData();
     formData.append('file', file);
-
     try {
       const response = await axios.post("https://kangwedance.site/dev/children/profile", formData);
       if (response.data.success) {
@@ -345,35 +339,6 @@ function DanceMode() {
         console.error(error);
     }
   },[camref])
-
-  // test
-  // const replay = () => {
-  //   videoref.current.currentTime = videoref.current.duration - 1
-  //   videoref.current.play()
-  // }
-
-  // //test
-  // const openGreatFeedback = () => {
-  //   setShowGreat(true)
-  //   setTimeout(() => setShowGreat(false), 3000)
-  // }
-
-  // //test
-  // const openGoodFeedback = () => {
-  //   setShowGood(true)
-  //   setTimeout(() => setShowGood(false), 3000)
-  // }
-
-  // //test
-  // const openCheerupFeedback = () => {
-  //   setShowCheerUp(true)
-  //   setTimeout(() => setShowCheerUp(false), 3000)
-  // }
-
-  //test
-  // const plusCount = () => {
-  //   setCount((prev)=>prev+1)
-  // }
 
   useEffect(() => {
     if (scoreRecordList.length === danceTimeline?.length) {
@@ -442,7 +407,7 @@ function DanceMode() {
               </div>
             </DirectionDiv>
           :
-            <DirectionDiv_FocusOut>
+            <FocusOffDirectionDiv>
               <div className="arrow">
                 {arrowState?
                 <MdKeyboardDoubleArrowRight color="yellow" size={90}/>
@@ -453,13 +418,13 @@ function DanceMode() {
               <div>
                   {PoseImages(poseTable[aimedPosture?.danceIndex])}
               </div>
-            </DirectionDiv_FocusOut>
+            </FocusOffDirectionDiv>
           }
         </MyOverlay>
         <video
           className={camfocus ? "small" : "big"}
           ref={videoref}
-          src={stageItem.videoUrl !== 'url' ? stageItem.videoUrl : `https://d3qb4vbeyp8phu.cloudfront.net/%EB%8F%99%EB%AC%BC.MOV`} // 빼기
+          src={stageItem.videoUrl}
           onCanPlayThrough={()=>videoref.current.play()}
           onTimeUpdate={handleTimeUpdate}
         />

@@ -7,16 +7,7 @@ import 시계추자세2 from "../../assets/images/motions/시계추자세2.png"
 import 악어자세1 from "../../assets/images/motions/악어자세1.png"
 import 악어자세2 from "../../assets/images/motions/악어자세2.png"
 
-// const Stars = () => {
-//   return (
-//     <div className="stars">
-//       {Array(item.difficulty).fill(null).map((_, idx) =>     <StarWrapper><Star key={idx} /></StarWrapper>)}
-//     </div>
-//   )
-// }
-
-const Div = styled.div`
-  /* background-color:green; */
+const Div = styled.div`/
   width:6rem !important;
   margin-left:-1rem;
   margin-top:0.5rem;

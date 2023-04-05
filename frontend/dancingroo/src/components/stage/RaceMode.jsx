@@ -181,15 +181,12 @@ function RaceMode() {
     bstr = atob(arr[1]),
     n = bstr.length,
     u8arr = new Uint8Array(n);
-    
     while(n--){
         u8arr[n] = bstr.charCodeAt(n);
     }
-    
     const file = new File([u8arr], "file", {type:mime});
     const formData = new FormData();
     formData.append('file', file);
-
     try {
       const response = await axios.post("https://kangwedance.site/dev/children/profile", formData);
       if (response.data.success) {
@@ -203,46 +200,7 @@ function RaceMode() {
         console.error(error);
     }
   },[camref])
-  
-  // test
-  // const handleShowResult = () => {
-  //   setPlayTime(playTimeline[playTimeline.length-1]?.endTime * 1000)
-  // }
-
-  // test
-  const replay = () => {
-    videoref.current.currentTime = videoref.current.duration - 1
-    videoref.current.play()
-  }
-
-  // //test
-  // const openGreatFeedback = () => {
-  //   setShowGreat(true)
-  //   setTimeout(() => setShowGreat(false), 3000)
-  // }
-
-  // //test
-  // const openGoodFeedback = () => {
-  //   setShowGood(true)
-  //   setTimeout(() => setShowGood(false), 3000)
-  // }
-
-  // //test
-  // const openCheerupFeedback = () => {
-  //   setShowCheerUp(true)
-  //   setTimeout(() => setShowCheerUp(false), 3000)
-  // }
-
-  // //test
-  // const openReadyGoFeedback = () => {
-  //   setShowReadyGo(true)
-  //   setTimeout(() => setShowReadyGo(false), 3000)
-  // }
-
-  // //test
-  // const plusCount = () => {
-  //   setCount((prev)=>prev+1)
-  // }
+ 
 
   const handleAfterDirection = () => {
     setAfterDirection(true)
@@ -260,7 +218,7 @@ function RaceMode() {
   useInterval(
     () => {
       if (gameStart && !isPauseModalOpen) {
-        setPlayTime((prev)=> prev + 10)
+        setPlayTime((prev)=> prev + 14)
         const filteredTimeline = playTimeline.find(
           (e) =>
             e.startTime * 1000 < playTime &&
@@ -389,7 +347,7 @@ function RaceMode() {
         <video
           className={camfocus ? "small" : "big"}
           ref={videoref}
-          src={stageItem.videoUrl !== 'url' ? stageItem.videoUrl : `https://d3qb4vbeyp8phu.cloudfront.net/%EB%8F%99%EB%AC%BC.MOV`} // 빼기
+          src={stageItem.videoUrl}
           onCanPlayThrough={()=>videoref.current.play()}
           onEnded={handleAfterDirection}
         />}
