@@ -68,7 +68,7 @@ const ProgressImg = styled.img`
 
 function ProgressBar({nowProgress, endProgress}) {
   /* eslint-disable */
-  const [progressPercent, setProgressPercent] = useState(0.1);
+  const [progressPercent, setProgressPercent] = useState(0);
 
   const message = ()=>{
     switch (true) {
