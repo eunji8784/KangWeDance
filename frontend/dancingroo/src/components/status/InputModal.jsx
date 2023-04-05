@@ -107,7 +107,7 @@ function InputModal({handleIsModalOpen, isOpen}) {
                 
                 const onSuccess = ()=>{
                     Swal.fire({
-                        text:'등록되었습니다!',
+                        text:'등록 성공!!',
                         width: 300,
                         confirmButtonColor: '#F05475'
                     })
