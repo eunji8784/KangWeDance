@@ -11,6 +11,7 @@ import Dance from '../../../assets/images/Dance.png'
 import Gallery from '../../../assets/images/Gallery.png'
 import Status from '../../../assets/images/Status.png'
 import  { Line } from "../ui/Semantics";
+import Swal from "sweetalert2";
 
 const Wrapper = styled.div`
     display: flex;
@@ -149,9 +150,19 @@ function HeaderBar({watchingPage, onlyTopBar}) {
         }
     },[data])
     const logoutHandler = ()=>{
-        if (window.confirm('로그아웃 하시겠습니까?')){
-            handleLogout()
-        }
+        Swal.fire({
+            text: "로그아웃 하시겠습니까?",
+            width: 320,
+            showCancelButton: true,
+            iconColor: '#F05475 ',
+            confirmButtonColor: '#F05475 ',
+            confirmButtonText: "확인",
+            cancelButtonText: "취소"
+        }).then(function(e){
+            if(e.isConfirmed === true) {
+                handleLogout()
+            }
+        })
     }
     
     return (
