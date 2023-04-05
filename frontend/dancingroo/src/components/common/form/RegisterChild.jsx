@@ -9,6 +9,7 @@ import { getChildState, patchChildState, childSelect } from "../../../store/user
 import { useDispatch,useSelector } from "react-redux";
 import axios from "axios";
 import useValidation from "../../../hooks/auth/useValidation";
+import Swal from "sweetalert2";
 
 const ModWrapper = styled(Wrapper)`
     width: 100vw;
@@ -124,7 +125,13 @@ function RegisterChild({userPage}) {
     const [dateValidError, setDateValidError] = useState(false)
 
     const onProfileUpdateSuccess = (json)=>{
-        alert('아이 프로필 등록이 완료되었습니다.')
+        Swal.fire({               
+            width: 400,
+            iconColor: '#F05475 ',
+            text: '아이 프로필 등록이 완료되었습니다.', 
+            confirmButtonColor: '#F05475 ',
+            confirmButtonText: '확인',
+          });
         dispatch(childSelect(0))
         navigate('/play')
     }
@@ -149,20 +156,38 @@ function RegisterChild({userPage}) {
         fileInput.current.click()
     }
     const handleDeleteChild = ()=>{
-        if (window.confirm('아이 프로필 삭제하시겠습니까?')){
-            const onSuccess = ()=>{
-                alert('아이 프로필이 삭제되었습니다.')
-                if (childIdx===firstChildIdx&&!secondChildIdx){ // 아이가 0명일 때
-                    dispatch(getChildState([{}]))
-                    navigate('/users/join')
-                } else {
-                    dispatch(childSelect(0))
-                    navigate('/play')
-                } 
+        Swal.fire({
+            text: "아이 프로필 삭제하시겠습니까?",
+            width: 360,
+            showCancelButton: true,
+            iconColor: '#F05475 ',
+            confirmButtonColor: '#F05475 ',
+            confirmButtonText: "삭제",
+            cancelButtonText: "취소"
+        }).then(function(e){
+            if(e.isConfirmed === true) {
+                const onSuccess = ()=>{
+                    Swal.fire({             
+                        width: 360,
+                        iconColor: '#F05475 ',
+                        text: '아이 프로필이 삭제되었습니다.', 
+                        confirmButtonColor: '#F05475 ',
+                        confirmButtonText: '확인',
+                    });
+                    if (childIdx===firstChildIdx&&!secondChildIdx){ // 아이가 0명일 때
+                        dispatch(getChildState([{}]))
+                        navigate('/users/join')
+                    } else {
+                        dispatch(childSelect(0))
+                        navigate('/play')
+                    } 
+                }
+                deleteChild.fetchApi('DELETE', `/children?childIdx=${childIdx}`, onSuccess)
+               
             }
-            deleteChild.fetchApi('DELETE', `/children?childIdx=${childIdx}`, onSuccess)
-        }
+        })
     }
+
     const SumbitChild = ()=>{
         const body = {
             nickname,
