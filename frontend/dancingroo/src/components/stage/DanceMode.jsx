@@ -61,8 +61,8 @@ const MyOverlay = styled(Overlay)`
     display:flex;
     flex-direction: column;
     position: absolute;
-    right: -0.5rem;
-    top: 1.5rem;
+    right: 0rem;
+    top: 3rem;
     transform: translateY(-60%);
     transition: all 0.5s ease;
     z-index: 2;
@@ -82,9 +82,10 @@ const MyBtn = styled(ModalBtn)`
 const DirectionDiv = styled.div`
   width:15rem;
   height:6rem;
-  background-color: #c9f7f9;
+  border-radius:1rem;
+  background-color: #bff9fa;
   position:absolute;
-  top:0;
+  top:0.5rem;
   left:10%;
   z-index:2;
   font-size:2rem;
@@ -142,7 +143,7 @@ const Settings = styled(AiFillSetting)`
   width:3rem;
   height:3rem;
   position:absolute;
-  top:2.5%;
+  top:2.5rem;
   right:3%;
   z-index:1;
   cursor:pointer;
