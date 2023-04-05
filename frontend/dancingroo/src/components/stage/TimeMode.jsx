@@ -12,7 +12,8 @@ import { Overlay } from "../common/ui/Semantics"
 import { ModalBtn } from "../status/HealthData"
 import { useInterval } from "../../hooks/useInterval"
 import useApi from "../../hooks/auth/useApi"
-import bgImg from "../../assets/images/bgImg.png"
+import game_bg from "../../assets/images/game_bg.png"
+import result_bg from "../../assets/images/result_bg.png"
 import { AiFillSetting, AiFillCamera } from "react-icons/ai";
 import { HiSwitchHorizontal } from "react-icons/hi"
 import { HiVideoCamera, HiVideoCameraSlash } from "react-icons/hi2"
@@ -320,13 +321,14 @@ function Timemode() {
 
   return (
     <Screen>
-      <img className="background-img" src={bgImg} alt="background" />
       {!playRecord.isLoading ? 
       <>
+        <img className="background-img" src={result_bg} alt="background" />
         <PlayResult data={playRecord.data.data} playMode={stageItem.playMode}/>
       </>
       :
       <>
+        <img className="background-img" src={game_bg} alt="background" />
         <Webcam
           className={camfocus ? "big" : "small"}
           ref={camref}

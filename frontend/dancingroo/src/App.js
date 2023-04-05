@@ -56,7 +56,7 @@ function App() {
           <Route path={"/users/join"} element={<Registration />}/>
           <Route path={"/users/oauth2-kakao"} element={<OauthKakao />}/>
           <Route path={"/users/oauth2-naver"} element={<OauthNaver />}/>
-          <Route path={"/error"} element={<ErrorPage/>} />
+          <Route path={"/*"} element={<ErrorPage/>} />
         </Route>
         {/* 헤더 없음 */}
         <Route path={"/"} element={<InitPage/>}/>
