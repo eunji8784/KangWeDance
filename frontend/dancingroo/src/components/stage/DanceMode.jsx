@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState, useCallback } from "react"
 import { useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components"
 import axios from "axios";
 import Webcam from "react-webcam"
@@ -151,6 +151,8 @@ const Settings = styled(AiFillSetting)`
 function DanceMode() {
   /* eslint-disable */
   const navigate = useNavigate()
+  const params = useParams()
+  const playId = params.playId
 
   const stageItem = useSelector((state) => state.stage.stageItem)
   const userId = useSelector((state) => state.userState.userId)
@@ -170,6 +172,12 @@ function DanceMode() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isBtnOpen, setIsBtnOpen] = useState(false);
   const [arrowState, setArrowState] = useState(false)
+  const [playIdState, setPlayIdState] = useState("0")
+  
+  useEffect(()=>{
+    setPlayIdState(playId)
+  }, [playId, playIdState])
+  
 
   useEffect(()=>{
     if (stageItem==='init'){
@@ -357,7 +365,7 @@ function DanceMode() {
   const toggleAutoScreenshot = () => {
     setAutoScreenshot((prev) => !prev)
   }
-  
+  console.log(playIdState)
   return (
     <Screen>
       {!playRecord.isLoading ? 
@@ -394,27 +402,27 @@ function DanceMode() {
             <MyBtn onClick={handleIsModalOpen}><RxExit style={{fontSize:"1.5rem"}}/>그만하기</MyBtn>
           </div>
           }
-          <ProgressBar nowProgress={videoref?.current?.currentTime} endProgress={videoref?.current?.duration}/>
+          <ProgressBar nowProgress={videoref?.current?.currentTime} endProgress={videoref?.current?.duration}/> 
           {!camfocus?
-            <DirectionDiv onClick={()=>videoref.current.pause()}
+            <DirectionDiv onClick={()=>videoref.current.pause()} style={{ display: playIdState === "1" ? 'flex' : 'none' }}
             >
               <div className="arrow">
                 {arrowState?
                 <MdKeyboardDoubleArrowRight color="yellow" size={90}/>
                 :
                 <MdKeyboardDoubleArrowRight color="white" size={90}/>
-                }
+              }
               </div>
                   {PoseImages(poseTable[aimedPosture?.danceIndex])}
             </DirectionDiv>
           :
-            <FocusOffDirectionDiv>
+            <FocusOffDirectionDiv style={{display:playIdState==="1"? 'flex':'none'}}>
               <div className="arrow">
                 {arrowState?
                 <MdKeyboardDoubleArrowRight color="yellow" size={90}/>
                 :
                 <MdKeyboardDoubleArrowRight color="white" size={90}/>
-                }
+              }
               </div>
                   {PoseImages(poseTable[aimedPosture?.danceIndex])}
             </FocusOffDirectionDiv>
