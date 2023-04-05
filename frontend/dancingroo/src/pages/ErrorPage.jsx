@@ -1,17 +1,29 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-// import styled from "styled-components";
+import styled from "styled-components";
 import {Wrapper} from "../components/common/ui/Semantics";
+import eastereggJpg from "../assets/images/easteregg.jpg"
+import { H1, P } from "../components/common/ui/Semantics";
+
+const ErrorWrapper = styled(Wrapper)`
+    margin-top: 5%;
+    height: 80%;
+`
+
+const ErrorImage = styled.img`
+    height: 80%;
+`
+
+const ErrorMessage = styled(P)`
+    
+`
 
 function ErrorPage() {
-    const navigate = useNavigate();
     return (
-        <Wrapper>
-            ErrorPage
-            <p onClick={()=>navigate('/')}>
-            홈으로 이동
-            </p>
-        </Wrapper>
+        <ErrorWrapper>
+            <ErrorMessage>잘못된 접근입니다</ErrorMessage>
+            <ErrorImage src={eastereggJpg} alt="background" />
+            <H1>팀 캥거루합창단</H1>
+        </ErrorWrapper>
     );
 }
 
