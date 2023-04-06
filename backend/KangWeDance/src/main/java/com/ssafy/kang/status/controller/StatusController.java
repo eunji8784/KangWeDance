@@ -55,6 +55,7 @@ public class StatusController {
 			@RequestHeader("accesstoken") String accesstoken) throws Exception {
 		try {
 			List<PlayRecordDto> playRecordDto = statusService.findplayRecord(date);
+			
 			return ApiResponse.success(SuccessCode.READ_PLAYRECORD_LIST, playRecordDto);
 		} catch (Exception e) {
 			e.printStackTrace();
