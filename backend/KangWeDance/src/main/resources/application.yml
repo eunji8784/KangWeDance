@@ -68,3 +68,8 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+
+hive: 
+  connectionURL: jdbc:hive2://52.55.191.26:10606/default
+  username: APP
+  password: mine

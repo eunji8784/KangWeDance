@@ -11,10 +11,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class FinishScoreDto {
-	int score;// 점수
-	int playMode; // 플레이모드
-	int level; // 레벨
-	int experienceScore;// 경험치
-	boolean isCompensated; // 보상여부
+public class PlayRecommendationDto {
+	int childIdx;
+	SongListDto recommendationSong;
 }

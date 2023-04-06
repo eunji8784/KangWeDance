@@ -11,20 +11,18 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.amazonaws.services.s3.AmazonS3Client;
 import com.ssafy.kang.common.ErrorCode;
 import com.ssafy.kang.common.SuccessCode;
 import com.ssafy.kang.common.dto.ApiResponse;
+import com.ssafy.kang.photos.model.FramesDto;
 import com.ssafy.kang.photos.model.PhotosDto;
 import com.ssafy.kang.photos.model.PhotosPageDto;
-import com.ssafy.kang.photos.model.PramesDto;
 import com.ssafy.kang.photos.model.service.PhotosService;
 import com.ssafy.kang.util.JwtUtil;
 
@@ -37,7 +35,6 @@ import lombok.RequiredArgsConstructor;
 public class PhotosController {
 	@Autowired
 	PhotosService photosService;
-	private final AmazonS3Client amazonS3Client;
 	private JwtUtil jwtService = new JwtUtil();
 	@Value("${cloud.aws.s3.bucket}")
 	private String bucket;
@@ -48,11 +45,12 @@ public class PhotosController {
 //	| orderAdd() | 등록만 하는 유형의 controller 메서드 |
 //	| orderModify() | 수정만 하는 유형의 controller 메서드 |
 //	| orderRemove() | 삭제만 하는 유형의 controller 메서드 |
-
 	@PostMapping
-	public ApiResponse<?> photosAdd(@RequestPart("file") MultipartFile file) throws Exception {
+	public ApiResponse<?> photosAdd(@RequestHeader("accesstoken") String accesstoken, @RequestBody PhotosDto photosDto)
+			throws Exception {
 		try {
-			photosService.addUpdate(file);
+			photosDto.setParentIdx(jwtService.getUserIdx(accesstoken));
+			photosService.addUpdate(photosDto);
 			return ApiResponse.success(SuccessCode.CREATE_PHOTO);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -84,14 +82,14 @@ public class PhotosController {
 		}
 	}
 
-	@GetMapping("/prames")
-	public ApiResponse<?> pramesDetails(@RequestParam("pageNum") int pageNum) throws Exception {
+	@GetMapping("/frames")
+	public ApiResponse<?> framesDetails(@RequestHeader("accesstoken") String accessToken) throws Exception {
 
 		// 페이징 처리를 위한 Map 선언
 		Map<String, Object> page = new HashMap<>();
 		try {
 			// 임시값 -> 토큰 구현전까지만 이렇게 사용
-			int parentIdx = 2;
+			int parentIdx = jwtService.getUserIdx(accessToken);
 			int parentExperience = photosService.findLevel(parentIdx);
 
 			int level = 1;
@@ -115,12 +113,16 @@ public class PhotosController {
 			else if (parentExperience >= 2560)
 				level = 10;
 
-			List<PramesDto> pramesDto = photosService.findPrames(level, pageNum);
+			List<FramesDto> frameDto = photosService.findFrames(level);
+			List<FramesDto> stickerDto = photosService.findStickers();
 
-			// 페이징 처리를 위한 코드 - 전체 카운트
-			int total = photosService.findPramesCount(level);
-			page.put("prameList", pramesDto);
-			page.put("pageNum", new PhotosPageDto(pageNum, total));
+			for (int i = 0; i < level && i < 5; i++) {
+				frameDto.get(i).setUnLock(true);
+			}
+
+			// 스티커랑 프레임 전송
+			page.put("frame", frameDto);
+			page.put("sticker", stickerDto);
 
 			return ApiResponse.success(SuccessCode.READ_PRAME_LIST, page);
 		} catch (Exception e) {
@@ -131,7 +133,7 @@ public class PhotosController {
 
 	@DeleteMapping("/{photoIdx}")
 	public ApiResponse<?> photoRemove(@PathVariable("photoIdx") int photoIdx,
-			@RequestHeader("access_token") String accessToken) throws Exception {
+			@RequestHeader("accesstoken") String accessToken) throws Exception {
 		try {
 			// 임시값 -> 토큰 구현전까지만 이렇게 사용
 

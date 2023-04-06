@@ -4,24 +4,26 @@
 	<resultMap id="child" type="ChildrenDto">
 		<result column="child_idx" property="childIdx" />
 		<result column="parent_idx" property="parentIdx" />
-		<result column="nickname" property="nickname" />
 		<result column="profile_image_url" property="profileImageUrl" />
-		<result column="gender" property="gender" />
 		<result column="birth_date" property="birthDate" />
+		<result column="body_record_flag" property="bodyRecordFlag" />
+	</resultMap>
+	<resultMap id="hadoop" type="BodyRecordForHadoop">
+		<result column="body_record_idx" property="bodyRecordIdx" />
+		<result column="child_idx" property="childIdx" />
 		<result column="weight" property="weight" />
 		<result column="height" property="height" />
 		<result column="bmi" property="bmi" />
 		<result column="today_calrories" property="todayCalrories" />
+		<result column="record_date" property="recordDate" />
 	</resultMap>
-	
 	<insert id="insertChildren" parameterType="ChildrenDto" useGeneratedKeys="true" keyColumn="child_idx" keyProperty="childIdx">
 		insert into children(parent_idx, nickname,profile_image_url,gender,birth_date)
 		value (#{parentIdx},#{nickname},#{profileImageUrl},#{gender},#{birthDate});
 	</insert>
-	
 	<insert id="insertChildrenBody">
-		insert into bodyRecord(child_idx,weight,height,bmi,today_calrories,record_date)
-		value(#{childIdx},#{weight},#{height},#{bmi},#{todayCalrories},now());
+		insert into bodyRecord(child_idx,weight,height,bmi,record_date)
+		values(#{childIdx},#{weight},#{height},#{bmi},curdate());
 	</insert>
 	<delete id="deleteChildren" parameterType="int">
 		delete from ch,br
@@ -39,8 +41,75 @@
 		where child_idx = #{childIdx}
 	</update>
 	<select id="selectChildren" parameterType="int" resultMap="child">
-		select child_idx,parent_idx,nickname,profile_image_url,gender,birth_date
-		from children
-		where parent_idx = #{parentIdx};
+		WITH latest_body_record AS(
+			SELECT 
+				child_idx, MAX(record_date) AS record_date
+			FROM
+				bodyRecord
+			GROUP BY child_idx
+		),
+		body_record_details AS(
+			SELECT 
+				body_record_idx,
+				br.child_idx,
+				weight,
+				height,
+				bmi,
+				br.record_date,
+				IF(MONTH(latest.record_date) = MONTH(CURDATE()),
+					1,
+					0) AS body_record_flag
+			FROM
+				bodyRecord br
+					JOIN
+				latest_body_record latest
+			WHERE
+				br.child_idx = latest.child_idx
+					AND br.record_date = latest.record_date
+		)
+
+		SELECT 
+			body.child_idx,
+			ch.parent_idx AS parent_idx,
+			nickname,
+			familyname,
+			profile_image_url,
+			gender,
+			birth_date,
+			weight,
+			height,
+			body_record_flag
+		FROM
+			children ch
+				JOIN
+			parent p ON ch.parent_idx = p.parent_idx
+				JOIN
+			body_record_details body ON ch.child_idx = body.child_idx
+		WHERE
+			ch.parent_idx = #{parentIdx};
 	</select>
+	<select id="selectBodyRecordForHadoop" resultMap="hadoop">
+		select *
+		from bodyRecord
+		where record_date=curdate()-1;
+	</select>
+	<select id="selectChildrenBodyRecord" parameterType="BodyRecordDto" resultType="String">
+		SELECT 
+		    body_record_idx
+		FROM
+		    bodyRecord
+		WHERE
+		    child_idx = #{childIdx}
+		        AND record_date = CURDATE()
+	</select>
+	<update id="updateChildrenBody" parameterType="BodyRecordDto">
+		UPDATE bodyRecord 
+		SET 
+		    weight = #{weight},
+		    height = #{height},
+		    bmi = #{bmi}
+		WHERE
+		    child_idx = #{childIdx}
+				AND record_date = CURDATE()
+	</update>
 </mapper>
