@@ -58,12 +58,10 @@ const Wrapper = styled.div`
 
 
 function InitPage() {
+    // 카카오
     const API_KEY_KAKAO = process.env.REACT_APP_API_KEY_KAKAO;
-    // 로컬 테스트 용
-    const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI
-    // 배포 서버 용
     const REDIRECT_URI_SITE = process.env.REACT_APP_REDIRECT_URI_SITE
-    const OAUTH_KAKAO = `https://kauth.kakao.com/oauth/authorize?client_id=${API_KEY_KAKAO}&redirect_uri=${REDIRECT_URI+'kakao'}&response_type=code`
+    const OAUTH_KAKAO = `https://kauth.kakao.com/oauth/authorize?client_id=${API_KEY_KAKAO}&redirect_uri=${REDIRECT_URI_SITE+'kakao'}&response_type=code`
     // 네이버
     const API_KEY_NAVER = process.env.REACT_APP_API_KEY_NAVER
     const STATE_TOKEN = process.env.REACT_APP_STATE_TOKEN 
