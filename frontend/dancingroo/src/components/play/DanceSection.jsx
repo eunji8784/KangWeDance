@@ -34,7 +34,7 @@ function DanceSection({danceData}) {
   return (
     <>
     <DescribeSection imgUrl={dance} color="#FFFBEB" title="댄스 모드" 
-    context="신나는 노래에 맞춰 율동 체조!"/>
+    context="신나는 노래에 맞춰 댄스!"/>
       <DanceWrapper numColumns={numColumns}>
         {danceData?.map((item) => <PlayItem key={item.songIdx} item={item} />)}
       </DanceWrapper>
