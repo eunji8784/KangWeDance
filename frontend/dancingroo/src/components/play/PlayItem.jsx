@@ -12,7 +12,7 @@ import { GoMute, GoUnmute } from "react-icons/go";
 
 const ItemWrapper = styled(Wrapper)`
   position: relative;
-  min-width: 100%;
+  width: 100%;
   justify-content: normal;
 `;
 
