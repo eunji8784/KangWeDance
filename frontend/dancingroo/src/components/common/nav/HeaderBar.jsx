@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import useLogout from "../../../hooks/auth/useLogout";
@@ -6,59 +6,68 @@ import { useSelector, useDispatch } from "react-redux";
 import { childSelect } from "../../../store/userSlice";
 //logo
 import logo from "../../../assets/images/logo.png"
-import {RiUserFill} from "react-icons/ri";
+import {RiUser3Fill} from "react-icons/ri";
 import Dance from '../../../assets/images/Dance.png'
 import Gallery from '../../../assets/images/Gallery.png'
 import Status from '../../../assets/images/Status.png'
+import  { Line } from "../ui/Semantics";
+import Swal from "sweetalert2";
 
 const Wrapper = styled.div`
     display: flex;
     flex-direction:column;
     align-items: center;
     justify-content: space-between;
-    min-height:10rem;
+    min-height:${props=>props.onlyTopBar ? 3 : 10}rem;
     .bottom-line {
     width: 100vw;
     height: 2px;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   }
 `;
+
 const Menu = styled.img`
-    /* border: 1px solid black; */
     width:4rem;
     cursor: pointer;
     transition: transform 0.3s ease-in-out;
 `;
+
 const Logo = styled.div`
-    /* background-color:gold; */
     width: 12rem;
-    height: 3rem;
+    height: 2.4rem;
     background-image:url(${logo});
     background-size:cover;
     cursor: pointer;
 `
+
 const BarContainer = styled.div`
-    /* border: 1px solid black; */
     width:${props=>props.width}%;
     height: ${props=>props.height}%;
     display:flex;
     align-items:center;
     justify-content:${props=>props.justify};
-    /* border:1px solid red; */
     .user-menu{
-        /* border:1px solid blue; */
         display:flex;
         justify-content:space-between;
         width:6rem;
         align-items:center;
-        /* margin-top:0.5rem; */
         &>div{
             cursor: pointer;
         }
     }
+    .user-icon{
+        display:flex;
+        align-items:center;
+        cursor: pointer;
+    }
+    .username{
+        position:absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
 `
+
 const LogoContainer = styled.div`
-    /* border: 1px solid red; */
     position:relative;
     display:flex;
     flex-direction:column;
@@ -75,9 +84,6 @@ const LogoContainer = styled.div`
     &>img:hover{
         transform: scale(1.1);
         // img와 형제요소인 span선택자.
-        &~span{
-            /* font-weight:bold;  */
-        }
     }
 `
 const Highlight = styled.div`
@@ -90,6 +96,7 @@ const Highlight = styled.div`
     opacity: ${({ active }) => active ? 1 : 0};
     transition: opacity 0.3s ease-in-out;
 `;
+
 const LogOut = styled.div`
     display: flex;
     justify-content: center;
@@ -115,15 +122,14 @@ const LogOut = styled.div`
   }
 `
 
-function HeaderBar(props) {
-    const {watchingPage} = props;
+function HeaderBar({watchingPage, onlyTopBar}) {
+    /* eslint-disable */
     const dispatch = useDispatch()
     const isLoggedIn = useSelector(state=>state.userState.isLoggedIn);
     const familyname = useSelector(state=>state.userState.familyname)
     const {data, isLoading, error, handleLogout} = useLogout()
     const [activeMenu, setActiveMenu] = useState(watchingPage);
     const API_KEY_KAKAO = process.env.REACT_APP_API_KEY_KAKAO;
-    const LOGOUT_REDIRECT_URI = process.env.REACT_APP_LOGOUT_REDIRECT_URI
     const LOGOUT_REDIRECT_URI_SITE = process.env.REACT_APP_LOGOUT_REDIRECT_URI_SITE
     const navigate = useNavigate();
     
@@ -139,16 +145,29 @@ function HeaderBar(props) {
                 window.location.href = 'https://kangwedance.site'
             } 
             else if (social==="Kakao"){
-                window.location.href = `https://kauth.kakao.com/oauth/logout?client_id=${API_KEY_KAKAO}&logout_redirect_uri=${LOGOUT_REDIRECT_URI}&state=logout`
+                window.location.href = `https://kauth.kakao.com/oauth/logout?client_id=${API_KEY_KAKAO}&logout_redirect_uri=${LOGOUT_REDIRECT_URI_SITE}&state=logout`
             } 
         }
     },[data])
     const logoutHandler = ()=>{
-        handleLogout()
+        Swal.fire({
+            text: "로그아웃 하시겠습니까?",
+            width: 320,
+            showCancelButton: true,
+            iconColor: '#F05475 ',
+            confirmButtonColor: '#F05475 ',
+            confirmButtonText: "확인",
+            cancelButtonText: "취소"
+        }).then(function(e){
+            if(e.isConfirmed === true) {
+                handleLogout()
+            }
+        })
     }
+    
     return (
-        <Wrapper>
-            <BarContainer height={30} justify={"space-between"} width={100}>
+        <Wrapper onlyTopBar={onlyTopBar}>
+            <BarContainer height={onlyTopBar ? 100 : 30} justify={"space-between"} width={100}>
                 <Logo onClick={() => {
                     dispatch(childSelect(0))
                     navigate("/play");
@@ -164,52 +183,58 @@ function HeaderBar(props) {
                     {isLoggedIn &&
                     <>
                     <LogOut onClick={logoutHandler}>로그아웃</LogOut>
-                    <div
+                                        <div className="user-icon"
                     onClick={() => {
                         navigate(`/users`);
                     }}>   
-                        <RiUserFill color="#F05475" size="2rem"/>
+                        <RiUser3Fill color="#F05475" size="1.9rem"/>
                     </div>
                     </>
                     }
                 </div>
             </BarContainer>
-            <BarContainer height={70} justify={"center"} width={80}>
-                <LogoContainer
-                    active={activeMenu === "play"}
-                >
-                    <Menu src={Dance} 
-                    onClick={() => {
-                        navigate("/play");
-                        setActiveMenu('play')
-                    }}/>
-                    <span>둠칫둠칫</span>
-                    <Highlight active={activeMenu === "play"}/>
-                </LogoContainer>
-                <LogoContainer
-                    active={activeMenu === "status"}
-                >
-                    <Menu src={Status}                    
-                    onClick={() => {
-                        navigate("/status");
-                        setActiveMenu('status')
-                    }}/>  
-                    <span>건강일지</span>
-                    <Highlight active={activeMenu === "status"}/>
-                </LogoContainer>
-                <LogoContainer
-                    active={activeMenu === "photos"}
-                >
-                    <Menu src={Gallery}                    
-                    onClick={() => {
-                        navigate("/photos");
-                        setActiveMenu('photos')
-                    }}/>
-                    <span>사진첩</span>
-                    <Highlight active={activeMenu === "photos"}/>
-                </LogoContainer>
-            </BarContainer>
-            <div className="bottom-line" />
+            <Line/>
+            {!onlyTopBar &&
+            <>
+                <BarContainer height={70} justify={"center"} width={80}>
+                    <LogoContainer
+                        active={activeMenu === "play"}
+                    >
+                        <Menu src={Dance} 
+                        onClick={() => {
+                            navigate("/play");
+                            setActiveMenu('play')
+                        }}/>
+                        <span>율동체조</span>
+                        <Highlight active={activeMenu === "play"}/>
+                    </LogoContainer>
+                    <LogoContainer
+                        active={activeMenu === "status"}
+                    >
+                        <Menu src={Status}                    
+                        onClick={() => {
+                            navigate("/status");
+                            setActiveMenu('status')
+                        }}/>  
+                        <span>건강일지</span>
+                        <Highlight active={activeMenu === "status"}/>
+                    </LogoContainer>
+                    <LogoContainer
+                        active={activeMenu === "photos"}
+                    >
+                        <Menu src={Gallery}                    
+                        onClick={() => {
+                            navigate("/photos");
+                            setActiveMenu('photos')
+                        }}/>
+                        <span>사진첩</span>
+                        <Highlight active={activeMenu === "photos"}/>
+                    </LogoContainer>
+                </BarContainer>
+                <div className="bottom-line" /> 
+            </>
+
+            }
         </Wrapper>
     );
 }

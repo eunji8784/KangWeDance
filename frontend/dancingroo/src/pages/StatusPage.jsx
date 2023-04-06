@@ -1,10 +1,11 @@
 import React,{useState, useEffect} from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import HealthData from "../components/status/HealthData";
 import InputModal from "../components/status/InputModal";
 import PlayData from "../components/status/PlayData";
 import StatusBar from "../components/status/StatusBar";
+import { useDispatch, useSelector } from "react-redux";
+import { patchChildState } from "../store/userSlice";
 
 import useApi from "../hooks/auth/useApi";
 
@@ -15,12 +16,24 @@ const Wrapper = styled.div`
     justify-content: center;
 `;
 
-function StatusPage(props) {
-    const navigate = useNavigate();
-    const {handleWatchingPage} = props
+function StatusPage({handleWatchingPage}) {
+    const select = useSelector(state=>state.userState.select)
+    const dispatch = useDispatch()
+    const bodyUpdateCheck = useSelector(state=>state.userState.children[select||0].bodyRecordFlag)
     const [section, setSection] = useState('health')
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [playRecord, setPlayRecord] = useState([]);
+    
+    useEffect(()=>{
+        if (bodyUpdateCheck===false){
+            setIsModalOpen(true)
+            dispatch(patchChildState({selectedIdx:select, name:"bodyRecordFlag", value:true}))
+        }
+    },[bodyUpdateCheck])
+
+    useEffect(()=>{
+        handleWatchingPage('status')
+    })
+
     const handleSection = (mode)=>{
         setSection(mode)
     }
@@ -28,20 +41,8 @@ function StatusPage(props) {
     const handleIsModalOpen = ()=>{
         setIsModalOpen((prev)=>!prev)
     }
-    const palyReco = useApi()
-
-    useEffect(()=>{
-        handleWatchingPage('status')
-        // palyReco.fetchApi('GET', `/status/play-record`)
-    },[])
-
-    useEffect(()=>{
-        if(palyReco.data){
-            setPlayRecord(palyReco.data)
-        }
-        console.log(palyReco.data)
-    }, [palyReco.data])
-
+    console.log(select)
+    console.log(bodyUpdateCheck)
     return (
         <Wrapper>
             <StatusBar handleSection={handleSection}/>

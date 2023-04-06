@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useCookies } from 'react-cookie';
+import { useNavigate } from 'react-router-dom';
 
 function useApi() {
+  const navigate = useNavigate()
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -26,7 +28,7 @@ function useApi() {
         },
         body: JSON.stringify(requestBody)
       });
-      console.log('리퀘스트 바디(json) : ', JSON.stringify(requestBody))
+      if (method==='POST' || method==='PATCH') console.log('리퀘스트 바디(json) : ', JSON.stringify(requestBody))
       if (!response.ok) throw new Error(`HTTP error: ${response.status}`)
       const json = await response.json();
       console.log(json)
@@ -35,6 +37,7 @@ function useApi() {
     } catch (error) {
       setError(error);
       console.error(error)
+      navigate('/error')
     } finally {
       setIsLoading(false);
     }

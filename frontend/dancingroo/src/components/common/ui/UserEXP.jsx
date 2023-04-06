@@ -21,7 +21,8 @@ const ExpGaugeWrapper = styled.div`
   height: 3rem;
   border-radius: 8px;
   background-color: #ddd;
-  margin-top: 3rem; // 바꾸자
+  margin-top: 5rem;
+  margin-bottom: 5rem;
 `;
 
 const ExpBar = styled.div`
@@ -64,6 +65,15 @@ const LevelUpAnimation = styled.div`
   animation: ${levelUpAnimation} 2s ease-out;
   opacity: 0;
 `;
+
+const GainExp = styled.div`
+  position: absolute;
+  top: -2.5rem;
+  left: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #F05475;
+`
 
 const UserLevel = styled.div`
   position: absolute;
@@ -137,9 +147,10 @@ function UserEXP({userLevel, startEXP, endEXP, totalLevelEXP, nextLevelEXP}) {
       <UserLevel>Lv {level}</UserLevel>
     </>
     }
-    <ExpText>
-      {showLevelUp ? `${currentExp} / ${nextLevelEXP}` : `${currentExp} / ${totalLevelEXP}`}
-    </ExpText>
+      <ExpText>
+        {showLevelUp ? `${currentExp} / ${nextLevelEXP}` : `${currentExp} / ${totalLevelEXP}`}
+      </ExpText>
+      <GainExp>+ {endEXP-startEXP}</GainExp>
     </ExpGaugeWrapper>
   );
 }
