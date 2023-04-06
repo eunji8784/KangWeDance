@@ -234,13 +234,8 @@ function RegisterChild({userPage}) {
                 setBtnColor(value)
             }
         }
-        if (name === "weight" || name === "height") {
-            // use regular expression to validate input value
-            if (/^[1-9]\d*(\.\d)?$/.test(value)) {
-                // convert to number if input value is valid
-                value = Number(value);
-            }
-        }
+        if(name==="weight"||name==="height") value = Number(value) 
+        dispatch(patchChildState({selectedIdx,name,value}));
     };
     return (
         <ModWrapper>
@@ -287,7 +282,7 @@ function RegisterChild({userPage}) {
                             {heightValidError?
                                 <span onClick={()=>setHeightValidError(false)}>{isValid.errors.height}</span>
                             :
-                                <FormInput value={height||''} type="text" name="height" id="height" placeholder=" cm" onChange={handleInputChange} disabled={!addChild}/>
+                                <FormInput value={height||''} type="number" step="0.1" name="height" id="height" placeholder=" cm" onChange={handleInputChange} disabled={!addChild}/>
                             }
                         </div>
                     </Article>
@@ -297,7 +292,7 @@ function RegisterChild({userPage}) {
                             {weightValidError?
                                 <span onClick={()=>setWeightValidError(false)}>{isValid.errors.weight}</span>
                             :
-                                <FormInput value={weight||''} type="text" name="weight" id="weight" placeholder=" kg" onChange={handleInputChange} disabled={!addChild}/>
+                                <FormInput value={weight||''} type="number" step="0.1" name="weight" id="weight" placeholder=" kg" onChange={handleInputChange} disabled={!addChild}/>
                             }
                         </div>
                     </Article>
