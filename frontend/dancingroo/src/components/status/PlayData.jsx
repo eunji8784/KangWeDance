@@ -239,7 +239,7 @@ function PlayData({handleIsModalOpen}) {
                     null :
                     <>
                       <div className='text-box-bold'>올해 {selectedMonth}월</div>
-                      <div className='text-box'>총 플레이 횟수 {playMonthCnt},</div>
+                      <div className='text-box'>총 플레이 횟수 {playMonthCnt}회,</div>
                       <div className='text-box'>총 소모 칼로리 {playCalTotal} cal</div>
                     </>
                     }
