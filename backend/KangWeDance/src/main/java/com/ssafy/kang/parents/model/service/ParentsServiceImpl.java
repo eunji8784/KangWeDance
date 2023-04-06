@@ -1,19 +1,15 @@
 package com.ssafy.kang.parents.model.service;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
-import com.ssafy.kang.common.SuccessCode;
 import com.ssafy.kang.parents.model.ParentsDto;
 import com.ssafy.kang.parents.model.mapper.ParentsMapper;
 import com.ssafy.kang.util.KakaoUtil;
@@ -39,7 +35,8 @@ public class ParentsServiceImpl implements ParentsService {
 	public Map<String, String> getToken(String code) throws Exception {
 		String reqURL = "https://kauth.kakao.com/oauth/token";
 		String clientId = "eb3617506bc76ea56b625f99f56e42dd";
-		String redirectUri = "http://localhost:3000/users/oauth2-kakao";
+		//String redirectUri = "http://localhost:3000/users/oauth2-kakao";
+		String redirectUri = "https://kangwedance.site/users/oauth2-kakao";
 		Map<String, String> rt = new HashMap<>();
 		try {
 			String result = kakaoUtil.getToken(reqURL, clientId, redirectUri, code);
@@ -110,8 +107,6 @@ public class ParentsServiceImpl implements ParentsService {
         Map<String, Object> obj = gson.fromJson(responseBody, Map.class);
         Map<String, Object> naver_account = gson.fromJson(obj.get("response").toString(), Map.class);
 		result.put("id", naver_account.get("id").toString());
-		result.put("nickname", naver_account.get("nickname").toString());
-
         return result;
 	}
 	@Override
@@ -154,6 +149,10 @@ public class ParentsServiceImpl implements ParentsService {
 	@Override
 	public ParentsDto findUser(int userIdx) throws Exception{
 		return parentsMapper.selectUser(userIdx);
+	}
+	@Override
+	public void getNaverLogout(String accessToken) throws Exception {
+		naverUtil.logout(accessToken);
 	}
 
 

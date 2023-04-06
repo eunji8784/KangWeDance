@@ -1,54 +1,192 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafy.kang.status.model.mapper.StatusMapper">
-	
 	<resultMap type="PlayRecordDto" id="playRecordList">
 		<result column="calorie_consumption" property="burnedCalories" />
 		<result column="score" property="score" />
+		<result column="child_idx" property="childIdx" />
 		<result column="title" property="title" />
 		<result column="record_date" property="recordDate" />
 	</resultMap>
-	
 	<resultMap type="FoodsDto" id="foodList">
 		<result column="name" property="name" />
 		<result column="category" property="category" />
 	</resultMap>
-	
-	<select id="selectPlayRecord" parameterType="int" resultMap="playRecordList" >
+	<resultMap id="bodyTagList" type="BodyTagDto">
+		<result column="child_idx" property="childIdx" />
+		<result column="arm" property="팔" />
+		<result column="leg" property="다리" />
+		<result column="body" property="몸통" />
+		<result column="flexibility" property="유연성" />
+		<result column="balance" property="균형감각" />
+		<result column="aerobic" property="유산소" />
+		<result column="height" property="키성장" />
+		<result column="play_time" property="총_플레이시간" />
+	</resultMap>
+	<resultMap type="BodyRecordDto" id="bodyRecord">
+		<result column="child_idx" property="childIdx" />
+		<result column="record_date" property="recordDate" />
+	</resultMap>
+	<select id="selectPlayRecord" parameterType="String" resultMap="playRecordList">
 		<!--
-			동작별 점수 총합 ->score
+			동작별 점수 총합 -> score
 			칼로리 소모량
 			노래 제목
 			기록날짜
 		 -->
-		 
-		SELECT  tmp1.calorie_consumption, tmp1.title, tmp1.record_date, tmp2.score
+		SELECT 
+		    tmp1.child_idx,
+		    (2400 + IFNULL(tmp1.score, 0) + FLOOR(RAND() * 201) - 100) AS calorie_consumption,
+		    tmp1.title,
+		    tmp1.record_date,
+		    tmp1.score
+		FROM
+		    (SELECT 
+		        s.song_idx,
+		        s.title,
+		        p.record_date,
+		        p.play_record_idx,
+		        p.child_idx,
+		        p.score_total AS score
+		    FROM
+		        songList s
+		    JOIN playRecord p ON s.song_idx = p.song_idx
+		    WHERE
+		        p.record_date LIKE CONCAT(#{date}, '%')) AS tmp1
+		        LEFT JOIN
+		    (SELECT 
+		        play_record_idx
+		    FROM
+		        scoreRecord
+		    GROUP BY play_record_idx) AS tmp2 ON tmp1.play_record_idx = tmp2.play_record_idx
+	</select>
+	<select id="selectFoodList" parameterType="String" resultMap="foodList">
+		SELECT name, category
+		FROM foodList
+		WHERE search_name like CONCAT (#{word}, '%')
+		limit 5
+	</select>
+	<select id="selectMonthlyRecord" resultMap="playRecordList">
+		SELECT tmp1.child_idx,tmp1.calorie_consumption, tmp1.title, tmp1.record_date
 		FROM 
-		 (SELECT s.song_idx, s.calorie_consumption, s.title, p.record_date, p.play_record_idx
+		 (SELECT s.song_idx, s.calorie_consumption, s.title, p.record_date, p.play_record_idx, p.child_idx
 			FROM songList s join playRecord p ON s.song_idx=p.song_idx
-   			WHERE p.child_idx=#{childIdx}
+   			WHERE child_idx=#{childIdx} and month(record_date) = #{month}
     	  )as tmp1
 		
 		LEFT JOIN
-	    ( SELECT sum(score) as score , play_record_idx
+	    ( SELECT play_record_idx
 		  FROM  scoreRecord
 	      GROUP BY play_record_idx
 		) as tmp2
-		
 	    ON tmp1.play_record_idx= tmp2.play_record_idx;
-
 	</select>
-	
-	
-	<select id="selectFoodList" parameterType="String" resultMap="foodList" >
-	SELECT name, category
-	FROM foodList
-	WHERE search_name like CONCAT (#{word}, '%')
-	limit 5
-	
+	<select id="selectBodyTagRecord" parameterType="int" resultMap="bodyTagList">
+		select child_idx, sum(arm) as arm, sum(leg)as leg, sum(flexibility)as flexibility, sum(body)as body, sum(aerobic) as aerobic, sum(height)as height, sum(balance)as balance, sum(play_time) as play_time
+		from statisticRecord
+		where parent_idx=#{parentIdx}
+		group by child_idx
+        order by child_idx;
 	</select>
-	
-	
+	<select id="selectBodyRecordList" parameterType="int" resultMap="bodyRecord">
+		SELECT 
+		    b.child_idx,
+		    b.weight,
+		    b.height,
+		    b.bmi,
+		    DATE_FORMAT(b.record_date, '%y-%m') AS record_date
+		FROM
+		    bodyRecord b
+		        JOIN
+		    (SELECT 
+		        child_idx, MAX(record_date) AS record_date
+		    FROM
+		        bodyRecord
+		    WHERE
+		        child_idx = #{childIdx}
+		    GROUP BY DATE_FORMAT(record_date, '%y-%m')) AS t ON t.child_idx = b.child_idx
+		        AND t.record_date = b.record_date
+		ORDER BY b.record_date DESC
+		LIMIT 7;
+	</select>
+	<select id="selectWeightPercentile" parameterType="int" resultType="PercentileDto">
+		WITH child_info AS (
+			SELECT 
+		    weight,
+		    TIMESTAMPDIFF(MONTH,
+		        birth_date,
+		        CURDATE()) AS age_month,
+		    IF(gender = 0, 2, 1) as gender
+			FROM
+				bodyRecord b
+					INNER JOIN
+				children c ON b.child_idx = c.child_idx
+			WHERE
+				b.child_idx = #{childIdx}
+			ORDER BY record_date DESC
+			LIMIT 1
+		)
+		
+		SELECT 
+		    weight,
+		    w.percentile_1th,
+		    w.percentile_3th,
+		    w.percentile_5th,
+		    w.percentile_10th,
+		    w.percentile_15th,
+		    w.percentile_25th,
+		    w.percentile_50th,
+		    w.percentile_75th,
+		    w.percentile_85th,
+		    w.percentile_90th,
+		    w.percentile_95th,
+		    w.percentile_97th,
+		    w.percentile_99th
+		FROM
+		    child_info c
+		        INNER JOIN
+		    weightByAge w ON c.age_month = w.age_month
+		        AND c.gender = w.gender;
+	</select>
+	<select id="selectHeightPercentile" parameterType="int" resultType="PercentileDto">
+		WITH child_info AS (
+			SELECT 
+		    height,
+		    TIMESTAMPDIFF(MONTH,
+		        birth_date,
+		        CURDATE()) AS age_month,
+		    IF(gender = 0, 2, 1) as gender
+			FROM
+				bodyRecord b
+					INNER JOIN
+				children c ON b.child_idx = c.child_idx
+			WHERE
+				b.child_idx = #{childIdx}
+			ORDER BY record_date DESC
+			LIMIT 1
+		)
+		
+		SELECT 
+		    height,
+		    h.percentile_1th,
+		    h.percentile_3th,
+		    h.percentile_5th,
+		    h.percentile_10th,
+		    h.percentile_15th,
+		    h.percentile_25th,
+		    h.percentile_50th,
+		    h.percentile_75th,
+		    h.percentile_85th,
+		    h.percentile_90th,
+		    h.percentile_95th,
+		    h.percentile_97th,
+		    h.percentile_99th
+		FROM
+		    child_info c
+		        INNER JOIN
+		    heightByAge h ON c.age_month = h.age_month
+		        AND c.gender = h.gender;
+	</select>
 	<!-- //일회성 코드 : 검색을 위해 영어 <->한국어 
 	
 	<select id="temps" parameterType="int" resultType="String">
@@ -63,4 +201,3 @@
 	</update>
 	-->
 </mapper>
-	

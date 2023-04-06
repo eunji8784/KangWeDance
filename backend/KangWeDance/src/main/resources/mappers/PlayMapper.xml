@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafy.kang.play.model.mapper.PlayMapper">
-	
 	<resultMap type="SongListDto" id="songList">
 		<result column="song_idx" property="songIdx" />
 		<result column="play_mode" property="playMode" />
 		<result column="thumbnail_url" property="thumbnailUrl" />
 		<result column="video_url" property="videoUrl" />
 		<result column="preview_music_url" property="previewMusicUrl" />
-		<result column="motion_tag" property="tag"/>
+		<result column="motion_tag" property="tag" />
 		<result column="calorie_consumption" property="calorieConsumption" />
 	</resultMap>
-	
 	<resultMap type="SongMotionDto" id="songMotionList">
 		<result column="motion_type_idx" property="danceIndex" />
 		<result column="start_time" property="startTime" />
@@ -19,18 +17,166 @@
 		<result column="count_delay" property="countDelay" />
 		<result column="count_standard" property="countStandard" />
 	</resultMap>
-
-	<select id="selectSongList" resultMap="songList" >
-		SELECT s.song_idx, s.play_mode, s.title, s.thumbnail_url, s.video_url, s.preview_music_url,
-			   m.motion_tag, s.difficulty, s.calorie_consumption 
-		FROM songList s
-		LEFT JOIN motionType m
-		ON s.motion_type_idx = m.motion_type_idx
+	<resultMap type="PlayRecordForHadoop" id="playRecordForHadoop">
+		<result column="record_date" property="recordDate" />
+		<result column="play_record_idx" property="PlayrecordIdx" />
+		<result column="child_idx" property="childIdx" />
+		<result column="song_idx" property="songIdx" />
+		<result column="play_mode" property="playMode" />
+	</resultMap>
+	<select id="selectSongList" resultMap="songList">
+		SELECT 
+		    s.song_idx,
+		    s.play_mode,
+		    s.title,
+		    s.explain,
+		    s.thumbnail_url,
+		    s.video_url,
+		    s.preview_music_url,
+		    m.motion_tag,
+		    s.difficulty,
+		    s.calorie_consumption
+		FROM
+		    songList s
+		        LEFT JOIN
+		    motionType m ON s.motion_type_idx = m.motion_type_idx
+	</select>
+	<select id="selectSongMotionList" parameterType="int" resultMap="songMotionList">
+		SELECT 
+		    *
+		FROM
+		    songMotion
+		WHERE
+		    song_idx = #{songIdx}
+	</select>
+	<select id="selectSongListByMotionTagIdx" parameterType="int" resultMap="songList">
+		SELECT 
+		    m.motion_type_idx,
+		    s.song_idx,
+		    s.play_mode,
+		    s.title,
+		    s.explain,
+		    s.thumbnail_url,
+		    s.video_url,
+		    s.preview_music_url,
+		    m.motion_tag,
+		    s.difficulty,
+		    s.calorie_consumption
+		FROM
+		    songList s
+		        LEFT JOIN
+		    motionType m ON s.motion_type_idx = m.motion_type_idx
+		WHERE
+		    m.motion_type_idx = #{motionTypeIdx}
+	</select>
+	<insert id="insertPlayRecord" parameterType="PlayRequestDto" useGeneratedKeys="true"
+        keyProperty="playRecordIdx" keyColumn="play_record_idx">
+		INSERT INTO playRecord(child_idx, song_idx, play_mode) 
+		VALUES(#{childIdx}, #{songIdx}, #{playMode})
+	</insert>
+	<insert id="insertScoreRecord" parameterType="ScoreRequestDto">
+		INSERT INTO scoreRecord(play_record_idx, motion_type_idx, count, time, count_standard, score) 
+		VALUES(#{playRecordIdx}, #{danceIndex}, #{count}, #{time}, #{countStandard}, #{score})
+	</insert>
+	<select id="selectExperienceScore" parameterType="int" resultType="int">
+		SELECT experience_score 
+		FROM parent 
+		WHERE 
+		parent_idx = 
+				(SELECT parent_idx FROM children WHERE child_idx = #{childIdx});
+	</select>
+	<update id="updateExperienceScore" parameterType="int">
+		UPDATE parent SET experience_score = #{param1} 
+		WHERE 
+		parent_idx = 
+				(SELECT parent_idx FROM children WHERE child_idx = #{param2});
+	</update>
+	<select id="selectPlayRecordForHadoop" resultMap="playRecordForHadoop" >
+		SELECT *
+		FROM playRecord
+		WHERE date_format(record_date, '%Y-%m-%d')  = curdate();
+	</select>
+	<select id="selectChildren" parameterType="int" resultType="int">
+		SELECT child_idx 
+		FROM children 
+		WHERE parent_idx = #{parentIdx} 
+	</select>
+	<select id="selectTag" parameterType="int" resultType="String">
+		SELECT 
+	    	m.motion_tag
+		FROM
+		    motionType m
+		        INNER JOIN
+		    (SELECT 
+		        s.motion_type_idx, SUM(s.score) AS score_sum
+		    FROM
+		        playRecord p
+		    RIGHT JOIN scoreRecord s ON p.play_record_idx = s.play_record_idx
+		    WHERE
+		        child_idx = #{childIdx}
+		    GROUP BY motion_type_idx
+		    ORDER BY score_sum
+		    LIMIT 1) AS t ON m.motion_type_idx = t.motion_type_idx
+	</select>
+	<select id="selectSongByTag" resultMap="songList">
+		SELECT 
+		    s.song_idx,
+		    s.play_mode,
+		    s.explain,
+		    s.title,
+		    s.thumbnail_url,
+		    s.video_url,
+		    s.preview_music_url,
+		    m.motion_tag,
+		    s.difficulty,
+		    s.calorie_consumption
+		FROM
+		    songList s
+		        RIGHT JOIN
+		    (SELECT 
+		        motion_type_idx, motion_tag
+		    FROM
+		        (SELECT 
+		        *
+		    FROM
+		        motionType
+		    WHERE
+		        motion_type_idx BETWEEN 5 AND 9) AS t
+		    WHERE
+		        motion_tag LIKE
+		<foreach collection="array" item="arr" separator="OR motion_tag LIKE">
+				 CONCAT('%', #{arr}, '%')
+		</foreach>
+			) AS m ON s.motion_type_idx = m.motion_type_idx
+		ORDER BY RAND()
+		LIMIT 1
+	</select>
+	<update id="updatePlayRecordScore" parameterType="int">
+		UPDATE playRecord 
+		SET 
+		    score_total = #{param1}
+		WHERE
+		    play_record_idx = #{param2}; 
+	</update>
+	
+	
+	
+	<!-- 하둡을 위한 파싱 코드  -->
+	<select id ="selectMotionTag"  parameterType="int"  resultType="String" >
+		SELECT motion_tag
+		FROM motionType m 
+			join songMotion  s 
+			on m.motion_type_idx=s.motion_type_idx
+		where s.song_idx=#{songIdx};
 	</select>
 	
-	<select id="selectSongMotionList" parameterType="int" resultMap="songMotionList" >
-		SELECT * FROM songMotion WHERE song_idx = #{songIdx}
-	</select>
-
+	<insert id ="inserTagForHadoop" parameterType="StatisticsDto" >
+		insert into statisticRecord (child_idx, parent_idx, arm, leg, flexibility, body, aerobic, height, balance, play_time)
+		Values (#{childIdx}, #{parentIdx},#{arm},#{leg}, #{flexibility}, #{body}, #{aerobic}, #{height}, #{senseOfBalance},#{playTime} )
+	</insert>
+	
+	
+	
+	
+	
 </mapper>
-	

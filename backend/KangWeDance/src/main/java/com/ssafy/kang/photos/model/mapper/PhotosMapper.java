@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.ssafy.kang.photos.model.FramesDto;
 import com.ssafy.kang.photos.model.PhotosDto;
-import com.ssafy.kang.photos.model.PramesDto;
 
 @Mapper
 public interface PhotosMapper {
@@ -20,7 +20,7 @@ public interface PhotosMapper {
 
 	public List<PhotosDto> selectPhotos(int parentIdx, int pageNum) throws SQLException;
 
-	public List<PramesDto> selectPrames(int level, int pageNum) throws SQLException;
+	public List<FramesDto> selectFrames(int level) throws SQLException;
 
 	public boolean deletePhoto(int photoIdx) throws SQLException;
 
@@ -29,6 +29,8 @@ public interface PhotosMapper {
 	public int selectPramesCount(int level) throws SQLException;
 
 	public int selectLevel(int parentIdx) throws SQLException;
+
+	public List<FramesDto> selectStickers() throws SQLException;
 
 	// 카카오 공유하기 -> 나중
 

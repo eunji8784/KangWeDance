@@ -12,18 +12,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.amazonaws.services.s3.AmazonS3Client;
 import com.ssafy.kang.common.ErrorCode;
 import com.ssafy.kang.common.SuccessCode;
 import com.ssafy.kang.common.dto.ApiResponse;
 import com.ssafy.kang.parents.model.ParentsDto;
 import com.ssafy.kang.parents.model.service.ParentsService;
 import com.ssafy.kang.util.JwtUtil;
-
-import lombok.RequiredArgsConstructor;
+import com.ssafy.kang.util.LevelUtil;
 
 @CrossOrigin(origins = { "*" }, maxAge = 6000)
 @RequestMapping("/parents")
@@ -33,8 +30,11 @@ public class ParentsConroller {
 	@Autowired
 	ParentsService parentsService;
 	private final JwtUtil jwtUtil;
+	private final LevelUtil levelUtil;
+	
 	public ParentsConroller() {
 		this.jwtUtil = new JwtUtil();
+		this.levelUtil = new LevelUtil();
 	}
 	@GetMapping("/social/kakao")
 	public ApiResponse<?> kakaoUserAdd(@RequestParam String code){
@@ -47,10 +47,12 @@ public class ParentsConroller {
 			dto.setAccessToken(token.get("access_token"));
 			userIO = parentsService.getUserInfo(dto.getAccessToken());
 			dto.setSocailUid(userIO.get("id"));
-			dto.setSocialPlatform("Kakao");
-			dto.setNickname(userIO.get("nickname"));
+			String social ="Kakao";
+			String nick = "갱거루 합창단";
+			dto.setSocialPlatform(social);
+			dto.setFamilyname(nick);
 			dto = parentsService.findSocial(dto.getSocailUid());
-			return login(dto,userIO,token);
+			return login(dto,userIO,token,nick,social);
 		} catch (Exception e) {
 			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
 		}
@@ -63,20 +65,25 @@ public class ParentsConroller {
 		ParentsDto dto = new ParentsDto();
 		try {
 			token = parentsService.getNaverToken(code);
+			System.out.println(token);
 			userIO = parentsService.getNaverUserInfo(token.get("access_token"));
+			System.out.println(userIO);
 			dto.setSocailUid(userIO.get("id"));
+			String social ="Naver";
 			dto.setSocialPlatform("Naver");
-			dto.setNickname(userIO.get("nickname"));
+			String nick = "갱거루 합창단";
+			dto.setFamilyname(nick);
 			dto = parentsService.findSocial(dto.getSocailUid());
-			return login(dto,userIO,token);
+			return login(dto,userIO,token,nick,social);
 		} catch (Exception e) {
 			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
 		}
 	}
-	public ApiResponse<?> login(ParentsDto dto,Map<String, String> userIO,Map<String, String> token) throws Exception{
+	public ApiResponse<?> login(ParentsDto dto,Map<String, String> userIO,Map<String, String> token,String nick,String social) throws Exception{
 		Map<String, String> map = new HashMap<>();
 		String accessToken ="";
 		String isUser = "false";
+		String nickname = nick;
 		SuccessCode sc= null;
 		if(dto != null && !dto.isDeletedFlag()) {
 			dto.setAccessToken(token.get("access_token"));
@@ -84,6 +91,7 @@ public class ParentsConroller {
 			parentsService.modifyAccessToken(dto);
 			if(parentsService.findChildren(dto.getParentIdx())!=0)
 				isUser = "true";
+			nickname = dto.getFamilyname();
 			sc = SuccessCode.LOGIN;
 		}else {
 			sc = SuccessCode.GO_JOIN;
@@ -91,32 +99,41 @@ public class ParentsConroller {
 				dto = new ParentsDto();		
 				dto.setAccessToken(token.get("access_token"));
 				dto.setSocailUid(userIO.get("id"));
-				dto.setSocialPlatform("Kakao");
-				dto.setNickname(userIO.get("nickname"));					
+				dto.setSocialPlatform(social);
+				dto.setFamilyname(nickname);					
+				nickname = dto.getFamilyname();
 				accessToken =  jwtUtil.createAccessToken("useridx",parentsService.addUser(dto));
 			}else {
 				parentsService.modifyUser(dto);
 			}
 		}
+		
 		map.put("accessToken", accessToken);
 		map.put("isUser", isUser);
+		map.put("familyname", nickname);
 		return ApiResponse.success(sc,map);
 	}
+	
 	@PatchMapping("/nickname")
-	public ApiResponse<?> nicknameModify(@RequestHeader("accesstoken") String accesstoken, @RequestBody String nickname){
-		try {
-			
-			parentsService.modifyNickname(ParentsDto.builder().parentIdx(jwtUtil.getUserIdx(accesstoken)).nickname(nickname).build());
-			return ApiResponse.success(SuccessCode.UPDATE_NICKNAME);
-		} catch (Exception e) {
-			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
-		}
-		
-	}
+    public ApiResponse<?> nicknameModify(@RequestHeader("accesstoken") String accesstoken, @RequestBody ParentsDto parentsDto){
+        try {
+            parentsDto.setParentIdx(jwtUtil.getUserIdx(accesstoken));
+            parentsService.modifyNickname(parentsDto);
+            return ApiResponse.success(SuccessCode.UPDATE_NICKNAME);
+        } catch (Exception e) {
+            return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
+        }    
+    }
+
 	@GetMapping("/experience-score")
 	public ApiResponse<?> experienceDetails(@RequestHeader("accesstoken") String accesstoken){//추후 엑세스 토큰으로 대체
 		try {
-			return ApiResponse.success(SuccessCode.READ_EXPERIENCE,parentsService.findExperience(jwtUtil.getUserIdx(accesstoken)));
+			int experience =parentsService.findExperience(jwtUtil.getUserIdx(accesstoken));
+			
+			Map<String, Integer> map = new HashMap<>(); 
+			map.put("experience", experience);
+			map.put("level", levelUtil.getLevel(experience));
+			return ApiResponse.success(SuccessCode.READ_EXPERIENCE,map);
 		} catch (Exception e) {
 			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
 		}
@@ -137,9 +154,9 @@ public class ParentsConroller {
 			if(dto.getSocialPlatform().equals("Kakao")) {
 				parentsService.kakaoLogout(dto.getAccessToken());
 			}else if(dto.getSocialPlatform().equals("Naver")) {
-				
+				parentsService.getNaverLogout(dto.getAccessToken());
 			}
-			return ApiResponse.success(SuccessCode.LOGOUT);
+			return ApiResponse.success(SuccessCode.LOGOUT,dto.getSocialPlatform());
 		} catch (Exception e) {
 			return ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION);
 		}

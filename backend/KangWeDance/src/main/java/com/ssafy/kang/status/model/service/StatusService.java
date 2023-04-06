@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.ssafy.kang.children.model.BodyRecordDto;
 import com.ssafy.kang.play.model.PlayRecordDto;
+import com.ssafy.kang.status.model.BodyTagDto;
 import com.ssafy.kang.status.model.FoodsDto;
 
 @Service
@@ -16,9 +18,19 @@ public interface StatusService {
 //	| saveOrder() | 등록/수정/삭제 가 동시에 일어나는 유형의 service 메서드 |
 
 	// 아이별 운동 기록 조회
-	public List<PlayRecordDto> findplayRecord(int childIdx) throws Exception;
+	public List<PlayRecordDto> findplayRecord(String date) throws Exception;
 
 	public List<FoodsDto> findFoodList(String word) throws Exception;
+
+	public List<PlayRecordDto> findMonthlyRecord(int childIdx, int month) throws Exception;
+
+	public List<BodyTagDto> findBodyTagRecord(int parentIdx) throws Exception;
+
+	public List<BodyRecordDto> findRecordList(int childIdx) throws Exception;
+
+	public int findWeightPercentile(int childIdx) throws Exception;
+
+	public int findHeightPercentile(int childIdx) throws Exception;
 
 	// 일회성 코드 : 검색을 위해 영어 <->한국어
 	// public String temps(int i) throws Exception;
