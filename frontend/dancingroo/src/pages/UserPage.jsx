@@ -15,14 +15,13 @@ import { logout } from "../store/userSlice";
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
-    align-items: center; 
+    align-items: center;
 `;
 
 export const Wrapper2 = styled.div`
     width: 45rem;
     display: flex;
     justify-content: space-between;
-    /* margin-bottom: 1rem; */
     &>div{
         width:40%;
     }

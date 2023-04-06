@@ -8,7 +8,7 @@ import NoteCompo from "../components/common/effects/NoteCompo";
 const Bodysuit = styled.div`
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     height: 100vh;
     // @ 양 옆 마진
     margin:0 15% !important;
