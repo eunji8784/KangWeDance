@@ -32,7 +32,7 @@ import com.ssafy.kang.util.JwtUtil;
 @TestMethodOrder(value = MethodOrderer.OrderAnnotation.class)
 class KangWeDanceApplicationTests {
 
-	String accessToken = "eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgwNTExMzg4MDMxLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODE4MDczODgsInN1YiI6ImFjY2Vzcy10b2tlbiIsInVzZXJpZHgiOjI0fQ.6n3ClQEzjrD8P0NvOyKkre7vHSKkdShYOpPLQ36OcNg";
+	String accessToken = "eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgwNzU5MjQzMTMzLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODIwNTUyNDMsInN1YiI6ImFjY2Vzcy10b2tlbiIsInVzZXJpZHgiOjI4fQ.yyqK2F_x5W1vE7wthwoxYOxW7_NIXqm27iPwx1YQUjk";
 
 	@Autowired
 	ParentsConroller parentsConroller;
