@@ -89,11 +89,13 @@ const FormInputButton = styled.input`
     margin-right: 1rem;
     cursor: pointer;
 `;
+
 const ProfileImage = styled.img`
     height:5rem;
     width:5rem;
     border-radius:50%;
 `;
+
 const MyButton = styled(PinkButton)`
     width:6.2rem;
     height:2.5rem;
@@ -240,7 +242,7 @@ function RegisterChild({userPage}) {
             <ModMain>
                 <ModSection>
                     <Article>
-                        <FormLabel htmlFor="nickname"> 닉네임1</FormLabel>
+                        <FormLabel htmlFor="nickname"> 닉네임</FormLabel>
                         {nameValidError?
                             <span onClick={()=>setNameValidError(false)}>{isValid.errors.nickname}</span>
                         :
@@ -280,7 +282,7 @@ function RegisterChild({userPage}) {
                             {heightValidError?
                                 <span onClick={()=>setHeightValidError(false)}>{isValid.errors.height}</span>
                             :
-                                <FormInput value={height||''} type="text" name="height" id="height" placeholder=" cm" onChange={handleInputChange} disabled={!addChild}/>
+                                <FormInput value={height||''} type="number" step="0.1" name="height" id="height" placeholder=" cm" onChange={handleInputChange} disabled={!addChild}/>
                             }
                         </div>
                     </Article>
@@ -290,7 +292,7 @@ function RegisterChild({userPage}) {
                             {weightValidError?
                                 <span onClick={()=>setWeightValidError(false)}>{isValid.errors.weight}</span>
                             :
-                                <FormInput value={weight||''} type="text" name="weight" id="weight" placeholder=" kg" onChange={handleInputChange} disabled={!addChild}/>
+                                <FormInput value={weight||''} type="number" step="0.1" name="weight" id="weight" placeholder=" kg" onChange={handleInputChange} disabled={!addChild}/>
                             }
                         </div>
                     </Article>
