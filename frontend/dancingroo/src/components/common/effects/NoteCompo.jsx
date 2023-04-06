@@ -39,6 +39,7 @@ const Note = styled.img`
 `;
 
 const NoteCompo = () => {
+  /* eslint-disable */
   const [positions, setPositions] = useState([]);
 
   const generateNote = (min, max, index) => {
