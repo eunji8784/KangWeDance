@@ -405,7 +405,7 @@ function DanceMode() {
           }
           <ProgressBar nowProgress={videoref?.current?.currentTime} endProgress={videoref?.current?.duration}/> 
           {!camfocus?
-            <DirectionDiv onClick={()=>videoref.current.pause()} style={{ display: playIdState === "1" ? 'flex' : 'none' }}
+            <DirectionDiv style={{ display: playIdState === "1" ? 'flex' : 'none' }}
             >
               <div className="arrow">
                 {arrowState?
