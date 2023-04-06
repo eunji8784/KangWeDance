@@ -17,7 +17,6 @@ const ModWrapper = styled(Wrapper)`
     display:flex;
     flex-direction:column;
     align-items:center;
-    z-index:-1;
     left:0;
     bottom:-5rem;
     h2{
@@ -241,7 +240,7 @@ function RegisterChild({userPage}) {
             <ModMain>
                 <ModSection>
                     <Article>
-                        <FormLabel htmlFor="nickname"> 닉네임</FormLabel>
+                        <FormLabel htmlFor="nickname"> 닉네임1</FormLabel>
                         {nameValidError?
                             <span onClick={()=>setNameValidError(false)}>{isValid.errors.nickname}</span>
                         :
