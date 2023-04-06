@@ -13,11 +13,9 @@ import Swal from "sweetalert2";
 
 const ModWrapper = styled(Wrapper)`
     width: 100vw;
-    height: 100vh;
     overflow: hidden;
     display:flex;
     flex-direction:column;
-    position:fixed;
     align-items:center;
     z-index:-1;
     left:0;
