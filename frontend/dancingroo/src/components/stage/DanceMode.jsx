@@ -143,7 +143,7 @@ const Settings = styled(AiFillSetting)`
   width:3rem;
   height:3rem;
   position:absolute;
-  top:2.5rem;
+  top:2rem;
   right:3%;
   z-index:1;
   cursor:pointer;
