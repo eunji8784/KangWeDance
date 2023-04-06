@@ -1,22 +1,22 @@
 // 회원가입-정보 등록
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import {Wrapper, Header, Main, Article, Section, H1, H2, P, Footer, PinkButton} from "../../common/ui/Semantics";
+import {Wrapper, Main, Article, Section, Footer, PinkButton} from "../../common/ui/Semantics";
 import kangkang from "../../../assets/images/kangkang.png"
 import useApi from "../../../hooks/auth/useApi";
-import { login, getChildState,patchChildState,childSelect } from "../../../store/userSlice";
+import { getChildState, patchChildState, childSelect } from "../../../store/userSlice";
 import { useDispatch,useSelector } from "react-redux";
+import axios from "axios";
+import useValidation from "../../../hooks/auth/useValidation";
+import Swal from "sweetalert2";
 
 const ModWrapper = styled(Wrapper)`
     width: 100vw;
-    height: 100vh;
     overflow: hidden;
     display:flex;
     flex-direction:column;
-    position:fixed;
     align-items:center;
-    z-index:-1;
     left:0;
     bottom:-5rem;
     h2{
@@ -34,12 +34,11 @@ const ModMain = styled(Main)`
     }
     padding-bottom:-10rem;
 `;
+
 const ModSection = styled(Section)`
     border:none;
     flex-direction:column;
-    /* align-items:center; */
     justify-content:space-around;
-    /* height:100%; */
     &>${Article}{
        height:6.5rem;
        text-align:start;
@@ -50,6 +49,13 @@ const ModSection = styled(Section)`
         flex-direction:column;
         width:100%;
        }
+    }
+    span{
+        color:red;
+        font-weight:normal;
+        margin-top:0.2rem;
+        height:2rem;
+        cursor: pointer;
     }
 `
 export const FormLabel = styled.label`
@@ -85,7 +91,9 @@ const FormInputButton = styled.input`
 `;
 
 const ProfileImage = styled.img`
-    height:4.5rem;
+    height:5rem;
+    width:5rem;
+    border-radius:50%;
 `;
 
 const MyButton = styled(PinkButton)`
@@ -95,49 +103,90 @@ const MyButton = styled(PinkButton)`
     font-size:0.9rem;
 `
 function RegisterChild({userPage}) {
+    /* eslint-disable */
     const selectedIdx = useSelector(state=>state.userState.select)
     const {nickname, weight, height, gender, profileImageUrl, childIdx, birthDate} = useSelector(state=>state.userState.children[selectedIdx||0]) // 디폴트는 첫째
     const firstChildIdx = useSelector(state=>state.userState.children[0].childIdx)
+    const secondChildIdx = useSelector(state=>state.userState.children[1]?.childIdx)
     const addChild = useSelector(state=>state.userState.addChild)
     const dispatch = useDispatch()
     const navigate = useNavigate();
-    const getImgUrl = useApi()
+    const isValid = useValidation()
     const addNewChild = useApi()
     const patchChild = useApi()
     const deleteChild = useApi()
     const [btnColor, setBtnColor] = useState(gender)
     const fileInput = useRef(null);
+    // 유효성검사 에러관리 state
+    const [nameValidError, setNameValidError] = useState(false)
+    const [weightValidError, setWeightValidError] = useState(false)
+    const [heightValidError, setHeightValidError] = useState(false)
+    const [dateValidError, setDateValidError] = useState(false)
 
     const onProfileUpdateSuccess = (json)=>{
-        alert('아이 프로필 등록이 완료되었습니다.')
+        Swal.fire({               
+            width: 400,
+            iconColor: '#F05475 ',
+            text: '아이 프로필 등록이 완료되었습니다.', 
+            confirmButtonColor: '#F05475 ',
+            confirmButtonText: '확인',
+          });
         dispatch(childSelect(0))
         navigate('/play')
     }
-
-    const handleUploadImg=(e)=>{
+    const handleUploadImg=async(e)=>{
+        const url = "https://kangwedance.site/dev/children/profile";
         const file = e.target.files[0]
         const formData = new FormData();
         formData.append('file', file);
-        getImgUrl.fetchApi('POST', "/children/profile", formData)
+        try {
+            const response = await axios.post(url, formData);
+            if (response.data.status!==200) throw new Error(`HTTP error: ${response.data.status}`)
+            dispatch(patchChildState({selectedIdx, name:"profileImageUrl", value:response.data.data}))
+          } catch (error) {
+            console.error(error);
+          }
+    }
+    const deleteProfileHandler =()=>{
+        fileInput.current.value = ''
+        dispatch(patchChildState({selectedIdx, name:"profileImageUrl", value: null}))
     }
     const uploadImg=()=>{
         fileInput.current.click()
     }
     const handleDeleteChild = ()=>{
-        if (window.confirm('아이 프로필 삭제하시겠습니까?')){
-            const onSuccess = ()=>{
-                alert('아이 프로필이 삭제되었습니다.')
-                if (childIdx===firstChildIdx){ // 첫째아이 삭제했으면 store에 등록된 아이프로필 지우고, 다시 조인페이지로 보냄
-                    dispatch(getChildState([{}]))
-                    navigate('/users/join')
-                } else {
-                    dispatch(childSelect(0))
-                    navigate('/play')
-                } 
+        Swal.fire({
+            text: "아이 프로필 삭제하시겠습니까?",
+            width: 360,
+            showCancelButton: true,
+            iconColor: '#F05475 ',
+            confirmButtonColor: '#F05475 ',
+            confirmButtonText: "삭제",
+            cancelButtonText: "취소"
+        }).then(function(e){
+            if(e.isConfirmed === true) {
+                const onSuccess = ()=>{
+                    Swal.fire({             
+                        width: 360,
+                        iconColor: '#F05475 ',
+                        text: '아이 프로필이 삭제되었습니다.', 
+                        confirmButtonColor: '#F05475 ',
+                        confirmButtonText: '확인',
+                    });
+                    if (childIdx===firstChildIdx&&!secondChildIdx){ // 아이가 0명일 때
+                        dispatch(getChildState([{}]))
+                        navigate('/users/join')
+                    } else {
+                        dispatch(childSelect(0))
+                        navigate('/play')
+                    } 
+                }
+                deleteChild.fetchApi('DELETE', `/children?childIdx=${childIdx}`, onSuccess)
+               
             }
-            deleteChild.fetchApi('DELETE', `/children?childIdx=${childIdx}`, onSuccess)
-        }
+        })
     }
+
     const SumbitChild = ()=>{
         const body = {
             nickname,
@@ -145,17 +194,34 @@ function RegisterChild({userPage}) {
             gender,
             weight,
             height,
-            ProfileImageUrl:profileImageUrl||"https://d3qb4vbeyp8phu.cloudfront.net/기본+프로필+이미지.png",
+            profileImageUrl:profileImageUrl,
         }
         const patchBody = {
             nickname,
             birthDate,
             gender,
-            ProfileImageUrl:profileImageUrl||"https://d3qb4vbeyp8phu.cloudfront.net/기본+프로필+이미지.png",
+            profileImageUrl:profileImageUrl,
             childIdx,
         }
-        if (addChild) addNewChild.fetchApi('POST', '/children', body, onProfileUpdateSuccess)
-        else patchChild.fetchApi('PATCH', '/children', patchBody, onProfileUpdateSuccess)
+        
+        const validCheck = isValid.validate({nickname, height, weight, birthDate});
+
+        if (addChild) {
+            if (validCheck.nicknameCheck && validCheck.heightCheck && validCheck.weightCheck && validCheck.birthDateCheck) {
+                addNewChild.fetchApi('POST', '/children', body, onProfileUpdateSuccess);
+            } else {
+                setNameValidError(!validCheck.nicknameCheck);
+                setHeightValidError(!validCheck.heightCheck);
+                setWeightValidError(!validCheck.weightCheck);
+                setDateValidError(!validCheck.birthDateCheck);
+            }
+        } else {
+            if (validCheck.nicknameCheck) {
+                patchChild.fetchApi('PATCH', '/children', patchBody, onProfileUpdateSuccess);
+            } else {
+                setNameValidError(!validCheck.nicknameCheck);
+            }
+        }
     }
     const handleInputChange = (e) => {
         let { name, value } = e.target;
@@ -177,7 +243,11 @@ function RegisterChild({userPage}) {
                 <ModSection>
                     <Article>
                         <FormLabel htmlFor="nickname"> 닉네임</FormLabel>
-                        <FormInput value={nickname||''} type="text" name="nickname" id="nickname" placeholder=" 닉네임" onChange={handleInputChange}/>
+                        {nameValidError?
+                            <span onClick={()=>setNameValidError(false)}>{isValid.errors.nickname}</span>
+                        :
+                            <FormInput value={nickname||''} type="text" name="nickname" id="nickname" placeholder=" 닉네임" onChange={handleInputChange}/>
+                        }
                     </Article>
                     <Article>
                         <FormLabel htmlFor="gender"> 성별</FormLabel>
@@ -188,7 +258,11 @@ function RegisterChild({userPage}) {
                     </Article>
                     <Article>
                         <FormLabel htmlFor="birthDate"> 생년월일</FormLabel>
-                        <FormInput value={birthDate||''} type="date" name="birthDate" id="birthDate" placeholder=" 닉네임" onChange={handleInputChange}/>
+                        {dateValidError?
+                            <span onClick={()=>setDateValidError(false)}>{isValid.errors.birthDate}</span>
+                            :
+                            <FormInput value={birthDate||''} type="date" name="birthDate" id="birthDate" placeholder=" 닉네임" onChange={handleInputChange}/>
+                        }
                     </Article>
                 </ModSection>
                 <ModSection>
@@ -199,19 +273,27 @@ function RegisterChild({userPage}) {
                             <FormInputButton className="white-black-line-btn" color="white" type="button" value="수정" onClick={()=>uploadImg()}/>
                             <input ref={fileInput} type="file" style={{ display: "none" }} onChange={(e) => {handleUploadImg(e)}}
                             />
-                            <FormInputButton className="white-black-line-btn" color="white" type="button" value="삭제" />
+                            <FormInputButton className="white-black-line-btn" color="white" type="button" value="삭제" onClick={deleteProfileHandler}/>
                         </div>
                     </Article>
                     <Article>
                         <div className="kids-state">
                             <FormLabel htmlFor="height">키</FormLabel>
-                            <FormInput value={height||''} type="text" name="height" id="height" placeholder=" cm" onChange={handleInputChange} disabled={!addChild}/>
+                            {heightValidError?
+                                <span onClick={()=>setHeightValidError(false)}>{isValid.errors.height}</span>
+                            :
+                                <FormInput value={height||''} type="number" step="0.1" name="height" id="height" placeholder=" cm" onChange={handleInputChange} disabled={!addChild}/>
+                            }
                         </div>
                     </Article>
                     <Article>
                         <div className="kids-state">
                             <FormLabel htmlFor="weight"> 체중</FormLabel>
-                            <FormInput value={weight||''} type="text" name="weight" id="weight" placeholder=" kg" onChange={handleInputChange} disabled={!addChild}/>
+                            {weightValidError?
+                                <span onClick={()=>setWeightValidError(false)}>{isValid.errors.weight}</span>
+                            :
+                                <FormInput value={weight||''} type="number" step="0.1" name="weight" id="weight" placeholder=" kg" onChange={handleInputChange} disabled={!addChild}/>
+                            }
                         </div>
                     </Article>
                 </ModSection>

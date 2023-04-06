@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Wrapper } from "../common/ui/Semantics";
-
 import {MdOutlineInsertPhoto}  from 'react-icons/md';
 import {IoShapesOutline} from 'react-icons/io5';
 import {RxFrame} from 'react-icons/rx';
 
 const SideBarSection = styled(Wrapper)`
-  width:4rem;
+  width: 5%;
+  min-width: 3rem;
   height: 100%;
   justify-content: start;
   border-left:solid #ffeef2;
@@ -29,7 +29,7 @@ const StyledDiv = styled.div`
       & > ${Highlight} {
         opacity: ${active ? 1 : 0};
       }
-      color:${active ? "#F05475;" : '#black'};
+      color:${active ? "#F05475" : '#black'};
       background-color:${active ? "#ffeef2" : '#ffffff'};
     `}
 `

@@ -7,8 +7,8 @@ import { login, logout } from "./store/userSlice";
 import { useNavigate } from "react-router-dom";
 // Layout
 import HBLayout from "./layout/HBLayout"
-import NHBLayout from "./layout/NHBLayout"
 import PHBLayout from "./layout/PHBLayout"
+import NHBLayout from "./layout/NHBLayout";
 // Pages
 import PlayPage from "./pages/PlayPage"
 import StatusPage from "./pages/StatusPage"
@@ -27,13 +27,13 @@ function App() {
   const navigate = useNavigate()
   const isLoggedIn = useSelector(state=>state.userState.isLoggedIn)
   const [watchingPage, setWatchingPage] = useState('')
-  const [Cookie, setCookie, removeCookie] = useCookies('accessToken')
+  const [Cookie, , ] = useCookies('accessToken')
 
   useEffect(()=>{
     const existingToken = Cookie.accessToken;
     if (existingToken) {
       dispatch(login(existingToken));
-    }
+    } 
   },[dispatch, Cookie.accessToken])
 
 
@@ -52,14 +52,13 @@ function App() {
         <Route element={<PHBLayout watchingPage={watchingPage} isLoggedIn={isLoggedIn}/>}>
           <Route path={"/photos"} element={<PhotosPage handleWatchingPage={handleWatchingPage}/>} />
         </Route>
-
         {/* 맨 윗줄 헤더만 있음 */}
         <Route element={<NHBLayout isLoggedIn={isLoggedIn}/>}>
           <Route path={"/users"} element={<UserPage />} />
           <Route path={"/users/join"} element={<Registration />}/>
           <Route path={"/users/oauth2-kakao"} element={<OauthKakao />}/>
           <Route path={"/users/oauth2-naver"} element={<OauthNaver />}/>
-          <Route path={"/error"} element={<ErrorPage/>} />
+          <Route path={"/*"} element={<ErrorPage/>} />
         </Route>
         {/* 헤더 없음 */}
         <Route path={"/"} element={<InitPage/>}/>

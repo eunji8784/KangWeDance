@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { Wrapper } from "../components/common/ui/Semantics";
 
@@ -12,7 +13,7 @@ import useApi from "../hooks/auth/useApi"
 
 const PhotosSection = styled(Wrapper)`
     flex-direction: row;
-    height: 100%;
+    height: 90%;
     width: 100%;
     min-width: 35rem;
     margin-top: 0.2rem;
@@ -21,20 +22,23 @@ const PhotosSection = styled(Wrapper)`
 `
 
 const SideSection = styled(Wrapper)`
-    width: 16%;
+    width: 20%;
     height: 100%;
-    min-width: 14rem;
+    min-width: 16rem;
     justify-content: flex-start;
     border: solid 0.2rem #ffeef2;
-    /* overflow: scroll; */
+    overflow-y: scroll;
+    overflow-X: hidden;
 `
 
 function PhotosPage({handleWatchingPage}) {
+    /* eslint-disable */
     const [section, setSection] = useState('gallery')
     const [image, setImage] = useState('https://d3qb4vbeyp8phu.cloudfront.net/photoInit.png')
     const [frameImage, setFrameImage] = useState('')
     const [stickerImage, setStickerImage] = useState('')
     const [stickerNum, setStickerNum] = useState(0)
+    const [plus, setPlus] = useState(true);
 
     const [photoList, setPhotoList] = useState([])
     const [frameList, setFrameList] = useState([])
@@ -44,17 +48,24 @@ function PhotosPage({handleWatchingPage}) {
     const photos = useApi()
     const framestickers = useApi()
 
+    const selected = useSelector(state=>state.photo.num)
+    const photoPageNum = useSelector(state=>state.photo.pageNum)
 
     useEffect(()=>{
         handleWatchingPage('photos')
-        photos.fetchApi('GET', `/photos?pageNum=1`)
         framestickers.fetchApi('GET', `/photos/frames`)
     },[])
 
+        //포토 리스트
+    useEffect(()=>{
+        photos.fetchApi('GET', `/photos?pageNum=${photoPageNum}`)
+    },[selected, photoPageNum])
+    
     //포토 리스트
     useEffect(()=>{
         if (photos.data) {
             setPhotoList(photos.data?.data.photoList)
+            setPlus(photos.data?.data.pageNum.next);
         }
     },[photos.data])
 
@@ -87,7 +98,7 @@ function PhotosPage({handleWatchingPage}) {
         <PhotosSection>
             <SideBar handleSection={handleSection}/>
             <SideSection>
-                {section==='gallery' && <PhotoList photoList={photoList} handleImge={handleImge}/>}
+                {section==='gallery' && <PhotoList plus={plus} photoList={photoList} handleImge={handleImge}/>}
                 {section==='frame' && <FrameList frameList={frameList} handleFrame={handleFrame}/>}
                 {section==='sticker' && <StickerList stickerList={stickerList} handleSticker={handleSticker}/>}
             </SideSection>

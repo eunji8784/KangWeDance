@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
 import styled from "styled-components";
 // 로고
 import bigLogo from "../assets/images/bigLogo.png"
@@ -16,12 +15,12 @@ const Wrapper = styled.div`
     position:relative;
     align-items:center;
     justify-content:center;
-    & > img:first-child {
-    position: absolute;
+    & > img.bigLogo {
+    position:fixed;
     width:60%;
     min-width:35rem;
     top: 12rem;
-    z-index: 2;
+    z-index:1;
     }
     & > img:last-child {
       position: absolute;
@@ -33,11 +32,12 @@ const Wrapper = styled.div`
     .socialLogin{
       display:flex;
       flex-direction:column;
+      justify-content:space-around;
       position: absolute;
-      /* background-color:blue; */
       z-index:1;
       width:20rem;
-      top: 25rem;
+      top: 28rem;
+      height: 10rem;
       left: auto; right:auto;
       font-size:30px;
       text-align:center;
@@ -56,21 +56,20 @@ const Wrapper = styled.div`
     }
 `;
 
-function InitPage(props) {
-    const navigate = useNavigate();
+
+function InitPage() {
+    // 카카오
     const API_KEY_KAKAO = process.env.REACT_APP_API_KEY_KAKAO;
-    // 로컬 테스트 용
-    const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI
-    // 배포 서버 용
     const REDIRECT_URI_SITE = process.env.REACT_APP_REDIRECT_URI_SITE
-    const OAUTH_KAKAO = `https://kauth.kakao.com/oauth/authorize?client_id=${API_KEY_KAKAO}&redirect_uri=${REDIRECT_URI+'kakao'}&response_type=code`
+    const OAUTH_KAKAO = `https://kauth.kakao.com/oauth/authorize?client_id=${API_KEY_KAKAO}&redirect_uri=${REDIRECT_URI_SITE+'kakao'}&response_type=code`
     // 네이버
     const API_KEY_NAVER = process.env.REACT_APP_API_KEY_NAVER
     const STATE_TOKEN = process.env.REACT_APP_STATE_TOKEN 
     const OAUTH_NAVER = `https://nid.naver.com/oauth2.0/authorize?client_id=${API_KEY_NAVER}&response_type=code&redirect_uri=${REDIRECT_URI_SITE+'naver'}&state=${STATE_TOKEN}`
+
     return (
         <Wrapper>
-          <img src={bigLogo} alt=""/>
+          <img src={bigLogo} alt="" className="bigLogo"/>
           <div className="socialLogin">
             <a href={OAUTH_KAKAO}>
               <img src={kakao_login} alt="" className='login-btn'/>

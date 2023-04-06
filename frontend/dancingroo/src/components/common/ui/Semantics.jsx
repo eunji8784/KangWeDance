@@ -12,9 +12,14 @@ export const Wrapper = styled.div`
   }
 `;
 
+export const Line = styled.div`
+  width: 150%;
+  border: 0.1rem solid rgba(0, 0, 0, 0.03);
+`;
+
+
 export const PinkButton = styled.button`
   height: 2rem;
-  /* width: 4rem; */
   color: white;
   font-size: 0.8rem;
   font-weight: 600;
@@ -90,7 +95,8 @@ const Semantics = {
   H2,
   P,
   Footer,
-  Overlay
+  Overlay,
+  Line
 }
 
 export default Semantics

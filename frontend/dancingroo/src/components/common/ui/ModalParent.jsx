@@ -1,14 +1,11 @@
 import React,{useState} from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
 import Modal from "../components/common/ui/Modal";
 
-function ModalParent(props) {
+function ModalParent() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const handleIsModalOpen = ()=>{
         setIsModalOpen((prev)=>!prev)
     }
-    const navigate = useNavigate();
 
     return (
         <>

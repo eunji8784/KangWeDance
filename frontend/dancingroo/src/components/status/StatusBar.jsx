@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-// import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -10,6 +9,7 @@ const Wrapper = styled.div`
     height:3.5rem;
     width:100%;
 `;
+
 const StyledDiv = styled.div`
     position:relative;
     display:flex;
@@ -18,9 +18,6 @@ const StyledDiv = styled.div`
     width:50%;
     height:100%;
     cursor: pointer;
-    :hover{
-      /* color:#F05475; */
-    }
     ${({active}) => `
       & > ${Highlight} {
         opacity: ${active ? 1 : 0};
@@ -41,8 +38,7 @@ const Highlight = styled.div`
   transition: opacity 0.3 s ease-in-out;
 `;
 
-function StatusBar(props) {
-    const {handleSection} = props;
+function StatusBar({handleSection}) {
     const [activeState, setActiveState] = useState('health')
 
     const handleClick = (mode)=>{
@@ -52,10 +48,10 @@ function StatusBar(props) {
     
     return (
         <Wrapper >
-          <StyledDiv active={activeState === 'health'} onClick={()=>handleClick('health')}>건강 기록
+          <StyledDiv active={activeState === 'health'} onClick={()=>handleClick('health')}>건강 통계
             <Highlight/>
           </StyledDiv>
-          <StyledDiv active={activeState === 'play'} onClick={()=>handleClick('play')}>운동 기록
+          <StyledDiv active={activeState === 'play'} onClick={()=>handleClick('play')}>건강 달력
             <Highlight/>
           </StyledDiv>            
         </Wrapper>
