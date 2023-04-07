@@ -255,7 +255,7 @@ function DanceMode() {
   const settingModel = async function () {
     const model = await tmPose.load(MODELURL, METADATAURL)
     setModel(() => model)
-    console.log("MODEL LOADED")
+
   }
 
   // 예측 함수 - 캠에 따라 자세 상태(prevPosture)를 바꿈
@@ -366,7 +366,7 @@ function DanceMode() {
   const toggleAutoScreenshot = () => {
     setAutoScreenshot((prev) => !prev)
   }
-  console.log(playIdState)
+
   return (
     <Screen>
       {!playRecord.isLoading ? 

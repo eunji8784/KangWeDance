@@ -38,8 +38,7 @@ function StatusPage({handleWatchingPage}) {
     const handleIsModalOpen = ()=>{
         setIsModalOpen((prev)=>!prev)
     }
-    console.log(select)
-    console.log(bodyUpdateCheck)
+
     return (
         <Wrapper>
             <StatusBar handleSection={handleSection}/>
