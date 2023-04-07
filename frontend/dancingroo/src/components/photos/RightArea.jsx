@@ -25,7 +25,7 @@ const ButtonSection = styled(Wrapper)`
 `
 
 const Card = styled.div`
-    width : ${window.innerWidth/2.2};
+    width : ${window.innerWidth/2.3};
     height : ${window.innerWidth*0.2557};
     border: 0.1rem solid rgba(0, 0, 0, 0.1);
 `;
@@ -35,7 +35,7 @@ const BackGroungImage = ({ image }) => {
     return (
       <Image
         image={img}
-        width={window.innerWidth/2.2}
+        width={window.innerWidth/2.3}
         height={window.innerWidth*0.2557}
       />
     );
@@ -226,7 +226,7 @@ function RightArea({image, frameImage, stickerImage, stickerNum}) {
              onTouchStart={checkDeselect}
              >
                     <Stage
-                        width={window.innerWidth/2.2}
+                        width={window.innerWidth/2.3}
                         height={window.innerWidth*0.2557}
                         ref={stageRef}
                         >
