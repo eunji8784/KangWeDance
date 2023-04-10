@@ -13,8 +13,8 @@ export const ModalWrapper = styled(Wrapper)`
     position: fixed;
     top: 0; bottom: 0; left: 0; right: 0;
     margin:auto;
-    width: 45%;
-    height: 50%;
+    width: 48%;
+    height: 58%;
     background-color: white;
     z-index: 3;
     letter-spacing:0.2rem;
@@ -28,6 +28,8 @@ const ModMain = styled(Main)`
 const ModSection = styled(Section)`
   display:flex;
   flex-direction:column;
+  width:90%;
+  border:none;
   img{
     height:80%;
     width:80%;
