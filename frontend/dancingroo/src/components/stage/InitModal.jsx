@@ -13,12 +13,11 @@ export const ModalWrapper = styled(Wrapper)`
     position: fixed;
     top: 0; bottom: 0; left: 0; right: 0;
     margin:auto;
-    width: 50%;
-    height: 65%;
+    width: 45%;
+    height: 50%;
     background-color: white;
     z-index: 3;
     letter-spacing:0.2rem;
-    
 `;
 
 const ModMain = styled(Main)`
