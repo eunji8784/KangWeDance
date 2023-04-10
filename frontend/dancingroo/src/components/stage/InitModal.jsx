@@ -16,7 +16,7 @@ export const ModalWrapper = styled(Wrapper)`
     width: 70%;
     height: 85%;
     background-color: white;
-    z-index: 2;
+    z-index: 3;
     letter-spacing:0.2rem;
     
 `;
@@ -30,7 +30,7 @@ const ModSection = styled(Section)`
 `
 
 function InitModal({initModalHanddler, isOpen}) {
-
+  console.log(isOpen)
   return (
       <ModalWrapper isModalOpen={isOpen}>
           <Main>

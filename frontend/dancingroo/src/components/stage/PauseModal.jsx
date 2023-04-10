@@ -16,6 +16,9 @@ const PauseModalWrapper = styled(ModalWrapper)`
         box-shadow: 0px 3px 15px rgba(237, 240, 84, 0.6);
     }
   }
+  .quit{
+    background-color:#808080;
+  }
 `; 
 
 function PauseModal({handleIsModalOpen, isOpen}) {
@@ -29,7 +32,7 @@ function PauseModal({handleIsModalOpen, isOpen}) {
           </Header>
           <Footer>
             <ModalBtn className="continue" onClick={()=>handleIsModalOpen()}>계속하기</ModalBtn>
-            <ModalBtn onClick={()=>navigate('/play')}>그만하기</ModalBtn>
+            <ModalBtn onClick={()=>navigate('/play')} className="quit">그만하기</ModalBtn>
           </Footer>
       </PauseModalWrapper>
   );
