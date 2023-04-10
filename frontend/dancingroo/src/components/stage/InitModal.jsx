@@ -13,18 +13,25 @@ export const ModalWrapper = styled(Wrapper)`
     position: fixed;
     top: 0; bottom: 0; left: 0; right: 0;
     margin:auto;
-    width: 70%;
-    height: 85%;
+    width: 50%;
+    height: 65%;
     background-color: white;
     z-index: 3;
     letter-spacing:0.2rem;
     
 `;
 
+const ModMain = styled(Main)`
+  width:90%;
+  border:none;
+`
+
 const ModSection = styled(Section)`
+  display:flex;
+  flex-direction:column;
   img{
-    height:70%;
-    width:70%;
+    height:80%;
+    width:80%;
   }
 
 `
@@ -33,13 +40,13 @@ function InitModal({initModalHanddler, isOpen}) {
   console.log(isOpen)
   return (
       <ModalWrapper isModalOpen={isOpen}>
-          <Main>
-              <Section>
+          <ModMain>
+              <ModSection>
                 <img src={dance_direction2} alt="" />
                 <h3>정확한 자세 측정을 위해,</h3>
                 <h3>머리부터 발끝까지 전신이 보이도록 위치해주세요!</h3>
-              </Section>
-          </Main>
+              </ModSection>
+          </ModMain>
           <Footer>
             <PinkButton onClick={()=>initModalHanddler()}>준비됐어요!</PinkButton>
           </Footer>
