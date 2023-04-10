@@ -13,7 +13,7 @@ export const ModalWrapper = styled(Wrapper)`
     position: fixed;
     top: 0; bottom: 0; left: 0; right: 0;
     margin:auto;
-    width: 48%;
+    width: 46%;
     height: 63%;
     background-color: white;
     z-index: 3;
