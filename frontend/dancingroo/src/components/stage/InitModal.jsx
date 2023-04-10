@@ -14,7 +14,7 @@ export const ModalWrapper = styled(Wrapper)`
     top: 0; bottom: 0; left: 0; right: 0;
     margin:auto;
     width: 48%;
-    height: 58%;
+    height: 63%;
     background-color: white;
     z-index: 3;
     letter-spacing:0.2rem;
