@@ -21,6 +21,7 @@ import { MdKeyboardDoubleArrowRight } from "react-icons/md"
 import { RxExit } from "react-icons/rx";
 import { poseTable } from "../../utils/commonInfo";
 import { PoseImages } from "./PoseImages";
+import InitModal from "./InitModal";
 
 const tmPose = window.tmPose
 const MODELURL =
@@ -174,11 +175,20 @@ function DanceMode() {
   const [isBtnOpen, setIsBtnOpen] = useState(false);
   const [arrowState, setArrowState] = useState(false)
   const [playIdState, setPlayIdState] = useState("0")
-  
+  const [initModalState, setInitModalState] = useState(true)
+
+  const initModalHanddler = ()=>{
+    setInitModalState((prev)=>!prev)
+  }
+
+  useEffect(()=>{
+    if (initModalState) videoref.current.pause()
+    else videoref.current.play()
+  },[initModalState])
+
   useEffect(()=>{
     setPlayIdState(playId)
   }, [playId, playIdState])
-  
 
   useEffect(()=>{
     if (stageItem==='init'){
@@ -440,6 +450,7 @@ function DanceMode() {
         <Settings onMouseEnter={()=>toggleButton('enter')} onClick={()=>toggleButton('click')} color={isBtnOpen? '#F05475' : 'black'} />
       </>
       }
+      <InitModal initModalHanddler={initModalHanddler} isOpen={initModalState}/>
     </Screen>
   )
 }
