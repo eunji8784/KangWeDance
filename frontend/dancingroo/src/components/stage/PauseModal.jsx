@@ -18,10 +18,10 @@ const PauseModalWrapper = styled(ModalWrapper)`
   }
   .quit{
     background-color:#808080;
-    box-shadow: 0px 3px 10px rgba(247, 196, 207, 0.166);
+    box-shadow: 0px 3px 10px rgba(244, 240, 240, 0.904);
     transition: box-shadow 0.3s ease-in-out;
     &:hover{
-        box-shadow: 0px 3px 15px rgba(247, 187, 200, 0.6);
+        box-shadow: 0px 3px 15px rgba(247, 247, 247, 0.807);
     }
   }
 `; 
