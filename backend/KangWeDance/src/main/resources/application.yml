@@ -25,8 +25,8 @@ mybatis:
 cloud:
   aws:
     credentials:
-      secret-key: IUbrwTIFA3bLB/f1KA1s2sNE2brE14MGnASf1LtW
-      access-key: AKIARYAZWIARPVAYS4F7
+      secret-key: 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
+      access-key: AKIARYAZWIARFKHH7K4A
     stack:
       auto: 'false'
     s3:
