@@ -38,7 +38,7 @@ const ModSection = styled(Section)`
 `
 
 function InitModal({initModalHanddler, isOpen}) {
-  console.log(isOpen)
+
   return (
       <ModalWrapper isModalOpen={isOpen}>
           <ModMain>
