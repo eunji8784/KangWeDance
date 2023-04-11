@@ -376,7 +376,7 @@ function DanceMode() {
   const toggleAutoScreenshot = () => {
     setAutoScreenshot((prev) => !prev)
   }
-
+  console.log('현재 볼륨 : ', videoref.current.volume)
   return (
     <Screen>
       {!playRecord.isLoading ? 
