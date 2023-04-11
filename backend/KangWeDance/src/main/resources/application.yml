@@ -21,7 +21,7 @@ spring:
 mybatis:
   mapper-locations: classpath:mappers/*.xml
   type-aliases-package: com.ssafy.kang.*.model
-
+#s3수정
 cloud:
   aws:
     credentials:
