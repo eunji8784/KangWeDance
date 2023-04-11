@@ -1,0 +1,65 @@
+.calendar{
+  width:90%;
+  min-width:19rem;
+  border: 0.5rem solid white;
+  border-radius: 0.5rem;
+  margin-top: 1rem;
+  font-family: 'GmarketSansMedium';
+}
+
+.react-calendar__navigation__label{
+    background-color: white !important;
+}
+
+.react-calendar__navigation{
+    color: black !important;
+}
+
+.dot {
+    height: 0.3rem;
+    width: 100%;
+    background-color:#FFD731;
+    /* border-radius: 50%; */
+    display: flex;
+  }
+
+.react-calendar__tile--now {
+    background: #ffeeab;
+    color: white;
+    /* border-radius: 100%; */
+}
+
+
+  .react-calendar__navigation__label > span {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: black;
+  }
+
+
+  /*day 타일 한개 한개 모양 커스텀하기*/
+  .react-calendar__tile {
+    color: black;
+    /* background-color: : white;
+    text-align:  */
+  }
+
+  /*day 타일 hover, focus 시 모양 커스텀*/
+  .react-calendar__tile:enabled:hover {
+    background-color: #f7b7b6;
+    color: white;
+  }
+
+  /*날짜 선택 됐을 때 day 타일 커스텀하기*/
+  .react-calendar__tile--active{
+    color: white;
+    background-color: #f87171 !important;
+  }
+
+  .react-calendar__navigation button{
+    min-width: 0;
+  }
+  
+  .react-calendar__navigation__arrow{
+    color: black !important;
+  }

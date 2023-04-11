@@ -1,8 +1,9 @@
 # 🦘캥 위 댄스 🦘 
 <div align="center">
-<img src="/uploads/c06f84af91d4df44e1d066736f187fa7/캥위댄스.png"  width="320" height="307">
+<img src="/uploads/e9fccaaa499abf64318ce1e735070025/image.png">
 <h4> 👪 부모와 아이가 함께하는 댄스형 헬스 게임👪 </h4>
-<p> 소아 비만을 치료하고 싶은, 혹은 예방하고 싶은 아동들을 위한 율동 체조 기반 운동 웹 </p>
+<p> 부모와 아이가 율동 체조를 함께 즐기며 유대감을 기르고
+<br>운동을 통한 건강까지 챙길 수 있는 서비스 </p>
 
 > <h4>캥 위 댄스 (Kang We Dance) = Kangaroo + Shall We Dance</h4>
 ><p>모성애의 상징인 캥거루의 영어 단어 Kangaroo 와
@@ -12,8 +13,8 @@
 <br>
 
 ## 🎯 타켓
-- 소아 비만을 치료하거나 예방하고자 하는 4~7세 사이의 미취학 아동 및 부모
 - 재밌는 율동 체조 게임으로 아이와 즐거운 시간을 보내며 건강 관리를 하고 싶은 부모
+- 소아 비만을 치료하거나 예방하고자 하는 4~7세 사이의 미취학 아동 및 부모
 <h4>🎤 캥거루 합창단 (A606)🎤</h4>
 
 |이름|역할|전공 여부|
@@ -29,14 +30,15 @@
     <h4>⭐️ Platforms & Languages ⭐️</h4>
     <img src="https://img.shields.io/badge/Typescript-3178C6?style=flat-square&logo=Typescript&logoColor=white"/>
     <img src="https://img.shields.io/badge/React-61DAFB?style=flat&logo=React&logoColor=white"/>
-    <img src="https://img.shields.io/badge/Redux-764ABC?style=flat&logo=Redux&logoColor=white"/>
     <img src="https://img.shields.io/badge/WebRTC-333333?style=flat&logo=WebRTC&logoColor=white"/>
+    <img src="https://img.shields.io/badge/TensorFlow-FF6F00?style=flat&logo=tensorflow&logoColor=white"/>
     <br>
     <img src="https://img.shields.io/badge/Java-007396?style=flat&logo=Conda-Forge&logoColor=white"/>
 	<img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=flat&logo=Spring Boot&logoColor=white" />
 	<img src="https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=MySQL&logoColor=white" />
     <br>
-    <img src="https://img.shields.io/badge/Apache Hadoop-66CCFF?style=flat&logo=Apache Hadoop&logoColor=white" />
+    <img src="https://img.shields.io/badge/Apache Hadoop-66CCFF?style=flat&logo=Apache Hadoop&logoColor=#white" />
+    <img src="https://img.shields.io/badge/Apache Hive-FDEE21?style=flat&logo=apachehive&logoColor=white" />
     <img src="https://img.shields.io/badge/Docker-2496ED?style=flat&logo=Docker&logoColor=white" />
     <img src="https://img.shields.io/badge/Jenkins-D24939?style=flat&logo=Jenkins&logoColor=white" />
 </div>
@@ -60,57 +62,35 @@
 <br>
 
 # 💡 서비스 개요
+(1) 놀이를 통한 부모와 아이의 유대감 형성
 
-<h4> 1. 문제인식 </h4>
-![2172423_203885_5055](/uploads/20b405d6717fe7194653a930f6bc0ff0/2172423_203885_5055.jpg)
+![image](/uploads/83ee94aedecfafaf9cdf62efae9960c7/image.png)
 
->[서울시 소아청소년 5명 중 1명은 ‘비만’] <br>
-[http://www.docdocdoc.co.kr/news/articleView.html?idxno=2025148](http://www.docdocdoc.co.kr/news/articleView.html?idxno=2025148)
+✅ __성장기 아이와 부모의 교감은 중요하다.__
 
-> [아동·청소년 비만, 방치하면 성인병 지름길] <br> 
-[http://www.ihalla.com/article.php?aid=1671116400735918099](http://www.ihalla.com/article.php?aid=1671116400735918099)
+✅ 그 중에서도 __함께 놀이__ 를 하는 것이 매우 효과적이다.
+
+(2) 소아 비만 문제
+
+![image](/uploads/9c583ea828f5f7aa87851eb1a3f6d616/image.png)
 
 ✅ __코로나19 시기 온라인 수업과 체육 활동의 최소화, 불규칙한 식생활 습관 등으로 소아 비만이 증가하고 있다.__
-- 고지혈증, 지방간, 고혈압, 당뇨병 같은 성인병으로 이어짐
-- 성장 저하, 면역력 결핍, 성조숙증 등의 질병 유발
-- 또래 아이들의 놀림으로 심리적으로 위축되고, 자존감이 낮아질 우려
-- 스트레스와 외모 콤플렉스로 인해서 사회성 발달과 심리 안정에 심각한 영향
-- 어릴 적 비만인 아이는 성인이 되어서도 비만이 될 확률이 80% 이상
+- 이는 고지혈증, 지방간, 고혈압, 당뇨병 같은 성인병으로 이어진다.
+- 어릴 적 비만인 아이는 성인이 되어서도 비만이 될 확률이 80% 이상.
 
-➡ 소아청소년기의 비만이 성인비만으로 발전되지 않도록 올바른 건강 관리와 적극적인 예방이 중요
-<h4> 2. 문제의 원인분석 </h4>
+# 💡 솔루션 
+➡ 즐거운 __율동 체조형 서비스__ 를 통해 __부모와 아이가 함께__ __유대감__ 을 기르고 __소아 비만__ 을 관리할 수 있도록 하자.
 
-> [운동 않고 TV만 보는 부모… 아이 비만에 영향] <br>
-[https://www.chosun.com/national/welfare-medical/2022/08/05/PXCWF6LPZBA6FM4LBBQ6UXVZ5U/](https://www.chosun.com/national/welfare-medical/2022/08/05/PXCWF6LPZBA6FM4LBBQ6UXVZ5U/)
+# 💡 기대 효과 
 
-> [기나긴 방학, 집에서 게임과 TV만 보다간 ‘소아비만’ 주의] <br>
-[https://sports.khan.co.kr/bizlife/sk_index.html?art_id=202302061230003&sec_id=561801&pt=nv](https://sports.khan.co.kr/bizlife/sk_index.html?art_id=202302061230003&sec_id=561801&pt=nv)
-    
-- 소아 비만의 가장 큰 원인 중 하나는 운동 부족.
-- 부모의 생활 습관이 아이의 비만에 영향을 끼친다.
-
-<h4> 3. 솔루션 </h4>
-
-> [소아청소년 비만, 기다리지 말고 적극 치료 나서야] <br>
-[https://www.k-health.com/news/articleView.html?idxno=63470](https://www.k-health.com/news/articleView.html?idxno=63470)
-
-> [소아 비만, 가족이 협조해야 해결 가능…지지 필수] <br>
-[https://www.yna.co.kr/view/AKR20210730124100017](https://www.yna.co.kr/view/AKR20210730124100017)
-- 하루 30분 이상 적절한 운동 등 생활 개선 계획을 세우고 실천해야 한다.
-- 아이가 매일 활발하게 움직일 수 있게 부모 등 보호자가 활동적으로 모범을 보이고 함께 운동에 참여한다.
-
-<h5>➡ 댄스형 헬스 게임을 통해 아이와 부모가 함께 즐겁게 소아 비만을 관리할 수 있도록 하자.</h5>
-
-<h4> 4. 기대 효과 </h4>
-
+- 부모님과 아이가 함께 활동함으로써 자녀와 부모 사이의 유대감 형성
 - 춤으로 소아비만 예방 및 치료
 - 보다 재밌고 쉽게 운동 가능
 - 포토카드 기능을 통한 추억 기록
 - 칼로리 소모량 및 체중 변화율을 기록하고 확인
-- 부모님과 아이가 함께 활동함으로써 자녀와 부모 사이의 유대감 형성
 
 
-<h3>💃 Kang We Dance? 🕺</h3>
+<h3>💃 Kang We Dance? Sure! 🕺</h3>
 
 ---
 <br>

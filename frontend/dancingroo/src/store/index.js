@@ -1,9 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit"
-import exampleSlice from "./exampleSlice"
+import userSlice from "./userSlice"
+import stageSlice from "./stageSlice"
+import photoSlice from "./photoSlice"
 
 const store = configureStore({
   reducer: {
-    example: exampleSlice,
+    userState: userSlice,
+    stage: stageSlice,
+    photo: photoSlice,
   },
 })
 
