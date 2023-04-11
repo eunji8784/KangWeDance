@@ -36,7 +36,7 @@
 		 -->
 		SELECT 
 		    tmp1.child_idx,
-		    (2400 + IFNULL(tmp1.score, 0)) AS calorie_consumption,
+		    (2400 + IFNULL(tmp1.score, 0) + FLOOR(RAND() * 201) - 100) AS calorie_consumption,
 		    tmp1.title,
 		    tmp1.record_date,
 		    tmp1.score

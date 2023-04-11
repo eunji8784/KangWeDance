@@ -12,9 +12,14 @@ export const Wrapper = styled.div`
   }
 `;
 
-export const PinkButton = styled.input`
+export const Line = styled.div`
+  width: 150%;
+  border: 0.1rem solid rgba(0, 0, 0, 0.03);
+`;
+
+
+export const PinkButton = styled.button`
   height: 2rem;
-  width: 4rem;
   color: white;
   font-size: 0.8rem;
   font-weight: 600;
@@ -30,25 +35,25 @@ export const PinkButton = styled.input`
 
 export const Header = styled.header`
   width:100%;
-  /* background-color: #333;
-  color: white;
-  padding: 1rem; */
 `;
 
 export const Main = styled.main`
-  /* flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center; */
+  border:1px solid red;
+  flex-direction:column;
+  width:80%;
+  height:80%;
 `;
 
 export const Article = styled.article`
-  max-width: 37.5rem;
-  /* padding: 1rem; */
+  border:1px solid green;
+  width:60%;
+  height:80%;
 `;
 
 export const Section = styled.section`
-  /* margin-bottom: 2rem; */
+  border:1px solid blue;
+  width:80%;
+  height:80%;
 `;
 
 export const H1 = styled.h1`
@@ -63,14 +68,12 @@ export const P = styled.p`
   font-size: 1.3rem;
   font-weight:bold;
   letter-spacing:0.5rem;
-  /* line-height: 1.5; */
 `;
 
 export const Footer = styled.footer`
-  /* background-color: #333;
-  color: white;
-  padding: 1rem; */
+  width:100%;
 `;
+
 export const Overlay = styled.div`
   position: absolute;
   width: 100%;
@@ -92,7 +95,8 @@ const Semantics = {
   H2,
   P,
   Footer,
-  Overlay
+  Overlay,
+  Line
 }
 
 export default Semantics

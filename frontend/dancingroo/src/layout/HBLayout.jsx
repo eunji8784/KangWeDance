@@ -1,44 +1,36 @@
-import React, { useState } from "react";
-// {useEffect} from "react";
+import React from "react";
 import { Outlet } from "react-router-dom";
-// import { useNavigate,  } from "react-router-dom";
-// import { useSelector } from "react-redux";
-// import TopBar from "../components/common/nav/TopBar";
 import HeaderBar from "../components/common/nav/HeaderBar";
 import styled from "styled-components";
 import ChildProfile from "../components/common/ui/ChildProfile";
+import NoteCompo from "../components/common/effects/NoteCompo";
 
 const Bodysuit = styled.div`
     display: flex;
     flex-direction: column;
+    /* justify-content: space-between; */
     height: 100vh;
-    position: relative;
     // @ 양 옆 마진
-    margin:0 8% !important;
-    /* border: 1px solid blue; */
+    margin:0 15% !important;
+    position: relative;
+    min-height: 100vh;
+    padding-bottom: 5rem;
 `;
-const OutletWrapper = styled(Outlet)`
-`
 
-const HBLayout = (props) => {
-    const {watchingPage} = props;
-    // const [watching, setWatching] = useState(watchingPage)
-    // const navigate = useNavigate();
-    // const isLoggedIn = useSelector((state)=>state.TOKEN.authenticated);
-    
-    // useEffect(()=>{
-    //     if(isLoggedIn){
-    //         navigate("/");
-    //     }
-    // }, [isLoggedIn])
+const OutletWrapper = styled(Outlet)`
+`;
+
+const HBLayout = ({watchingPage}) => {
 
     return(
-        <Bodysuit>
-            {/* <TopBar/> */}
-            <HeaderBar watchingPage={watchingPage}/>
-            <ChildProfile/>
-            <OutletWrapper />
-        </Bodysuit>
+        <>
+            <Bodysuit>
+                <HeaderBar watchingPage={watchingPage}/>
+                <ChildProfile/>
+                <NoteCompo/>
+                <OutletWrapper />
+            </Bodysuit>
+        </>
     )
 
 }
