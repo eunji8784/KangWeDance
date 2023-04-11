@@ -443,7 +443,7 @@ function DanceMode() {
           className={camfocus ? "small" : "big"}
           ref={videoref}
           src={stageItem.videoUrl}
-          // onCanPlayThrough={()=>videoref.current.play()}
+          volume = {0.35}
           onTimeUpdate={handleTimeUpdate}
         />
         <PauseModal handleIsModalOpen={handleIsModalOpen} isOpen={isModalOpen} />
