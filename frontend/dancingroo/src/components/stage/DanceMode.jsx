@@ -21,6 +21,7 @@ import { MdKeyboardDoubleArrowRight } from "react-icons/md"
 import { RxExit } from "react-icons/rx";
 import { poseTable } from "../../utils/commonInfo";
 import { PoseImages } from "./PoseImages";
+import InitModal from "./InitModal";
 
 const tmPose = window.tmPose
 const MODELURL =
@@ -174,11 +175,20 @@ function DanceMode() {
   const [isBtnOpen, setIsBtnOpen] = useState(false);
   const [arrowState, setArrowState] = useState(false)
   const [playIdState, setPlayIdState] = useState("0")
-  
+  const [initModalState, setInitModalState] = useState(true)
+
+  const initModalHanddler = ()=>{
+    setInitModalState((prev)=>!prev)
+  }
+
+  useEffect(()=>{
+    if (initModalState) videoref.current.pause()
+    else videoref.current.play()
+  },[initModalState])
+
   useEffect(()=>{
     setPlayIdState(playId)
   }, [playId, playIdState])
-  
 
   useEffect(()=>{
     if (stageItem==='init'){
@@ -255,7 +265,7 @@ function DanceMode() {
   const settingModel = async function () {
     const model = await tmPose.load(MODELURL, METADATAURL)
     setModel(() => model)
-    console.log("MODEL LOADED")
+
   }
 
   // 예측 함수 - 캠에 따라 자세 상태(prevPosture)를 바꿈
@@ -366,7 +376,7 @@ function DanceMode() {
   const toggleAutoScreenshot = () => {
     setAutoScreenshot((prev) => !prev)
   }
-  console.log(playIdState)
+  // console.log('현재 볼륨 : ', videoref?.current?.volume)
   return (
     <Screen>
       {!playRecord.isLoading ? 
@@ -433,13 +443,14 @@ function DanceMode() {
           className={camfocus ? "small" : "big"}
           ref={videoref}
           src={stageItem.videoUrl}
-          onCanPlayThrough={()=>videoref.current.play()}
+          volume = {0.1}
           onTimeUpdate={handleTimeUpdate}
         />
         <PauseModal handleIsModalOpen={handleIsModalOpen} isOpen={isModalOpen} />
         <Settings onMouseEnter={()=>toggleButton('enter')} onClick={()=>toggleButton('click')} color={isBtnOpen? '#F05475' : 'black'} />
       </>
       }
+      <InitModal initModalHanddler={initModalHanddler} isOpen={initModalState}/>
     </Screen>
   )
 }
