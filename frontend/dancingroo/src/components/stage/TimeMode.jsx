@@ -153,7 +153,7 @@ function Timemode() {
   const settingModel = async function () {
     const model = await tmPose.load(MODELURL, METADATAURL)
     setModel(() => model)
-    console.log("MODEL LOADED")
+
   }
 
   // 모달 열기/닫기 함수 -> time 따로 만들어서 저장후 다시 돌리기
